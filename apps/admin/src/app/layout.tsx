@@ -1,6 +1,6 @@
 import "~/styles/globals.css";
 import "@repo/ui/globals.css";
-import { Providers } from "./providers";
+import { Providers } from "@repo/ui/providers/theme-provider";
 
 import { type Metadata } from "next";
 import { Geist } from "next/font/google";

@@ -1,7 +1,15 @@
 import type { Preview } from "@storybook/nextjs";
 import "@repo/ui/globals.css";
+import { Providers } from "@repo/ui/providers/theme-provider";
 
 const preview: Preview = {
+  decorators: [
+    (Story) => (
+      <Providers>
+        <Story />
+      </Providers>
+    ),
+  ],
   parameters: {
     controls: {
       matchers: {
