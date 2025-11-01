@@ -1,0 +1,2 @@
+- vitest
+- e2e
