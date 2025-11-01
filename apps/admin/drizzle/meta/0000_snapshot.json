@@ -1,5 +1,5 @@
 {
-  "id": "a2c37578-cef9-4efb-a2c3-8de98130bd3f",
+  "id": "78c34052-85ab-42f6-8785-657cec0ee640",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -76,8 +76,8 @@
         }
       },
       "indexes": {
-        "account_user_id_idx": {
-          "name": "account_user_id_idx",
+        "fa_account_user_id_idx": {
+          "name": "fa_account_user_id_idx",
           "columns": [
             {
               "expression": "userId",
@@ -169,8 +169,8 @@
         }
       },
       "indexes": {
-        "created_by_idx": {
-          "name": "created_by_idx",
+        "fa_post_created_by_idx": {
+          "name": "fa_post_created_by_idx",
           "columns": [
             {
               "expression": "createdById",
@@ -184,8 +184,8 @@
           "method": "btree",
           "with": {}
         },
-        "name_idx": {
-          "name": "name_idx",
+        "fa_post_name_idx": {
+          "name": "fa_post_name_idx",
           "columns": [
             {
               "expression": "name",
@@ -245,8 +245,8 @@
         }
       },
       "indexes": {
-        "t_user_id_idx": {
-          "name": "t_user_id_idx",
+        "fa_session_user_id_idx": {
+          "name": "fa_session_user_id_idx",
           "columns": [
             {
               "expression": "userId",

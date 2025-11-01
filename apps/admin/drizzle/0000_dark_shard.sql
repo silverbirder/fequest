@@ -45,7 +45,7 @@ CREATE TABLE "fequest-admin_verification_token" (
 ALTER TABLE "fequest-admin_account" ADD CONSTRAINT "fequest-admin_account_userId_fequest-admin_user_id_fk" FOREIGN KEY ("userId") REFERENCES "public"."fequest-admin_user"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "fequest-admin_post" ADD CONSTRAINT "fequest-admin_post_createdById_fequest-admin_user_id_fk" FOREIGN KEY ("createdById") REFERENCES "public"."fequest-admin_user"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "fequest-admin_session" ADD CONSTRAINT "fequest-admin_session_userId_fequest-admin_user_id_fk" FOREIGN KEY ("userId") REFERENCES "public"."fequest-admin_user"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-CREATE INDEX "account_user_id_idx" ON "fequest-admin_account" USING btree ("userId");--> statement-breakpoint
-CREATE INDEX "created_by_idx" ON "fequest-admin_post" USING btree ("createdById");--> statement-breakpoint
-CREATE INDEX "name_idx" ON "fequest-admin_post" USING btree ("name");--> statement-breakpoint
-CREATE INDEX "t_user_id_idx" ON "fequest-admin_session" USING btree ("userId");
+CREATE INDEX "fa_account_user_id_idx" ON "fequest-admin_account" USING btree ("userId");--> statement-breakpoint
+CREATE INDEX "fa_post_created_by_idx" ON "fequest-admin_post" USING btree ("createdById");--> statement-breakpoint
+CREATE INDEX "fa_post_name_idx" ON "fequest-admin_post" USING btree ("name");--> statement-breakpoint
+CREATE INDEX "fa_session_user_id_idx" ON "fequest-admin_session" USING btree ("userId");

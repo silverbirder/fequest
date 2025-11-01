@@ -26,9 +26,9 @@ export const posts = createTable(
     updatedAt: d.timestamp({ withTimezone: true }).$onUpdate(() => new Date()),
   }),
   (t) => [
-    index("created_by_idx").on(t.createdById),
-    index("name_idx").on(t.name),
-  ],
+    index("fa_post_created_by_idx").on(t.createdById),
+    index("fa_post_name_idx").on(t.name),
+  ]
 );
 
 export const users = createTable("user", (d) => ({
@@ -72,8 +72,8 @@ export const accounts = createTable(
   }),
   (t) => [
     primaryKey({ columns: [t.provider, t.providerAccountId] }),
-    index("account_user_id_idx").on(t.userId),
-  ],
+    index("fa_account_user_id_idx").on(t.userId),
+  ]
 );
 
 export const accountsRelations = relations(accounts, ({ one }) => ({
@@ -90,7 +90,7 @@ export const sessions = createTable(
       .references(() => users.id),
     expires: d.timestamp({ mode: "date", withTimezone: true }).notNull(),
   }),
-  (t) => [index("t_user_id_idx").on(t.userId)],
+  (t) => [index("fa_session_user_id_idx").on(t.userId)],
 );
 
 export const sessionsRelations = relations(sessions, ({ one }) => ({
