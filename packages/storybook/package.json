@@ -12,7 +12,6 @@
     "@repo/typescript-config": "workspace:*",
     "@storybook/addon-a11y": "^10.0.2",
     "@storybook/addon-docs": "^10.0.2",
-    "@storybook/addon-vitest": "^10.0.2",
     "@storybook/nextjs": "^10.0.2",
     "@types/node": "^22.15.3",
     "@types/react": "19.1.0",
