@@ -28,7 +28,7 @@ export const posts = createTable(
   (t) => [
     index("fa_post_created_by_idx").on(t.createdById),
     index("fa_post_name_idx").on(t.name),
-  ]
+  ],
 );
 
 export const users = createTable("user", (d) => ({
@@ -73,7 +73,7 @@ export const accounts = createTable(
   (t) => [
     primaryKey({ columns: [t.provider, t.providerAccountId] }),
     index("fa_account_user_id_idx").on(t.userId),
-  ]
+  ],
 );
 
 export const accountsRelations = relations(accounts, ({ one }) => ({
