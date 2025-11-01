@@ -1,2 +1,1 @@
-- vitest
 - e2e
