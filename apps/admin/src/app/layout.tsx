@@ -1,4 +1,6 @@
 import "~/styles/globals.css";
+import "@repo/ui/globals.css";
+import { Providers } from "./providers";
 
 import { type Metadata } from "next";
 import { Geist } from "next/font/google";
@@ -19,9 +21,11 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={geist.className}>
-        <TRPCReactProvider>{children}</TRPCReactProvider>
+        <TRPCReactProvider>
+          <Providers>{children}</Providers>
+        </TRPCReactProvider>
       </body>
     </html>
   );

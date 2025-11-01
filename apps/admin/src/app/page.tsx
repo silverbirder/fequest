@@ -3,6 +3,7 @@ import Link from "next/link";
 import { LatestPost } from "~/app/_components/post";
 import { auth } from "~/server/auth";
 import { api, HydrateClient } from "~/trpc/server";
+import { Button } from "@repo/ui/components/button";
 import styles from "./index.module.css";
 
 export default async function Home() {
@@ -15,6 +16,7 @@ export default async function Home() {
 
   return (
     <HydrateClient>
+      <Button variant="destructive">Open alert</Button>
       <main className={styles.main}>
         <div className={styles.container}>
           <h1 className={styles.title}>
