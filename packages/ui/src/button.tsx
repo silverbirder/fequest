@@ -2,13 +2,13 @@
 
 import { ReactNode } from "react";
 
-interface ButtonProps {
+type Props = {
   children: ReactNode;
   className?: string;
   appName: string;
-}
+};
 
-export const Button = ({ children, className, appName }: ButtonProps) => {
+export const Button = ({ children, className, appName }: Props) => {
   return (
     <button
       className={className}
