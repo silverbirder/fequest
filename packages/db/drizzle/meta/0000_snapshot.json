@@ -1,11 +1,11 @@
 {
-  "id": "e19baa0d-ec5a-4098-b058-6ac5d27737a3",
+  "id": "09a519d4-ca88-4947-9ff7-fd495845ba99",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
-    "public.fequest-admin_account": {
-      "name": "fequest-admin_account",
+    "public.fequest_account": {
+      "name": "fequest_account",
       "schema": "",
       "columns": {
         "userId": {
@@ -76,8 +76,8 @@
         }
       },
       "indexes": {
-        "fa_account_user_id_idx": {
-          "name": "fa_account_user_id_idx",
+        "fe_account_user_id_idx": {
+          "name": "fe_account_user_id_idx",
           "columns": [
             {
               "expression": "userId",
@@ -93,10 +93,10 @@
         }
       },
       "foreignKeys": {
-        "fequest-admin_account_userId_fequest-admin_user_id_fk": {
-          "name": "fequest-admin_account_userId_fequest-admin_user_id_fk",
-          "tableFrom": "fequest-admin_account",
-          "tableTo": "fequest-admin_user",
+        "fequest_account_userId_fequest_user_id_fk": {
+          "name": "fequest_account_userId_fequest_user_id_fk",
+          "tableFrom": "fequest_account",
+          "tableTo": "fequest_user",
           "columnsFrom": ["userId"],
           "columnsTo": ["id"],
           "onDelete": "no action",
@@ -104,8 +104,8 @@
         }
       },
       "compositePrimaryKeys": {
-        "fequest-admin_account_provider_providerAccountId_pk": {
-          "name": "fequest-admin_account_provider_providerAccountId_pk",
+        "fequest_account_provider_providerAccountId_pk": {
+          "name": "fequest_account_provider_providerAccountId_pk",
           "columns": ["provider", "providerAccountId"]
         }
       },
@@ -114,8 +114,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.fequest-admin_post": {
-      "name": "fequest-admin_post",
+    "public.fequest_post": {
+      "name": "fequest_post",
       "schema": "",
       "columns": {
         "id": {
@@ -125,7 +125,7 @@
           "notNull": true,
           "identity": {
             "type": "byDefault",
-            "name": "fequest-admin_post_id_seq",
+            "name": "fequest_post_id_seq",
             "schema": "public",
             "increment": "1",
             "startWith": "1",
@@ -162,8 +162,8 @@
         }
       },
       "indexes": {
-        "fa_post_created_by_idx": {
-          "name": "fa_post_created_by_idx",
+        "fe_post_created_by_idx": {
+          "name": "fe_post_created_by_idx",
           "columns": [
             {
               "expression": "createdById",
@@ -177,8 +177,8 @@
           "method": "btree",
           "with": {}
         },
-        "fa_post_name_idx": {
-          "name": "fa_post_name_idx",
+        "fe_post_name_idx": {
+          "name": "fe_post_name_idx",
           "columns": [
             {
               "expression": "name",
@@ -194,10 +194,10 @@
         }
       },
       "foreignKeys": {
-        "fequest-admin_post_createdById_fequest-admin_user_id_fk": {
-          "name": "fequest-admin_post_createdById_fequest-admin_user_id_fk",
-          "tableFrom": "fequest-admin_post",
-          "tableTo": "fequest-admin_user",
+        "fequest_post_createdById_fequest_user_id_fk": {
+          "name": "fequest_post_createdById_fequest_user_id_fk",
+          "tableFrom": "fequest_post",
+          "tableTo": "fequest_user",
           "columnsFrom": ["createdById"],
           "columnsTo": ["id"],
           "onDelete": "no action",
@@ -210,8 +210,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.fequest-admin_session": {
-      "name": "fequest-admin_session",
+    "public.fequest_session": {
+      "name": "fequest_session",
       "schema": "",
       "columns": {
         "sessionToken": {
@@ -234,8 +234,8 @@
         }
       },
       "indexes": {
-        "fa_session_user_id_idx": {
-          "name": "fa_session_user_id_idx",
+        "fe_session_user_id_idx": {
+          "name": "fe_session_user_id_idx",
           "columns": [
             {
               "expression": "userId",
@@ -251,10 +251,10 @@
         }
       },
       "foreignKeys": {
-        "fequest-admin_session_userId_fequest-admin_user_id_fk": {
-          "name": "fequest-admin_session_userId_fequest-admin_user_id_fk",
-          "tableFrom": "fequest-admin_session",
-          "tableTo": "fequest-admin_user",
+        "fequest_session_userId_fequest_user_id_fk": {
+          "name": "fequest_session_userId_fequest_user_id_fk",
+          "tableFrom": "fequest_session",
+          "tableTo": "fequest_user",
           "columnsFrom": ["userId"],
           "columnsTo": ["id"],
           "onDelete": "no action",
@@ -267,8 +267,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.fequest-admin_user": {
-      "name": "fequest-admin_user",
+    "public.fequest_user": {
+      "name": "fequest_user",
       "schema": "",
       "columns": {
         "id": {
@@ -311,8 +311,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.fequest-admin_verification_token": {
-      "name": "fequest-admin_verification_token",
+    "public.fequest_verification_token": {
+      "name": "fequest_verification_token",
       "schema": "",
       "columns": {
         "identifier": {
@@ -337,8 +337,8 @@
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {
-        "fequest-admin_verification_token_identifier_token_pk": {
-          "name": "fequest-admin_verification_token_identifier_token_pk",
+        "fequest_verification_token_identifier_token_pk": {
+          "name": "fequest_verification_token_identifier_token_pk",
           "columns": ["identifier", "token"]
         }
       },

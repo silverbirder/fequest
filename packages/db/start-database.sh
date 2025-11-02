@@ -21,19 +21,21 @@ if [ -z "${DATABASE_URL:-}" ]; then
   exit 1
 fi
 
-DB_CONTAINER_NAME="fequest-admin-postgres"
+DB_CONTAINER_NAME="fequest-postgres"
 
 if ! command -v docker >/dev/null 2>&1; then
   echo -e "Docker is not installed. Please install Docker and try again.\nDocker install guide: https://docs.docker.com/engine/install/"
   exit 1
 fi
 
-if docker ps -q -f name="$DB_CONTAINER_NAME" >/dev/null; then
+RUNNING_CONTAINER_ID=$(docker ps -q -f "name=^/${DB_CONTAINER_NAME}$")
+if [ -n "$RUNNING_CONTAINER_ID" ]; then
   echo "Database container '$DB_CONTAINER_NAME' already running"
   exit 0
 fi
 
-if docker ps -q -a -f name="$DB_CONTAINER_NAME" >/dev/null; then
+EXISTING_CONTAINER_ID=$(docker ps -aq -f "name=^/${DB_CONTAINER_NAME}$")
+if [ -n "$EXISTING_CONTAINER_ID" ]; then
   docker start "$DB_CONTAINER_NAME"
   echo "Existing database container '$DB_CONTAINER_NAME' started"
   exit 0
@@ -57,6 +59,6 @@ docker run -d \
   --name "$DB_CONTAINER_NAME" \
   -e POSTGRES_USER="postgres" \
   -e POSTGRES_PASSWORD="$DB_PASSWORD" \
-  -e POSTGRES_DB="fequest-admin" \
+  -e POSTGRES_DB="fequest" \
   -p "$DB_PORT":5432 \
   docker.io/postgres && echo "Database container '$DB_CONTAINER_NAME' was successfully created"

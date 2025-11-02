@@ -24,5 +24,5 @@ export default {
   dbCredentials: {
     url: databaseUrl,
   },
-  tablesFilter: ["fequest-admin_*"],
+  tablesFilter: ["fequest_*"],
 } satisfies Config;

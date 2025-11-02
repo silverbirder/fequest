@@ -7,7 +7,7 @@ import { type AdapterAccount } from "next-auth/adapters";
  *
  * @see https://orm.drizzle.team/docs/goodies#multi-project-schema
  */
-export const createTable = pgTableCreator((name) => `fequest-admin_${name}`);
+export const createTable = pgTableCreator((name) => `fequest_${name}`);
 
 export const posts = createTable(
   "post",
@@ -25,8 +25,8 @@ export const posts = createTable(
     updatedAt: d.timestamp({ withTimezone: true }).$onUpdate(() => new Date()),
   }),
   (t) => [
-    index("fa_post_created_by_idx").on(t.createdById),
-    index("fa_post_name_idx").on(t.name),
+    index("fe_post_created_by_idx").on(t.createdById),
+    index("fe_post_name_idx").on(t.name),
   ],
 );
 
@@ -71,7 +71,7 @@ export const accounts = createTable(
   }),
   (t) => [
     primaryKey({ columns: [t.provider, t.providerAccountId] }),
-    index("fa_account_user_id_idx").on(t.userId),
+    index("fe_account_user_id_idx").on(t.userId),
   ],
 );
 
@@ -89,7 +89,7 @@ export const sessions = createTable(
       .references(() => users.id),
     expires: d.timestamp({ mode: "date", withTimezone: true }).notNull(),
   }),
-  (t) => [index("fa_session_user_id_idx").on(t.userId)],
+  (t) => [index("fe_session_user_id_idx").on(t.userId)],
 );
 
 export const sessionsRelations = relations(sessions, ({ one }) => ({
