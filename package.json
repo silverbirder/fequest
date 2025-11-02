@@ -9,6 +9,7 @@
     "check-types": "turbo run check-types",
     "test": "turbo run test",
     "storybook": "pnpm --filter @repo/storybook storybook",
+    "start-database": "pnpm --filter @repo/db db:start",
     "lint-staged": "lint-staged",
     "prepare": "husky install"
   },
