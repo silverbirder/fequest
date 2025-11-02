@@ -12,7 +12,7 @@ function getAbsolutePath(value: string) {
   return dirname(fileURLToPath(import.meta.resolve(`${value}/package.json`)));
 }
 const config: StorybookConfig = {
-  stories: ["../../ui/src/**/*.stories.tsx"],
+  stories: ["../../../packages/*/src/**/*.stories.tsx"],
   addons: [
     getAbsolutePath("@storybook/addon-docs"),
     getAbsolutePath("@storybook/addon-a11y"),
