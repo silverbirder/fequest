@@ -99,9 +99,6 @@ importers:
       eslint:
         specifier: ^9.38.0
         version: 9.39.0
-      turbo:
-        specifier: ^2.6.0
-        version: 2.6.0
       typescript:
         specifier: 5.9.2
         version: 5.9.2
@@ -178,9 +175,6 @@ importers:
       eslint:
         specifier: ^9.38.0
         version: 9.39.0
-      turbo:
-        specifier: ^2.6.0
-        version: 2.6.0
       typescript:
         specifier: 5.9.2
         version: 5.9.2

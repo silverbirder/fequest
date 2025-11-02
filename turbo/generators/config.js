@@ -11,9 +11,18 @@ module.exports = function generator(plop) {
   });
 
   plop.setGenerator("feature", {
-    description:
-      "Create a feature module",
+    description: "Create a shareable feature package under packages/",
     prompts: [
+      {
+        type: "list",
+        name: "app",
+        message: "Which application is this feature for?",
+        choices: [
+          { name: "admin", value: "admin" },
+          { name: "user", value: "user" },
+        ],
+        default: "admin",
+      },
       {
         type: "input",
         name: "name",
@@ -21,50 +30,114 @@ module.exports = function generator(plop) {
         validate: (input) =>
           (input && input.trim().length > 0) || "A feature name is required.",
       },
-      {
-        type: "input",
-        name: "baseDir",
-        message: "Where should the feature be created? (relative to repo root)",
-        default: "apps/admin/src/features",
-        transformer: (input) => input.trim(),
-      },
     ],
     actions: (answers) => {
-      const actions = [];
-      const baseDir = plop.renderString("{{ensureRelative baseDir}}", answers);
-      const featureDir = `${baseDir}/{{dashCase name}}`;
+      const workspaceFolder = plop.renderString(
+        "{{dashCase app}}-feature-{{dashCase name}}",
+        answers
+      );
+      const packageDir = `packages/${workspaceFolder}`;
+      const featureDir = `${packageDir}/src`;
+      const indexPath = `${featureDir}/index.ts`;
+      const sortKeys = (obj) =>
+        Object.fromEntries(
+          Object.entries(obj).sort(([a], [b]) => a.localeCompare(b))
+        );
 
-      const files = [
+      const actions = [
         {
-          template: "container.tsx.hbs",
-          output: `${featureDir}/container.tsx`,
+          type: "add",
+          path: plop.renderString(`${packageDir}/package.json`, answers),
+          templateFile: "templates/feature/package.json.hbs",
+          skipIfExists: true,
         },
         {
-          template: "component.tsx.hbs",
-          output: `${featureDir}/component.tsx`,
+          type: "add",
+          path: plop.renderString(`${packageDir}/tsconfig.json`, answers),
+          templateFile: "templates/feature/tsconfig.json.hbs",
+          skipIfExists: true,
         },
         {
-          template: "presenter.ts.hbs",
-          output: `${featureDir}/presenter.ts`,
+          type: "add",
+          path: plop.renderString(`${packageDir}/vitest.config.ts`, answers),
+          templateFile: "templates/feature/vitest.config.ts.hbs",
+          skipIfExists: true,
         },
         {
-          template: "spec.tsx.hbs",
-          output: `${featureDir}/{{kebabCase name}}.test.tsx`,
+          type: "add",
+          path: plop.renderString(
+            `${featureDir}/{{kebabCase name}}.container.tsx`,
+            answers
+          ),
+          templateFile: "templates/feature/container.tsx.hbs",
+          skipIfExists: true,
         },
         {
-          template: "index.ts.hbs",
-          output: `${featureDir}/index.ts`,
+          type: "add",
+          path: plop.renderString(
+            `${featureDir}/{{kebabCase name}}.container.stories.tsx`,
+            answers
+          ),
+          templateFile: "templates/feature/container.stories.tsx.hbs",
+          skipIfExists: true,
+        },
+        {
+          type: "add",
+          path: plop.renderString(
+            `${featureDir}/{{kebabCase name}}.container.spec.tsx`,
+            answers
+          ),
+          templateFile: "templates/feature/container.spec.tsx.hbs",
+          skipIfExists: true,
+        },
+        {
+          type: "add",
+          path: plop.renderString(
+            `${featureDir}/{{kebabCase name}}.component.tsx`,
+            answers
+          ),
+          templateFile: "templates/feature/component.tsx.hbs",
+          skipIfExists: true,
+        },
+        {
+          type: "add",
+          path: plop.renderString(
+            `${featureDir}/{{kebabCase name}}.component.stories.tsx`,
+            answers
+          ),
+          templateFile: "templates/feature/component.stories.tsx.hbs",
+          skipIfExists: true,
+        },
+        {
+          type: "add",
+          path: plop.renderString(
+            `${featureDir}/{{kebabCase name}}.component.spec.tsx`,
+            answers
+          ),
+          templateFile: "templates/feature/component.spec.tsx.hbs",
+          skipIfExists: true,
+        },
+        {
+          type: "add",
+          path: plop.renderString(indexPath, answers),
+          templateFile: "templates/feature/index.ts.hbs",
+          skipIfExists: true,
+        },
+        {
+          type: "modify",
+          path: `apps/${answers.app}/package.json`,
+          transform: (content) => {
+            const pkgJson = JSON.parse(content);
+            const dependencyName = `@repo/${workspaceFolder}`;
+            pkgJson.dependencies = pkgJson.dependencies || {};
+            if (!pkgJson.dependencies[dependencyName]) {
+              pkgJson.dependencies[dependencyName] = "workspace:*";
+              pkgJson.dependencies = sortKeys(pkgJson.dependencies);
+            }
+            return `${JSON.stringify(pkgJson, null, 2)}\n`;
+          },
         },
       ];
-
-      files.forEach(({ template, output }) => {
-        actions.push({
-          type: "add",
-          path: plop.renderString(output, answers),
-          templateFile: `templates/feature/${template}`,
-          skipIfExists: true,
-        });
-      });
 
       return actions;
     },

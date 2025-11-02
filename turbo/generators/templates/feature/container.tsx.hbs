@@ -1,10 +1,10 @@
-import { use{{pascalCase name}}Presenter } from "./presenter";
-import { {{pascalCase name}}Component } from "./component";
+import { {{pascalCase name}}Component } from "./{{kebabCase name}}.component";
 
-const {{pascalCase name}}Container = () => {
-  const presenter = use{{pascalCase name}}Presenter();
+export const {{pascalCase name}}Container = () => {
+  const title = "{{pascalCase name}}";
+  const description = "{{pascalCase name}} feature placeholder";
 
-  return <{{pascalCase name}}Component presenter={presenter} />;
+  return (
+    <{{pascalCase name}}Component title={title} description={description} />
+  );
 };
-
-export { {{pascalCase name}}Container };
