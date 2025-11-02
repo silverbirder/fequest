@@ -2,7 +2,7 @@ import Link from "next/link";
 
 import { auth } from "~/server/auth";
 import { HydrateClient } from "~/trpc/server";
-import { Button } from "@repo/ui/components/button";
+import { Button } from "@repo/ui/components";
 
 export default async function Home() {
   const session = await auth();

@@ -1,0 +1,17 @@
+import type { {{pascalCase name}}Presenter } from "./presenter";
+
+type {{pascalCase name}}ComponentProps = {
+  presenter: {{pascalCase name}}Presenter;
+};
+
+const {{pascalCase name}}Component = ({ presenter }: {{pascalCase name}}ComponentProps) => {
+  return (
+    <section data-slot="{{kebabCase name}}-feature" className="space-y-2">
+      <h2 className="text-lg font-semibold">{{pascalCase name}}</h2>
+      <p>{presenter.title}</p>
+    </section>
+  );
+};
+
+export type { {{pascalCase name}}ComponentProps };
+export { {{pascalCase name}}Component };

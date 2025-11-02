@@ -9,7 +9,8 @@
     "start": "next start",
     "preview": "next build && next start",
     "lint": "eslint --max-warnings 0",
-    "check-types": "SKIP_ENV_VALIDATION=1 next typegen && SKIP_ENV_VALIDATION=1 tsc --noEmit"
+    "check-types": "SKIP_ENV_VALIDATION=1 next typegen && SKIP_ENV_VALIDATION=1 tsc --noEmit",
+    "generate:feature": "turbo gen feature"
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^1.7.2",
@@ -37,6 +38,7 @@
     "@types/react": "19.1.0",
     "@types/react-dom": "19.1.1",
     "eslint": "^9.38.0",
+    "turbo": "^2.6.0",
     "typescript": "5.9.2"
   }
 }

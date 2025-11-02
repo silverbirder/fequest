@@ -1,0 +1,10 @@
+import { use{{pascalCase name}}Presenter } from "./presenter";
+import { {{pascalCase name}}Component } from "./component";
+
+const {{pascalCase name}}Container = () => {
+  const presenter = use{{pascalCase name}}Presenter();
+
+  return <{{pascalCase name}}Component presenter={presenter} />;
+};
+
+export { {{pascalCase name}}Container };

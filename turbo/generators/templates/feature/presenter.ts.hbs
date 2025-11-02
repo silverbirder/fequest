@@ -1,0 +1,12 @@
+type {{pascalCase name}}Presenter = {
+  title: string;
+};
+
+const use{{pascalCase name}}Presenter = (): {{pascalCase name}}Presenter => {
+  return {
+    title: "{{pascalCase name}} feature",
+  };
+};
+
+export type { {{pascalCase name}}Presenter };
+export { use{{pascalCase name}}Presenter };
