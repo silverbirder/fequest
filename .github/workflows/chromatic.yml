@@ -17,7 +17,7 @@ jobs:
       - uses: actions/setup-node@v4
       - uses: pnpm/action-setup@v4
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --no-frozen-lockfile
       - name: Run Chromatic
         uses: chromaui/action@latest
         with:
