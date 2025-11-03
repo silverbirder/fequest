@@ -9,6 +9,8 @@
     "check-types": "turbo run check-types",
     "test": "turbo run test",
     "storybook": "pnpm --filter @repo/storybook storybook",
+    "build-storybook": "pnpm --filter @repo/storybook build-storybook",
+    "chromatic": "npx chromatic",
     "start-database": "pnpm --filter @repo/db db:start",
     "lint-staged": "lint-staged",
     "prepare": "husky install",
@@ -16,6 +18,7 @@
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
+    "chromatic": "^13.3.3",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.6",
     "prettier": "^3.6.2",

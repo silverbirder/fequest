@@ -11,6 +11,9 @@ importers:
       '@repo/eslint-config':
         specifier: workspace:*
         version: link:packages/eslint-config
+      chromatic:
+        specifier: ^13.3.3
+        version: 13.3.3
       husky:
         specifier: ^9.1.7
         version: 9.1.7
@@ -4721,6 +4724,19 @@ packages:
     engines: {node: '>= 14.16.0'}
     dependencies:
       readdirp: 4.1.2
+
+  /chromatic@13.3.3:
+    resolution: {integrity: sha512-89w0hiFzIRqLbwGSkqSQzhbpuqaWpXYZuevSIF+570Wb+T/apeAkp3px8nMJcFw+zEdqw/i6soofkJtfirET1Q==}
+    hasBin: true
+    peerDependencies:
+      '@chromatic-com/cypress': ^0.*.* || ^1.0.0
+      '@chromatic-com/playwright': ^0.*.* || ^1.0.0
+    peerDependenciesMeta:
+      '@chromatic-com/cypress':
+        optional: true
+      '@chromatic-com/playwright':
+        optional: true
+    dev: true
 
   /chrome-trace-event@1.0.4:
     resolution: {integrity: sha512-rNjApaLzuwaOTjCiT8lSDdGN1APCiqkChLMJxJPWLunPAt5fy8xgU9/jNOchV84wfIxrA0lRQB7oCT8jrn/wrQ==}
