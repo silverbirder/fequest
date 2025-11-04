@@ -18,6 +18,23 @@ export const featureRequestStatuses = [
 
 export type FeatureRequestStatus = (typeof featureRequestStatuses)[number];
 
+export const users = createTable("user", (d) => ({
+  id: d
+    .varchar({ length: 255 })
+    .notNull()
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  name: d.varchar({ length: 255 }),
+  email: d.varchar({ length: 255 }).notNull(),
+  emailVerified: d
+    .timestamp({
+      mode: "date",
+      withTimezone: true,
+    })
+    .default(sql`CURRENT_TIMESTAMP`),
+  image: d.varchar({ length: 255 }),
+}));
+
 export const posts = createTable(
   "post",
   (d) => ({
@@ -38,23 +55,6 @@ export const posts = createTable(
     index("fe_post_name_idx").on(t.name),
   ],
 );
-
-export const users = createTable("user", (d) => ({
-  id: d
-    .varchar({ length: 255 })
-    .notNull()
-    .primaryKey()
-    .$defaultFn(() => crypto.randomUUID()),
-  name: d.varchar({ length: 255 }),
-  email: d.varchar({ length: 255 }).notNull(),
-  emailVerified: d
-    .timestamp({
-      mode: "date",
-      withTimezone: true,
-    })
-    .default(sql`CURRENT_TIMESTAMP`),
-  image: d.varchar({ length: 255 }),
-}));
 
 export const products = createTable(
   "product",

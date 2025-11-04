@@ -5,3 +5,4 @@ export {
   type Database,
 } from "./client";
 export * from "./schema";
+export * from "./sample-data";
