@@ -9,6 +9,15 @@ import { type AdapterAccount } from "next-auth/adapters";
  */
 export const createTable = pgTableCreator((name) => `fequest_${name}`);
 
+export const featureRequestStatuses = [
+  "pending",
+  "in_progress",
+  "completed",
+  "rejected",
+] as const;
+
+export type FeatureRequestStatus = (typeof featureRequestStatuses)[number];
+
 export const posts = createTable(
   "post",
   (d) => ({
@@ -47,9 +56,82 @@ export const users = createTable("user", (d) => ({
   image: d.varchar({ length: 255 }),
 }));
 
+export const products = createTable(
+  "product",
+  (d) => ({
+    id: d.integer().primaryKey().generatedByDefaultAsIdentity(),
+    name: d.varchar({ length: 256 }).notNull(),
+    userId: d
+      .varchar({ length: 255 })
+      .notNull()
+      .references(() => users.id),
+    createdAt: d
+      .timestamp({ withTimezone: true })
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
+    updatedAt: d.timestamp({ withTimezone: true }).$onUpdate(() => new Date()),
+  }),
+  (t) => [
+    index("fe_product_user_id_idx").on(t.userId),
+    index("fe_product_name_idx").on(t.name),
+  ],
+);
+
+export const featureRequests = createTable(
+  "feature_request",
+  (d) => ({
+    id: d.integer().primaryKey().generatedByDefaultAsIdentity(),
+    productId: d
+      .integer()
+      .notNull()
+      .references(() => products.id),
+    userId: d
+      .varchar({ length: 255 })
+      .notNull()
+      .references(() => users.id),
+    status: d
+      .varchar({ length: 32 })
+      .$type<FeatureRequestStatus>()
+      .notNull()
+      .default("pending"),
+    content: d.text().notNull(),
+    likes: d.integer().default(0).notNull(),
+    createdAt: d
+      .timestamp({ withTimezone: true })
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
+    updatedAt: d.timestamp({ withTimezone: true }).$onUpdate(() => new Date()),
+  }),
+  (t) => [
+    index("fe_feature_request_product_id_idx").on(t.productId),
+    index("fe_feature_request_user_id_idx").on(t.userId),
+  ],
+);
+
 export const usersRelations = relations(users, ({ many }) => ({
   accounts: many(accounts),
+  products: many(products),
+  featureRequests: many(featureRequests),
 }));
+
+export const productsRelations = relations(products, ({ one, many }) => ({
+  user: one(users, { fields: [products.userId], references: [users.id] }),
+  featureRequests: many(featureRequests),
+}));
+
+export const featureRequestsRelations = relations(
+  featureRequests,
+  ({ one }) => ({
+    product: one(products, {
+      fields: [featureRequests.productId],
+      references: [products.id],
+    }),
+    user: one(users, {
+      fields: [featureRequests.userId],
+      references: [users.id],
+    }),
+  }),
+);
 
 export const accounts = createTable(
   "account",
