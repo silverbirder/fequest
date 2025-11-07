@@ -59,6 +59,9 @@ importers:
       '@trpc/server':
         specifier: ^11.0.0
         version: 11.7.1(typescript@5.9.2)
+      drizzle-orm:
+        specifier: ^0.41.0
+        version: 0.41.0(@libsql/client@0.14.0)(gel@2.1.1)(postgres@3.4.7)
       next:
         specifier: ^16.0.0
         version: 16.0.1(@babel/core@7.28.5)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
@@ -138,6 +141,9 @@ importers:
       '@trpc/server':
         specifier: ^11.0.0
         version: 11.7.1(typescript@5.9.2)
+      drizzle-orm:
+        specifier: ^0.41.0
+        version: 0.41.0(@libsql/client@0.14.0)(gel@2.1.1)(postgres@3.4.7)
       next:
         specifier: ^16.0.0
         version: 16.0.1(@babel/core@7.28.5)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
@@ -381,6 +387,9 @@ importers:
       '@repo/ui':
         specifier: workspace:*
         version: link:../ui
+      next:
+        specifier: ^16.0.0
+        version: 16.0.1(@babel/core@7.28.5)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       react:
         specifier: ^19.0.0
         version: 19.2.0
