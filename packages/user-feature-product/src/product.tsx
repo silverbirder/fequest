@@ -1,4 +1,4 @@
-import { VStack } from "@repo/ui/components";
+import { Button, VStack } from "@repo/ui/components";
 import Form from "next/form";
 
 type FeatureRequest = {
@@ -29,6 +29,7 @@ export const Product = ({ product, onLikeFeature }: Props) => {
       <section>
         <h2>{title}</h2>
         <p>{description}</p>
+        <Button variant="destructive">新しいフィーチャーをリクエスト</Button>
       </section>
       <section>
         <h2>フィーチャー一覧</h2>

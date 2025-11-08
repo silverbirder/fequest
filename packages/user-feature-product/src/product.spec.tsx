@@ -5,7 +5,7 @@ import { Product } from "./product";
 
 describe("Product", () => {
   it("renders provided props", async () => {
-    const { asFragment } = await render(
+    const { asFragment, baseElement } = await render(
       <Product
         product={{
           id: 1,
@@ -17,5 +17,6 @@ describe("Product", () => {
     );
 
     expect(asFragment()).toMatchSnapshot();
+    await expect.element(baseElement).toMatchScreenshot();
   });
 });

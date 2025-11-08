@@ -1,3 +1,4 @@
+import tailwindPostcss from "@tailwindcss/postcss";
 import react from "@vitejs/plugin-react";
 import { playwright } from "@vitest/browser-playwright";
 import { defineConfig, mergeConfig } from "vitest/config";
@@ -7,6 +8,11 @@ import { defineConfig, mergeConfig } from "vitest/config";
  * @type {import("vitest/config").ViteUserConfigExport}
  */
 const baseConfig = {
+  css: {
+    postcss: {
+      plugins: [tailwindPostcss()],
+    },
+  },
   plugins: [react()],
   test: {
     include: ["src/**/*.test.{ts,tsx}", "src/**/*.spec.{ts,tsx}"],

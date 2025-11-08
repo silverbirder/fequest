@@ -4,4 +4,7 @@ export default createBrowserConfig({
   define: {
     "process.env": {},
   },
+  test: {
+    setupFiles: ["./vitest.setup.ts"],
+  },
 });
