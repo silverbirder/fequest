@@ -1,7 +1,7 @@
 /* eslint-env node */
 /* global process */
 import { createEnv } from "@t3-oss/env-nextjs";
-import { z } from "zod";
+import { fallback, optional, picklist, pipe, string, url } from "valibot";
 
 export const env = createEnv({
   /**
@@ -10,15 +10,14 @@ export const env = createEnv({
    */
   server: {
     AUTH_SECRET:
-      process.env.NODE_ENV === "production"
-        ? z.string()
-        : z.string().optional(),
-    AUTH_GOOGLE_ID: z.string(),
-    AUTH_GOOGLE_SECRET: z.string(),
-    DATABASE_URL: z.string().url(),
-    NODE_ENV: z
-      .enum(["development", "test", "production"])
-      .default("development"),
+      process.env.NODE_ENV === "production" ? string() : optional(string()),
+    AUTH_GOOGLE_ID: string(),
+    AUTH_GOOGLE_SECRET: string(),
+    DATABASE_URL: pipe(string(), url()),
+    NODE_ENV: fallback(
+      picklist(["development", "test", "production"]),
+      "development"
+    ),
   },
 
   /**
@@ -27,7 +26,7 @@ export const env = createEnv({
    * `NEXT_PUBLIC_`.
    */
   client: {
-    // NEXT_PUBLIC_CLIENTVAR: z.string(),
+    // NEXT_PUBLIC_CLIENTVAR: string(),
   },
 
   /**
@@ -47,7 +46,7 @@ export const env = createEnv({
    */
   skipValidation: !!process.env.SKIP_ENV_VALIDATION,
   /**
-   * Makes it so that empty strings are treated as undefined. `SOME_VAR: z.string()` and
+   * Makes it so that empty strings are treated as undefined. `SOME_VAR: string()` and
    * `SOME_VAR=''` will throw an error.
    */
   emptyStringAsUndefined: true,

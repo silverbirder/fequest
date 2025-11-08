@@ -1,12 +1,12 @@
-import { z } from "zod";
+import { integer, minValue, number, object, pipe } from "valibot";
 
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 
 export const productRouter = createTRPCRouter({
   byId: publicProcedure
     .input(
-      z.object({
-        id: z.number().int().positive(),
+      object({
+        id: pipe(number(), integer(), minValue(1)),
       }),
     )
     .query(async ({ ctx, input }) => {

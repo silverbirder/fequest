@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { integer, minValue, number, object, pipe } from "valibot";
 
 import { TRPCError } from "@trpc/server";
 import { eq, sql } from "drizzle-orm";
@@ -9,8 +9,8 @@ import { featureRequests } from "@repo/db";
 export const featureRequestsRouter = createTRPCRouter({
   like: protectedProcedure
     .input(
-      z.object({
-        id: z.number().int().positive(),
+      object({
+        id: pipe(number(), integer(), minValue(1)),
       }),
     )
     .mutation(async ({ ctx, input }) => {
