@@ -66,34 +66,7 @@ module.exports = function generator(plop) {
         {
           type: "add",
           path: plop.renderString(
-            `${featureDir}/{{kebabCase name}}.container.tsx`,
-            answers
-          ),
-          templateFile: "templates/feature/container.tsx.hbs",
-          skipIfExists: true,
-        },
-        {
-          type: "add",
-          path: plop.renderString(
-            `${featureDir}/{{kebabCase name}}.container.stories.tsx`,
-            answers
-          ),
-          templateFile: "templates/feature/container.stories.tsx.hbs",
-          skipIfExists: true,
-        },
-        {
-          type: "add",
-          path: plop.renderString(
-            `${featureDir}/{{kebabCase name}}.container.spec.tsx`,
-            answers
-          ),
-          templateFile: "templates/feature/container.spec.tsx.hbs",
-          skipIfExists: true,
-        },
-        {
-          type: "add",
-          path: plop.renderString(
-            `${featureDir}/{{kebabCase name}}.component.tsx`,
+            `${featureDir}/{{kebabCase name}}.tsx`,
             answers
           ),
           templateFile: "templates/feature/component.tsx.hbs",
@@ -102,7 +75,7 @@ module.exports = function generator(plop) {
         {
           type: "add",
           path: plop.renderString(
-            `${featureDir}/{{kebabCase name}}.component.stories.tsx`,
+            `${featureDir}/{{kebabCase name}}.stories.tsx`,
             answers
           ),
           templateFile: "templates/feature/component.stories.tsx.hbs",
@@ -111,7 +84,7 @@ module.exports = function generator(plop) {
         {
           type: "add",
           path: plop.renderString(
-            `${featureDir}/{{kebabCase name}}.component.spec.tsx`,
+            `${featureDir}/{{kebabCase name}}.spec.tsx`,
             answers
           ),
           templateFile: "templates/feature/component.spec.tsx.hbs",

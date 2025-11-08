@@ -18,7 +18,7 @@ type Props = {
   onLikeFeature?: (formData: FormData) => Promise<void>;
 };
 
-export const ProductComponent = ({ product, onLikeFeature }: Props) => {
+export const Product = ({ product, onLikeFeature }: Props) => {
   const title = product.name;
   const description = "プロダクトに寄せられたフィーチャーリクエストです";
   const featureRequests = product.featureRequests ?? [];

@@ -1,19 +1,17 @@
 import { render } from "vitest-browser-react";
 import { describe, expect, it } from "vitest";
 
-import { {{pascalCase name}}Component } from "./{{kebabCase name}}.component";
+import { {{pascalCase name}} } from "./{{kebabCase name}}";
 
-describe("{{pascalCase name}}Component", () => {
-  it("renders provided props", async () => {
+describe("{{pascalCase name}}", () => {
+  it("renders provided children", async () => {
     await render(
-      <{{pascalCase name}}Component
-        title="Sample"
-        description="Sample description"
-      />
+      <{{pascalCase name}} className="sample">Child content</{{pascalCase name}}>,
     );
 
-    const section = document.querySelector('[data-slot="{{kebabCase name}}-component"]');
-    expect(section).not.toBeNull();
-    expect(section?.textContent ?? "").toContain("Sample description");
+    const element = document.querySelector("div.sample");
+    expect(element).not.toBeNull();
+    expect(element?.textContent ?? "").toContain("Child content");
+    expect(element?.classList.contains("sample")).toBe(true);
   });
 });

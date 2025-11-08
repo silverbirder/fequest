@@ -1,21 +1,9 @@
-type {{pascalCase name}}ComponentProps = {
-  title: string;
-  description: string;
-};
+import type { PropsWithChildren } from "react";
 
-export const {{pascalCase name}}Component = ({
-  title,
-  description,
-}: {{pascalCase name}}ComponentProps) => {
-  return (
-    <section
-      data-slot="{{kebabCase name}}-component"
-      className="space-y-2 rounded-md border border-border/40 p-4 shadow-sm"
-    >
-      <h2 className="text-lg font-semibold">{title}</h2>
-      <p className="text-sm text-muted-foreground">{description}</p>
-    </section>
-  );
-};
+type Props = PropsWithChildren<{
+  className?: string;
+}>;
 
-export type { {{pascalCase name}}ComponentProps };
+export const {{pascalCase name}} = ({ children, className }: Props) => {
+  return <div className={className}>{children}</div>;
+};

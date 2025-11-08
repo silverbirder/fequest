@@ -36,10 +36,10 @@ export default function generator(plop) {
         {
           type: "add",
           path: plop.renderString(
-            `${componentDir}/{{kebabCase name}}.test.tsx`,
+            `${componentDir}/{{kebabCase name}}.spec.tsx`,
             answers,
           ),
-          templateFile: "templates/react-component/component.test.tsx.hbs",
+          templateFile: "templates/react-component/component.spec.tsx.hbs",
           skipIfExists: true,
         },
         {

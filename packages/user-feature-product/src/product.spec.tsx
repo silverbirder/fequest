@@ -1,12 +1,12 @@
 import { render } from "vitest-browser-react";
 import { describe, expect, it } from "vitest";
 
-import { ProductComponent } from "./product.component";
+import { Product } from "./product";
 
-describe("ProductComponent", () => {
+describe("Product", () => {
   it("renders provided props", async () => {
     await render(
-      <ProductComponent
+      <Product
         product={{
           id: 1,
           name: "Sample Product",

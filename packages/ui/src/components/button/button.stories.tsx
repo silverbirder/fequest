@@ -2,7 +2,6 @@ import type { Meta, StoryObj } from "@storybook/nextjs";
 import { Button } from "./button";
 
 const meta = {
-  title: "Example/Button",
   component: Button,
   args: { children: "Click Me", variant: "default", size: "default" },
 } satisfies Meta<typeof Button>;

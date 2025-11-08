@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/nextjs";
 
-import { ProductComponent } from "./product.component";
+import { Product } from "./product";
 
 const meta = {
-  component: ProductComponent,
+  component: Product,
   args: {
     product: {
       id: 1,
@@ -18,7 +18,7 @@ const meta = {
       ],
     },
   },
-} satisfies Meta<typeof ProductComponent>;
+} satisfies Meta<typeof Product>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
