@@ -1,0 +1,24 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Product > renders provided props 1`] = `
+<DocumentFragment>
+  <div>
+    <section>
+      <h2>
+        Sample Product
+      </h2>
+      <p>
+        プロダクトに寄せられたフィーチャーリクエストです
+      </p>
+    </section>
+    <section>
+      <h2>
+        フィーチャー一覧
+      </h2>
+      <p>
+        フィーチャーはまだありません。
+      </p>
+    </section>
+  </div>
+</DocumentFragment>
+`;

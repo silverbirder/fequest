@@ -1,0 +1,1 @@
+- [ ] build時にtypescript running不要

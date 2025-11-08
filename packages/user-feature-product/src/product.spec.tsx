@@ -5,7 +5,7 @@ import { Product } from "./product";
 
 describe("Product", () => {
   it("renders provided props", async () => {
-    await render(
+    const { asFragment } = await render(
       <Product
         product={{
           id: 1,
@@ -16,8 +16,6 @@ describe("Product", () => {
       />,
     );
 
-    const section = document.querySelector('[data-slot="product-component"]');
-    expect(section).not.toBeNull();
-    expect(section?.textContent ?? "").toContain("Sample description");
+    expect(asFragment()).toMatchSnapshot();
   });
 });

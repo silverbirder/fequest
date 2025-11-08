@@ -4,4 +4,6 @@ export * from "./card";
 export * from "./center";
 export * from "./code";
 export * from "./container";
+export * from "./flex";
+export * from "./grid";
 export * from "./stack";
