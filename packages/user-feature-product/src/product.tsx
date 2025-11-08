@@ -1,3 +1,4 @@
+import { VStack } from "@repo/ui/components";
 import Form from "next/form";
 
 type FeatureRequest = {
@@ -34,18 +35,18 @@ export const Product = ({ product, onLikeFeature }: Props) => {
         {featureRequests.length === 0 ? (
           <p>フィーチャーはまだありません。</p>
         ) : (
-          <ul>
+          <VStack>
             {featureRequests.map((feature) => (
-              <li key={feature.id}>
+              <VStack key={feature.id}>
                 <p>{feature.content}</p>
                 <Form action={onLikeFeature}>
                   <input type="hidden" name="featureId" value={feature.id} />
                   <button type="submit">いいね ({feature.likes})</button>
                   <span>ステータス: {feature.status}</span>
                 </Form>
-              </li>
+              </VStack>
             ))}
-          </ul>
+          </VStack>
         )}
       </section>
     </div>
