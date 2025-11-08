@@ -1,6 +1,6 @@
 import { revalidatePath } from "next/cache";
 
-import { ProductContainer } from "@repo/user-feature-product";
+import { ProductComponent } from "@repo/user-feature-product";
 import { api } from "~/trpc/server";
 
 type Props = {
@@ -40,5 +40,5 @@ export default async function Page({ params }: Props) {
     return <div>Product not found</div>;
   }
 
-  return <ProductContainer product={product} onLikeFeature={likeFeature} />;
+  return <ProductComponent product={product} onLikeFeature={likeFeature} />;
 }

@@ -6,7 +6,13 @@ import { ProductComponent } from "./product.component";
 describe("ProductComponent", () => {
   it("renders provided props", async () => {
     await render(
-      <ProductComponent title="Sample" description="Sample description" />,
+      <ProductComponent
+        product={{
+          id: 1,
+          name: "Sample Product",
+          featureRequests: [],
+        }}
+      />,
     );
 
     const section = document.querySelector('[data-slot="product-component"]');
