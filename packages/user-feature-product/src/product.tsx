@@ -15,7 +15,7 @@ type Product = {
 
 type Props = {
   product: Product;
-  onLikeFeature?: (formData: FormData) => Promise<void>;
+  onLikeFeature: (formData: FormData) => Promise<void>;
 };
 
 export const Product = ({ product, onLikeFeature }: Props) => {
@@ -49,7 +49,7 @@ export const Product = ({ product, onLikeFeature }: Props) => {
                   {feature.content}
                 </p>
                 <Form
-                  action={(formData) => onLikeFeature?.(formData)}
+                  action={onLikeFeature}
                   className="flex items-center gap-2"
                 >
                   <input type="hidden" name="featureId" value={feature.id} />

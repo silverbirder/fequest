@@ -17,6 +17,9 @@ const meta = {
         },
       ],
     },
+    onLikeFeature: async (formData: FormData) => {
+      console.log("Liked feature with ID:", formData.get("featureId"));
+    },
   },
 } satisfies Meta<typeof Product>;
 
