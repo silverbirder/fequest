@@ -1,26 +1,12 @@
 import { revalidatePath } from "next/cache";
 
 import { Product } from "@repo/user-feature-product";
+import { idSchema } from "@repo/schema";
 import { api } from "~/trpc/server";
-import {
-  integer,
-  minValue,
-  number,
-  object,
-  pipe,
-  safeParse,
-  string,
-  transform,
-} from "valibot";
+import { object, safeParse } from "valibot";
 
 const paramsSchema = object({
-  id: pipe(
-    string(),
-    transform((value) => Number(value)),
-    number("Invalid product ID"),
-    integer("Invalid product ID"),
-    minValue(1, "Invalid product ID"),
-  ),
+  id: idSchema,
 });
 
 type Props = {

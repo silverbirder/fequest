@@ -120,6 +120,9 @@ importers:
       '@repo/db':
         specifier: workspace:*
         version: link:../../packages/db
+      '@repo/schema':
+        specifier: workspace:*
+        version: link:../../packages/schema
       '@repo/ui':
         specifier: workspace:*
         version: link:../../packages/ui
@@ -254,6 +257,28 @@ importers:
       typescript-eslint:
         specifier: ^8.40.0
         version: 8.46.2(eslint@9.39.0(jiti@2.6.1))(typescript@5.9.2)
+
+  packages/schema:
+    dependencies:
+      valibot:
+        specifier: ^1.1.0
+        version: 1.1.0(typescript@5.9.2)
+    devDependencies:
+      '@repo/eslint-config':
+        specifier: workspace:*
+        version: link:../eslint-config
+      '@repo/typescript-config':
+        specifier: workspace:*
+        version: link:../typescript-config
+      '@types/node':
+        specifier: ^22.15.3
+        version: 22.18.13
+      eslint:
+        specifier: ^9.38.0
+        version: 9.39.0(jiti@2.6.1)
+      typescript:
+        specifier: 5.9.2
+        version: 5.9.2
 
   packages/storybook:
     dependencies:

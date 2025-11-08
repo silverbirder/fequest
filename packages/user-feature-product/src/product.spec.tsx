@@ -12,6 +12,7 @@ describe("Product", () => {
           name: "Sample Product",
           featureRequests: [],
         }}
+        onLikeFeature={async () => {}}
       />,
     );
 

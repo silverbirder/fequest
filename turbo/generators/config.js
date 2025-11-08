@@ -65,6 +65,12 @@ module.exports = function generator(plop) {
         },
         {
           type: "add",
+          path: plop.renderString(`${packageDir}/eslint.config.mjs`, answers),
+          templateFile: "templates/feature/eslint.config.mjs.hbs",
+          skipIfExists: true,
+        },
+        {
+          type: "add",
           path: plop.renderString(
             `${featureDir}/{{kebabCase name}}.tsx`,
             answers
