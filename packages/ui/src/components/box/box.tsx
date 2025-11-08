@@ -1,7 +1,7 @@
-import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 
 import { cn } from "@repo/ui/lib/utils";
+import React from "react";
 
 type BoxProps = React.ComponentPropsWithoutRef<"div"> & {
   asChild?: boolean;
