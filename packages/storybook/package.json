@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "lint": "eslint . --max-warnings 0",
+    "check-types": "tsc --noEmit",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
   },
@@ -12,6 +13,7 @@
     "@repo/typescript-config": "workspace:*",
     "@storybook/addon-a11y": "^10.0.2",
     "@storybook/addon-docs": "^10.0.2",
+    "@storybook/addon-vitest": "^10.0.2",
     "@storybook/nextjs-vite": "^10.0.6",
     "@tailwindcss/postcss": "^4.1.11",
     "@types/node": "^22.15.3",
@@ -21,7 +23,11 @@
     "eslint-config-next": "16.0.1",
     "eslint-plugin-storybook": "^10.0.2",
     "storybook": "^10.0.2",
-    "typescript": "5.9.2"
+    "typescript": "5.9.2",
+    "vitest": "^4.0.6",
+    "playwright": "^1.56.1",
+    "@vitest/browser-playwright": "^4.0.6",
+    "@vitest/coverage-v8": "^4.0.8"
   },
   "dependencies": {
     "@repo/ui": "workspace:*",
