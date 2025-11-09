@@ -1,10 +1,9 @@
-import { integer, minValue, number, object, pipe } from "valibot";
-
+import { featureRequests } from "@repo/db";
 import { TRPCError } from "@trpc/server";
 import { eq, sql } from "drizzle-orm";
+import { integer, minValue, number, object, pipe } from "valibot";
 
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
-import { featureRequests } from "@repo/db";
 
 export const featureRequestsRouter = createTRPCRouter({
   like: protectedProcedure

@@ -1,5 +1,4 @@
 import { Slot } from "@radix-ui/react-slot";
-
 import { cn } from "@repo/ui/lib/utils";
 import React from "react";
 
@@ -8,11 +7,11 @@ type BoxProps = React.ComponentPropsWithoutRef<"div"> & {
 };
 
 const Box = React.forwardRef<HTMLDivElement, BoxProps>(
-  ({ className, asChild = false, ...props }, ref) => {
+  ({ asChild = false, className, ...props }, ref) => {
     const Comp = asChild ? Slot : "div";
 
     return (
-      <Comp ref={ref} data-slot="box" className={cn(className)} {...props} />
+      <Comp className={cn(className)} data-slot="box" ref={ref} {...props} />
     );
   },
 );

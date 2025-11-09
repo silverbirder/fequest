@@ -1,11 +1,24 @@
 import { Slot } from "@radix-ui/react-slot";
-import { cva, type VariantProps } from "class-variance-authority";
-
 import { cn } from "@repo/ui/lib/utils";
+import { cva, type VariantProps } from "class-variance-authority";
 import React from "react";
 
 const gridVariants = cva("grid", {
+  defaultVariants: {
+    align: "stretch",
+    columns: "1",
+    flow: "row",
+    gap: "md",
+    inline: false,
+    justify: "start",
+  },
   variants: {
+    align: {
+      center: "items-center",
+      end: "items-end",
+      start: "items-start",
+      stretch: "items-stretch",
+    },
     columns: {
       "1": "grid-cols-1",
       "2": "grid-cols-2",
@@ -21,6 +34,34 @@ const gridVariants = cva("grid", {
       "12": "grid-cols-12",
       none: "grid-cols-none",
     },
+    flow: {
+      column: "grid-flow-col",
+      "column-dense": "grid-flow-col-dense",
+      dense: "grid-flow-dense",
+      row: "grid-flow-row",
+      "row-dense": "grid-flow-row-dense",
+    },
+    gap: {
+      "2xl": "gap-10",
+      lg: "gap-6",
+      md: "gap-4",
+      none: "gap-0",
+      sm: "gap-2",
+      xl: "gap-8",
+      xs: "gap-1",
+    },
+    inline: {
+      false: "",
+      true: "inline-grid",
+    },
+    justify: {
+      around: "justify-around",
+      between: "justify-between",
+      center: "justify-center",
+      end: "justify-end",
+      evenly: "justify-evenly",
+      start: "justify-start",
+    },
     rows: {
       "1": "grid-rows-1",
       "2": "grid-rows-2",
@@ -30,48 +71,6 @@ const gridVariants = cva("grid", {
       "6": "grid-rows-6",
       none: "grid-rows-none",
     },
-    gap: {
-      none: "gap-0",
-      xs: "gap-1",
-      sm: "gap-2",
-      md: "gap-4",
-      lg: "gap-6",
-      xl: "gap-8",
-      "2xl": "gap-10",
-    },
-    flow: {
-      row: "grid-flow-row",
-      column: "grid-flow-col",
-      dense: "grid-flow-dense",
-      "row-dense": "grid-flow-row-dense",
-      "column-dense": "grid-flow-col-dense",
-    },
-    inline: {
-      false: "",
-      true: "inline-grid",
-    },
-    align: {
-      start: "items-start",
-      center: "items-center",
-      end: "items-end",
-      stretch: "items-stretch",
-    },
-    justify: {
-      start: "justify-start",
-      center: "justify-center",
-      end: "justify-end",
-      between: "justify-between",
-      around: "justify-around",
-      evenly: "justify-evenly",
-    },
-  },
-  defaultVariants: {
-    columns: "1",
-    gap: "md",
-    flow: "row",
-    inline: false,
-    align: "stretch",
-    justify: "start",
   },
 });
 
@@ -83,15 +82,15 @@ type GridProps = React.ComponentPropsWithoutRef<"div"> &
 const Grid = React.forwardRef<HTMLDivElement, GridProps>(
   (
     {
+      align,
+      asChild = false,
       className,
       columns,
-      rows,
-      gap,
       flow,
+      gap,
       inline,
-      align,
       justify,
-      asChild = false,
+      rows,
       ...props
     },
     ref,
@@ -100,12 +99,12 @@ const Grid = React.forwardRef<HTMLDivElement, GridProps>(
 
     return (
       <Comp
-        ref={ref}
-        data-slot="grid"
         className={cn(
-          gridVariants({ columns, rows, gap, flow, inline, align, justify }),
+          gridVariants({ align, columns, flow, gap, inline, justify, rows }),
           className,
         )}
+        data-slot="grid"
+        ref={ref}
         {...props}
       />
     );

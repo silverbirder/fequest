@@ -1,5 +1,5 @@
-import { render } from "vitest-browser-react";
 import { describe, expect, it } from "vitest";
+import { render } from "vitest-browser-react";
 
 import { HStack, VStack } from "./stack";
 
@@ -24,7 +24,7 @@ describe("Stack", () => {
 
   it("supports vertical orientation with custom spacing and alignment", async () => {
     await render(
-      <VStack spacing="lg" align="center" justify="between">
+      <VStack align="center" justify="between" spacing="lg">
         <span>One</span>
         <span>Two</span>
       </VStack>,
@@ -43,7 +43,7 @@ describe("Stack", () => {
 
   it("allows wrapping and inline display", async () => {
     await render(
-      <HStack wrap="wrap" inline>
+      <HStack inline wrap="wrap">
         <span>One</span>
         <span>Two</span>
         <span>Three</span>

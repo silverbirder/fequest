@@ -1,5 +1,5 @@
-import { describe, expect, it } from "vitest";
 import { safeParse } from "valibot";
+import { describe, expect, it } from "vitest";
 
 import { idSchema } from "./base";
 

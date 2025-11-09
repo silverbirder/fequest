@@ -3,20 +3,20 @@ import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import { Grid } from "./grid";
 
 const meta = {
-  title: "Layout/Grid",
-  component: Grid,
   args: {
-    columns: "3",
-    gap: "md",
     children: [...Array(6)].map((_, index) => (
       <div
-        key={index}
         className="rounded-md bg-primary/10 px-4 py-8 text-center"
+        key={index}
       >
         Item {index + 1}
       </div>
     )),
+    columns: "3",
+    gap: "md",
   },
+  component: Grid,
+  title: "Layout/Grid",
 } satisfies Meta<typeof Grid>;
 
 export default meta;
@@ -26,16 +26,16 @@ export const Default: Story = {};
 
 export const Dense: Story = {
   args: {
+    columns: "4",
     flow: "row-dense",
     gap: "sm",
-    columns: "4",
   },
   render: (args) => (
     <Grid {...args}>
       {[160, 120, 200, 140, 100, 180].map((height, index) => (
         <div
-          key={index}
           className="rounded-md bg-primary/10 px-4"
+          key={index}
           style={{ minHeight: height }}
         >
           Box {index + 1}
@@ -47,9 +47,9 @@ export const Dense: Story = {
 
 export const Inline: Story = {
   args: {
-    inline: true,
+    align: "center",
     columns: "2",
     gap: "lg",
-    align: "center",
+    inline: true,
   },
 };

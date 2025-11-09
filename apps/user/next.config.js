@@ -6,8 +6,8 @@ import "./src/env.js";
 
 /** @type {import("next").NextConfig} */
 const config = {
-  typedRoutes: true,
   reactCompiler: true,
+  typedRoutes: true,
 };
 
 export default config;

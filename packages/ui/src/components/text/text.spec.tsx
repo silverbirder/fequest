@@ -1,12 +1,12 @@
-import { render } from "vitest-browser-react";
 import { describe, expect, it } from "vitest";
+import { render } from "vitest-browser-react";
 
 import { Text } from "./text";
 
 describe("Text", () => {
   it("renders a span with typography variants", async () => {
     await render(
-      <Text size="xl" weight="semibold" color="accent">
+      <Text color="accent" size="xl" weight="semibold">
         Hello
       </Text>,
     );

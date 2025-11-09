@@ -1,5 +1,5 @@
-import { render } from "vitest-browser-react";
 import { describe, expect, it } from "vitest";
+import { render } from "vitest-browser-react";
 
 import { Container } from "./container";
 
@@ -33,7 +33,7 @@ describe("Container", () => {
 
   it("allows custom sizing and padding variants", async () => {
     await render(
-      <Container size="sm" padding="none">
+      <Container padding="none" size="sm">
         Variant
       </Container>,
     );

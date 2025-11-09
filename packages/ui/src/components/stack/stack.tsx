@@ -1,55 +1,54 @@
-import { cva, type VariantProps } from "class-variance-authority";
-
 import { cn } from "@repo/ui/lib/utils";
+import { cva, type VariantProps } from "class-variance-authority";
 import React from "react";
 
 const stackVariants = cva("flex", {
+  defaultVariants: {
+    align: "stretch",
+    direction: "column",
+    inline: false,
+    justify: "start",
+    spacing: "md",
+    wrap: "nowrap",
+  },
   variants: {
-    direction: {
-      row: "flex-row",
-      column: "flex-col",
-    },
     align: {
-      start: "items-start",
+      baseline: "items-baseline",
       center: "items-center",
       end: "items-end",
+      start: "items-start",
       stretch: "items-stretch",
-      baseline: "items-baseline",
+    },
+    direction: {
+      column: "flex-col",
+      row: "flex-row",
+    },
+    inline: {
+      false: undefined,
+      true: "inline-flex",
     },
     justify: {
-      start: "justify-start",
+      around: "justify-around",
+      between: "justify-between",
       center: "justify-center",
       end: "justify-end",
-      between: "justify-between",
-      around: "justify-around",
       evenly: "justify-evenly",
+      start: "justify-start",
     },
     spacing: {
-      none: "gap-0",
-      xs: "gap-1",
-      sm: "gap-2",
-      md: "gap-4",
-      lg: "gap-6",
-      xl: "gap-8",
       "2xl": "gap-10",
+      lg: "gap-6",
+      md: "gap-4",
+      none: "gap-0",
+      sm: "gap-2",
+      xl: "gap-8",
+      xs: "gap-1",
     },
     wrap: {
       nowrap: "flex-nowrap",
       wrap: "flex-wrap",
       "wrap-reverse": "flex-wrap-reverse",
     },
-    inline: {
-      false: undefined,
-      true: "inline-flex",
-    },
-  },
-  defaultVariants: {
-    direction: "column",
-    align: "stretch",
-    justify: "start",
-    spacing: "md",
-    wrap: "nowrap",
-    inline: false,
   },
 });
 
@@ -58,20 +57,20 @@ type StackProps = React.HTMLAttributes<HTMLDivElement> &
 
 const Stack = React.forwardRef<HTMLDivElement, StackProps>(
   (
-    { className, direction, spacing, align, justify, wrap, inline, ...props },
+    { align, className, direction, inline, justify, spacing, wrap, ...props },
     ref,
   ) => {
     const orientation = direction ?? "column";
 
     return (
       <div
-        ref={ref}
-        data-slot="stack"
-        data-orientation={orientation}
         className={cn(
-          stackVariants({ direction, spacing, align, justify, wrap, inline }),
+          stackVariants({ align, direction, inline, justify, spacing, wrap }),
           className,
         )}
+        data-orientation={orientation}
+        data-slot="stack"
+        ref={ref}
         {...props}
       />
     );
@@ -83,7 +82,7 @@ type HStackProps = Omit<StackProps, "direction">;
 
 const HStack = React.forwardRef<HTMLDivElement, HStackProps>(
   ({ align = "center", ...props }, ref) => (
-    <Stack ref={ref} direction="row" align={align} {...props} />
+    <Stack align={align} direction="row" ref={ref} {...props} />
   ),
 );
 HStack.displayName = "HStack";
@@ -92,10 +91,10 @@ type VStackProps = Omit<StackProps, "direction">;
 
 const VStack = React.forwardRef<HTMLDivElement, VStackProps>(
   ({ align = "start", ...props }, ref) => (
-    <Stack ref={ref} direction="column" align={align} {...props} />
+    <Stack align={align} direction="column" ref={ref} {...props} />
   ),
 );
 VStack.displayName = "VStack";
 
-export { Stack, HStack, VStack, stackVariants };
-export type { StackProps, HStackProps, VStackProps };
+export { HStack, Stack, stackVariants, VStack };
+export type { HStackProps, StackProps, VStackProps };

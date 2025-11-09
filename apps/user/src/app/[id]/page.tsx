@@ -1,9 +1,9 @@
-import { revalidatePath } from "next/cache";
-
-import { Product } from "@repo/user-feature-product";
 import { idSchema } from "@repo/schema";
-import { api } from "~/trpc/server";
+import { Product } from "@repo/user-feature-product";
+import { revalidatePath } from "next/cache";
 import { object, safeParse } from "valibot";
+
+import { api } from "~/trpc/server";
 
 const paramsSchema = object({
   id: idSchema,
@@ -39,5 +39,5 @@ export default async function Page({ params }: PageProps<"/[id]">) {
     return <div>Product not found</div>;
   }
 
-  return <Product product={product} onLikeFeature={likeFeature} />;
+  return <Product onLikeFeature={likeFeature} product={product} />;
 }

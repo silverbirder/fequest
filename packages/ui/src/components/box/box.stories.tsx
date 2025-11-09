@@ -3,12 +3,12 @@ import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import { Box } from "./box";
 
 const meta = {
-  title: "Layout/Box",
-  component: Box,
   args: {
-    className: "rounded-md border border-border bg-background p-4 shadow-sm",
     children: "This content is inside the box",
+    className: "rounded-md border border-border bg-background p-4 shadow-sm",
   },
+  component: Box,
+  title: "Layout/Box",
 } satisfies Meta<typeof Box>;
 
 export default meta;

@@ -2,24 +2,24 @@ import { Button, Heading, Text, VStack } from "@repo/ui/components";
 import Form from "next/form";
 
 type FeatureRequest = {
-  id: number;
   content: string;
+  id: number;
   likes: number;
   status: string;
 };
 
 type Product = {
+  featureRequests?: FeatureRequest[] | null;
   id: number;
   name: string;
-  featureRequests?: FeatureRequest[] | null;
 };
 
 type Props = {
-  product: Product;
   onLikeFeature: (formData: FormData) => Promise<void>;
+  product: Product;
 };
 
-export const Product = ({ product, onLikeFeature }: Props) => {
+export const Product = ({ onLikeFeature, product }: Props) => {
   const title = product.name;
   const description = "プロダクトに寄せられたフィーチャーリクエストです";
   const featureRequests = product.featureRequests ?? [];
@@ -41,7 +41,7 @@ export const Product = ({ product, onLikeFeature }: Props) => {
               <VStack key={feature.id}>
                 <Text>{feature.content}</Text>
                 <Form action={onLikeFeature}>
-                  <input type="hidden" name="featureId" value={feature.id} />
+                  <input name="featureId" type="hidden" value={feature.id} />
                   <button type="submit">いいね ({feature.likes})</button>
                   <span>ステータス: {feature.status}</span>
                 </Form>

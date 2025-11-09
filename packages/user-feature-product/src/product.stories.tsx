@@ -3,25 +3,25 @@ import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import { Product } from "./product";
 
 const meta = {
-  title: "Feature/User/Product",
-  component: Product,
   args: {
+    onLikeFeature: async (formData: FormData) => {
+      console.log("Liked feature with ID:", formData.get("featureId"));
+    },
     product: {
-      id: 1,
-      name: "サンプルプロダクト",
       featureRequests: [
         {
-          id: 1,
           content: "ユーザーがプロフィール画像をアップロードできるようにする",
+          id: 1,
           likes: 5,
           status: "検討中",
         },
       ],
-    },
-    onLikeFeature: async (formData: FormData) => {
-      console.log("Liked feature with ID:", formData.get("featureId"));
+      id: 1,
+      name: "サンプルプロダクト",
     },
   },
+  component: Product,
+  title: "Feature/User/Product",
 } satisfies Meta<typeof Product>;
 
 export default meta;

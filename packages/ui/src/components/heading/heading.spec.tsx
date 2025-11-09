@@ -1,5 +1,5 @@
-import { render } from "vitest-browser-react";
 import { describe, expect, it } from "vitest";
+import { render } from "vitest-browser-react";
 
 import { Heading } from "./heading";
 
@@ -17,7 +17,7 @@ describe("Heading", () => {
 
   it("allows changing level and composing with asChild", async () => {
     await render(
-      <Heading level={3} asChild underline>
+      <Heading asChild level={3} underline>
         <a href="#section">Section</a>
       </Heading>,
     );

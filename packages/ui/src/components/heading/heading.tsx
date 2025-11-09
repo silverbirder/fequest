@@ -1,45 +1,44 @@
 import { Slot } from "@radix-ui/react-slot";
+import { cn } from "@repo/ui/lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
 import React, { type ElementType } from "react";
-
-import { cn } from "@repo/ui/lib/utils";
 
 type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
 
 const headingVariants = cva("text-foreground tracking-tight", {
+  defaultVariants: {
+    align: "left",
+    size: "3xl",
+    weight: "bold",
+  },
   variants: {
-    size: {
-      "5xl": "text-5xl leading-tight",
-      "4xl": "text-4xl leading-tight",
-      "3xl": "text-3xl leading-tight",
-      "2xl": "text-2xl leading-snug",
-      xl: "text-xl leading-snug",
-      lg: "text-lg leading-snug",
-    },
-    weight: {
-      regular: "font-normal",
-      medium: "font-medium",
-      semibold: "font-semibold",
-      bold: "font-bold",
-      extrabold: "font-extrabold",
-    },
     align: {
-      left: "text-left",
       center: "text-center",
-      right: "text-right",
       justify: "text-justify",
+      left: "text-left",
+      right: "text-right",
     },
-    underline: {
-      true: "underline underline-offset-8",
+    size: {
+      "2xl": "text-2xl leading-snug",
+      "3xl": "text-3xl leading-tight",
+      "4xl": "text-4xl leading-tight",
+      "5xl": "text-5xl leading-tight",
+      lg: "text-lg leading-snug",
+      xl: "text-xl leading-snug",
     },
     truncate: {
       true: "truncate",
     },
-  },
-  defaultVariants: {
-    size: "3xl",
-    weight: "bold",
-    align: "left",
+    underline: {
+      true: "underline underline-offset-8",
+    },
+    weight: {
+      bold: "font-bold",
+      extrabold: "font-extrabold",
+      medium: "font-medium",
+      regular: "font-normal",
+      semibold: "font-semibold",
+    },
   },
 });
 
@@ -56,21 +55,21 @@ const sizeByLevel: Record<HeadingLevel, HeadingSize> = {
 
 type HeadingProps = React.HTMLAttributes<HTMLHeadingElement> &
   VariantProps<typeof headingVariants> & {
-    level?: HeadingLevel;
     asChild?: boolean;
+    level?: HeadingLevel;
   };
 
 const Heading = React.forwardRef<HTMLHeadingElement, HeadingProps>(
   (
     {
-      level = 2,
+      align,
       asChild = false,
       className,
+      level = 2,
       size,
-      weight,
-      align,
-      underline,
       truncate,
+      underline,
+      weight,
       ...props
     },
     ref,
@@ -80,19 +79,19 @@ const Heading = React.forwardRef<HTMLHeadingElement, HeadingProps>(
 
     return (
       <Component
-        ref={ref}
-        data-slot="heading"
-        data-level={level}
         className={cn(
           headingVariants({
-            size: computedSize,
-            weight,
             align,
-            underline,
+            size: computedSize,
             truncate,
+            underline,
+            weight,
           }),
           className,
         )}
+        data-level={level}
+        data-slot="heading"
+        ref={ref}
         {...props}
       />
     );
@@ -101,4 +100,4 @@ const Heading = React.forwardRef<HTMLHeadingElement, HeadingProps>(
 Heading.displayName = "Heading";
 
 export { Heading, headingVariants };
-export type { HeadingProps, HeadingLevel };
+export type { HeadingLevel, HeadingProps };

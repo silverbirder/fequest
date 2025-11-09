@@ -1,3 +1,4 @@
+import { posts } from "@repo/db";
 import { minLength, object, pipe, string } from "valibot";
 
 import {
@@ -5,23 +6,14 @@ import {
   protectedProcedure,
   publicProcedure,
 } from "~/server/api/trpc";
-import { posts } from "@repo/db";
 
 export const postRouter = createTRPCRouter({
-  hello: publicProcedure
-    .input(object({ text: string() }))
-    .query(({ input }) => {
-      return {
-        greeting: `Hello ${input.text}`,
-      };
-    }),
-
   create: protectedProcedure
     .input(object({ name: pipe(string(), minLength(1)) }))
     .mutation(async ({ ctx, input }) => {
       await ctx.db.insert(posts).values({
-        name: input.name,
         createdById: ctx.session.user.id,
+        name: input.name,
       });
     }),
 
@@ -36,4 +28,12 @@ export const postRouter = createTRPCRouter({
   getSecretMessage: protectedProcedure.query(() => {
     return "you can now see this secret message!";
   }),
+
+  hello: publicProcedure
+    .input(object({ text: string() }))
+    .query(({ input }) => {
+      return {
+        greeting: `Hello ${input.text}`,
+      };
+    }),
 });

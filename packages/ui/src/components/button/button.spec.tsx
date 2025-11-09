@@ -1,12 +1,12 @@
-import { render } from "vitest-browser-react";
 import { describe, expect, it } from "vitest";
+import { render } from "vitest-browser-react";
 
 import { Button } from "./button";
 
 describe("Button", () => {
   it("applies default structure and variant styles", async () => {
     await render(
-      <Button variant="destructive" size="lg">
+      <Button size="lg" variant="destructive">
         Delete
       </Button>,
     );

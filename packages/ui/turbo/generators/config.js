@@ -1,23 +1,5 @@
 export default function generator(plop) {
   plop.setGenerator("component", {
-    description: "Create a shared UI component",
-    prompts: [
-      {
-        type: "input",
-        name: "name",
-        message: "What is the component name?",
-        validate: (input) =>
-          (input && input.trim().length > 0) || "A component name is required.",
-      },
-      {
-        type: "input",
-        name: "baseDir",
-        message:
-          "Where should the component be created? (relative to @repo/ui)",
-        default: "src/components",
-        transformer: (input) => input.trim(),
-      },
-    ],
     actions: (answers) => {
       const baseDir =
         answers.baseDir && answers.baseDir.trim().length > 0
@@ -28,51 +10,69 @@ export default function generator(plop) {
 
       const actions = [
         {
-          type: "add",
           path: plop.renderString(`${componentDir}/{{kebabCase name}}.tsx`, answers),
-          templateFile: "templates/component/component.tsx.hbs",
           skipIfExists: true,
+          templateFile: "templates/component/component.tsx.hbs",
+          type: "add",
         },
         {
-          type: "add",
           path: plop.renderString(
             `${componentDir}/{{kebabCase name}}.spec.tsx`,
             answers,
           ),
-          templateFile: "templates/component/component.spec.tsx.hbs",
           skipIfExists: true,
+          templateFile: "templates/component/component.spec.tsx.hbs",
+          type: "add",
         },
         {
-          type: "add",
           path: plop.renderString(
             `${componentDir}/{{kebabCase name}}.stories.tsx`,
             answers,
           ),
+          skipIfExists: true,
           templateFile: "templates/component/component.stories.tsx.hbs",
-          skipIfExists: true,
+          type: "add",
         },
         {
-          type: "add",
           path: plop.renderString(`${componentDir}/index.ts`, answers),
+          skipIfExists: true,
           templateFile: "templates/component/component.index.ts.hbs",
-          skipIfExists: true,
-        },
-        {
           type: "add",
-          path: plop.renderString(indexPath, answers),
-          templateFile: "templates/component/index.base.ts.hbs",
-          skipIfExists: true,
         },
         {
-          type: "append",
           path: plop.renderString(indexPath, answers),
-          template: 'export * from "./{{kebabCase name}}";',
+          skipIfExists: true,
+          templateFile: "templates/component/index.base.ts.hbs",
+          type: "add",
+        },
+        {
+          path: plop.renderString(indexPath, answers),
           separator: "\n",
+          template: 'export * from "./{{kebabCase name}}";',
+          type: "append",
           unique: true,
         },
       ];
 
       return actions;
     },
+    description: "Create a shared UI component",
+    prompts: [
+      {
+        message: "What is the component name?",
+        name: "name",
+        type: "input",
+        validate: (input) =>
+          (input && input.trim().length > 0) || "A component name is required.",
+      },
+      {
+        default: "src/components",
+        message:
+          "Where should the component be created? (relative to @repo/ui)",
+        name: "baseDir",
+        transformer: (input) => input.trim(),
+        type: "input",
+      },
+    ],
   });
 }

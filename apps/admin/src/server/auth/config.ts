@@ -1,15 +1,15 @@
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
+import {
+  accounts,
+  seedSampleDataForUser,
+  sessions,
+  users,
+  verificationTokens,
+} from "@repo/db";
 import { type DefaultSession, type NextAuthConfig } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 
 import { db } from "~/server/db";
-import {
-  accounts,
-  sessions,
-  users,
-  verificationTokens,
-  seedSampleDataForUser,
-} from "@repo/db";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -19,11 +19,11 @@ import {
  */
 declare module "next-auth" {
   interface Session extends DefaultSession {
-    user: {
+    user: DefaultSession["user"] & {
       id: string;
       // ...other properties
       // role: UserRole;
-    } & DefaultSession["user"];
+    };
   }
 
   // interface User {
@@ -38,11 +38,10 @@ declare module "next-auth" {
  * @see https://next-auth.js.org/configuration/options
  */
 export const authConfig: NextAuthConfig = {
-  providers: [GoogleProvider],
   adapter: DrizzleAdapter(db, {
-    usersTable: users,
     accountsTable: accounts,
     sessionsTable: sessions,
+    usersTable: users,
     verificationTokensTable: verificationTokens,
   }),
   callbacks: {
@@ -67,4 +66,5 @@ export const authConfig: NextAuthConfig = {
       }
     },
   },
+  providers: [GoogleProvider],
 };

@@ -1,5 +1,5 @@
-import { render } from "vitest-browser-react";
 import { describe, expect, it } from "vitest";
+import { render } from "vitest-browser-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "./avatar";
 
@@ -8,8 +8,8 @@ describe("Avatar", () => {
     await render(
       <Avatar className="border">
         <AvatarImage
-          src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg=="
           alt="Sample"
+          src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg=="
         />
         <AvatarFallback>SS</AvatarFallback>
       </Avatar>,
@@ -27,8 +27,8 @@ describe("Avatar", () => {
     await render(
       <Avatar>
         <AvatarImage
-          src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg=="
           alt="Jane Doe"
+          src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg=="
         />
         <AvatarFallback>JD</AvatarFallback>
       </Avatar>,

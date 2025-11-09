@@ -1,15 +1,14 @@
 import "@repo/ui/globals.css";
 import { Providers } from "@repo/ui/providers/theme-provider";
-
 import { type Metadata } from "next";
 import { Geist } from "next/font/google";
 
 import { TRPCReactProvider } from "~/trpc/react";
 
 export const metadata: Metadata = {
-  title: "Fequest",
   description: "機能リクエストができるサービスです。",
   icons: [{ rel: "icon", url: "/favicon.ico" }],
+  title: "Fequest",
 };
 
 const geist = Geist({

@@ -3,8 +3,6 @@ import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import { Container } from "./container";
 
 const meta = {
-  title: "Layout/Container",
-  component: Container,
   args: {
     children: (
       <div className="rounded-md border border-dashed border-primary/30 bg-primary/5 p-6">
@@ -12,6 +10,8 @@ const meta = {
       </div>
     ),
   },
+  component: Container,
+  title: "Layout/Container",
 } satisfies Meta<typeof Container>;
 
 export default meta;
@@ -36,7 +36,7 @@ export const CenterContent: Story = {
 
 export const Fluid: Story = {
   args: {
-    size: "full",
     padding: "lg",
+    size: "full",
   },
 };

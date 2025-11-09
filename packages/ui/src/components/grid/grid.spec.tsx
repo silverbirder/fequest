@@ -1,5 +1,5 @@
-import { render } from "vitest-browser-react";
 import { describe, expect, it } from "vitest";
+import { render } from "vitest-browser-react";
 
 import { Grid } from "./grid";
 
@@ -23,7 +23,7 @@ describe("Grid", () => {
 
   it("supports custom column and row templates as well as flow", async () => {
     await render(
-      <Grid columns="3" rows="2" flow="column">
+      <Grid columns="3" flow="column" rows="2">
         {[...Array(6)].map((_, index) => (
           <span key={index}>Item {index}</span>
         ))}
@@ -41,7 +41,7 @@ describe("Grid", () => {
 
   it("allows inline grid display with alignment options via Slot", async () => {
     await render(
-      <Grid inline align="center" justify="between" gap="lg" asChild>
+      <Grid align="center" asChild gap="lg" inline justify="between">
         <section>
           <span>One</span>
           <span>Two</span>

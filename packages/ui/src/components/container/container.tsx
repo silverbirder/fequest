@@ -1,30 +1,29 @@
-import { cva, type VariantProps } from "class-variance-authority";
-
 import { cn } from "@repo/ui/lib/utils";
+import { cva, type VariantProps } from "class-variance-authority";
 import React from "react";
 
 const containerVariants = cva("mx-auto w-full", {
+  defaultVariants: {
+    padding: "md",
+    size: "3xl",
+  },
   variants: {
+    padding: {
+      lg: "px-6 sm:px-10 lg:px-12",
+      md: "px-4 sm:px-6 lg:px-8",
+      none: "px-0",
+      sm: "px-2 sm:px-4",
+    },
     size: {
-      xs: "max-w-lg",
-      sm: "max-w-xl",
-      md: "max-w-2xl",
-      lg: "max-w-4xl",
-      xl: "max-w-5xl",
       "2xl": "max-w-6xl",
       "3xl": "max-w-7xl",
       full: "max-w-none",
+      lg: "max-w-4xl",
+      md: "max-w-2xl",
+      sm: "max-w-xl",
+      xl: "max-w-5xl",
+      xs: "max-w-lg",
     },
-    padding: {
-      none: "px-0",
-      sm: "px-2 sm:px-4",
-      md: "px-4 sm:px-6 lg:px-8",
-      lg: "px-6 sm:px-10 lg:px-12",
-    },
-  },
-  defaultVariants: {
-    size: "3xl",
-    padding: "md",
   },
 });
 
@@ -34,15 +33,15 @@ type ContainerProps = React.ComponentPropsWithoutRef<"div"> &
   };
 
 const Container = React.forwardRef<HTMLDivElement, ContainerProps>(
-  ({ className, size, padding, centerContent = false, ...props }, ref) => (
+  ({ centerContent = false, className, padding, size, ...props }, ref) => (
     <div
-      ref={ref}
-      data-slot="container"
       className={cn(
-        containerVariants({ size, padding }),
+        containerVariants({ padding, size }),
         centerContent && "flex flex-col items-center text-center",
         className,
       )}
+      data-slot="container"
+      ref={ref}
       {...props}
     />
   ),

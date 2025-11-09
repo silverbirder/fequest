@@ -1,61 +1,60 @@
 import { Slot } from "@radix-ui/react-slot";
+import { cn } from "@repo/ui/lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
 import React from "react";
 
-import { cn } from "@repo/ui/lib/utils";
-
 const textVariants = cva("text-foreground leading-normal block", {
+  defaultVariants: {
+    align: "left",
+    casing: "none",
+    color: "default",
+    display: "block",
+    size: "md",
+    weight: "normal",
+  },
   variants: {
-    size: {
-      xs: "text-xs",
-      sm: "text-sm",
-      md: "text-base",
-      lg: "text-lg",
-      xl: "text-xl",
-      "2xl": "text-2xl",
-    },
-    weight: {
-      light: "font-light",
-      normal: "font-normal",
-      medium: "font-medium",
-      semibold: "font-semibold",
-      bold: "font-bold",
-    },
     align: {
-      left: "text-left",
       center: "text-center",
-      right: "text-right",
       justify: "text-justify",
+      left: "text-left",
+      right: "text-right",
     },
     casing: {
+      capitalize: "capitalize",
+      lowercase: "lowercase",
       none: undefined,
       uppercase: "uppercase tracking-wide",
-      lowercase: "lowercase",
-      capitalize: "capitalize",
     },
     color: {
+      accent: "text-primary",
       default: undefined,
+      destructive: "text-destructive",
       muted: "text-muted-foreground",
       subtle: "text-foreground/80",
-      accent: "text-primary",
-      destructive: "text-destructive",
-    },
-    truncate: {
-      true: "truncate",
     },
     display: {
       block: "block",
       inline: "inline",
       "inline-block": "inline-block",
     },
-  },
-  defaultVariants: {
-    size: "md",
-    weight: "normal",
-    align: "left",
-    casing: "none",
-    color: "default",
-    display: "block",
+    size: {
+      "2xl": "text-2xl",
+      lg: "text-lg",
+      md: "text-base",
+      sm: "text-sm",
+      xl: "text-xl",
+      xs: "text-xs",
+    },
+    truncate: {
+      true: "truncate",
+    },
+    weight: {
+      bold: "font-bold",
+      light: "font-light",
+      medium: "font-medium",
+      normal: "font-normal",
+      semibold: "font-semibold",
+    },
   },
 });
 
@@ -67,15 +66,15 @@ type TextProps = React.ComponentPropsWithoutRef<"span"> &
 const Text = React.forwardRef<HTMLSpanElement, TextProps>(
   (
     {
-      className,
-      size,
-      weight,
       align,
-      casing,
-      color,
-      truncate,
-      display,
       asChild = false,
+      casing,
+      className,
+      color,
+      display,
+      size,
+      truncate,
+      weight,
       ...props
     },
     ref,
@@ -84,20 +83,20 @@ const Text = React.forwardRef<HTMLSpanElement, TextProps>(
 
     return (
       <Comp
-        ref={ref}
-        data-slot="text"
         className={cn(
           textVariants({
-            size,
-            weight,
             align,
             casing,
             color,
-            truncate,
             display,
+            size,
+            truncate,
+            weight,
           }),
           className,
         )}
+        data-slot="text"
+        ref={ref}
         {...props}
       />
     );

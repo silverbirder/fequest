@@ -5,22 +5,6 @@ import { fallback, optional, picklist, pipe, string, url } from "valibot";
 
 export const env = createEnv({
   /**
-   * Specify your server-side environment variables schema here. This way you can ensure the app
-   * isn't built with invalid env vars.
-   */
-  server: {
-    AUTH_SECRET:
-      process.env.NODE_ENV === "production" ? string() : optional(string()),
-    AUTH_GOOGLE_ID: string(),
-    AUTH_GOOGLE_SECRET: string(),
-    DATABASE_URL: pipe(string(), url()),
-    NODE_ENV: fallback(
-      picklist(["development", "test", "production"]),
-      "development"
-    ),
-  },
-
-  /**
    * Specify your client-side environment variables schema here. This way you can ensure the app
    * isn't built with invalid env vars. To expose them to the client, prefix them with
    * `NEXT_PUBLIC_`.
@@ -30,24 +14,40 @@ export const env = createEnv({
   },
 
   /**
+   * Makes it so that empty strings are treated as undefined. `SOME_VAR: string()` and
+   * `SOME_VAR=''` will throw an error.
+   */
+  emptyStringAsUndefined: true,
+
+  /**
    * You can't destruct `process.env` as a regular object in the Next.js edge runtimes (e.g.
    * middlewares) or client-side so we need to destruct manually.
    */
   runtimeEnv: {
-    AUTH_SECRET: process.env.AUTH_SECRET,
     AUTH_GOOGLE_ID: process.env.AUTH_GOOGLE_ID,
     AUTH_GOOGLE_SECRET: process.env.AUTH_GOOGLE_SECRET,
+    AUTH_SECRET: process.env.AUTH_SECRET,
     DATABASE_URL: process.env.DATABASE_URL,
     NODE_ENV: process.env.NODE_ENV,
+  },
+  /**
+   * Specify your server-side environment variables schema here. This way you can ensure the app
+   * isn't built with invalid env vars.
+   */
+  server: {
+    AUTH_GOOGLE_ID: string(),
+    AUTH_GOOGLE_SECRET: string(),
+    AUTH_SECRET:
+      process.env.NODE_ENV === "production" ? string() : optional(string()),
+    DATABASE_URL: pipe(string(), url()),
+    NODE_ENV: fallback(
+      picklist(["development", "test", "production"]),
+      "development"
+    ),
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially
    * useful for Docker builds.
    */
   skipValidation: !!process.env.SKIP_ENV_VALIDATION,
-  /**
-   * Makes it so that empty strings are treated as undefined. `SOME_VAR: string()` and
-   * `SOME_VAR=''` will throw an error.
-   */
-  emptyStringAsUndefined: true,
 });

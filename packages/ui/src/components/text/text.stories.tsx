@@ -3,14 +3,14 @@ import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import { Text } from "./text";
 
 const meta = {
-  title: "UI/Text",
-  component: Text,
   args: {
     children: "The quick brown fox jumps over the lazy dog.",
+    color: "default",
     size: "md",
     weight: "normal",
-    color: "default",
   },
+  component: Text,
+  title: "UI/Text",
 } satisfies Meta<typeof Text>;
 
 export default meta;
@@ -33,28 +33,28 @@ export const Uppercase: Story = {
 
 export const Accent: Story = {
   args: {
+    children: "Accent emphasis",
     color: "accent",
     weight: "semibold",
-    children: "Accent emphasis",
   },
 };
 
 export const RightAligned: Story = {
   args: {
     align: "right",
+    children: "Right aligned copy",
     className: "w-full",
     size: "lg",
-    children: "Right aligned copy",
   },
 };
 
 export const Truncated: Story = {
   args: {
-    truncate: true,
     casing: "none",
-    display: "inline-block",
     children:
       "This sentence is intentionally long to demonstrate how the truncate variant trims overflowing text in constrained layouts.",
     className: "max-w-xs",
+    display: "inline-block",
+    truncate: true,
   },
 };

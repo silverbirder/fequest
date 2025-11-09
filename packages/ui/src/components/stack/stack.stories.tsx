@@ -3,12 +3,11 @@ import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import { HStack, VStack } from "./stack";
 
 const meta = {
-  title: "Layout/Stack",
-  component: HStack,
   args: {
-    spacing: "md",
     justify: "start",
+    spacing: "md",
   },
+  component: HStack,
   render: (args) => (
     <HStack {...args}>
       <div className="rounded-md bg-primary/10 px-4 py-2">Item 1</div>
@@ -16,6 +15,7 @@ const meta = {
       <div className="rounded-md bg-primary/10 px-4 py-2">Item 3</div>
     </HStack>
   ),
+  title: "Layout/Stack",
 } satisfies Meta<typeof HStack>;
 
 export default meta;

@@ -3,42 +3,42 @@
 exports[`Product > renders provided props 1`] = `
 <DocumentFragment>
   <div
-    class="flex flex-col items-start justify-start gap-8 flex-nowrap"
+    class="flex items-start flex-col justify-start gap-8 flex-nowrap"
     data-orientation="column"
     data-slot="stack"
   >
     <div
-      class="flex flex-col items-start justify-start gap-6 flex-nowrap"
+      class="flex items-start flex-col justify-start gap-6 flex-nowrap"
       data-orientation="column"
       data-slot="stack"
     >
       <h2
-        class="text-foreground tracking-tight text-lg leading-snug font-bold text-left"
+        class="text-foreground tracking-tight text-left text-lg leading-snug font-bold"
         data-level="2"
         data-slot="heading"
       >
         Sample Product
       </h2>
       <span
-        class="text-foreground text-base font-normal text-left block"
+        class="text-foreground text-left block text-base font-normal"
         data-slot="text"
       >
         プロダクトに寄せられたフィーチャーリクエストです
       </span>
       <button
-        class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-destructive text-white shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60 h-9 px-4 py-2 has-[>svg]:px-3"
+        class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive h-9 px-4 py-2 has-[>svg]:px-3 bg-destructive text-white shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60"
         data-slot="button"
       >
         新しいフィーチャーをリクエスト
       </button>
     </div>
     <div
-      class="flex flex-col items-start justify-start gap-6 flex-nowrap"
+      class="flex items-start flex-col justify-start gap-6 flex-nowrap"
       data-orientation="column"
       data-slot="stack"
     >
       <h2
-        class="text-foreground tracking-tight text-lg leading-snug font-bold text-left"
+        class="text-foreground tracking-tight text-left text-lg leading-snug font-bold"
         data-level="2"
         data-slot="heading"
       >

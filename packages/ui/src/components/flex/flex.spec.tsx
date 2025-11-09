@@ -1,6 +1,6 @@
 import * as React from "react";
-import { render } from "vitest-browser-react";
 import { describe, expect, it } from "vitest";
+import { render } from "vitest-browser-react";
 
 import { Flex } from "./flex";
 
@@ -41,7 +41,7 @@ describe("Flex", () => {
 
   it("allows inline display and column direction via Slot", async () => {
     await render(
-      <Flex inline direction="column" gap="lg" asChild>
+      <Flex asChild direction="column" gap="lg" inline>
         <section>
           <span>One</span>
           <span>Two</span>
