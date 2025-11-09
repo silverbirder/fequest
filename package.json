@@ -14,7 +14,8 @@
     "start-database": "pnpm --filter @repo/db db:start",
     "lint-staged": "lint-staged",
     "prepare": "husky install",
-    "generate:feature": "turbo gen feature"
+    "generate:feature": "turbo gen feature",
+    "generate:component": "turbo gen component"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",

@@ -1,5 +1,5 @@
 export default function generator(plop) {
-  plop.setGenerator("react-component", {
+  plop.setGenerator("component", {
     description: "Create a shared UI component",
     prompts: [
       {
@@ -30,7 +30,7 @@ export default function generator(plop) {
         {
           type: "add",
           path: plop.renderString(`${componentDir}/{{kebabCase name}}.tsx`, answers),
-          templateFile: "templates/react-component/component.tsx.hbs",
+          templateFile: "templates/component/component.tsx.hbs",
           skipIfExists: true,
         },
         {
@@ -39,7 +39,7 @@ export default function generator(plop) {
             `${componentDir}/{{kebabCase name}}.spec.tsx`,
             answers,
           ),
-          templateFile: "templates/react-component/component.spec.tsx.hbs",
+          templateFile: "templates/component/component.spec.tsx.hbs",
           skipIfExists: true,
         },
         {
@@ -48,19 +48,19 @@ export default function generator(plop) {
             `${componentDir}/{{kebabCase name}}.stories.tsx`,
             answers,
           ),
-          templateFile: "templates/react-component/component.stories.tsx.hbs",
+          templateFile: "templates/component/component.stories.tsx.hbs",
           skipIfExists: true,
         },
         {
           type: "add",
           path: plop.renderString(`${componentDir}/index.ts`, answers),
-          templateFile: "templates/react-component/component.index.ts.hbs",
+          templateFile: "templates/component/component.index.ts.hbs",
           skipIfExists: true,
         },
         {
           type: "add",
           path: plop.renderString(indexPath, answers),
-          templateFile: "templates/react-component/index.base.ts.hbs",
+          templateFile: "templates/component/index.base.ts.hbs",
           skipIfExists: true,
         },
         {
