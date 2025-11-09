@@ -1,5 +1,4 @@
-const runCiFix = (files) => (files.length ? 'pnpm ci:fix' : []);
-
 module.exports = {
-  '*': runCiFix
+  "*.{ts,tsx}": [() => "pnpm check-types", "eslint --fix", "prettier --write"],
+  "*.{md,json}": ["prettier --write"],
 };

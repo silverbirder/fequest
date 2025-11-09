@@ -2,29 +2,52 @@
 
 exports[`Product > renders provided props 1`] = `
 <DocumentFragment>
-  <div>
-    <section>
-      <h2>
+  <div
+    class="flex flex-col items-start justify-start gap-8 flex-nowrap"
+    data-orientation="column"
+    data-slot="stack"
+  >
+    <div
+      class="flex flex-col items-start justify-start gap-6 flex-nowrap"
+      data-orientation="column"
+      data-slot="stack"
+    >
+      <h2
+        class="text-foreground tracking-tight text-lg leading-snug font-bold text-left"
+        data-level="2"
+        data-slot="heading"
+      >
         Sample Product
       </h2>
-      <p>
+      <span
+        class="text-foreground text-base font-normal text-left block"
+        data-slot="text"
+      >
         プロダクトに寄せられたフィーチャーリクエストです
-      </p>
+      </span>
       <button
         class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-destructive text-white shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60 h-9 px-4 py-2 has-[>svg]:px-3"
         data-slot="button"
       >
         新しいフィーチャーをリクエスト
       </button>
-    </section>
-    <section>
-      <h2>
+    </div>
+    <div
+      class="flex flex-col items-start justify-start gap-6 flex-nowrap"
+      data-orientation="column"
+      data-slot="stack"
+    >
+      <h2
+        class="text-foreground tracking-tight text-lg leading-snug font-bold text-left"
+        data-level="2"
+        data-slot="heading"
+      >
         フィーチャー一覧
       </h2>
       <p>
         フィーチャーはまだありません。
       </p>
-    </section>
+    </div>
   </div>
 </DocumentFragment>
 `;

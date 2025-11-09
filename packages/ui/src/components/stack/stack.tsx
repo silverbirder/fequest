@@ -91,7 +91,7 @@ HStack.displayName = "HStack";
 type VStackProps = Omit<StackProps, "direction">;
 
 const VStack = React.forwardRef<HTMLDivElement, VStackProps>(
-  ({ align = "stretch", ...props }, ref) => (
+  ({ align = "start", ...props }, ref) => (
     <Stack ref={ref} direction="column" align={align} {...props} />
   ),
 );

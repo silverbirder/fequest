@@ -1,4 +1,4 @@
-import { Button, VStack } from "@repo/ui/components";
+import { Button, Heading, Text, VStack } from "@repo/ui/components";
 import Form from "next/form";
 
 type FeatureRequest = {
@@ -25,21 +25,21 @@ export const Product = ({ product, onLikeFeature }: Props) => {
   const featureRequests = product.featureRequests ?? [];
 
   return (
-    <div>
-      <section>
-        <h2>{title}</h2>
-        <p>{description}</p>
+    <VStack spacing="xl">
+      <VStack spacing="lg">
+        <Heading size="lg">{title}</Heading>
+        <Text>{description}</Text>
         <Button variant="destructive">新しいフィーチャーをリクエスト</Button>
-      </section>
-      <section>
-        <h2>フィーチャー一覧</h2>
+      </VStack>
+      <VStack spacing="lg">
+        <Heading size="lg">フィーチャー一覧</Heading>
         {featureRequests.length === 0 ? (
           <p>フィーチャーはまだありません。</p>
         ) : (
           <VStack>
             {featureRequests.map((feature) => (
               <VStack key={feature.id}>
-                <p>{feature.content}</p>
+                <Text>{feature.content}</Text>
                 <Form action={onLikeFeature}>
                   <input type="hidden" name="featureId" value={feature.id} />
                   <button type="submit">いいね ({feature.likes})</button>
@@ -49,7 +49,7 @@ export const Product = ({ product, onLikeFeature }: Props) => {
             ))}
           </VStack>
         )}
-      </section>
-    </div>
+      </VStack>
+    </VStack>
   );
 };
