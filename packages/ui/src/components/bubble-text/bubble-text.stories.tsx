@@ -7,6 +7,7 @@ const meta = {
     children: "BubbleText",
   },
   component: BubbleText,
+  title: "UI/BubbleText",
 } satisfies Meta<typeof BubbleText>;
 
 export default meta;
