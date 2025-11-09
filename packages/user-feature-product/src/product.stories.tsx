@@ -3,6 +3,7 @@ import type { Meta, StoryObj } from "@storybook/nextjs";
 import { Product } from "./product";
 
 const meta = {
+  title: "Feature/User/Product",
   component: Product,
   args: {
     product: {
