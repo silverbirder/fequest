@@ -9,11 +9,7 @@ const paramsSchema = object({
   id: idSchema,
 });
 
-type Props = {
-  params: Promise<unknown>;
-};
-
-export default async function Page({ params }: Props) {
+export default async function Page({ params }: PageProps<"/[id]">) {
   const parsedParams = safeParse(paramsSchema, await params);
   if (!parsedParams.success) {
     return <div>Invalid product ID</div>;
