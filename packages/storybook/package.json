@@ -12,7 +12,8 @@
     "@repo/typescript-config": "workspace:*",
     "@storybook/addon-a11y": "^10.0.2",
     "@storybook/addon-docs": "^10.0.2",
-    "@storybook/nextjs": "^10.0.2",
+    "@storybook/nextjs-vite": "^10.0.6",
+    "@tailwindcss/postcss": "^4.1.11",
     "@types/node": "^22.15.3",
     "@types/react": "19.1.0",
     "@types/react-dom": "19.1.1",
@@ -23,6 +24,7 @@
     "typescript": "5.9.2"
   },
   "dependencies": {
-    "@repo/ui": "workspace:*"
+    "@repo/ui": "workspace:*",
+    "next": "^16.0.0"
   }
 }

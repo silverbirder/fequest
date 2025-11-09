@@ -1,4 +1,4 @@
-import type { StorybookConfig } from "@storybook/nextjs";
+import type { StorybookConfig } from "@storybook/nextjs-vite";
 
 import { dirname } from "path";
 
@@ -18,7 +18,7 @@ const config: StorybookConfig = {
     getAbsolutePath("@storybook/addon-a11y"),
   ],
   framework: {
-    name: getAbsolutePath("@storybook/nextjs"),
+    name: getAbsolutePath("@storybook/nextjs-vite"),
     options: {},
   },
 };

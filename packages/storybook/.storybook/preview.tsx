@@ -1,5 +1,5 @@
-import type { Preview } from "@storybook/nextjs";
 import "@repo/ui/globals.css";
+import type { Preview } from "@storybook/nextjs-vite";
 import { Providers } from "@repo/ui/providers/theme-provider";
 
 const preview: Preview = {
