@@ -23,7 +23,7 @@
     "tailwindcss": "^4.1.11",
     "turbo": "^2.6.0",
     "typescript": "5.9.2",
-    "vitest": "^4.0.6",
+    "vitest": "^4.0.8",
     "vitest-browser-react": "^2.0.2"
   },
   "dependencies": {
