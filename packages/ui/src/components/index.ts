@@ -1,5 +1,6 @@
 export * from "./avatar";
 export * from "./box";
+export * from "./bubble-text";
 export * from "./button";
 export * from "./center";
 export * from "./container";
