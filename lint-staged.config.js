@@ -1,12 +1,5 @@
-const runTypeCheck = (files) => (files.length ? 'pnpm check-types' : []);
+const runCiFix = (files) => (files.length ? 'pnpm ci:fix' : []);
 
 module.exports = {
-  '*.{ts,tsx}': [
-    'eslint --fix',
-    'prettier --write'
-  ],
-  '*.{md,json}': [
-    'prettier --write'
-  ],
-  '**/*.{ts,tsx}': runTypeCheck
+  '*': runCiFix
 };

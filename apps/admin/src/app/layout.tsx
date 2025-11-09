@@ -21,7 +21,7 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="ja" suppressHydrationWarning>
-      <body className={geist.className + " prose"}>
+      <body className={geist.className}>
         <TRPCReactProvider>
           <Providers>{children}</Providers>
         </TRPCReactProvider>

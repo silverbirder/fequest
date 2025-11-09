@@ -6,9 +6,7 @@ const preview: Preview = {
   decorators: [
     (Story) => (
       <Providers>
-        <div className="prose">
-          <Story />
-        </div>
+        <Story />
       </Providers>
     ),
   ],
