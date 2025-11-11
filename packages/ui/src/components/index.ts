@@ -4,10 +4,10 @@ export * from "./bubble-text";
 export * from "./button";
 export * from "./center";
 export * from "./container";
+export * from "./emoji-reaction";
 export * from "./flex";
 export * from "./grid";
 export * from "./heading";
 export * from "./request-card";
 export * from "./stack";
-
 export * from "./text";
