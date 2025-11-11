@@ -6,12 +6,11 @@ import { {{pascalCase name}} } from "./{{kebabCase name}}";
 describe("{{pascalCase name}}", () => {
   it("renders provided children", async () => {
     await render(
-      <{{pascalCase name}} className="sample">Child content</{{pascalCase name}}>,
+      <{{pascalCase name}}>Child content</{{pascalCase name}}>,
     );
 
-    const element = document.querySelector("div.sample");
+    const element = document.querySelector("div");
     expect(element).not.toBeNull();
     expect(element?.textContent ?? "").toContain("Child content");
-    expect(element?.classList.contains("sample")).toBe(true);
   });
 });

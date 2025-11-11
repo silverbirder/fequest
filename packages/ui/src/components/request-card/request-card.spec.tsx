@@ -1,13 +1,11 @@
-import { render } from "vitest-browser-react";
 import { describe, expect, it } from "vitest";
+import { render } from "vitest-browser-react";
 
-import { {{pascalCase name}} } from "./{{kebabCase name}}";
+import { RequestCard } from "./request-card";
 
-describe("{{pascalCase name}}", () => {
+describe("RequestCard", () => {
   it("renders provided children", async () => {
-    await render(
-      <{{pascalCase name}}>Child content</{{pascalCase name}}>,
-    );
+    await render(<RequestCard>Child content</RequestCard>);
 
     const element = document.querySelector("div");
     expect(element).not.toBeNull();
