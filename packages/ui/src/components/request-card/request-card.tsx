@@ -1,7 +1,23 @@
-import type { PropsWithChildren } from "react";
+import type { ComponentProps } from "react";
 
-type Props = PropsWithChildren;
+import { Avatar, AvatarFallback, AvatarImage } from "../avatar";
+import { BubbleText } from "../bubble-text";
+import { HStack } from "../stack";
 
-export const RequestCard = ({ children }: Props) => {
-  return <div>{children}</div>;
+type Props = ComponentProps<typeof BubbleText> & {
+  avatar: {
+    alt?: string;
+    fallbackText?: string;
+    src?: string;
+  };
 };
+
+export const RequestCard = ({ avatar, text }: Props) => (
+  <HStack align="center" spacing="sm">
+    <Avatar>
+      <AvatarImage alt={avatar.alt} src={avatar.src}></AvatarImage>
+      <AvatarFallback>{avatar.fallbackText}</AvatarFallback>
+    </Avatar>
+    <BubbleText text={text} />
+  </HStack>
+);

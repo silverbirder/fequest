@@ -5,7 +5,7 @@ import { BubbleText } from "./bubble-text";
 
 describe("BubbleText", () => {
   it("renders provided children", async () => {
-    await render(<BubbleText>Child content</BubbleText>);
+    await render(<BubbleText text="Child content" />);
 
     const element = document.querySelector("div");
     expect(element).not.toBeNull();

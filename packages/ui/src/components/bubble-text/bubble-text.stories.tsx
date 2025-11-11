@@ -4,7 +4,7 @@ import { BubbleText } from "./bubble-text";
 
 const meta = {
   args: {
-    children: "コメント機能の追加",
+    text: "コメント機能の追加",
   },
   component: BubbleText,
   title: "UI/BubbleText",

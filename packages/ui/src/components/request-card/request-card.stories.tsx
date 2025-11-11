@@ -4,9 +4,13 @@ import { RequestCard } from "./request-card";
 
 const meta = {
   args: {
-    children: "RequestCard",
+    avatar: {
+      fallbackText: "NR",
+    },
+    text: "コメント機能の追加",
   },
   component: RequestCard,
+  title: "UI/RequestCard",
 } satisfies Meta<typeof RequestCard>;
 
 export default meta;
