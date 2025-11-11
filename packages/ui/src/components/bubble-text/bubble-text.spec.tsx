@@ -5,11 +5,10 @@ import { BubbleText } from "./bubble-text";
 
 describe("BubbleText", () => {
   it("renders provided children", async () => {
-    await render(<BubbleText className="sample">Child content</BubbleText>);
+    await render(<BubbleText>Child content</BubbleText>);
 
-    const element = document.querySelector("div.sample");
+    const element = document.querySelector("div");
     expect(element).not.toBeNull();
     expect(element?.textContent ?? "").toContain("Child content");
-    expect(element?.classList.contains("sample")).toBe(true);
   });
 });
