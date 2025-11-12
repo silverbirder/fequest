@@ -1,3 +1,8 @@
+import {
+  splitStyleProps,
+  type StyleProps,
+  stylePropsClassNames,
+} from "@repo/ui/lib/style-props";
 import { cn } from "@repo/ui/lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
 import React from "react";
@@ -27,24 +32,33 @@ const containerVariants = cva("mx-auto w-full", {
   },
 });
 
-type ContainerProps = React.ComponentPropsWithoutRef<"div"> &
+type ContainerProps = Omit<
+  React.ComponentPropsWithoutRef<"div">,
+  keyof StyleProps
+> &
+  StyleProps &
   VariantProps<typeof containerVariants> & {
     centerContent?: boolean;
   };
 
 const Container = React.forwardRef<HTMLDivElement, ContainerProps>(
-  ({ centerContent = false, className, padding, size, ...props }, ref) => (
-    <div
-      className={cn(
-        containerVariants({ padding, size }),
-        centerContent && "flex flex-col items-center text-center",
-        className,
-      )}
-      data-slot="container"
-      ref={ref}
-      {...props}
-    />
-  ),
+  ({ centerContent = false, className, padding, size, ...props }, ref) => {
+    const { restProps, styleProps } = splitStyleProps(props);
+
+    return (
+      <div
+        className={cn(
+          containerVariants({ padding, size }),
+          centerContent && "flex flex-col items-center text-center",
+          stylePropsClassNames(styleProps),
+          className,
+        )}
+        data-slot="container"
+        ref={ref}
+        {...restProps}
+      />
+    );
+  },
 );
 Container.displayName = "Container";
 

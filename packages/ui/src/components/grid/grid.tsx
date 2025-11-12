@@ -1,4 +1,9 @@
 import { Slot } from "@radix-ui/react-slot";
+import {
+  splitStyleProps,
+  type StyleProps,
+  stylePropsClassNames,
+} from "@repo/ui/lib/style-props";
 import { cn } from "@repo/ui/lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
 import React from "react";
@@ -74,7 +79,8 @@ const gridVariants = cva("grid", {
   },
 });
 
-type GridProps = React.ComponentPropsWithoutRef<"div"> &
+type GridProps = Omit<React.ComponentPropsWithoutRef<"div">, keyof StyleProps> &
+  StyleProps &
   VariantProps<typeof gridVariants> & {
     asChild?: boolean;
   };
@@ -96,16 +102,18 @@ const Grid = React.forwardRef<HTMLDivElement, GridProps>(
     ref,
   ) => {
     const Comp = asChild ? Slot : "div";
+    const { restProps, styleProps } = splitStyleProps(props);
 
     return (
       <Comp
         className={cn(
           gridVariants({ align, columns, flow, gap, inline, justify, rows }),
+          stylePropsClassNames(styleProps),
           className,
         )}
         data-slot="grid"
         ref={ref}
-        {...props}
+        {...restProps}
       />
     );
   },

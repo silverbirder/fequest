@@ -1,3 +1,8 @@
+import {
+  splitStyleProps,
+  type StyleProps,
+  stylePropsClassNames,
+} from "@repo/ui/lib/style-props";
 import { cn } from "@repo/ui/lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
 import React from "react";
@@ -52,7 +57,8 @@ const stackVariants = cva("flex", {
   },
 });
 
-type StackProps = React.HTMLAttributes<HTMLDivElement> &
+type StackProps = Omit<React.HTMLAttributes<HTMLDivElement>, keyof StyleProps> &
+  StyleProps &
   VariantProps<typeof stackVariants>;
 
 const Stack = React.forwardRef<HTMLDivElement, StackProps>(
@@ -61,17 +67,19 @@ const Stack = React.forwardRef<HTMLDivElement, StackProps>(
     ref,
   ) => {
     const orientation = direction ?? "column";
+    const { restProps, styleProps } = splitStyleProps(props);
 
     return (
       <div
         className={cn(
           stackVariants({ align, direction, inline, justify, spacing, wrap }),
+          stylePropsClassNames(styleProps),
           className,
         )}
         data-orientation={orientation}
         data-slot="stack"
         ref={ref}
-        {...props}
+        {...restProps}
       />
     );
   },

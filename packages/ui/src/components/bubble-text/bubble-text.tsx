@@ -7,10 +7,19 @@ type Props = {
 
 export const BubbleText = ({ text }: Props) => {
   return (
-    <Box className="bg-gray-100 p-3 rounded-md w-fit relative">
+    <Box bg="gray-100" p="md" position="relative" radius="md" w="fit">
       <Box
         aria-hidden
-        className="caret-transparent absolute -left-1 top-1/2 h-3 w-3 -translate-y-1/2 rotate-45 rounded-xs bg-gray-100"
+        bg="gray-100"
+        caret="transparent"
+        h="3"
+        left="-1"
+        position="absolute"
+        radius="xs"
+        rotate="45"
+        top="1/2"
+        translateY="-1/2"
+        w="3"
       />
       <Text color="subtle" size="md">
         {text}

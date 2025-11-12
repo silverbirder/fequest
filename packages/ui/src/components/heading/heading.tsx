@@ -1,4 +1,9 @@
 import { Slot } from "@radix-ui/react-slot";
+import {
+  splitStyleProps,
+  type StyleProps,
+  stylePropsClassNames,
+} from "@repo/ui/lib/style-props";
 import { cn } from "@repo/ui/lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
 import React, { type ElementType } from "react";
@@ -53,7 +58,11 @@ const sizeByLevel: Record<HeadingLevel, HeadingSize> = {
   6: "lg",
 };
 
-type HeadingProps = React.HTMLAttributes<HTMLHeadingElement> &
+type HeadingProps = Omit<
+  React.HTMLAttributes<HTMLHeadingElement>,
+  keyof StyleProps
+> &
+  StyleProps &
   VariantProps<typeof headingVariants> & {
     asChild?: boolean;
     level?: HeadingLevel;
@@ -76,6 +85,7 @@ const Heading = React.forwardRef<HTMLHeadingElement, HeadingProps>(
   ) => {
     const Component: ElementType = asChild ? Slot : (`h${level}` as const);
     const computedSize = size ?? sizeByLevel[level] ?? "3xl";
+    const { restProps, styleProps } = splitStyleProps(props);
 
     return (
       <Component
@@ -87,12 +97,13 @@ const Heading = React.forwardRef<HTMLHeadingElement, HeadingProps>(
             underline,
             weight,
           }),
+          stylePropsClassNames(styleProps),
           className,
         )}
         data-level={level}
         data-slot="heading"
         ref={ref}
-        {...props}
+        {...restProps}
       />
     );
   },

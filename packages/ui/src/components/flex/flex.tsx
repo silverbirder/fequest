@@ -1,4 +1,9 @@
 import { Slot } from "@radix-ui/react-slot";
+import {
+  splitStyleProps,
+  type StyleProps,
+  stylePropsClassNames,
+} from "@repo/ui/lib/style-props";
 import { cn } from "@repo/ui/lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
 import React from "react";
@@ -55,7 +60,8 @@ const flexVariants = cva("flex", {
   },
 });
 
-type FlexProps = React.ComponentPropsWithoutRef<"div"> &
+type FlexProps = Omit<React.ComponentPropsWithoutRef<"div">, keyof StyleProps> &
+  StyleProps &
   VariantProps<typeof flexVariants> & {
     asChild?: boolean;
   };
@@ -76,16 +82,18 @@ const Flex = React.forwardRef<HTMLDivElement, FlexProps>(
     ref,
   ) => {
     const Comp = asChild ? Slot : "div";
+    const { restProps, styleProps } = splitStyleProps(props);
 
     return (
       <Comp
         className={cn(
           flexVariants({ align, direction, gap, inline, justify, wrap }),
+          stylePropsClassNames(styleProps),
           className,
         )}
         data-slot="flex"
         ref={ref}
-        {...props}
+        {...restProps}
       />
     );
   },

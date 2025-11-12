@@ -1,4 +1,9 @@
 import { Slot } from "@radix-ui/react-slot";
+import {
+  splitStyleProps,
+  type StyleProps,
+  stylePropsClassNames,
+} from "@repo/ui/lib/style-props";
 import { cn } from "@repo/ui/lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
 import React from "react";
@@ -29,7 +34,11 @@ const centerVariants = cva("flex items-center justify-center", {
   },
 });
 
-type CenterProps = React.ComponentPropsWithoutRef<"div"> &
+type CenterProps = Omit<
+  React.ComponentPropsWithoutRef<"div">,
+  keyof StyleProps
+> &
+  StyleProps &
   VariantProps<typeof centerVariants> & {
     asChild?: boolean;
   };
@@ -40,16 +49,18 @@ const Center = React.forwardRef<HTMLDivElement, CenterProps>(
     ref,
   ) => {
     const Comp = asChild ? Slot : "div";
+    const { restProps, styleProps } = splitStyleProps(props);
 
     return (
       <Comp
         className={cn(
           centerVariants({ direction, inline, spacing }),
+          stylePropsClassNames(styleProps),
           className,
         )}
         data-slot="center"
         ref={ref}
-        {...props}
+        {...restProps}
       />
     );
   },

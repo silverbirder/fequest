@@ -1,4 +1,9 @@
 import { Slot } from "@radix-ui/react-slot";
+import {
+  splitStyleProps,
+  type StyleProps,
+  stylePropsClassNames,
+} from "@repo/ui/lib/style-props";
 import { cn } from "@repo/ui/lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
 import React from "react";
@@ -58,7 +63,11 @@ const textVariants = cva("text-foreground leading-normal block", {
   },
 });
 
-type TextProps = React.ComponentPropsWithoutRef<"span"> &
+type TextProps = Omit<
+  React.ComponentPropsWithoutRef<"span">,
+  keyof StyleProps
+> &
+  StyleProps &
   VariantProps<typeof textVariants> & {
     asChild?: boolean;
   };
@@ -80,6 +89,7 @@ const Text = React.forwardRef<HTMLSpanElement, TextProps>(
     ref,
   ) => {
     const Comp = asChild ? Slot : "span";
+    const { restProps, styleProps } = splitStyleProps(props);
 
     return (
       <Comp
@@ -93,11 +103,12 @@ const Text = React.forwardRef<HTMLSpanElement, TextProps>(
             truncate,
             weight,
           }),
+          stylePropsClassNames(styleProps),
           className,
         )}
         data-slot="text"
         ref={ref}
-        {...props}
+        {...restProps}
       />
     );
   },
