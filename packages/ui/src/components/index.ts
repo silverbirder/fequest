@@ -9,7 +9,7 @@ export * from "./emoji-reaction";
 export * from "./flex";
 export * from "./grid";
 export * from "./heading";
+export * from "./input";
 export * from "./request-card";
 export * from "./stack";
-
 export * from "./text";
