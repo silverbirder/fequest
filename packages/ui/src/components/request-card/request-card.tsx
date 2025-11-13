@@ -13,7 +13,7 @@ type Props = ComponentProps<typeof BubbleText> & {
 };
 
 export const RequestCard = ({ avatar, text }: Props) => (
-  <HStack align="center" spacing="sm">
+  <HStack align="center" gap="sm">
     <Avatar>
       <AvatarImage alt={avatar.alt} src={avatar.src}></AvatarImage>
       <AvatarFallback>{avatar.fallbackText}</AvatarFallback>

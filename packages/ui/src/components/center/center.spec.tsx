@@ -35,9 +35,9 @@ describe("Center", () => {
     expect(center?.className ?? "").toContain("inline-flex");
   });
 
-  it("allows vertical stacking with spacing", async () => {
+  it("allows vertical stacking with gap", async () => {
     await render(
-      <Center direction="column" spacing="lg">
+      <Center direction="column" gap="lg">
         <span>One</span>
         <span>Two</span>
       </Center>,

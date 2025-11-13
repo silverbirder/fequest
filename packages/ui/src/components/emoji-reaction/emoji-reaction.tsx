@@ -8,7 +8,7 @@ type Props = {
 
 export const EmojiReaction = ({ count, emoji }: Props) => {
   return (
-    <HStack caret="transparent" spacing="xs">
+    <HStack caret="transparent" gap="xs">
       <Text size="md">{emoji}</Text>
       <Text size="md">{count}</Text>
     </HStack>

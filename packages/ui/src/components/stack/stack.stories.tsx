@@ -4,8 +4,8 @@ import { HStack, VStack } from "./stack";
 
 const meta = {
   args: {
+    gap: "md",
     justify: "start",
-    spacing: "md",
   },
   component: HStack,
   render: (args) => (

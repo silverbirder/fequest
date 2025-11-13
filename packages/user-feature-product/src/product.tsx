@@ -25,13 +25,13 @@ export const Product = ({ onLikeFeature, product }: Props) => {
   const featureRequests = product.featureRequests ?? [];
 
   return (
-    <VStack spacing="xl">
-      <VStack spacing="lg">
+    <VStack gap="xl">
+      <VStack gap="lg">
         <Heading size="lg">{title}</Heading>
         <Text>{description}</Text>
         <Button variant="destructive">新しいフィーチャーをリクエスト</Button>
       </VStack>
-      <VStack spacing="lg">
+      <VStack gap="lg">
         <Heading size="lg">フィーチャー一覧</Heading>
         {featureRequests.length === 0 ? (
           <p>フィーチャーはまだありません。</p>

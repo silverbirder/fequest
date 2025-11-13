@@ -35,6 +35,6 @@ export const Column: Story = {
     ),
     className: "h-64 border border-dashed border-primary/30",
     direction: "column",
-    spacing: "lg",
+    gap: "lg",
   },
 };

@@ -11,9 +11,9 @@ const stackVariants = cva("flex", {
   defaultVariants: {
     align: "stretch",
     direction: "column",
+    gap: "md",
     inline: false,
     justify: "start",
-    spacing: "md",
     wrap: "nowrap",
   },
   variants: {
@@ -28,6 +28,15 @@ const stackVariants = cva("flex", {
       column: "flex-col",
       row: "flex-row",
     },
+    gap: {
+      "2xl": "gap-10",
+      lg: "gap-6",
+      md: "gap-4",
+      none: "gap-0",
+      sm: "gap-2",
+      xl: "gap-8",
+      xs: "gap-1",
+    },
     inline: {
       false: undefined,
       true: "inline-flex",
@@ -39,15 +48,6 @@ const stackVariants = cva("flex", {
       end: "justify-end",
       evenly: "justify-evenly",
       start: "justify-start",
-    },
-    spacing: {
-      "2xl": "gap-10",
-      lg: "gap-6",
-      md: "gap-4",
-      none: "gap-0",
-      sm: "gap-2",
-      xl: "gap-8",
-      xs: "gap-1",
     },
     wrap: {
       nowrap: "flex-nowrap",
@@ -63,7 +63,7 @@ type StackProps = Omit<React.HTMLAttributes<HTMLDivElement>, keyof StyleProps> &
 
 const Stack = React.forwardRef<HTMLDivElement, StackProps>(
   (
-    { align, className, direction, inline, justify, spacing, wrap, ...props },
+    { align, className, direction, gap, inline, justify, wrap, ...props },
     ref,
   ) => {
     const orientation = direction ?? "column";
@@ -72,7 +72,7 @@ const Stack = React.forwardRef<HTMLDivElement, StackProps>(
     return (
       <div
         className={cn(
-          stackVariants({ align, direction, inline, justify, spacing, wrap }),
+          stackVariants({ align, direction, gap, inline, justify, wrap }),
           stylePropsClassNames(styleProps),
           className,
         )}

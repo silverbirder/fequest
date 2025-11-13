@@ -3,12 +3,12 @@
 exports[`Product > renders provided props 1`] = `
 <DocumentFragment>
   <div
-    class="flex items-start flex-col justify-start gap-8 flex-nowrap"
+    class="flex items-start flex-col gap-8 justify-start flex-nowrap"
     data-orientation="column"
     data-slot="stack"
   >
     <div
-      class="flex items-start flex-col justify-start gap-6 flex-nowrap"
+      class="flex items-start flex-col gap-6 justify-start flex-nowrap"
       data-orientation="column"
       data-slot="stack"
     >
@@ -33,7 +33,7 @@ exports[`Product > renders provided props 1`] = `
       </button>
     </div>
     <div
-      class="flex items-start flex-col justify-start gap-6 flex-nowrap"
+      class="flex items-start flex-col gap-6 justify-start flex-nowrap"
       data-orientation="column"
       data-slot="stack"
     >

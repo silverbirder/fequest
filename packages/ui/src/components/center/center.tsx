@@ -11,25 +11,25 @@ import React from "react";
 const centerVariants = cva("flex items-center justify-center", {
   defaultVariants: {
     direction: "row",
+    gap: "sm",
     inline: false,
-    spacing: "sm",
   },
   variants: {
     direction: {
       column: "flex-col",
       row: "flex-row",
     },
-    inline: {
-      false: "",
-      true: "inline-flex",
-    },
-    spacing: {
+    gap: {
       lg: "gap-6",
       md: "gap-4",
       none: "gap-0",
       sm: "gap-2",
       xl: "gap-8",
       xs: "gap-1",
+    },
+    inline: {
+      false: "",
+      true: "inline-flex",
     },
   },
 });
@@ -44,17 +44,14 @@ type CenterProps = Omit<
   };
 
 const Center = React.forwardRef<HTMLDivElement, CenterProps>(
-  (
-    { asChild = false, className, direction, inline, spacing, ...props },
-    ref,
-  ) => {
+  ({ asChild = false, className, direction, gap, inline, ...props }, ref) => {
     const Comp = asChild ? Slot : "div";
     const { restProps, styleProps } = splitStyleProps(props);
 
     return (
       <Comp
         className={cn(
-          centerVariants({ direction, inline, spacing }),
+          centerVariants({ direction, gap, inline }),
           stylePropsClassNames(styleProps),
           className,
         )}

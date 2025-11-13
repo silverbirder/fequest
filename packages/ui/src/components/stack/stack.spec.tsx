@@ -22,9 +22,9 @@ describe("Stack", () => {
     expect(className).toContain("gap-4");
   });
 
-  it("supports vertical orientation with custom spacing and alignment", async () => {
+  it("supports vertical orientation with custom gap and alignment", async () => {
     await render(
-      <VStack align="center" justify="between" spacing="lg">
+      <VStack align="center" gap="lg" justify="between">
         <span>One</span>
         <span>Two</span>
       </VStack>,
