@@ -1,5 +1,6 @@
 export * from "./avatar";
 export * from "./box";
+export * from "./bubble-input";
 export * from "./bubble-text";
 export * from "./button";
 export * from "./center";
@@ -10,4 +11,5 @@ export * from "./grid";
 export * from "./heading";
 export * from "./request-card";
 export * from "./stack";
+
 export * from "./text";
