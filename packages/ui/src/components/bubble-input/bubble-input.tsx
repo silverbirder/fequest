@@ -1,21 +1,17 @@
-import { Box } from "../box";
+import { Input } from "../input";
+import { VStack } from "../stack";
+import { Text } from "../text";
 
 export const BubbleInput = () => {
   return (
-    <Box bg="gray-100" p="md" position="relative" radius="md" w="fit">
-      <Box
-        aria-hidden
-        bg="gray-100"
-        caret="transparent"
-        h="3"
-        left="-1"
-        position="absolute"
-        radius="xs"
-        rotate="45"
-        top="1/2"
-        translateY="-1/2"
-        w="3"
+    <VStack align="stretch" className="group" gap="xs">
+      <Input
+        className="border-none bg-none hover:bg-gray-100 shadow-none rounded-md p-3"
+        placeholder="新しいリクエストを入力..."
       />
-    </Box>
+      <Text className="opacity-0 text-gray-500 text-sm transition-opacity duration-200 group-hover:opacity-100 group-focus-within:opacity-100">
+        Enterで送信
+      </Text>
+    </VStack>
   );
 };
