@@ -2,7 +2,8 @@ import type { ComponentProps } from "react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "../avatar";
 import { BubbleText } from "../bubble-text";
-import { HStack } from "../stack";
+import { EmojiReaction } from "../emoji-reaction";
+import { HStack, VStack } from "../stack";
 
 type Props = ComponentProps<typeof BubbleText> & {
   avatar: {
@@ -10,14 +11,29 @@ type Props = ComponentProps<typeof BubbleText> & {
     fallbackText?: string;
     src?: string;
   };
+  reactions?: {
+    count: number;
+    emoji: string;
+  }[];
 };
 
-export const RequestCard = ({ avatar, text }: Props) => (
-  <HStack align="center" gap="sm">
+export const RequestCard = ({ avatar, reactions, text }: Props) => (
+  <HStack align="baseline" gap="sm">
     <Avatar>
       <AvatarImage alt={avatar.alt} src={avatar.src}></AvatarImage>
       <AvatarFallback>{avatar.fallbackText}</AvatarFallback>
     </Avatar>
-    <BubbleText text={text} />
+    <VStack gap="xs">
+      <BubbleText text={text} />
+      <HStack gap="xs">
+        {reactions?.map((reaction, index) => (
+          <EmojiReaction
+            count={reaction.count}
+            emoji={reaction.emoji}
+            key={index}
+          />
+        ))}
+      </HStack>
+    </VStack>
   </HStack>
 );

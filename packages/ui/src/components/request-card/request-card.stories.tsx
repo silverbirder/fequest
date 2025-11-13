@@ -7,6 +7,11 @@ const meta = {
     avatar: {
       fallbackText: "NR",
     },
+    reactions: [
+      { count: 12, emoji: "👍" },
+      { count: 5, emoji: "❤️" },
+      { count: 3, emoji: "🎉" },
+    ],
     text: "コメント機能の追加",
   },
   component: RequestCard,
