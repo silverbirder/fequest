@@ -4,7 +4,7 @@ import Form from "next/form";
 type FeatureRequest = {
   content: string;
   id: number;
-  likes: number;
+  reactions?: null | { emoji: string }[];
   status: string;
 };
 
@@ -15,11 +15,27 @@ type Product = {
 };
 
 type Props = {
-  onLikeFeature: (formData: FormData) => Promise<void>;
+  onReactToFeature: (formData: FormData) => Promise<void>;
   product: Product;
 };
 
-export const Product = ({ onLikeFeature, product }: Props) => {
+const summarizeReactions = (reactions?: null | { emoji: string }[]) => {
+  if (!reactions || reactions.length === 0) {
+    return [];
+  }
+
+  const totals = new Map<string, number>();
+  for (const reaction of reactions) {
+    totals.set(reaction.emoji, (totals.get(reaction.emoji) ?? 0) + 1);
+  }
+
+  return Array.from(totals.entries()).map(([emoji, count]) => ({
+    count,
+    emoji,
+  }));
+};
+
+export const Product = ({ onReactToFeature, product }: Props) => {
   const title = product.name;
   const description = "プロダクトに寄せられたフィーチャーリクエストです";
   const featureRequests = product.featureRequests ?? [];
@@ -40,16 +56,49 @@ export const Product = ({ onLikeFeature, product }: Props) => {
             {featureRequests.map((feature) => (
               <VStack key={feature.id}>
                 <Text>{feature.content}</Text>
-                <Form action={onLikeFeature}>
+                <Form action={onReactToFeature}>
                   <input name="featureId" type="hidden" value={feature.id} />
-                  <button type="submit">いいね ({feature.likes})</button>
                   <span>ステータス: {feature.status}</span>
+                  <input name="emoji" type="hidden" value="👍" />
+                  <input name="action" type="hidden" value="up" />
+                  <button type="submit">👍 リアクション</button>
                 </Form>
+                <ReactionList
+                  featureId={feature.id}
+                  reactions={feature.reactions}
+                />
               </VStack>
             ))}
           </VStack>
         )}
       </VStack>
+    </VStack>
+  );
+};
+
+type ReactionListProps = {
+  featureId: number;
+  reactions?: null | { emoji: string }[];
+};
+
+const ReactionList = ({ featureId, reactions }: ReactionListProps) => {
+  const summaries = summarizeReactions(reactions);
+
+  if (summaries.length === 0) {
+    return (
+      <VStack>
+        <Text size="sm">リアクションはまだありません。</Text>
+      </VStack>
+    );
+  }
+
+  return (
+    <VStack>
+      {summaries.map(({ count, emoji }) => (
+        <Text key={`${featureId}-${emoji}`} size="sm">
+          {emoji} {count}
+        </Text>
+      ))}
     </VStack>
   );
 };

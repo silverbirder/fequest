@@ -13,7 +13,11 @@ export const productRouter = createTRPCRouter({
       const product = await ctx.db.query.products.findFirst({
         where: (product, { eq }) => eq(product.id, input.id),
         with: {
-          featureRequests: true,
+          featureRequests: {
+            with: {
+              reactions: true,
+            },
+          },
         },
       });
       return product ?? null;

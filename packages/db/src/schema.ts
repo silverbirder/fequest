@@ -1,5 +1,11 @@
 import { relations, sql } from "drizzle-orm";
-import { index, pgTableCreator, primaryKey } from "drizzle-orm/pg-core";
+import {
+  check,
+  index,
+  pgTableCreator,
+  primaryKey,
+  uniqueIndex,
+} from "drizzle-orm/pg-core";
 import { type AdapterAccount } from "next-auth/adapters";
 
 /**
@@ -9,12 +15,7 @@ import { type AdapterAccount } from "next-auth/adapters";
  */
 export const createTable = pgTableCreator((name) => `fequest_${name}`);
 
-export const featureRequestStatuses = [
-  "pending",
-  "in_progress",
-  "completed",
-  "rejected",
-] as const;
+export const featureRequestStatuses = ["open", "closed"] as const;
 
 export type FeatureRequestStatus = (typeof featureRequestStatuses)[number];
 
@@ -87,15 +88,13 @@ export const featureRequests = createTable(
       .references(() => products.id),
     userId: d
       .varchar({ length: 255 })
-      .notNull()
-      .references(() => users.id),
+      .references(() => users.id, { onDelete: "set null" }),
     status: d
       .varchar({ length: 32 })
       .$type<FeatureRequestStatus>()
       .notNull()
-      .default("pending"),
+      .default("open"),
     content: d.text().notNull(),
-    likes: d.integer().default(0).notNull(),
     createdAt: d
       .timestamp({ withTimezone: true })
       .default(sql`CURRENT_TIMESTAMP`)
@@ -108,10 +107,54 @@ export const featureRequests = createTable(
   ],
 );
 
+export const featureRequestReactions = createTable(
+  "feature_request_reaction",
+  (d) => ({
+    id: d.integer().primaryKey().generatedByDefaultAsIdentity(),
+    featureRequestId: d
+      .integer()
+      .notNull()
+      .references(() => featureRequests.id, { onDelete: "cascade" }),
+    userId: d
+      .varchar({ length: 255 })
+      .references(() => users.id, { onDelete: "set null" }),
+    anonymousIdentifier: d.varchar({ length: 255 }),
+    emoji: d.varchar({ length: 32 }).notNull(),
+    createdAt: d
+      .timestamp({ withTimezone: true })
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
+  }),
+  (t) => [
+    index("fe_feature_request_reaction_feature_request_id_idx").on(
+      t.featureRequestId,
+    ),
+    index("fe_feature_request_reaction_user_id_idx").on(t.userId),
+    index("fe_feature_request_reaction_anonymous_identifier_idx").on(
+      t.anonymousIdentifier,
+    ),
+    uniqueIndex("fe_feature_request_reaction_user_unique").on(
+      t.featureRequestId,
+      t.userId,
+      t.emoji,
+    ),
+    uniqueIndex("fe_feature_request_reaction_anonymous_unique").on(
+      t.featureRequestId,
+      t.anonymousIdentifier,
+      t.emoji,
+    ),
+    check(
+      "fe_feature_request_reaction_identity_check",
+      sql`${t.userId} is not null or ${t.anonymousIdentifier} is not null`,
+    ),
+  ],
+);
+
 export const usersRelations = relations(users, ({ many }) => ({
   accounts: many(accounts),
   products: many(products),
   featureRequests: many(featureRequests),
+  featureRequestReactions: many(featureRequestReactions),
 }));
 
 export const productsRelations = relations(products, ({ one, many }) => ({
@@ -121,13 +164,28 @@ export const productsRelations = relations(products, ({ one, many }) => ({
 
 export const featureRequestsRelations = relations(
   featureRequests,
-  ({ one }) => ({
+  ({ one, many }) => ({
     product: one(products, {
       fields: [featureRequests.productId],
       references: [products.id],
     }),
     user: one(users, {
       fields: [featureRequests.userId],
+      references: [users.id],
+    }),
+    reactions: many(featureRequestReactions),
+  }),
+);
+
+export const featureRequestReactionsRelations = relations(
+  featureRequestReactions,
+  ({ one }) => ({
+    featureRequest: one(featureRequests, {
+      fields: [featureRequestReactions.featureRequestId],
+      references: [featureRequests.id],
+    }),
+    user: one(users, {
+      fields: [featureRequestReactions.userId],
       references: [users.id],
     }),
   }),

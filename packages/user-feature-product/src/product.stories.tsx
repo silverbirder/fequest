@@ -4,16 +4,26 @@ import { Product } from "./product";
 
 const meta = {
   args: {
-    onLikeFeature: async (formData: FormData) => {
-      console.log("Liked feature with ID:", formData.get("featureId"));
+    onReactToFeature: async (formData: FormData) => {
+      console.log("Reacted to feature", {
+        action: formData.get("action"),
+        emoji: formData.get("emoji"),
+        id: formData.get("featureId"),
+      });
     },
     product: {
       featureRequests: [
         {
           content: "ユーザーがプロフィール画像をアップロードできるようにする",
           id: 1,
-          likes: 5,
-          status: "検討中",
+          reactions: [{ emoji: "👍" }, { emoji: "👍" }, { emoji: "🎉" }],
+          status: "open",
+        },
+        {
+          content: "管理者向けダッシュボードにフィルタリング機能を追加",
+          id: 2,
+          reactions: [{ emoji: "✅" }],
+          status: "closed",
         },
       ],
       id: 1,

@@ -1,9 +1,10 @@
-import { featureRequests, products } from "./schema";
+import { featureRequestReactions, featureRequests, products } from "./schema";
 import type { Database } from "./client";
 
 const DEFAULT_PRODUCT_NAME = "サンプルプロダクト";
 const DEFAULT_FEATURE_REQUEST_CONTENT =
   "新しいアカウントにシードされたサンプル機能リクエスト。";
+const CLOSED_FEATURE_REQUEST_CONTENT = "クローズ済みのサンプル機能リクエスト。";
 
 export type SeedSampleDataOptions = {
   productName?: string;
@@ -29,10 +30,46 @@ export const seedSampleDataForUser = async (
       throw new Error("Failed to insert sample product for new user");
     }
 
-    await tx.insert(featureRequests).values({
-      productId: product.id,
-      userId,
-      content: featureRequestContent,
-    });
+    const seededFeatureRequests = await tx
+      .insert(featureRequests)
+      .values([
+        {
+          productId: product.id,
+          userId,
+          status: "open",
+          content: featureRequestContent,
+        },
+        {
+          productId: product.id,
+          userId,
+          status: "closed",
+          content: CLOSED_FEATURE_REQUEST_CONTENT,
+        },
+      ])
+      .returning({ id: featureRequests.id, status: featureRequests.status });
+
+    const openFeatureRequest = seededFeatureRequests.find(
+      (request) => request.status === "open",
+    );
+    const closedFeatureRequest = seededFeatureRequests.find(
+      (request) => request.status === "closed",
+    );
+
+    if (!openFeatureRequest || !closedFeatureRequest) {
+      throw new Error("Failed to insert sample feature requests");
+    }
+
+    await tx.insert(featureRequestReactions).values([
+      {
+        featureRequestId: openFeatureRequest.id,
+        userId,
+        emoji: "👍",
+      },
+      {
+        featureRequestId: closedFeatureRequest.id,
+        anonymousIdentifier: `seed-guest-${product.id}`,
+        emoji: "🎉",
+      },
+    ]);
   });
 };
