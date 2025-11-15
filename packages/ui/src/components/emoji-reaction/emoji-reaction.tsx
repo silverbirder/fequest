@@ -1,5 +1,5 @@
+import { HStack } from "../layout";
 import { Button } from "../shadcn";
-import { HStack } from "../stack";
 import { Text } from "../text";
 
 type Props = {

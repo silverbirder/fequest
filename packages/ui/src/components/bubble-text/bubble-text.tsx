@@ -1,4 +1,4 @@
-import { Box } from "../box";
+import { Box } from "../layout";
 import { Text } from "../text";
 
 type Props = {

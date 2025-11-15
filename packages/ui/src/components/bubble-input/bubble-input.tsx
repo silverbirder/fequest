@@ -1,5 +1,5 @@
+import { VStack } from "../layout";
 import { Input } from "../shadcn";
-import { VStack } from "../stack";
 import { Text } from "../text";
 
 export const BubbleInput = () => {
