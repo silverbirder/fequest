@@ -1,6 +1,6 @@
 import { HStack } from "../layout";
 import { Button } from "../shadcn";
-import { Text } from "../text";
+import { Text } from "../typography";
 
 type Props = {
   count?: number;

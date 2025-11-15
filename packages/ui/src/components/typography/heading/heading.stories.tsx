@@ -9,7 +9,7 @@ const meta = {
     weight: "bold",
   },
   component: Heading,
-  title: "UI/Heading",
+  title: "Typography/Heading",
 } satisfies Meta<typeof Heading>;
 
 export default meta;

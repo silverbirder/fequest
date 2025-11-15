@@ -10,7 +10,7 @@ const meta = {
     weight: "normal",
   },
   component: Text,
-  title: "UI/Text",
+  title: "Typography/Text",
 } satisfies Meta<typeof Text>;
 
 export default meta;

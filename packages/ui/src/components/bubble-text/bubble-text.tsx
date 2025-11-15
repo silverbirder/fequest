@@ -1,5 +1,5 @@
 import { Box } from "../layout";
-import { Text } from "../text";
+import { Text } from "../typography";
 
 type Props = {
   text: string;
