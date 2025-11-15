@@ -8,7 +8,10 @@
     "db:migrate": "drizzle-kit migrate --config drizzle.config.ts",
     "db:push": "drizzle-kit push --config drizzle.config.ts",
     "db:studio": "drizzle-kit studio --config drizzle.config.ts",
-    "db:start": "./start-database.sh"
+    "db:start": "./start-database.sh",
+    "check-types": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "exports": {
     ".": "./src/index.ts",
@@ -26,6 +29,7 @@
     "@types/node": "^22.15.3",
     "dotenv": "^16.4.7",
     "drizzle-kit": "^0.30.5",
-    "typescript": "5.9.2"
+    "typescript": "5.9.2",
+    "vitest": "^4.0.8"
   }
 }
