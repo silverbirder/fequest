@@ -9,7 +9,9 @@
     "start": "next start",
     "preview": "next build && next start",
     "lint": "eslint --max-warnings 0",
-    "check-types": "SKIP_ENV_VALIDATION=1 next typegen && SKIP_ENV_VALIDATION=1 tsc --noEmit"
+    "check-types": "SKIP_ENV_VALIDATION=1 next typegen && SKIP_ENV_VALIDATION=1 tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^1.7.2",
@@ -41,6 +43,7 @@
     "@types/react-dom": "19.1.1",
     "babel-plugin-react-compiler": "^1.0.0",
     "eslint": "^9.38.0",
-    "typescript": "5.9.2"
+    "typescript": "5.9.2",
+    "vitest": "^4.0.8"
   }
 }
