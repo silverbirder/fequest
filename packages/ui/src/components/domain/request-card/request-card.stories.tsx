@@ -15,7 +15,7 @@ const meta = {
     text: "コメント機能の追加",
   },
   component: RequestCard,
-  title: "UI/RequestCard",
+  title: "Domain/RequestCard",
 } satisfies Meta<typeof RequestCard>;
 
 export default meta;

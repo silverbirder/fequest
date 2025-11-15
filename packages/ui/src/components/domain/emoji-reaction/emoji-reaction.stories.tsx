@@ -1,14 +1,15 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 
-import { BubbleText } from "./bubble-text";
+import { EmojiReaction } from "./emoji-reaction";
 
 const meta = {
   args: {
-    text: "コメント機能の追加",
+    count: 5,
+    emoji: "😀",
   },
-  component: BubbleText,
-  title: "UI/BubbleText",
-} satisfies Meta<typeof BubbleText>;
+  component: EmojiReaction,
+  title: "Domain/EmojiReaction",
+} satisfies Meta<typeof EmojiReaction>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;

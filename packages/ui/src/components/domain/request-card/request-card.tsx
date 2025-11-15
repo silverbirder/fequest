@@ -1,9 +1,9 @@
 import type { ComponentProps } from "react";
 
+import { HStack, VStack } from "../../layout";
+import { Avatar, AvatarFallback, AvatarImage } from "../../shadcn";
 import { BubbleText } from "../bubble-text";
 import { EmojiReaction } from "../emoji-reaction";
-import { HStack, VStack } from "../layout";
-import { Avatar, AvatarFallback, AvatarImage } from "../shadcn";
 
 type Props = ComponentProps<typeof BubbleText> & {
   avatar: {

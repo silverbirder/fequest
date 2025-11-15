@@ -5,7 +5,7 @@ import { BubbleInput } from "./bubble-input";
 const meta = {
   args: {},
   component: BubbleInput,
-  title: "UI/BubbleInput",
+  title: "Domain/BubbleInput",
 } satisfies Meta<typeof BubbleInput>;
 
 export default meta;
