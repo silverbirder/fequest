@@ -11,4 +11,20 @@ describe("EmojiReaction", () => {
     expect(element).not.toBeNull();
     expect(element?.textContent ?? "").toContain("😀5");
   });
+
+  it("calls onClick when clicked", async () => {
+    let clicked = false;
+    const handleClick = () => {
+      clicked = true;
+    };
+
+    await render(<EmojiReaction count={3} emoji="👍" onClick={handleClick} />);
+
+    const button = document.querySelector("button");
+    expect(button).not.toBeNull();
+
+    button?.click();
+
+    expect(clicked).toBe(true);
+  });
 });

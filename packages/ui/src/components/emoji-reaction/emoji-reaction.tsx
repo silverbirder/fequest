@@ -5,11 +5,12 @@ import { Text } from "../text";
 type Props = {
   count?: number;
   emoji?: string;
+  onClick?: () => void;
 };
 
-export const EmojiReaction = ({ count, emoji }: Props) => {
+export const EmojiReaction = ({ count, emoji, onClick }: Props) => {
   return (
-    <Button size="sm" variant="outline">
+    <Button onClick={onClick} size="sm" variant="outline">
       <HStack caret="transparent" gap="xs">
         <Text size="md">{emoji}</Text>
         <Text size="md">{count}</Text>
