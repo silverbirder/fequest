@@ -11,13 +11,14 @@ type Props = ComponentProps<typeof BubbleText> & {
     fallbackText?: string;
     src?: string;
   };
+  onReact?: (emoji: string) => void;
   reactions?: {
     count: number;
     emoji: string;
   }[];
 };
 
-export const RequestCard = ({ avatar, reactions, text }: Props) => (
+export const RequestCard = ({ avatar, onReact, reactions, text }: Props) => (
   <HStack align="baseline" gap="sm">
     <Avatar>
       <AvatarImage alt={avatar.alt} src={avatar.src}></AvatarImage>
@@ -31,6 +32,7 @@ export const RequestCard = ({ avatar, reactions, text }: Props) => (
             count={reaction.count}
             emoji={reaction.emoji}
             key={index}
+            onClick={onReact ? () => onReact(reaction.emoji) : undefined}
           />
         ))}
       </HStack>
