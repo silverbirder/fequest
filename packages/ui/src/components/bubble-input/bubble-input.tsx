@@ -1,4 +1,4 @@
-import { Input } from "../input";
+import { Input } from "../shadcn";
 import { VStack } from "../stack";
 import { Text } from "../text";
 

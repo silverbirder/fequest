@@ -1,4 +1,4 @@
-import { Button } from "../button";
+import { Button } from "../shadcn";
 import { HStack } from "../stack";
 import { Text } from "../text";
 

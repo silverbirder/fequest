@@ -8,7 +8,7 @@ const meta = {
     type: "text",
   },
   component: Input,
-  title: "UI/Input",
+  title: "shadcn/Input",
 } satisfies Meta<typeof Input>;
 
 export default meta;

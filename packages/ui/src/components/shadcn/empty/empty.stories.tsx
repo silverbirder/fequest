@@ -23,7 +23,7 @@ const meta = {
     ),
   },
   component: Empty,
-  title: "UI/Empty",
+  title: "shadcn/Empty",
 } satisfies Meta<typeof Empty>;
 
 export default meta;

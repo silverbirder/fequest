@@ -5,7 +5,7 @@ import { Button } from "./button";
 const meta = {
   args: { children: "Click Me", size: "default", variant: "default" },
   component: Button,
-  title: "UI/Button",
+  title: "shadcn/Button",
 } satisfies Meta<typeof Button>;
 
 export default meta;
