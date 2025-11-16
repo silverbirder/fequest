@@ -7,6 +7,7 @@
   "explorer.fileNesting.enabled": true,
   "explorer.fileNesting.patterns": {
     "*.ts": "$(capture).spec.ts, $(capture).test.ts",
-    "*.tsx": "$(capture).spec.tsx, $(capture).stories.tsx"
+    "*.tsx": "$(capture).spec.tsx, $(capture).stories.tsx",
+    "*.feature": "$(capture).feature, $(capture).feature.spec.ts"
   }
 }
