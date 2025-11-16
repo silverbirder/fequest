@@ -4,6 +4,12 @@ import { Product } from "./product";
 
 const meta = {
   args: {
+    canCreateFeatureRequest: true,
+    onCreateFeatureRequest: async (formData: FormData) => {
+      console.log("Created feature request", {
+        content: formData.get("content"),
+      });
+    },
     onReactToFeature: async (formData: FormData) => {
       console.log("Reacted to feature", {
         action: formData.get("action"),

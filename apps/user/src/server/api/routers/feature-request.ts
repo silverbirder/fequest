@@ -1,4 +1,4 @@
-import { featureRequestReactions } from "@repo/db";
+import { featureRequestReactions, featureRequests } from "@repo/db";
 import { TRPCError } from "@trpc/server";
 import { and, eq, isNull, sql } from "drizzle-orm";
 import {
@@ -11,11 +11,53 @@ import {
   optional,
   pipe,
   string,
+  transform,
 } from "valibot";
 
-import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
+import {
+  createTRPCRouter,
+  protectedProcedure,
+  publicProcedure,
+} from "~/server/api/trpc";
 
 export const featureRequestsRouter = createTRPCRouter({
+  create: protectedProcedure
+    .input(
+      object({
+        content: pipe(
+          string(),
+          transform((value) => value.trim()),
+          minLength(1),
+          maxLength(2000),
+        ),
+        productId: pipe(number(), integer(), minValue(1)),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const product = await ctx.db.query.products.findFirst({
+        columns: { id: true },
+        where: (product, { eq }) => eq(product.id, input.productId),
+      });
+
+      if (!product) {
+        throw new TRPCError({ code: "NOT_FOUND" });
+      }
+
+      const [featureRequest] = await ctx.db
+        .insert(featureRequests)
+        .values({
+          content: input.content,
+          productId: product.id,
+          userId: ctx.session.user.id,
+        })
+        .returning({
+          content: featureRequests.content,
+          id: featureRequests.id,
+          status: featureRequests.status,
+        });
+
+      return featureRequest;
+    }),
   react: publicProcedure
     .input(
       object({

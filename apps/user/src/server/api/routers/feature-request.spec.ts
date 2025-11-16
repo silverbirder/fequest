@@ -1,7 +1,7 @@
 import type { Database } from "@repo/db";
 import type { Session } from "next-auth";
 
-import { featureRequestReactions } from "@repo/db";
+import { featureRequestReactions, featureRequests } from "@repo/db";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("~/server/auth", () => ({
@@ -19,13 +19,13 @@ const [{ createCallerFactory }, { featureRequestsRouter }] = await Promise.all([
 
 const createCaller = createCallerFactory(featureRequestsRouter);
 
-type HarnessOptions = {
+type ReactHarnessOptions = {
   featureRequest?: null | { id: number };
   reactionCounts?: Array<{ count: number; emoji: string }>;
   session?: null | Pick<Session, "expires" | "user">;
 };
 
-const createTestHarness = (options: HarnessOptions = {}) => {
+const createReactHarness = (options: ReactHarnessOptions = {}) => {
   const featureRequest = Object.hasOwn(options, "featureRequest")
     ? options.featureRequest
     : { id: 1 };
@@ -88,6 +88,65 @@ const createTestHarness = (options: HarnessOptions = {}) => {
   };
 };
 
+type CreateHarnessOptions = {
+  insertedFeatureRequest?: { content: string; id: number; status: string };
+  product?: null | { id: number };
+  session?: null | Pick<Session, "expires" | "user">;
+};
+
+const createCreateHarness = (options: CreateHarnessOptions = {}) => {
+  const product = Object.hasOwn(options, "product")
+    ? options.product
+    : { id: 1 };
+
+  const insertResult = options.insertedFeatureRequest ?? {
+    content: "Add export feature",
+    id: 123,
+    status: "open",
+  };
+
+  const findProduct = vi.fn().mockResolvedValue(product);
+
+  const returning = vi.fn().mockResolvedValue([insertResult]);
+  const values = vi.fn(() => ({
+    returning,
+  }));
+  const insertMock = vi.fn(() => ({
+    values,
+  }));
+
+  const db = {
+    insert: insertMock,
+    query: {
+      products: {
+        findFirst: findProduct,
+      },
+    },
+  } as unknown as Database;
+
+  const resolvedSession = Object.hasOwn(options, "session")
+    ? ((options.session ?? null) as null | Session)
+    : ({
+        expires: new Date().toISOString(),
+        user: { id: "user-abc" },
+      } as Session);
+
+  const caller = createCaller({
+    db,
+    headers: new Headers(),
+    session: resolvedSession,
+  });
+
+  return {
+    caller,
+    findProduct,
+    insertMock,
+    returning,
+    session: resolvedSession,
+    values,
+  };
+};
+
 afterEach(() => {
   vi.restoreAllMocks();
 });
@@ -95,7 +154,7 @@ afterEach(() => {
 describe("featureRequestsRouter.react", () => {
   it("adds a reaction for an authenticated user", async () => {
     const reactionCounts = [{ count: 3, emoji: "🔥" }];
-    const harness = createTestHarness({
+    const harness = createReactHarness({
       featureRequest: { id: 55 },
       reactionCounts,
       session: { expires: new Date().toISOString(), user: { id: "user-123" } },
@@ -135,7 +194,7 @@ describe("featureRequestsRouter.react", () => {
   });
 
   it("removes a reaction for an anonymous user when action is down", async () => {
-    const harness = createTestHarness({
+    const harness = createReactHarness({
       featureRequest: { id: 77 },
     });
 
@@ -158,7 +217,7 @@ describe("featureRequestsRouter.react", () => {
   });
 
   it("throws when no identity is available for a reaction", async () => {
-    const harness = createTestHarness({
+    const harness = createReactHarness({
       featureRequest: { id: 88 },
     });
 
@@ -175,7 +234,7 @@ describe("featureRequestsRouter.react", () => {
   });
 
   it("throws when the supplied feature request does not exist", async () => {
-    const harness = createTestHarness({
+    const harness = createReactHarness({
       featureRequest: null,
       session: { expires: new Date().toISOString(), user: { id: "user-1" } },
     });
@@ -190,7 +249,7 @@ describe("featureRequestsRouter.react", () => {
   });
 
   it("requires action to be up or down", async () => {
-    const harness = createTestHarness({
+    const harness = createReactHarness({
       featureRequest: { id: 12 },
       session: { expires: new Date().toISOString(), user: { id: "user-123" } },
     });
@@ -205,5 +264,76 @@ describe("featureRequestsRouter.react", () => {
       code: "BAD_REQUEST",
       message: "action must be either 'up' or 'down'",
     });
+  });
+});
+
+describe("featureRequestsRouter.create", () => {
+  it("creates a feature request for the authenticated user", async () => {
+    const harness = createCreateHarness({
+      insertedFeatureRequest: {
+        content: "Add integrations",
+        id: 44,
+        status: "open",
+      },
+    });
+
+    const result = await harness.caller.create({
+      content: "  Add integrations  ",
+      productId: 1,
+    });
+
+    expect(harness.findProduct).toHaveBeenCalledWith({
+      columns: { id: true },
+      where: expect.any(Function),
+    });
+    expect(harness.insertMock).toHaveBeenCalledWith(featureRequests);
+    expect(harness.values).toHaveBeenCalledWith({
+      content: "Add integrations",
+      productId: 1,
+      userId: harness.session?.user?.id,
+    });
+    expect(harness.returning).toHaveBeenCalledWith({
+      content: featureRequests.content,
+      id: featureRequests.id,
+      status: featureRequests.status,
+    });
+    expect(result).toEqual({
+      content: "Add integrations",
+      id: 44,
+      status: "open",
+    });
+  });
+
+  it("throws when no user is authenticated", async () => {
+    const harness = createCreateHarness({ session: null });
+
+    await expect(
+      harness.caller.create({
+        content: "Dark mode",
+        productId: 3,
+      }),
+    ).rejects.toMatchObject({ code: "UNAUTHORIZED" });
+  });
+
+  it("throws when the product does not exist", async () => {
+    const harness = createCreateHarness({ product: null });
+
+    await expect(
+      harness.caller.create({
+        content: "Offline support",
+        productId: 999,
+      }),
+    ).rejects.toMatchObject({ code: "NOT_FOUND" });
+  });
+
+  it("rejects empty content after trimming", async () => {
+    const harness = createCreateHarness();
+
+    await expect(
+      harness.caller.create({
+        content: "   \t",
+        productId: 2,
+      }),
+    ).rejects.toMatchObject({ code: "BAD_REQUEST" });
   });
 });

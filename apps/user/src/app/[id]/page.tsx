@@ -3,8 +3,10 @@ import { Product } from "@repo/user-feature-product";
 import { notFound } from "next/navigation";
 import { object, safeParse } from "valibot";
 
+import { auth } from "~/server/auth";
 import { api } from "~/trpc/server";
 
+import { createCreateFeatureRequest } from "./create-feature-request";
 import { createReactToFeature } from "./react-to-feature";
 
 const paramsSchema = object({
@@ -18,13 +20,26 @@ export default async function Page({ params }: PageProps<"/[id]">) {
   }
   const productId = parsedParams.output.id;
 
-  const product = await api.product.byId({ id: productId });
+  const [product, session] = await Promise.all([
+    api.product.byId({ id: productId }),
+    auth(),
+  ]);
 
   if (!product) {
     notFound();
   }
 
+  const createFeatureRequest = createCreateFeatureRequest({ productId });
   const reactToFeature = createReactToFeature({ productId });
 
-  return <Product onReactToFeature={reactToFeature} product={product} />;
+  const canCreateFeatureRequest = Boolean(session?.user);
+
+  return (
+    <Product
+      canCreateFeatureRequest={canCreateFeatureRequest}
+      onCreateFeatureRequest={createFeatureRequest}
+      onReactToFeature={reactToFeature}
+      product={product}
+    />
+  );
 }

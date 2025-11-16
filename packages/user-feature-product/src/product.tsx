@@ -1,4 +1,11 @@
-import { Heading, HStack, Text, VStack } from "@repo/ui/components";
+import {
+  BubbleInput,
+  Heading,
+  HStack,
+  Text,
+  VStack,
+} from "@repo/ui/components";
+import Form from "next/form";
 
 import type { ReactionSummary } from "./libs/reaction-summary";
 
@@ -18,6 +25,8 @@ type Product = {
 };
 
 type Props = {
+  canCreateFeatureRequest: boolean;
+  onCreateFeatureRequest: (formData: FormData) => Promise<void>;
   onReactToFeature: (formData: FormData) => Promise<void>;
   product: Product;
 };
@@ -31,7 +40,12 @@ const getAvatarFallbackText = (content: string) => {
   return trimmed.slice(0, 2).toUpperCase();
 };
 
-export const Product = ({ onReactToFeature, product }: Props) => {
+export const Product = ({
+  canCreateFeatureRequest,
+  onCreateFeatureRequest,
+  onReactToFeature,
+  product,
+}: Props) => {
   const title = product.name;
   const featureRequests = product.featureRequests ?? [];
 
@@ -39,7 +53,6 @@ export const Product = ({ onReactToFeature, product }: Props) => {
     <VStack gap="xl">
       <Heading size="lg">{title}</Heading>
       <VStack gap="lg">
-        <Heading size="lg">フィーチャー一覧</Heading>
         {featureRequests.length === 0 ? (
           <Text>フィーチャーはまだありません。</Text>
         ) : (
@@ -57,6 +70,19 @@ export const Product = ({ onReactToFeature, product }: Props) => {
           </HStack>
         )}
       </VStack>
+      {canCreateFeatureRequest ? (
+        <Form action={onCreateFeatureRequest} className="w-full">
+          <BubbleInput
+            aria-label="新しいフィーチャーリクエスト"
+            autoComplete="off"
+            maxLength={2000}
+            name="content"
+            required
+          />
+        </Form>
+      ) : (
+        <Text>ログインするとフィーチャーを登録できます。</Text>
+      )}
     </VStack>
   );
 };

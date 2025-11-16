@@ -7,6 +7,8 @@ describe("Product", () => {
   it("renders provided props", async () => {
     const { asFragment, baseElement } = await render(
       <Product
+        canCreateFeatureRequest
+        onCreateFeatureRequest={async () => {}}
         onReactToFeature={async () => {}}
         product={{
           featureRequests: [],
