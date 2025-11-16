@@ -1,5 +1,7 @@
 import type { Database } from "@repo/db";
+import type { Session } from "next-auth";
 
+import { ANONYMOUS_IDENTIFIER_COOKIE_NAME } from "@repo/user-cookie";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("~/server/auth", () => ({
@@ -18,7 +20,9 @@ const [{ createCallerFactory }, { productRouter }] = await Promise.all([
 const createCaller = createCallerFactory(productRouter);
 
 type HarnessOptions = {
+  cookies?: Record<string, string>;
   product?: unknown;
+  session?: null | Session;
 };
 
 const createTestHarness = (options: HarnessOptions = {}) => {
@@ -31,10 +35,18 @@ const createTestHarness = (options: HarnessOptions = {}) => {
     },
   } as unknown as Database;
 
+  const headers = new Headers();
+  if (options.cookies) {
+    const cookieHeader = Object.entries(options.cookies)
+      .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
+      .join("; ");
+    headers.set("cookie", cookieHeader);
+  }
+
   const caller = createCaller({
     db,
-    headers: new Headers(),
-    session: null,
+    headers,
+    session: options.session ?? null,
   });
 
   return { caller, findFirst };
@@ -50,7 +62,18 @@ describe("productRouter.byId", () => {
       featureRequests: [
         {
           id: 1,
-          reactions: [{ emoji: "👍" }],
+          reactions: [
+            {
+              anonymousIdentifier: null,
+              emoji: "👍",
+              userId: "viewer",
+            },
+            {
+              anonymousIdentifier: "anon-1",
+              emoji: "🎉",
+              userId: null,
+            },
+          ],
         },
       ],
       id: 42,
@@ -58,6 +81,13 @@ describe("productRouter.byId", () => {
     };
     const { caller, findFirst } = createTestHarness({
       product: productRecord,
+      session: {
+        expires: "",
+        user: {
+          id: "viewer",
+          name: "Test",
+        },
+      },
     });
 
     const result = await caller.byId({ id: 42 });
@@ -72,7 +102,54 @@ describe("productRouter.byId", () => {
     queryOptions?.where?.({ id: "product.id" } as unknown, { eq } as never);
     expect(eq).toHaveBeenCalledWith("product.id", 42);
 
-    expect(result).toEqual(productRecord);
+    const firstFeature = productRecord.featureRequests[0] as Record<
+      string,
+      unknown
+    >;
+    const featureWithoutReactions = { ...firstFeature };
+    delete featureWithoutReactions.reactions;
+
+    expect(result).toEqual({
+      ...productRecord,
+      featureRequests: [
+        {
+          ...featureWithoutReactions,
+          reactionSummaries: [
+            { count: 1, emoji: "👍", reactedByViewer: true },
+            { count: 1, emoji: "🎉", reactedByViewer: false },
+          ],
+        },
+      ],
+    });
+  });
+
+  it("marks anonymous viewer reactions when identifier is provided", async () => {
+    const productRecord = {
+      featureRequests: [
+        {
+          id: 1,
+          reactions: [
+            {
+              anonymousIdentifier: "anon-1",
+              emoji: "👍",
+              userId: null,
+            },
+          ],
+        },
+      ],
+      id: 42,
+      name: "Demo Product",
+    };
+    const { caller } = createTestHarness({
+      cookies: { [ANONYMOUS_IDENTIFIER_COOKIE_NAME]: "anon-1" },
+      product: productRecord,
+    });
+
+    const result = await caller.byId({ id: 42 });
+
+    expect(result?.featureRequests[0]?.reactionSummaries).toEqual([
+      { count: 1, emoji: "👍", reactedByViewer: true },
+    ]);
   });
 
   it("returns null when no product matches the supplied id", async () => {

@@ -24,6 +24,8 @@ vi.mock("next/headers", () => ({
   cookies: mocks.cookies,
 }));
 
+import { ANONYMOUS_IDENTIFIER_COOKIE_NAME } from "@repo/user-cookie";
+
 import { createReactToFeature } from "./react-to-feature";
 
 type MockCookieStore = {
@@ -96,7 +98,7 @@ describe("createReactToFeature", () => {
 
       expect(cookieStore.set).toHaveBeenCalledWith(
         expect.objectContaining({
-          name: "fequestAnonId",
+          name: ANONYMOUS_IDENTIFIER_COOKIE_NAME,
           value: uuid,
         }),
       );

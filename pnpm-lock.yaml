@@ -129,6 +129,9 @@ importers:
       '@repo/ui':
         specifier: workspace:*
         version: link:../../packages/ui
+      '@repo/user-cookie':
+        specifier: workspace:*
+        version: link:../../packages/user-cookie
       '@repo/user-feature-product':
         specifier: workspace:*
         version: link:../../packages/user-feature-product
@@ -454,6 +457,27 @@ importers:
       vitest-browser-react:
         specifier: ^2.0.2
         version: 2.0.2(@types/react-dom@19.1.1(@types/react@19.1.0))(@types/react@19.1.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(vitest@4.0.8(@types/node@22.18.13)(@vitest/browser-playwright@4.0.8)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.44.0)(yaml@2.8.1))
+
+  packages/user-cookie:
+    devDependencies:
+      '@repo/eslint-config':
+        specifier: workspace:*
+        version: link:../eslint-config
+      '@repo/typescript-config':
+        specifier: workspace:*
+        version: link:../typescript-config
+      '@types/node':
+        specifier: ^22.15.3
+        version: 22.18.13
+      eslint:
+        specifier: ^9.38.0
+        version: 9.39.0(jiti@2.6.1)
+      typescript:
+        specifier: 5.9.2
+        version: 5.9.2
+      vitest:
+        specifier: ^4.0.8
+        version: 4.0.8(@types/node@22.18.13)(@vitest/browser-playwright@4.0.8)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.44.0)(yaml@2.8.1)
 
   packages/user-feature-product:
     dependencies:

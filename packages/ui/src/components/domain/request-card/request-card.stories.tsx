@@ -8,9 +8,9 @@ const meta = {
       fallbackText: "NR",
     },
     reactions: [
-      { count: 12, emoji: "👍" },
-      { count: 5, emoji: "❤️" },
-      { count: 3, emoji: "🎉" },
+      { count: 12, emoji: "👍", reactedByViewer: true },
+      { count: 5, emoji: "❤️", reactedByViewer: false },
+      { count: 3, emoji: "🎉", reactedByViewer: false },
     ],
     text: "コメント機能の追加",
   },

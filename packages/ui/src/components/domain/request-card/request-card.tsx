@@ -15,6 +15,7 @@ type Props = ComponentProps<typeof BubbleText> & {
   reactions?: {
     count: number;
     emoji: string;
+    reactedByViewer?: boolean;
   }[];
 };
 
@@ -29,6 +30,7 @@ export const RequestCard = ({ avatar, onReact, reactions, text }: Props) => (
       <HStack gap="xs">
         {reactions?.map((reaction, index) => (
           <EmojiReaction
+            active={reaction.reactedByViewer}
             count={reaction.count}
             emoji={reaction.emoji}
             key={index}

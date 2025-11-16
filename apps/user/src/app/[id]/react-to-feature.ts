@@ -1,3 +1,4 @@
+import { ensureAnonymousIdentifier } from "@repo/user-cookie";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 
@@ -30,21 +31,7 @@ export const createReactToFeature = ({
     }
 
     const cookieStore = await cookies();
-    const cookieName = "fequestAnonId";
-    let anonymousIdentifier = cookieStore.get(cookieName)?.value;
-
-    if (!anonymousIdentifier) {
-      anonymousIdentifier = crypto.randomUUID();
-      cookieStore.set({
-        httpOnly: true,
-        maxAge: 60 * 60 * 24 * 365,
-        name: cookieName,
-        path: "/",
-        sameSite: "lax",
-        secure: process.env.NODE_ENV === "production",
-        value: anonymousIdentifier,
-      });
-    }
+    const anonymousIdentifier = ensureAnonymousIdentifier(cookieStore);
 
     try {
       await api.featureRequests.react({

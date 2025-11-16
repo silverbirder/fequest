@@ -4,10 +4,9 @@ import { RequestCard, VStack } from "@repo/ui/components";
 import Form from "next/form";
 import { useRef } from "react";
 
-export type ReactionSummary = {
-  count: number;
-  emoji: string;
-};
+import type { ReactionSummary } from "../libs/reaction-summary";
+
+const AVAILABLE_EMOJIS = ["👍", "🎉", "❤️", "🔥", "💡"] as const;
 
 type Props = {
   avatarFallbackText: string;
@@ -26,8 +25,16 @@ export const FeatureRequestItem = ({
 }: Props) => {
   const formRef = useRef<HTMLFormElement>(null);
   const emojiInputRef = useRef<HTMLInputElement>(null);
+  const actionInputRef = useRef<HTMLInputElement>(null);
 
   const handleReact = (emoji: string) => {
+    const clickedReaction = reactionOptions.find(
+      (reaction) => reaction.emoji === emoji,
+    );
+    const nextAction = clickedReaction?.reactedByViewer ? "down" : "up";
+    if (actionInputRef.current) {
+      actionInputRef.current.value = nextAction;
+    }
     if (emojiInputRef.current) {
       emojiInputRef.current.value = emoji;
     }
@@ -38,8 +45,13 @@ export const FeatureRequestItem = ({
     }
   };
 
-  const reactionOptions =
-    reactions.length > 0 ? reactions : [{ count: 0, emoji: "👍" }];
+  const reactionMap = new Map(
+    reactions.map((reaction) => [reaction.emoji, reaction]),
+  );
+  const reactionOptions = AVAILABLE_EMOJIS.map(
+    (emoji) =>
+      reactionMap.get(emoji) ?? { count: 0, emoji, reactedByViewer: false },
+  );
 
   return (
     <VStack gap="xs">
@@ -51,9 +63,14 @@ export const FeatureRequestItem = ({
       />
       <Form action={onReactToFeature} ref={formRef}>
         <input name="featureId" type="hidden" value={featureId} />
-        <input name="action" type="hidden" value="up" />
         <input
-          defaultValue={reactionOptions[0]?.emoji ?? "👍"}
+          defaultValue="up"
+          name="action"
+          ref={actionInputRef}
+          type="hidden"
+        />
+        <input
+          defaultValue={reactionOptions[0]?.emoji ?? AVAILABLE_EMOJIS[0]}
           name="emoji"
           ref={emojiInputRef}
           type="hidden"

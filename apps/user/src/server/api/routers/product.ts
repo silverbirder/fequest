@@ -1,3 +1,5 @@
+import { getAnonymousIdentifierFromHeaders } from "@repo/user-cookie";
+import { summarizeReactions } from "@repo/user-feature-product";
 import { integer, minValue, number, object, pipe } from "valibot";
 
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
@@ -20,6 +22,27 @@ export const productRouter = createTRPCRouter({
           },
         },
       });
-      return product ?? null;
+      if (!product) {
+        return null;
+      }
+
+      const viewerUserId = ctx.session?.user?.id ?? null;
+      const viewerAnonymousIdentifier = viewerUserId
+        ? null
+        : getAnonymousIdentifierFromHeaders(ctx.headers);
+
+      return {
+        ...product,
+        featureRequests: product.featureRequests.map((feature) => {
+          const { reactions, ...rest } = feature;
+          return {
+            ...rest,
+            reactionSummaries: summarizeReactions(reactions, {
+              viewerAnonymousIdentifier,
+              viewerUserId,
+            }),
+          };
+        }),
+      };
     }),
 });

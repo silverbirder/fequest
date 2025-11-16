@@ -16,13 +16,18 @@ const meta = {
         {
           content: "ユーザーがプロフィール画像をアップロードできるようにする",
           id: 1,
-          reactions: [{ emoji: "👍" }, { emoji: "👍" }, { emoji: "🎉" }],
+          reactionSummaries: [
+            { count: 2, emoji: "👍", reactedByViewer: true },
+            { count: 1, emoji: "🎉", reactedByViewer: true },
+          ],
           status: "open",
         },
         {
           content: "管理者向けダッシュボードにフィルタリング機能を追加",
           id: 2,
-          reactions: [{ emoji: "✅" }],
+          reactionSummaries: [
+            { count: 1, emoji: "✅", reactedByViewer: false },
+          ],
           status: "closed",
         },
       ],
