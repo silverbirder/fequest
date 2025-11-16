@@ -1,5 +1,9 @@
-import { Button, Heading, Text, VStack } from "@repo/ui/components";
-import Form from "next/form";
+import { Heading, HStack, Text, VStack } from "@repo/ui/components";
+
+import {
+  FeatureRequestItem,
+  type ReactionSummary,
+} from "./feature-request-item";
 
 type FeatureRequest = {
   content: string;
@@ -19,7 +23,18 @@ type Props = {
   product: Product;
 };
 
-const summarizeReactions = (reactions?: null | { emoji: string }[]) => {
+const getAvatarFallbackText = (content: string) => {
+  const trimmed = content.trim();
+  if (trimmed.length === 0) {
+    return "FR";
+  }
+
+  return trimmed.slice(0, 2).toUpperCase();
+};
+
+const summarizeReactions = (
+  reactions?: null | { emoji: string }[],
+): ReactionSummary[] => {
   if (!reactions || reactions.length === 0) {
     return [];
   }
@@ -37,68 +52,30 @@ const summarizeReactions = (reactions?: null | { emoji: string }[]) => {
 
 export const Product = ({ onReactToFeature, product }: Props) => {
   const title = product.name;
-  const description = "プロダクトに寄せられたフィーチャーリクエストです";
   const featureRequests = product.featureRequests ?? [];
 
   return (
     <VStack gap="xl">
-      <VStack gap="lg">
-        <Heading size="lg">{title}</Heading>
-        <Text>{description}</Text>
-        <Button variant="destructive">新しいフィーチャーをリクエスト</Button>
-      </VStack>
+      <Heading size="lg">{title}</Heading>
       <VStack gap="lg">
         <Heading size="lg">フィーチャー一覧</Heading>
         {featureRequests.length === 0 ? (
-          <p>フィーチャーはまだありません。</p>
+          <Text>フィーチャーはまだありません。</Text>
         ) : (
-          <VStack>
+          <HStack align="start" gap="lg">
             {featureRequests.map((feature) => (
-              <VStack key={feature.id}>
-                <Text>{feature.content}</Text>
-                <Form action={onReactToFeature}>
-                  <input name="featureId" type="hidden" value={feature.id} />
-                  <span>ステータス: {feature.status}</span>
-                  <input name="emoji" type="hidden" value="👍" />
-                  <input name="action" type="hidden" value="up" />
-                  <button type="submit">👍 リアクション</button>
-                </Form>
-                <ReactionList
-                  featureId={feature.id}
-                  reactions={feature.reactions}
-                />
-              </VStack>
+              <FeatureRequestItem
+                avatarFallbackText={getAvatarFallbackText(feature.content)}
+                featureId={feature.id}
+                key={feature.id}
+                onReactToFeature={onReactToFeature}
+                reactions={summarizeReactions(feature.reactions)}
+                text={feature.content}
+              />
             ))}
-          </VStack>
+          </HStack>
         )}
       </VStack>
-    </VStack>
-  );
-};
-
-type ReactionListProps = {
-  featureId: number;
-  reactions?: null | { emoji: string }[];
-};
-
-const ReactionList = ({ featureId, reactions }: ReactionListProps) => {
-  const summaries = summarizeReactions(reactions);
-
-  if (summaries.length === 0) {
-    return (
-      <VStack>
-        <Text size="sm">リアクションはまだありません。</Text>
-      </VStack>
-    );
-  }
-
-  return (
-    <VStack>
-      {summaries.map(({ count, emoji }) => (
-        <Text key={`${featureId}-${emoji}`} size="sm">
-          {emoji} {count}
-        </Text>
-      ))}
     </VStack>
   );
 };
