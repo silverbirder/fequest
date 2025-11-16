@@ -34,22 +34,22 @@ afterEach(() => {
 });
 
 describe("createCreateFeatureRequest", () => {
-  it("submits trimmed content", async () => {
+  it("submits trimmed title", async () => {
     const action = createCreateFeatureRequest({ productId: 11 });
 
-    await action(createFormData({ content: "  Dark mode  " }));
+    await action(createFormData({ title: "  Dark mode  " }));
 
     expect(mocks.create).toHaveBeenCalledWith({
-      content: "Dark mode",
       productId: 11,
+      title: "Dark mode",
     });
     expect(mocks.revalidatePath).toHaveBeenCalledWith("/11");
   });
 
-  it("bails when the content is empty", async () => {
+  it("bails when the title is empty", async () => {
     const action = createCreateFeatureRequest({ productId: 4 });
 
-    await action(createFormData({ content: "   " }));
+    await action(createFormData({ title: "   " }));
 
     expect(mocks.create).not.toHaveBeenCalled();
     expect(mocks.revalidatePath).not.toHaveBeenCalled();
@@ -59,11 +59,11 @@ describe("createCreateFeatureRequest", () => {
     mocks.create.mockRejectedValueOnce(new Error("boom"));
     const action = createCreateFeatureRequest({ productId: 7 });
 
-    await action(createFormData({ content: "Share reports" }));
+    await action(createFormData({ title: "Share reports" }));
 
     expect(mocks.create).toHaveBeenCalledWith({
-      content: "Share reports",
       productId: 7,
+      title: "Share reports",
     });
     expect(mocks.revalidatePath).toHaveBeenCalledWith("/7");
   });

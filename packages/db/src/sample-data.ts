@@ -37,12 +37,14 @@ export const seedSampleDataForUser = async (
           productId: product.id,
           userId,
           status: "open",
+          title: featureRequestContent,
           content: featureRequestContent,
         },
         {
           productId: product.id,
           userId,
           status: "closed",
+          title: CLOSED_FEATURE_REQUEST_CONTENT,
           content: CLOSED_FEATURE_REQUEST_CONTENT,
         },
       ])

@@ -16,6 +16,7 @@ type FeatureRequest = {
   id: number;
   reactionSummaries?: null | ReactionSummary[];
   status: string;
+  title?: null | string;
 };
 
 type Product = {
@@ -31,8 +32,8 @@ type Props = {
   product: Product;
 };
 
-const getAvatarFallbackText = (content: string) => {
-  const trimmed = content.trim();
+const getAvatarFallbackText = (text: string) => {
+  const trimmed = text.trim();
   if (trimmed.length === 0) {
     return "FR";
   }
@@ -57,16 +58,19 @@ export const Product = ({
           <Text>フィーチャーはまだありません。</Text>
         ) : (
           <HStack align="start" gap="lg">
-            {featureRequests.map((feature) => (
-              <FeatureRequestItem
-                avatarFallbackText={getAvatarFallbackText(feature.content)}
-                featureId={feature.id}
-                key={feature.id}
-                onReactToFeature={onReactToFeature}
-                reactions={feature.reactionSummaries ?? []}
-                text={feature.content}
-              />
-            ))}
+            {featureRequests.map((feature) => {
+              const text = feature.title?.trim() ?? "";
+              return (
+                <FeatureRequestItem
+                  avatarFallbackText={getAvatarFallbackText(text)}
+                  featureId={feature.id}
+                  key={feature.id}
+                  onReactToFeature={onReactToFeature}
+                  reactions={feature.reactionSummaries ?? []}
+                  text={text}
+                />
+              );
+            })}
           </HStack>
         )}
       </VStack>
@@ -75,8 +79,8 @@ export const Product = ({
           <BubbleInput
             aria-label="新しいフィーチャーリクエスト"
             autoComplete="off"
-            maxLength={2000}
-            name="content"
+            maxLength={255}
+            name="title"
             required
           />
         </Form>

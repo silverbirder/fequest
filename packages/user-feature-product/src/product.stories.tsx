@@ -7,7 +7,7 @@ const meta = {
     canCreateFeatureRequest: true,
     onCreateFeatureRequest: async (formData: FormData) => {
       console.log("Created feature request", {
-        content: formData.get("content"),
+        title: formData.get("title"),
       });
     },
     onReactToFeature: async (formData: FormData) => {
@@ -27,6 +27,7 @@ const meta = {
             { count: 1, emoji: "🎉", reactedByViewer: true },
           ],
           status: "open",
+          title: "プロフィール画像アップロード",
         },
         {
           content: "管理者向けダッシュボードにフィルタリング機能を追加",
@@ -35,6 +36,7 @@ const meta = {
             { count: 1, emoji: "✅", reactedByViewer: false },
           ],
           status: "closed",
+          title: "管理ダッシュボードのフィルター",
         },
       ],
       id: 1,

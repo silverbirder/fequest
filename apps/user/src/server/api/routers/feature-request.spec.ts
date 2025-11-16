@@ -89,7 +89,12 @@ const createReactHarness = (options: ReactHarnessOptions = {}) => {
 };
 
 type CreateHarnessOptions = {
-  insertedFeatureRequest?: { content: string; id: number; status: string };
+  insertedFeatureRequest?: {
+    content: string;
+    id: number;
+    status: string;
+    title: string;
+  };
   product?: null | { id: number };
   session?: null | Pick<Session, "expires" | "user">;
 };
@@ -100,9 +105,10 @@ const createCreateHarness = (options: CreateHarnessOptions = {}) => {
     : { id: 1 };
 
   const insertResult = options.insertedFeatureRequest ?? {
-    content: "Add export feature",
+    content: "",
     id: 123,
     status: "open",
+    title: "Add export feature",
   };
 
   const findProduct = vi.fn().mockResolvedValue(product);
@@ -271,15 +277,16 @@ describe("featureRequestsRouter.create", () => {
   it("creates a feature request for the authenticated user", async () => {
     const harness = createCreateHarness({
       insertedFeatureRequest: {
-        content: "Add integrations",
+        content: "",
         id: 44,
         status: "open",
+        title: "Add integrations",
       },
     });
 
     const result = await harness.caller.create({
-      content: "  Add integrations  ",
       productId: 1,
+      title: "  Add integrations  ",
     });
 
     expect(harness.findProduct).toHaveBeenCalledWith({
@@ -288,19 +295,22 @@ describe("featureRequestsRouter.create", () => {
     });
     expect(harness.insertMock).toHaveBeenCalledWith(featureRequests);
     expect(harness.values).toHaveBeenCalledWith({
-      content: "Add integrations",
+      content: "",
       productId: 1,
+      title: "Add integrations",
       userId: harness.session?.user?.id,
     });
     expect(harness.returning).toHaveBeenCalledWith({
       content: featureRequests.content,
       id: featureRequests.id,
       status: featureRequests.status,
+      title: featureRequests.title,
     });
     expect(result).toEqual({
-      content: "Add integrations",
+      content: "",
       id: 44,
       status: "open",
+      title: "Add integrations",
     });
   });
 
@@ -309,8 +319,8 @@ describe("featureRequestsRouter.create", () => {
 
     await expect(
       harness.caller.create({
-        content: "Dark mode",
         productId: 3,
+        title: "Dark mode",
       }),
     ).rejects.toMatchObject({ code: "UNAUTHORIZED" });
   });
@@ -320,8 +330,8 @@ describe("featureRequestsRouter.create", () => {
 
     await expect(
       harness.caller.create({
-        content: "Offline support",
         productId: 999,
+        title: "Offline support",
       }),
     ).rejects.toMatchObject({ code: "NOT_FOUND" });
   });
@@ -331,8 +341,8 @@ describe("featureRequestsRouter.create", () => {
 
     await expect(
       harness.caller.create({
-        content: "   \t",
         productId: 2,
+        title: "   \t",
       }),
     ).rejects.toMatchObject({ code: "BAD_REQUEST" });
   });

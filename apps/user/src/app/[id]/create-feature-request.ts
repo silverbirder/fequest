@@ -12,20 +12,20 @@ export const createCreateFeatureRequest = ({
   return async (formData: FormData) => {
     "use server";
 
-    const content = formData.get("content");
-    if (typeof content !== "string") {
+    const title = formData.get("title");
+    if (typeof title !== "string") {
       return;
     }
 
-    const trimmed = content.trim();
+    const trimmed = title.trim();
     if (trimmed.length === 0) {
       return;
     }
 
     try {
       await api.featureRequests.create({
-        content: trimmed,
         productId,
+        title: trimmed,
       });
     } catch (error) {
       console.error("Failed to create feature request", error);

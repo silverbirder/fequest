@@ -18,6 +18,7 @@ type FeatureRequestInsertValues = {
   productId: number;
   userId: string;
   status: FeatureRequestStatus;
+  title: string;
   content: string;
 };
 
@@ -128,12 +129,14 @@ describe("seedSampleDataForUser", () => {
         productId: seededProductId,
         userId,
         status: "open",
+        title: "新しいアカウントにシードされたサンプル機能リクエスト。",
         content: "新しいアカウントにシードされたサンプル機能リクエスト。",
       },
       {
         productId: seededProductId,
         userId,
         status: "closed",
+        title: "クローズ済みのサンプル機能リクエスト。",
         content: "クローズ済みのサンプル機能リクエスト。",
       },
     ]);
@@ -176,9 +179,11 @@ describe("seedSampleDataForUser", () => {
 
     expect(harness.records.featureRequestValues?.[0]).toMatchObject({
       content: customFeatureRequestContent,
+      title: customFeatureRequestContent,
     });
     expect(harness.records.featureRequestValues?.[1]).toMatchObject({
       content: "クローズ済みのサンプル機能リクエスト。",
+      title: "クローズ済みのサンプル機能リクエスト。",
     });
   });
 

@@ -94,6 +94,7 @@ export const featureRequests = createTable(
       .$type<FeatureRequestStatus>()
       .notNull()
       .default("open"),
+    title: d.varchar({ length: 255 }).notNull().default(""),
     content: d.text().notNull(),
     createdAt: d
       .timestamp({ withTimezone: true })

@@ -24,13 +24,13 @@ export const featureRequestsRouter = createTRPCRouter({
   create: protectedProcedure
     .input(
       object({
-        content: pipe(
+        productId: pipe(number(), integer(), minValue(1)),
+        title: pipe(
           string(),
           transform((value) => value.trim()),
           minLength(1),
-          maxLength(2000),
+          maxLength(255),
         ),
-        productId: pipe(number(), integer(), minValue(1)),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -46,14 +46,16 @@ export const featureRequestsRouter = createTRPCRouter({
       const [featureRequest] = await ctx.db
         .insert(featureRequests)
         .values({
-          content: input.content,
+          content: "",
           productId: product.id,
+          title: input.title,
           userId: ctx.session.user.id,
         })
         .returning({
           content: featureRequests.content,
           id: featureRequests.id,
           status: featureRequests.status,
+          title: featureRequests.title,
         });
 
       return featureRequest;
