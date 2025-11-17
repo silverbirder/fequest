@@ -1,0 +1,15 @@
+.git
+.gitignore
+node_modules
+.pnpm-store
+.turbo
+.next
+tmp
+apps/*/.next
+apps/*/node_modules
+packages/*/.next
+packages/*/node_modules
+yarn.lock
+package-lock.json
+**/*.log
+out

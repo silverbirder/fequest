@@ -21,7 +21,7 @@
     "eslint": "^9.38.0",
     "storybook": "^10.0.7",
     "tailwindcss": "^4.1.11",
-    "turbo": "^2.6.0",
+    "turbo": "^2.6.1",
     "typescript": "5.9.2",
     "vitest": "^4.0.8",
     "vitest-browser-react": "^2.0.2"
