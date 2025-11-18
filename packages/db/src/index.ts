@@ -6,3 +6,4 @@ export {
 } from "./client";
 export * from "./schema";
 export * from "./sample-data";
+export { migrateDatabase } from "./migrate";

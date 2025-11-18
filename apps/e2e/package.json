@@ -6,16 +6,20 @@
   "scripts": {
     "lint": "eslint . --max-warnings 0",
     "check-types": "tsc --noEmit",
-    "test:e2e": "vitest run",
+    "test:e2e": "DEBUG=testcontainers* vitest run",
     "test:e2e:watch": "vitest"
   },
   "devDependencies": {
     "@amiceli/vitest-cucumber": "^6.1.0",
+    "@repo/db": "workspace:*",
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@types/node": "^22.15.3",
     "eslint": "^9.38.0",
+    "playwright": "^1.56.1",
+    "testcontainers": "^11.8.1",
     "typescript": "5.9.2",
+    "vite-tsconfig-paths": "^5.1.4",
     "vitest": "^4.0.8"
   }
 }
