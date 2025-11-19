@@ -14,6 +14,10 @@ jobs:
     name: Run e2e tests
     runs-on: ubuntu-latest
     timeout-minutes: 45
+    env:
+      AUTH_GOOGLE_ID: ${{ secrets.AUTH_GOOGLE_ID }}
+      AUTH_GOOGLE_SECRET: ${{ secrets.AUTH_GOOGLE_SECRET }}
+      AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
 
     steps:
       - name: Checkout
