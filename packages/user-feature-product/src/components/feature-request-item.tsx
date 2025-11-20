@@ -2,22 +2,24 @@
 
 import { RequestCard, VStack } from "@repo/ui/components";
 import Form from "next/form";
-import { useRef } from "react";
+import { type ComponentProps, useRef } from "react";
 
 import type { ReactionSummary } from "../libs/reaction-summary";
 
 const AVAILABLE_EMOJIS = ["👍", "🎉", "❤️", "🔥", "💡"] as const;
 
 type Props = {
-  avatarFallbackText: string;
+  avatar: RequestCardAvatar;
   featureId: number;
   onReactToFeature: (formData: FormData) => Promise<void>;
   reactions: ReactionSummary[];
   text: string;
 };
 
+type RequestCardAvatar = ComponentProps<typeof RequestCard>["avatar"];
+
 export const FeatureRequestItem = ({
-  avatarFallbackText,
+  avatar,
   featureId,
   onReactToFeature,
   reactions,
@@ -56,7 +58,7 @@ export const FeatureRequestItem = ({
   return (
     <VStack gap="xs">
       <RequestCard
-        avatar={{ fallbackText: avatarFallbackText }}
+        avatar={avatar}
         onReact={handleReact}
         reactions={reactionOptions}
         text={text}

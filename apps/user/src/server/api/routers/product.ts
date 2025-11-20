@@ -17,7 +17,24 @@ export const productRouter = createTRPCRouter({
         with: {
           featureRequests: {
             with: {
-              reactions: true,
+              reactions: {
+                with: {
+                  user: {
+                    columns: {
+                      id: true,
+                      image: true,
+                      name: true,
+                    },
+                  },
+                },
+              },
+              user: {
+                columns: {
+                  id: true,
+                  image: true,
+                  name: true,
+                },
+              },
             },
           },
         },

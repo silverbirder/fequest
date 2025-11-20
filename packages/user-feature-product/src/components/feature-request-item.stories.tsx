@@ -4,7 +4,9 @@ import { FeatureRequestItem } from "./feature-request-item";
 
 const meta = {
   args: {
-    avatarFallbackText: "FR",
+    avatar: {
+      fallbackText: "FR",
+    },
     featureId: 1,
     onReactToFeature: async () => {},
     reactions: [

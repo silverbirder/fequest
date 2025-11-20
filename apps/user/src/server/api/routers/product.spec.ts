@@ -95,7 +95,28 @@ describe("productRouter.byId", () => {
     const queryOptions = findFirst.mock.calls[0]?.[0];
     expect(queryOptions).toBeDefined();
     expect(queryOptions?.with).toEqual({
-      featureRequests: { with: { reactions: true } },
+      featureRequests: {
+        with: {
+          reactions: {
+            with: {
+              user: {
+                columns: {
+                  id: true,
+                  image: true,
+                  name: true,
+                },
+              },
+            },
+          },
+          user: {
+            columns: {
+              id: true,
+              image: true,
+              name: true,
+            },
+          },
+        },
+      },
     });
 
     const eq = vi.fn();

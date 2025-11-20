@@ -13,7 +13,7 @@ describe("FeatureRequestItem", () => {
     const onReact = vi.fn();
     const { baseElement } = await render(
       <FeatureRequestItem
-        avatarFallbackText="FR"
+        avatar={{ fallbackText: "FR" }}
         featureId={99}
         onReactToFeature={onReact}
         reactions={defaultReactions}

@@ -17,6 +17,10 @@ type FeatureRequest = {
   reactionSummaries?: null | ReactionSummary[];
   status: string;
   title?: null | string;
+  user?: null | {
+    image?: null | string;
+    name?: null | string;
+  };
 };
 
 type Product = {
@@ -32,13 +36,22 @@ type Props = {
   product: Product;
 };
 
-const getAvatarFallbackText = (text: string) => {
-  const trimmed = text.trim();
+const getAvatarFallbackText = (text?: null | string) => {
+  const trimmed = (text ?? "").trim();
   if (trimmed.length === 0) {
     return "FR";
   }
 
   return trimmed.slice(0, 2).toUpperCase();
+};
+
+const createAvatarProps = (feature: FeatureRequest) => {
+  const referenceText = feature.user?.name ?? feature.title ?? feature.content;
+  return {
+    alt: feature.user?.name ?? undefined,
+    fallbackText: getAvatarFallbackText(referenceText),
+    src: feature.user?.image ?? undefined,
+  };
 };
 
 export const Product = ({
@@ -62,7 +75,7 @@ export const Product = ({
               const text = feature.title?.trim() ?? "";
               return (
                 <FeatureRequestItem
-                  avatarFallbackText={getAvatarFallbackText(text)}
+                  avatar={createAvatarProps(feature)}
                   featureId={feature.id}
                   key={feature.id}
                   onReactToFeature={onReactToFeature}

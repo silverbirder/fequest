@@ -28,6 +28,10 @@ const meta = {
           ],
           status: "open",
           title: "プロフィール画像アップロード",
+          user: {
+            image: "https://placehold.co/48x48",
+            name: "田中 花子",
+          },
         },
         {
           content: "管理者向けダッシュボードにフィルタリング機能を追加",
@@ -37,6 +41,10 @@ const meta = {
           ],
           status: "closed",
           title: "管理ダッシュボードのフィルター",
+          user: {
+            image: "https://placehold.co/48x48",
+            name: "佐藤 健",
+          },
         },
       ],
       id: 1,
