@@ -1,5 +1,4 @@
 import { featureRequestsRouter } from "~/server/api/routers/feature-request";
-import { postRouter } from "~/server/api/routers/post";
 import { productRouter } from "~/server/api/routers/product";
 import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
 
@@ -10,7 +9,6 @@ import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
  */
 export const appRouter = createTRPCRouter({
   featureRequests: featureRequestsRouter,
-  post: postRouter,
   product: productRouter,
 });
 

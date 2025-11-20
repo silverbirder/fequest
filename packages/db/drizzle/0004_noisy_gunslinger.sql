@@ -1,0 +1,1 @@
+DROP TABLE "fequest_post" CASCADE;

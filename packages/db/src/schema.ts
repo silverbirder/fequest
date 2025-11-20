@@ -36,27 +36,6 @@ export const users = createTable("user", (d) => ({
   image: d.varchar({ length: 255 }),
 }));
 
-export const posts = createTable(
-  "post",
-  (d) => ({
-    id: d.integer().primaryKey().generatedByDefaultAsIdentity(),
-    name: d.varchar({ length: 256 }),
-    createdById: d
-      .varchar({ length: 255 })
-      .notNull()
-      .references(() => users.id),
-    createdAt: d
-      .timestamp({ withTimezone: true })
-      .default(sql`CURRENT_TIMESTAMP`)
-      .notNull(),
-    updatedAt: d.timestamp({ withTimezone: true }).$onUpdate(() => new Date()),
-  }),
-  (t) => [
-    index("fe_post_created_by_idx").on(t.createdById),
-    index("fe_post_name_idx").on(t.name),
-  ],
-);
-
 export const products = createTable(
   "product",
   (d) => ({
