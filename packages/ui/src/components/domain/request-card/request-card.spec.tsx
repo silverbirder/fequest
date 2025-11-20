@@ -6,7 +6,16 @@ import { RequestCard } from "./request-card";
 describe("RequestCard", () => {
   it("renders provided children", async () => {
     await render(
-      <RequestCard avatar={{ fallbackText: "CF" }} text="Child content" />,
+      <RequestCard
+        avatar={{ fallbackText: "CF" }}
+        detail={{
+          content: "Detailed content",
+          createdAt: "2024-01-01T00:00:00.000Z",
+          title: "Child content",
+          updatedAt: "2024-01-02T00:00:00.000Z",
+        }}
+        text="Child content"
+      />,
     );
 
     const element = document.querySelector("div");

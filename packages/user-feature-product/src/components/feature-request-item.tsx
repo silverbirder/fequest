@@ -10,6 +10,7 @@ const AVAILABLE_EMOJIS = ["👍", "🎉", "❤️", "🔥", "💡"] as const;
 
 type Props = {
   avatar: RequestCardAvatar;
+  detail: RequestCardDetail;
   featureId: number;
   onReactToFeature: (formData: FormData) => Promise<void>;
   reactions: ReactionSummary[];
@@ -17,9 +18,11 @@ type Props = {
 };
 
 type RequestCardAvatar = ComponentProps<typeof RequestCard>["avatar"];
+type RequestCardDetail = ComponentProps<typeof RequestCard>["detail"];
 
 export const FeatureRequestItem = ({
   avatar,
+  detail,
   featureId,
   onReactToFeature,
   reactions,
@@ -59,6 +62,7 @@ export const FeatureRequestItem = ({
     <VStack gap="xs">
       <RequestCard
         avatar={avatar}
+        detail={detail}
         onReact={handleReact}
         reactions={reactionOptions}
         text={text}

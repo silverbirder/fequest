@@ -13,10 +13,12 @@ import { FeatureRequestItem } from "./components/feature-request-item";
 
 type FeatureRequest = {
   content: string;
+  createdAt?: Date | null | string;
   id: number;
   reactionSummaries?: null | ReactionSummary[];
   status: string;
   title?: null | string;
+  updatedAt?: Date | null | string;
   user?: null | {
     image?: null | string;
     name?: null | string;
@@ -54,6 +56,19 @@ const createAvatarProps = (feature: FeatureRequest) => {
   };
 };
 
+const toIsoString = (value?: Date | null | string) => {
+  if (!value) {
+    return null;
+  }
+
+  const date = value instanceof Date ? value : new Date(value);
+  if (Number.isNaN(date.getTime())) {
+    return null;
+  }
+
+  return date.toISOString();
+};
+
 export const Product = ({
   canCreateFeatureRequest,
   onCreateFeatureRequest,
@@ -76,6 +91,12 @@ export const Product = ({
               return (
                 <FeatureRequestItem
                   avatar={createAvatarProps(feature)}
+                  detail={{
+                    content: feature.content,
+                    createdAt: toIsoString(feature.createdAt),
+                    title: text,
+                    updatedAt: toIsoString(feature.updatedAt),
+                  }}
                   featureId={feature.id}
                   key={feature.id}
                   onReactToFeature={onReactToFeature}

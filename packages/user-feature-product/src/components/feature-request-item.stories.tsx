@@ -7,6 +7,12 @@ const meta = {
     avatar: {
       fallbackText: "FR",
     },
+    detail: {
+      content: "ユーザーが検索結果をフィルターできるようにしてほしいです。",
+      createdAt: "2024-11-01T09:00:00.000Z",
+      title: "タグ付け機能の追加",
+      updatedAt: "2024-11-05T18:30:00.000Z",
+    },
     featureId: 1,
     onReactToFeature: async () => {},
     reactions: [
