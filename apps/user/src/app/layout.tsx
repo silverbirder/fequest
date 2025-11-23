@@ -4,7 +4,7 @@ import { Header } from "@repo/user-feature-header";
 import { type Metadata } from "next";
 import { Geist } from "next/font/google";
 
-import { auth, signIn } from "~/server/auth";
+import { auth, signIn, signOut } from "~/server/auth";
 import { TRPCReactProvider } from "~/trpc/react";
 
 export const metadata: Metadata = {
@@ -27,6 +27,11 @@ export default async function RootLayout({
     await signIn("google");
   };
 
+  const signOutUser = async () => {
+    "use server";
+    await signOut();
+  };
+
   return (
     <html lang="ja" suppressHydrationWarning>
       <body className={geist.className}>
@@ -34,6 +39,7 @@ export default async function RootLayout({
           <Providers>
             <Header
               loginAction={signInWithGoogle}
+              logoutAction={signOutUser}
               user={session?.user ?? null}
             />
             {children}

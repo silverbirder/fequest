@@ -13,6 +13,7 @@ type Story = StoryObj<typeof meta>;
 export const LoggedOut: Story = {
   args: {
     loginAction: async () => {},
+    logoutAction: async () => {},
     user: null,
   },
 };
@@ -20,6 +21,7 @@ export const LoggedOut: Story = {
 export const LoggedIn: Story = {
   args: {
     loginAction: async () => {},
+    logoutAction: async () => {},
     user: {
       image: "https://github.com/shadcn.png",
       name: "田中 花子",

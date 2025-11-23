@@ -7,6 +7,10 @@ import {
   AvatarImage,
   Button,
   Container,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
   HStack,
 } from "@repo/ui/components";
 import Link from "next/link";
@@ -15,6 +19,7 @@ type Props = {
   appName?: string;
   homeHref?: Route | UrlObject;
   loginAction: () => Promise<void>;
+  logoutAction: () => Promise<void>;
   user?: null | User;
 };
 
@@ -39,6 +44,7 @@ export const Header = ({
   appName = "Fequest",
   homeHref = "/",
   loginAction,
+  logoutAction,
   user,
 }: Props) => {
   const isAuthenticated = Boolean(user);
@@ -55,15 +61,36 @@ export const Header = ({
           </Link>
 
           {isAuthenticated ? (
-            <Avatar>
-              <AvatarImage
-                alt={user?.name ?? "ログイン済みユーザー"}
-                src={user?.image ?? undefined}
-              />
-              <AvatarFallback delayMs={0}>
-                {createFallbackText(user?.name)}
-              </AvatarFallback>
-            </Avatar>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  className="rounded-full p-0"
+                  size="icon"
+                  variant="ghost"
+                >
+                  <Avatar>
+                    <AvatarImage
+                      alt={user?.name ?? "ログイン済みユーザー"}
+                      src={user?.image ?? undefined}
+                    />
+                    <AvatarFallback delayMs={0}>
+                      {createFallbackText(user?.name)}
+                    </AvatarFallback>
+                  </Avatar>
+                  <span className="sr-only">ユーザーメニュー</span>
+                </Button>
+              </DropdownMenuTrigger>
+
+              <DropdownMenuContent align="end" sideOffset={8}>
+                <DropdownMenuItem asChild>
+                  <form action={logoutAction} className="w-full">
+                    <button className="w-full text-left" type="submit">
+                      ログアウト
+                    </button>
+                  </form>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           ) : (
             <form action={loginAction}>
               <Button size="sm" type="submit" variant="outline">
