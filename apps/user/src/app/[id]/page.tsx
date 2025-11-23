@@ -7,6 +7,7 @@ import { auth } from "~/server/auth";
 import { api } from "~/trpc/server";
 
 import { createCreateFeatureRequest } from "./create-feature-request";
+import { createDeleteFeatureRequest } from "./delete-feature-request";
 import { createReactToFeature } from "./react-to-feature";
 
 const paramsSchema = object({
@@ -31,13 +32,16 @@ export default async function Page({ params }: PageProps<"/[id]">) {
 
   const createFeatureRequest = createCreateFeatureRequest({ productId });
   const reactToFeature = createReactToFeature({ productId });
+  const deleteFeatureRequest = createDeleteFeatureRequest({ productId });
 
   const canCreateFeatureRequest = Boolean(session?.user);
 
   return (
     <Product
       canCreateFeatureRequest={canCreateFeatureRequest}
+      currentUserId={session?.user?.id ?? null}
       onCreateFeatureRequest={createFeatureRequest}
+      onDeleteFeatureRequest={deleteFeatureRequest}
       onReactToFeature={reactToFeature}
       product={product}
     />

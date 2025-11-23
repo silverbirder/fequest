@@ -153,6 +153,52 @@ const createCreateHarness = (options: CreateHarnessOptions = {}) => {
   };
 };
 
+type DeleteHarnessOptions = {
+  featureRequest?: null | { id: number; userId: null | string };
+  session?: null | Pick<Session, "expires" | "user">;
+};
+
+const createDeleteHarness = (options: DeleteHarnessOptions = {}) => {
+  const featureRequest = Object.hasOwn(options, "featureRequest")
+    ? options.featureRequest
+    : { id: 5, userId: "owner-user" };
+
+  const findFirst = vi.fn().mockResolvedValue(featureRequest);
+  const deleteWhere = vi.fn();
+  const deleteMock = vi.fn(() => ({
+    where: deleteWhere,
+  }));
+
+  const db = {
+    delete: deleteMock,
+    query: {
+      featureRequests: {
+        findFirst,
+      },
+    },
+  } as unknown as Database;
+
+  const resolvedSession = Object.hasOwn(options, "session")
+    ? (options.session ?? null)
+    : ({
+        expires: new Date().toISOString(),
+        user: { id: featureRequest?.userId ?? "owner-user" },
+      } as Session);
+
+  const caller = createCaller({
+    db,
+    headers: new Headers(),
+    session: resolvedSession,
+  });
+
+  return {
+    caller,
+    deleteMock,
+    deleteWhere,
+    findFirst,
+  };
+};
+
 afterEach(() => {
   vi.restoreAllMocks();
 });
@@ -345,5 +391,52 @@ describe("featureRequestsRouter.create", () => {
         title: "   \t",
       }),
     ).rejects.toMatchObject({ code: "BAD_REQUEST" });
+  });
+});
+
+describe("featureRequestsRouter.delete", () => {
+  it("removes the feature request when the creator deletes it", async () => {
+    const harness = createDeleteHarness();
+
+    const result = await harness.caller.delete({ id: 5 });
+
+    expect(harness.findFirst).toHaveBeenCalledWith({
+      columns: { id: true, userId: true },
+      where: expect.any(Function),
+    });
+    expect(harness.deleteMock).toHaveBeenCalledWith(featureRequests);
+    expect(harness.deleteWhere).toHaveBeenCalled();
+    expect(result).toEqual({ id: 5 });
+  });
+
+  it("throws FORBIDDEN when a different user attempts to delete", async () => {
+    const harness = createDeleteHarness({
+      session: {
+        expires: new Date().toISOString(),
+        user: { id: "other-user" },
+      },
+    });
+
+    await expect(harness.caller.delete({ id: 5 })).rejects.toMatchObject({
+      code: "FORBIDDEN",
+    });
+
+    expect(harness.deleteMock).not.toHaveBeenCalled();
+  });
+
+  it("throws NOT_FOUND when the feature request is missing", async () => {
+    const harness = createDeleteHarness({
+      featureRequest: null,
+      session: {
+        expires: new Date().toISOString(),
+        user: { id: "owner-user" },
+      },
+    });
+
+    await expect(harness.caller.delete({ id: 99 })).rejects.toMatchObject({
+      code: "NOT_FOUND",
+    });
+
+    expect(harness.deleteMock).not.toHaveBeenCalled();
   });
 });

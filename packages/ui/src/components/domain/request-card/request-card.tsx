@@ -1,4 +1,4 @@
-import type { ComponentProps } from "react";
+import type { ComponentProps, ReactNode } from "react";
 
 import { Box, HStack, VStack } from "../../layout";
 import {
@@ -30,6 +30,7 @@ type Props = ComponentProps<typeof BubbleText> & {
     title?: string;
     updatedAt?: Date | null | string;
   };
+  footerActions?: ReactNode;
   onReact?: (emoji: string) => void;
   reactions?: {
     count: number;
@@ -59,6 +60,7 @@ const formatDateTime = (value?: Date | null | string) => {
 export const RequestCard = ({
   avatar,
   detail,
+  footerActions,
   onReact,
   reactions,
   text,
@@ -117,12 +119,19 @@ export const RequestCard = ({
                   </p>
                 </Text>
               </Box>
-              <DialogFooter>
-                <DialogClose asChild>
-                  <Button type="button" variant="outline">
-                    閉じる
-                  </Button>
-                </DialogClose>
+              <DialogFooter className="w-full">
+                <div className="flex w-full items-center justify-between gap-2">
+                  {footerActions ? (
+                    <div className="flex gap-2">{footerActions}</div>
+                  ) : (
+                    <div className="flex-1" />
+                  )}
+                  <DialogClose asChild>
+                    <Button type="button" variant="outline">
+                      閉じる
+                    </Button>
+                  </DialogClose>
+                </div>
               </DialogFooter>
             </VStack>
           </DialogContent>

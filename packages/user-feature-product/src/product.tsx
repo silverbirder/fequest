@@ -20,6 +20,7 @@ type FeatureRequest = {
   title?: null | string;
   updatedAt?: Date | null | string;
   user?: null | {
+    id?: null | string;
     image?: null | string;
     name?: null | string;
   };
@@ -33,7 +34,9 @@ type Product = {
 
 type Props = {
   canCreateFeatureRequest: boolean;
+  currentUserId?: null | string;
   onCreateFeatureRequest: (formData: FormData) => Promise<void>;
+  onDeleteFeatureRequest?: (formData: FormData) => Promise<void>;
   onReactToFeature: (formData: FormData) => Promise<void>;
   product: Product;
 };
@@ -71,7 +74,9 @@ const toIsoString = (value?: Date | null | string) => {
 
 export const Product = ({
   canCreateFeatureRequest,
+  currentUserId,
   onCreateFeatureRequest,
+  onDeleteFeatureRequest,
   onReactToFeature,
   product,
 }: Props) => {
@@ -87,10 +92,16 @@ export const Product = ({
         ) : (
           <HStack align="start" gap="lg">
             {featureRequests.map((feature) => {
+              const isOwner =
+                Boolean(currentUserId) &&
+                Boolean(feature.user?.id) &&
+                feature.user?.id === currentUserId;
+              const canDelete = Boolean(onDeleteFeatureRequest && isOwner);
               const text = feature.title?.trim() ?? "";
               return (
                 <FeatureRequestItem
                   avatar={createAvatarProps(feature)}
+                  canDelete={canDelete}
                   detail={{
                     content: feature.content,
                     createdAt: toIsoString(feature.createdAt),
@@ -99,6 +110,9 @@ export const Product = ({
                   }}
                   featureId={feature.id}
                   key={feature.id}
+                  onDeleteFeatureRequest={
+                    canDelete ? onDeleteFeatureRequest : undefined
+                  }
                   onReactToFeature={onReactToFeature}
                   reactions={feature.reactionSummaries ?? []}
                   text={text}

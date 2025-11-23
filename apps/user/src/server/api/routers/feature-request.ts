@@ -60,6 +60,32 @@ export const featureRequestsRouter = createTRPCRouter({
 
       return featureRequest;
     }),
+  delete: protectedProcedure
+    .input(
+      object({
+        id: pipe(number(), integer(), minValue(1)),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const featureRequest = await ctx.db.query.featureRequests.findFirst({
+        columns: { id: true, userId: true },
+        where: (fr, { eq }) => eq(fr.id, input.id),
+      });
+
+      if (!featureRequest) {
+        throw new TRPCError({ code: "NOT_FOUND" });
+      }
+
+      if (featureRequest.userId !== ctx.session.user.id) {
+        throw new TRPCError({ code: "FORBIDDEN" });
+      }
+
+      await ctx.db
+        .delete(featureRequests)
+        .where(eq(featureRequests.id, featureRequest.id));
+
+      return { id: featureRequest.id };
+    }),
   react: publicProcedure
     .input(
       object({

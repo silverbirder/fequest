@@ -1,6 +1,6 @@
 "use client";
 
-import { RequestCard, VStack } from "@repo/ui/components";
+import { Button, RequestCard, VStack } from "@repo/ui/components";
 import Form from "next/form";
 import { type ComponentProps, useRef } from "react";
 
@@ -10,8 +10,10 @@ const AVAILABLE_EMOJIS = ["👍", "🎉", "❤️", "🔥", "💡"] as const;
 
 type Props = {
   avatar: RequestCardAvatar;
+  canDelete?: boolean;
   detail: RequestCardDetail;
   featureId: number;
+  onDeleteFeatureRequest?: (formData: FormData) => Promise<void>;
   onReactToFeature: (formData: FormData) => Promise<void>;
   reactions: ReactionSummary[];
   text: string;
@@ -22,8 +24,10 @@ type RequestCardDetail = ComponentProps<typeof RequestCard>["detail"];
 
 export const FeatureRequestItem = ({
   avatar,
+  canDelete,
   detail,
   featureId,
+  onDeleteFeatureRequest,
   onReactToFeature,
   reactions,
   text,
@@ -58,11 +62,26 @@ export const FeatureRequestItem = ({
       reactionMap.get(emoji) ?? { count: 0, emoji, reactedByViewer: false },
   );
 
+  const footerActions =
+    canDelete && onDeleteFeatureRequest ? (
+      <Form action={onDeleteFeatureRequest} className="m-0">
+        <input name="featureId" type="hidden" value={featureId} />
+        <Button
+          className="text-destructive dark:text-destructive"
+          type="submit"
+          variant="ghost"
+        >
+          リクエストを削除
+        </Button>
+      </Form>
+    ) : null;
+
   return (
     <VStack gap="xs">
       <RequestCard
         avatar={avatar}
         detail={detail}
+        footerActions={footerActions}
         onReact={handleReact}
         reactions={reactionOptions}
         text={text}

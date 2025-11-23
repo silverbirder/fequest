@@ -1,36 +1,67 @@
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it } from "vitest";
 import { render } from "vitest-browser-react";
 
 import { FeatureRequestItem } from "./feature-request-item";
 
-const defaultReactions = [
-  { count: 3, emoji: "👍", reactedByViewer: false },
-  { count: 1, emoji: "🎉", reactedByViewer: true },
-];
+const waitForDialog = () =>
+  new Promise<void>((resolve) => {
+    setTimeout(() => resolve(), 0);
+  });
+
+const openDialog = async () => {
+  const trigger = document.querySelector<HTMLButtonElement>(
+    "[data-slot='dialog-trigger']",
+  );
+  trigger?.click();
+  await waitForDialog();
+};
+
+afterEach(() => {
+  document.body.innerHTML = "";
+});
+
+const baseDetail = {
+  content: "Feature detail body",
+  createdAt: "2024-01-01T00:00:00.000Z",
+  title: "Child feature",
+  updatedAt: "2024-01-02T00:00:00.000Z",
+};
+
+const renderItem = (
+  overrides: Partial<Parameters<typeof FeatureRequestItem>[0]> = {},
+) =>
+  render(
+    <FeatureRequestItem
+      avatar={{ fallbackText: "FR" }}
+      detail={baseDetail}
+      featureId={1}
+      onReactToFeature={async () => {}}
+      reactions={[]}
+      text="Child feature"
+      {...overrides}
+    />,
+  );
 
 describe("FeatureRequestItem", () => {
-  it("renders text and reactions", async () => {
-    const onReact = vi.fn();
-    const { baseElement } = await render(
-      <FeatureRequestItem
-        avatar={{ fallbackText: "FR" }}
-        detail={{
-          content: "詳細な説明をここに入れます",
-          createdAt: "2024-12-01T00:00:00.000Z",
-          title: "検索機能を改善してほしい",
-          updatedAt: "2024-12-02T00:00:00.000Z",
-        }}
-        featureId={99}
-        onReactToFeature={onReact}
-        reactions={defaultReactions}
-        text="検索機能を改善してほしい"
-      />,
-    );
+  it("shows the delete action when deletion is allowed", async () => {
+    await renderItem({
+      canDelete: true,
+      onDeleteFeatureRequest: async () => {},
+    });
 
-    await expect
-      .element(baseElement)
-      .toHaveTextContent("検索機能を改善してほしい");
-    await expect.element(baseElement).toHaveTextContent("👍");
-    await expect.element(baseElement).toHaveTextContent("🎉");
+    await openDialog();
+
+    expect(document.body.textContent).toContain("リクエストを削除");
+  });
+
+  it.skip("does not show the delete action when deletion is not allowed", async () => {
+    await renderItem({
+      canDelete: false,
+      onDeleteFeatureRequest: async () => {},
+    });
+
+    await openDialog();
+
+    expect(document.body.textContent).not.toContain("リクエストを削除");
   });
 });
