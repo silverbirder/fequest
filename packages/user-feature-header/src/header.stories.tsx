@@ -3,9 +3,6 @@ import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import { Header } from "./header";
 
 const meta = {
-  args: {
-    children: "Header",
-  },
   component: Header,
   title: "Feature/User/Header",
 } satisfies Meta<typeof Header>;
@@ -13,4 +10,19 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {};
+export const LoggedOut: Story = {
+  args: {
+    loginAction: async () => {},
+    user: null,
+  },
+};
+
+export const LoggedIn: Story = {
+  args: {
+    loginAction: async () => {},
+    user: {
+      image: "https://github.com/shadcn.png",
+      name: "田中 花子",
+    },
+  },
+};
