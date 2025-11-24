@@ -1,0 +1,34 @@
+{
+  "name": "@repo/admin-feature-dashboard",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "lint": "eslint . --max-warnings 0",
+    "test": "vitest --browser=chromium --run",
+    "test:watch": "vitest --browser=chromium",
+    "check-types": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@repo/ui": "workspace:*",
+    "next": "^16.0.0"
+  },
+  "peerDependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@repo/eslint-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
+    "@repo/vitest-config": "workspace:*",
+    "@storybook/nextjs-vite": "^10.0.6",
+    "@types/react": "19.1.0",
+    "@types/react-dom": "19.1.1",
+    "eslint": "^9.38.0",
+    "typescript": "5.9.2",
+    "vitest": "^4.0.8",
+    "vitest-browser-react": "^2.0.2"
+  }
+}
