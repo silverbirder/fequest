@@ -10,8 +10,13 @@
     "build-storybook": "storybook build"
   },
   "devDependencies": {
+    "@repo/admin-feature-dashboard": "workspace:*",
+    "@repo/admin-feature-product": "workspace:*",
+    "@repo/admin-feature-sign-in": "workspace:*",
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
+    "@repo/user-feature-header": "workspace:*",
+    "@repo/user-feature-product": "workspace:*",
     "@storybook/addon-a11y": "^10.0.8",
     "@storybook/addon-docs": "^10.0.8",
     "@storybook/addon-vitest": "^10.0.8",

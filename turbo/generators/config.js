@@ -122,6 +122,20 @@ module.exports = function generator(plop) {
             return `${JSON.stringify(pkgJson, null, 2)}\n`;
           },
         },
+        {
+          type: "modify",
+          path: "packages/storybook/package.json",
+          transform: (content) => {
+            const pkgJson = JSON.parse(content);
+            const dependencyName = `@repo/${workspaceFolder}`;
+            pkgJson.devDependencies = pkgJson.devDependencies || {};
+            if (!pkgJson.devDependencies[dependencyName]) {
+              pkgJson.devDependencies[dependencyName] = "workspace:*";
+              pkgJson.devDependencies = sortKeys(pkgJson.devDependencies);
+            }
+            return `${JSON.stringify(pkgJson, null, 2)}\n`;
+          },
+        },
       ];
 
       return actions;
