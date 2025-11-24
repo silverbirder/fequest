@@ -4,7 +4,10 @@ import { Dashboard } from "./dashboard";
 
 const meta = {
   args: {
-    children: "Dashboard",
+    products: [
+      { featureCount: 3, id: 1, name: "Alpha", reactionCount: 5 },
+      { featureCount: 0, id: 2, name: "Beta", reactionCount: 1 },
+    ],
   },
   component: Dashboard,
   title: "Feature/Admin/Dashboard",
@@ -14,3 +17,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
+
+export const Empty: Story = {
+  args: {
+    products: [],
+  },
+};
