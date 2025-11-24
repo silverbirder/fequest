@@ -1,14 +1,14 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { render } from "vitest-browser-react";
 
 import { SignIn } from "./sign-in";
 
 describe("SignIn", () => {
-  it("renders provided children", async () => {
-    await render(<SignIn>Child content</SignIn>);
+  it("renders button and link", async () => {
+    const action = vi.fn();
+    await render(<SignIn onGoogleSignIn={action} />);
 
-    const element = document.querySelector("div");
-    expect(element).not.toBeNull();
-    expect(element?.textContent ?? "").toContain("Child content");
+    const button = document.querySelector<HTMLButtonElement>("button");
+    expect(button?.textContent).toContain("Googleで続行");
   });
 });

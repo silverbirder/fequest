@@ -4,9 +4,11 @@ import { SignIn } from "./sign-in";
 
 const meta = {
   args: {
-    children: "SignIn",
+    appName: "Fequest Admin",
+    onGoogleSignIn: async () => {},
   },
   component: SignIn,
+  title: "Feature/Admin/SignIn",
 } satisfies Meta<typeof SignIn>;
 
 export default meta;

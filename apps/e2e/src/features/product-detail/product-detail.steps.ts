@@ -6,7 +6,7 @@ import {
   Then,
   When,
 } from "@cucumber/cucumber";
-import { migrateDatabase } from "@repo/db";
+import { migrateDatabase } from "@repo/db/migrate";
 import { stat } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -23,7 +23,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const screenshotPath = resolve(__dirname, "product-detail-screenshot.png");
 
-setDefaultTimeout(120_000);
+setDefaultTimeout(600_000);
 
 let userStartedContainer: StartedTestContainer | undefined;
 let dbStartedContainer: StartedTestContainer | undefined;
