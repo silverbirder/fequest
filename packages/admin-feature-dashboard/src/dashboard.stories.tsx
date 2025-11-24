@@ -4,6 +4,7 @@ import { Dashboard } from "./dashboard";
 
 const meta = {
   args: {
+    onCreateProduct: async () => {},
     products: [
       { featureCount: 3, id: 1, name: "Alpha", reactionCount: 5 },
       { featureCount: 0, id: 2, name: "Beta", reactionCount: 1 },

@@ -8,6 +8,7 @@ Mandatory rules for any AI coding assistant working in this repository. Do not p
 - **Component typing style**: Declare `type Props = { ... }` and write `export const Xxx = (props: Props) => { ... }`. Do not use `React.FC`.
 - **Tests and stories are required**: Every change needs a spec. Components must also have Storybook stories.
 - **Must pass formatting/lint**: Run `pnpm ci:fix` after changes and ensure it succeeds before a PR/commit.
+- **Vitest browser tests may need elevation**: When running `pnpm test:fix` (or any task that spins up Vitest browser mode), be prepared to rerun with elevated permissions if port binding is blocked; prefer `pnpm test:fix` and request elevation when necessary.
 - **UI lives in packages**: Implement UI in `packages/*` (e.g., `repo/ui`). The `apps/*` layer should only handle server actions and data fetching, then render package-provided UI.
 - **Acknowledge this file**: When an AI agent loads this repository, it must explicitly state that it has read `AGENTS.md` before proceeding with work.
 

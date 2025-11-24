@@ -1,6 +1,14 @@
 import {
   Box,
   Button,
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
   Empty,
   EmptyContent,
   EmptyDescription,
@@ -8,10 +16,12 @@ import {
   EmptyMedia,
   EmptyTitle,
   HStack,
+  Input,
   Text,
   VStack,
 } from "@repo/ui/components";
 import Link from "next/link";
+import { type ReactNode, useId } from "react";
 
 type ProductSummary = {
   featureCount: number;
@@ -23,11 +33,67 @@ type ProductSummary = {
 const formatCount = (value: number) =>
   new Intl.NumberFormat("ja-JP").format(value);
 
+type CreateProductDialogProps = {
+  onCreateProduct: Props["onCreateProduct"];
+  trigger: ReactNode;
+};
+
 type Props = {
+  onCreateProduct: (formData: FormData) => Promise<void>;
   products: ProductSummary[];
 };
 
-export const Dashboard = ({ products }: Props) => {
+const CreateProductDialog = ({
+  onCreateProduct,
+  trigger,
+}: CreateProductDialogProps) => {
+  const inputId = useId();
+
+  return (
+    <Dialog>
+      <DialogTrigger asChild>{trigger}</DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>新しいプロダクトを作成</DialogTitle>
+          <DialogDescription>
+            名前を入力して作成すると、そのプロダクトの管理ページに移動します。
+          </DialogDescription>
+        </DialogHeader>
+        <form action={onCreateProduct} data-slot="create-product-form">
+          <VStack gap="md">
+            <VStack align="start" gap="xs">
+              <label htmlFor={inputId}>
+                <Text size="sm" weight="semibold">
+                  プロダクト名
+                </Text>
+              </label>
+              <Input
+                aria-label="プロダクト名"
+                id={inputId}
+                maxLength={256}
+                name="name"
+                placeholder="例: プロダクトX"
+                required
+              />
+            </VStack>
+            <DialogFooter>
+              <DialogClose asChild>
+                <Button type="button" variant="ghost">
+                  キャンセル
+                </Button>
+              </DialogClose>
+              <Button type="submit" variant="default">
+                作成する
+              </Button>
+            </DialogFooter>
+          </VStack>
+        </form>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+export const Dashboard = ({ onCreateProduct, products }: Props) => {
   return (
     <VStack gap="xl">
       <HStack align="center" justify="between">
@@ -39,9 +105,14 @@ export const Dashboard = ({ products }: Props) => {
             質問（フィーチャーリクエスト）とリアクションの合計を確認できます。
           </Text>
         </VStack>
-        <Button asChild variant="default">
-          <Link href="/products/new">プロダクトを作成</Link>
-        </Button>
+        <CreateProductDialog
+          onCreateProduct={onCreateProduct}
+          trigger={
+            <Button type="button" variant="default">
+              プロダクトを作成
+            </Button>
+          }
+        />
       </HStack>
 
       {products.length === 0 ? (
@@ -54,9 +125,14 @@ export const Dashboard = ({ products }: Props) => {
             </EmptyDescription>
           </EmptyHeader>
           <EmptyContent>
-            <Button asChild>
-              <Link href="/products/new">プロダクトを作成</Link>
-            </Button>
+            <CreateProductDialog
+              onCreateProduct={onCreateProduct}
+              trigger={
+                <Button type="button" variant="default">
+                  プロダクトを作成
+                </Button>
+              }
+            />
           </EmptyContent>
         </Empty>
       ) : (

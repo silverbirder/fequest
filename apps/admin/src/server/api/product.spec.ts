@@ -24,6 +24,7 @@ const createCaller = createCallerFactory(productRouter);
 
 type HarnessOptions = {
   featureRequest?: unknown;
+  insertedProducts?: unknown[];
   product?: unknown;
   products?: unknown[];
   session?: null | Session;
@@ -44,6 +45,9 @@ const createTestHarness = (options: HarnessOptions = {}) => {
   const updateFeatureRequestsReturning = vi
     .fn()
     .mockResolvedValue(options.updatedFeatureRequests ?? []);
+  const insertProductsReturning = vi
+    .fn()
+    .mockResolvedValue(options.insertedProducts ?? []);
 
   const productUpdateWhere = vi.fn(() => ({
     returning: updateProductsReturning,
@@ -69,7 +73,19 @@ const createTestHarness = (options: HarnessOptions = {}) => {
     throw new Error("Unexpected table");
   });
 
+  const insertValues = vi.fn(() => ({
+    returning: insertProductsReturning,
+  }));
+
+  const insert = vi.fn((table) => {
+    if (table === products) {
+      return { values: insertValues };
+    }
+    throw new Error("Unexpected table");
+  });
+
   const db = {
+    insert,
     query: {
       featureRequests: {
         findFirst: findFirstFeatureRequest,
@@ -94,6 +110,9 @@ const createTestHarness = (options: HarnessOptions = {}) => {
     findFirstFeatureRequest,
     findFirstProduct,
     findMany,
+    insert,
+    insertProductsReturning,
+    insertValues,
     productUpdateSet,
     productUpdateWhere,
     update,
@@ -240,6 +259,51 @@ describe("productRouter.byId", () => {
     const { caller } = createTestHarness({ session: null });
 
     await expect(caller.byId({ id: 1 })).rejects.toBeInstanceOf(TRPCError);
+  });
+});
+
+describe("productRouter.create", () => {
+  it("inserts a product for the signed-in user", async () => {
+    const { caller, insertProductsReturning, insertValues } = createTestHarness(
+      {
+        insertedProducts: [{ id: 9, name: "New Product" }],
+        session: {
+          expires: "",
+          user: { id: "user-1", name: "Tester" },
+        },
+      },
+    );
+
+    const result = await caller.create({ name: "  New Product  " });
+
+    expect(insertValues).toHaveBeenCalledWith({
+      name: "New Product",
+      userId: "user-1",
+    });
+    expect(insertProductsReturning).toHaveBeenCalled();
+    expect(result).toEqual({ id: 9, name: "New Product" });
+  });
+
+  it("throws INTERNAL_SERVER_ERROR when insert returns no rows", async () => {
+    const { caller } = createTestHarness({
+      insertedProducts: [],
+      session: {
+        expires: "",
+        user: { id: "user-1", name: "Tester" },
+      },
+    });
+
+    await expect(caller.create({ name: "Missing" })).rejects.toMatchObject({
+      code: "INTERNAL_SERVER_ERROR",
+    });
+  });
+
+  it("rejects when called without a session", async () => {
+    const { caller } = createTestHarness({ session: null });
+
+    await expect(caller.create({ name: "Prod" })).rejects.toBeInstanceOf(
+      TRPCError,
+    );
   });
 });
 

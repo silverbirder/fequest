@@ -27,6 +27,10 @@ type ProductSummary = {
 
 const productIdSchema = object({ id: number() });
 
+const createInputSchema = object({
+  name: pipe(string(), trim(), minLength(1), maxLength(256)),
+});
+
 const renameInputSchema = object({
   id: number(),
   name: pipe(string(), trim(), minLength(1), maxLength(256)),
@@ -75,6 +79,24 @@ export const productRouter = createTRPCRouter({
         id: product.id,
         name: product.name,
       };
+    }),
+
+  create: protectedProcedure
+    .input(createInputSchema)
+    .mutation(async ({ ctx, input }) => {
+      const [product] = await ctx.db
+        .insert(products)
+        .values({ name: input.name.trim(), userId: ctx.session.user.id })
+        .returning({ id: products.id, name: products.name });
+
+      if (!product) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to create product",
+        });
+      }
+
+      return product;
     }),
 
   list: protectedProcedure.query(async ({ ctx }) => {

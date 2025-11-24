@@ -23,6 +23,7 @@ describe("Dashboard", () => {
   it("shows product cards with counts", async () => {
     await render(
       <Dashboard
+        onCreateProduct={vi.fn()}
         products={[
           { featureCount: 2, id: 1, name: "Alpha", reactionCount: 5 },
           { featureCount: 0, id: 2, name: "Beta", reactionCount: 0 },
@@ -41,10 +42,28 @@ describe("Dashboard", () => {
   });
 
   it("renders empty state when no products", async () => {
-    await render(<Dashboard products={[]} />);
+    await render(<Dashboard onCreateProduct={vi.fn()} products={[]} />);
 
     const html = document.body.textContent ?? "";
     expect(html).toContain("まだプロダクトがありません");
     expect(html).toContain("プロダクトを作成");
+  });
+
+  it("opens the create product dialog when the trigger is clicked", async () => {
+    await render(<Dashboard onCreateProduct={vi.fn()} products={[]} />);
+
+    const triggers = Array.from(document.querySelectorAll("button")).filter(
+      (button) => button.textContent?.includes("プロダクトを作成"),
+    );
+
+    expect(triggers.length).toBeGreaterThan(0);
+
+    triggers[0]?.click();
+
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    const form = document.querySelector('[data-slot="create-product-form"]');
+    expect(form).not.toBeNull();
+    expect(form?.textContent).toContain("プロダクト名");
   });
 });
