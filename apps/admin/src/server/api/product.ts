@@ -41,6 +41,10 @@ const setFeatureStatusInputSchema = object({
   status: picklist(featureRequestStatuses),
 });
 
+const deleteInputSchema = object({
+  id: number(),
+});
+
 export const productRouter = createTRPCRouter({
   byId: protectedProcedure
     .input(productIdSchema)
@@ -97,6 +101,37 @@ export const productRouter = createTRPCRouter({
       }
 
       return product;
+    }),
+
+  delete: protectedProcedure
+    .input(deleteInputSchema)
+    .mutation(async ({ ctx, input }) => {
+      const product = await ctx.db.query.products.findFirst({
+        columns: {
+          id: true,
+        },
+        where: (product, { and, eq }) =>
+          and(
+            eq(product.id, input.id),
+            eq(product.userId, ctx.session.user.id),
+          ),
+      });
+
+      if (!product) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Product not found",
+        });
+      }
+
+      await ctx.db.transaction(async (tx) => {
+        await tx
+          .delete(featureRequests)
+          .where(eq(featureRequests.productId, input.id));
+        await tx.delete(products).where(eq(products.id, input.id));
+      });
+
+      return { id: input.id };
     }),
 
   list: protectedProcedure.query(async ({ ctx }) => {

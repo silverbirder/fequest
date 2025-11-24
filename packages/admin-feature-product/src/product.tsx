@@ -26,6 +26,7 @@ type ProductDetail = {
 };
 
 type Props = {
+  onDelete: (formData: FormData) => Promise<void>;
   onUpdateFeatureStatus: (formData: FormData) => Promise<void>;
   onUpdateName: (formData: FormData) => Promise<void>;
   product: ProductDetail;
@@ -58,6 +59,7 @@ const formatDateTime = (value?: Date | null | string) => {
 };
 
 export const Product = ({
+  onDelete,
   onUpdateFeatureStatus,
   onUpdateName,
   product,
@@ -98,6 +100,27 @@ export const Product = ({
                 名前を保存
               </Button>
             </HStack>
+          </form>
+        </VStack>
+      </Box>
+
+      <Box bg="card" p="lg" radius="lg" w="full">
+        <VStack align="start" gap="sm" w="full">
+          <Text size="sm" weight="semibold">
+            プロダクトを削除
+          </Text>
+          <Text color="muted" size="sm">
+            この操作は取り消せません。プロダクトと関連する質問がすべて削除されます。
+          </Text>
+          <form
+            action={onDelete}
+            data-slot="delete-form"
+            style={{ width: "100%" }}
+          >
+            <input name="productId" type="hidden" value={product.id} />
+            <Button size="sm" type="submit" variant="destructive">
+              プロダクトを削除
+            </Button>
           </form>
         </VStack>
       </Box>

@@ -6,6 +6,7 @@ import { object, safeParse } from "valibot";
 import { auth } from "~/server/auth";
 import { api } from "~/trpc/server";
 
+import { createDeleteProduct } from "./delete-product";
 import { createRenameProduct } from "./rename-product";
 import { createUpdateFeatureStatus } from "./update-feature-status";
 
@@ -30,11 +31,13 @@ export default async function Page({ params }: PageProps<"/products/[id]">) {
     notFound();
   }
 
+  const deleteProduct = createDeleteProduct({ productId });
   const renameProduct = createRenameProduct({ productId });
   const updateFeatureStatus = createUpdateFeatureStatus({ productId });
 
   return (
     <Product
+      onDelete={deleteProduct}
       onUpdateFeatureStatus={updateFeatureStatus}
       onUpdateName={renameProduct}
       product={product}

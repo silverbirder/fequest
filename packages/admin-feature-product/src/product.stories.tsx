@@ -4,6 +4,7 @@ import { Product } from "./product";
 
 const meta = {
   args: {
+    onDelete: async () => {},
     onUpdateFeatureStatus: async () => {},
     onUpdateName: async () => {},
     product: {
@@ -40,6 +41,7 @@ export const Default: Story = {};
 
 export const EmptyFeatures: Story = {
   args: {
+    onDelete: async () => {},
     product: { featureRequests: [], id: 1, name: "Empty Product" },
   },
 };

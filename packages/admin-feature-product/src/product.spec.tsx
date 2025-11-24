@@ -8,6 +8,7 @@ describe("Product", () => {
   it("shows rename form with the current product name", async () => {
     await render(
       <Product
+        onDelete={async () => {}}
         onUpdateFeatureStatus={async () => {}}
         onUpdateName={async () => {}}
         product={{ featureRequests: [], id: 1, name: "Fequest" }}
@@ -27,6 +28,7 @@ describe("Product", () => {
   it("renders feature requests with status toggles", async () => {
     await render(
       <Product
+        onDelete={async () => {}}
         onUpdateFeatureStatus={async () => {}}
         onUpdateName={async () => {}}
         product={{
@@ -72,6 +74,7 @@ describe("Product", () => {
   it("shows empty state when there are no feature requests", async () => {
     await render(
       <Product
+        onDelete={async () => {}}
         onUpdateFeatureStatus={async () => {}}
         onUpdateName={async () => {}}
         product={{ featureRequests: [], id: 3, name: "Empty Product" }}
@@ -80,5 +83,33 @@ describe("Product", () => {
 
     const html = document.body.textContent ?? "";
     expect(html).toContain("まだ質問がありません。");
+  });
+
+  it("renders a destructive delete action with the product id", async () => {
+    await render(
+      <Product
+        onDelete={async () => {}}
+        onUpdateFeatureStatus={async () => {}}
+        onUpdateName={async () => {}}
+        product={{ featureRequests: [], id: 7, name: "Deletable" }}
+      />,
+    );
+
+    const deleteForm = document.querySelector<HTMLFormElement>(
+      'form[data-slot="delete-form"]',
+    );
+    expect(deleteForm?.textContent ?? "").toContain("プロダクトを削除");
+
+    const hiddenId = deleteForm?.querySelector<HTMLInputElement>(
+      'input[name="productId"]',
+    );
+    expect(hiddenId?.value).toBe("7");
+
+    const button = deleteForm?.querySelector<HTMLButtonElement>(
+      'button[type="submit"]',
+    );
+    expect(button?.getAttribute("data-variant") ?? button?.className).toContain(
+      "destructive",
+    );
   });
 });
