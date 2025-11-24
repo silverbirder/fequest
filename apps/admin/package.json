@@ -14,6 +14,7 @@
   "dependencies": {
     "@auth/drizzle-adapter": "^1.7.2",
     "@libsql/client": "^0.14.0",
+    "@repo/admin-feature-sign-in": "workspace:*",
     "@repo/db": "workspace:*",
     "@repo/ui": "workspace:*",
     "@t3-oss/env-nextjs": "^0.12.0",
