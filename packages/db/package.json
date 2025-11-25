@@ -9,9 +9,7 @@
     "push": "drizzle-kit push --config drizzle.config.ts",
     "studio": "drizzle-kit studio --config drizzle.config.ts",
     "start-db": "./start-database.sh",
-    "check-types": "tsc --noEmit",
-    "test": "vitest run",
-    "test:watch": "vitest"
+    "check-types": "tsc --noEmit"
   },
   "exports": {
     ".": "./src/index.ts",
@@ -30,7 +28,6 @@
     "@types/node": "^22.15.3",
     "dotenv": "^16.4.7",
     "drizzle-kit": "^0.30.5",
-    "typescript": "5.9.2",
-    "vitest": "^4.0.8"
+    "typescript": "5.9.2"
   }
 }

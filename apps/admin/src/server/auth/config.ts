@@ -1,11 +1,5 @@
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
-import {
-  accounts,
-  seedSampleDataForUser,
-  sessions,
-  users,
-  verificationTokens,
-} from "@repo/db";
+import { accounts, sessions, users, verificationTokens } from "@repo/db";
 import { type DefaultSession, type NextAuthConfig } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 
@@ -52,19 +46,6 @@ export const authConfig: NextAuthConfig = {
         id: user.id,
       },
     }),
-  },
-  events: {
-    createUser: async ({ user }) => {
-      try {
-        if (!user.id) {
-          return;
-        }
-
-        await seedSampleDataForUser(db, user.id);
-      } catch (error) {
-        console.error("Failed to seed sample data for user", error);
-      }
-    },
   },
   providers: [GoogleProvider],
 };
