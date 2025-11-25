@@ -9,38 +9,38 @@ import {
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const repoRoot = resolve(__dirname, "../../../..");
-const userDockerfilePath = "apps/user/Dockerfile";
-const USER_PORT = 3000;
+const adminDockerfilePath = "apps/admin/Dockerfile";
+const ADMIN_PORT = 3001;
 
-export const startUser = async (
+export const startAdmin = async (
   network: StartedNetwork,
   databaseUrl: string,
 ) => {
-  const userContainer = await GenericContainer.fromDockerfile(
+  const adminContainer = await GenericContainer.fromDockerfile(
     repoRoot,
-    userDockerfilePath,
-  ).build("fequest-user", { deleteOnExit: true });
+    adminDockerfilePath,
+  ).build("fequest-admin", { deleteOnExit: true });
 
-  const container = await userContainer
+  const container = await adminContainer
     .withEnvironment({
-      AUTH_GOOGLE_ID: "dummy-user-google-id",
-      AUTH_GOOGLE_SECRET: "dummy-user-google-secret",
-      AUTH_SECRET: "dummy-user-auth-secret",
+      AUTH_GOOGLE_ID: "dummy-admin-google-id",
+      AUTH_GOOGLE_SECRET: "dummy-admin-google-secret",
+      AUTH_SECRET: "dummy-admin-auth-secret",
       AUTH_TRUST_HOST: "true",
       DATABASE_URL: databaseUrl,
       SKIP_ENV_VALIDATION: "1",
     })
     .withNetwork(network)
-    .withExposedPorts(USER_PORT)
+    .withExposedPorts(ADMIN_PORT)
     .start();
 
-  const mappedPort = container.getMappedPort(USER_PORT);
+  const mappedPort = container.getMappedPort(ADMIN_PORT);
   const host = container.getHost();
 
   return { container, url: `http://${host}:${mappedPort}` } as const;
 };
 
-export const stopUser = async (container?: StartedTestContainer) => {
+export const stopAdmin = async (container?: StartedTestContainer) => {
   if (!container) {
     return;
   }

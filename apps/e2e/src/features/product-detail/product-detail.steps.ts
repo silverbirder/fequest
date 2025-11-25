@@ -13,14 +13,17 @@ import { fileURLToPath } from "node:url";
 import { Network, StartedNetwork, StartedTestContainer } from "testcontainers";
 import { expect } from "vitest";
 
-import { ProductPage } from "@/pages/product.page";
+import { AdminDashboardPage } from "@/pages/admin/dashboard.page";
+import { AdminProductPage } from "@/pages/admin/product.page";
+import { UserProductPage } from "@/pages/user/product.page";
 import {
   type BrowserSession,
   createBrowserSession,
 } from "@/playwright/session";
+import { startAdmin, stopAdmin } from "@/setup/admin";
 import { createUserSession } from "@/setup/auth";
 import { startDatabase, stopDatabase } from "@/setup/database";
-import { type SeededProductData, seedProductData } from "@/setup/seed";
+import { createSeedSession } from "@/setup/seed";
 import { startUser, stopUser } from "@/setup/user";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -34,10 +37,18 @@ const authScreenshotPath = resolve(
 setDefaultTimeout(600_000);
 
 let userStartedContainer: StartedTestContainer | undefined;
+let adminStartedContainer: StartedTestContainer | undefined;
 let dbStartedContainer: StartedTestContainer | undefined;
 let network: StartedNetwork | undefined;
 let userUrl: string | undefined;
-let seededProduct: SeededProductData | undefined;
+let seededProduct:
+  | undefined
+  | {
+      openFeatureTitle: string;
+      productId: number;
+      productName: string;
+      userId: string;
+    };
 let databaseUrlForHost: string | undefined;
 let authenticatedSessionToken: string | undefined;
 let browserSession: BrowserSession | undefined;
@@ -61,14 +72,82 @@ BeforeAll(async () => {
 
   await migrateDatabase(hostConnectionString);
 
-  seededProduct = await seedProductData(hostConnectionString);
+  const [
+    { container: startedAdminContainer, url: adminBaseUrl },
+    { container: startedUserContainer, url: userBaseUrl },
+  ] = await Promise.all([
+    startAdmin(startedNetwork, connectionString),
+    startUser(startedNetwork, connectionString),
+  ]);
 
-  const { container: startedUserContainer, url } = await startUser(
-    startedNetwork,
-    connectionString,
-  );
+  adminStartedContainer = startedAdminContainer;
   userStartedContainer = startedUserContainer;
-  userUrl = url;
+  userUrl = userBaseUrl;
+
+  const { sessionToken, userId } =
+    await createSeedSession(hostConnectionString);
+
+  const openFeatureTitle = "E2E サンプル機能";
+  const closedFeatureTitle = "E2E クローズ済み機能";
+
+  // Create product via admin UI
+  const adminBrowser = await createBrowserSession();
+  await adminBrowser.context.addCookies([
+    {
+      domain: new URL(adminBaseUrl).hostname,
+      httpOnly: true,
+      name: "authjs.session-token",
+      path: "/",
+      sameSite: "Lax",
+      secure: false,
+      value: sessionToken,
+    },
+  ]);
+  const adminDashboardPage = new AdminDashboardPage(
+    adminBrowser.page,
+    adminBaseUrl,
+  );
+  await adminDashboardPage.goto();
+  const { productId, productName } =
+    await adminDashboardPage.createProduct("E2E Product");
+
+  // Create features via user UI
+  const userBrowser = await createBrowserSession();
+  await userBrowser.context.addCookies([
+    {
+      domain: new URL(userBaseUrl).hostname,
+      httpOnly: true,
+      name: "authjs.session-token",
+      path: "/",
+      sameSite: "Lax",
+      secure: false,
+      value: sessionToken,
+    },
+  ]);
+  const userProductPage = new UserProductPage(userBrowser.page, userBaseUrl);
+  await userProductPage.goto(productId);
+  await userProductPage.createFeatureRequest(openFeatureTitle);
+  await userProductPage.createFeatureRequest(closedFeatureTitle);
+  await userProductPage.waitForFeatureRequest(closedFeatureTitle);
+
+  // Close one feature via admin UI
+  const adminProductPage = new AdminProductPage(
+    adminBrowser.page,
+    adminBaseUrl,
+  );
+  await adminProductPage.goto(productId);
+  // createFeatureRequest は2件追加しているので、2件目をクローズする
+  await adminProductPage.closeFeatureAt(2);
+
+  await adminBrowser.close();
+  await userBrowser.close();
+
+  seededProduct = {
+    openFeatureTitle,
+    productId,
+    productName,
+    userId,
+  };
 });
 
 AfterAll(async () => {
@@ -78,6 +157,7 @@ AfterAll(async () => {
   }
 
   await stopUser(userStartedContainer);
+  await stopAdmin(adminStartedContainer);
   await stopDatabase(dbStartedContainer);
 
   if (network) {
@@ -90,15 +170,23 @@ Given("データベースにサンプルのプロダクトが存在する", () =
   expect(seededProduct).toBeDefined();
 });
 
+Given("管理画面からサンプルのプロダクトが登録されている", () => {
+  expect(seededProduct).toBeDefined();
+});
+
 Given("user アプリケーションのコンテナを起動している", () => {
   expect(userStartedContainer).toBeDefined();
+});
+
+Given("admin アプリケーションのコンテナを起動している", () => {
+  expect(adminStartedContainer).toBeDefined();
 });
 
 When(/^\/\[id\] ページにアクセスしたとき$/, () => {
   expect(userUrl).toBeTruthy();
 });
 
-Then("シードされたフィーチャーを確認できる", () => {
+Then("登録したフィーチャーを確認できる", () => {
   expect(seededProduct?.openFeatureTitle).toBeTruthy();
 });
 
@@ -114,7 +202,7 @@ Then(
     const session = await createBrowserSession();
 
     try {
-      const productPage = new ProductPage(session.page, userUrl);
+      const productPage = new UserProductPage(session.page, userUrl);
       await productPage.goto(seededProduct.productId);
       await productPage.waitForFeatureRequest(seededProduct.openFeatureTitle);
       const savedPath =
@@ -167,7 +255,7 @@ When(
         },
       ]);
 
-      const productPage = new ProductPage(browserSession.page, userUrl);
+      const productPage = new UserProductPage(browserSession.page, userUrl);
       await productPage.goto(seededProduct.productId);
       await productPage.createFeatureRequest(createdFeatureTitle);
     } catch (error) {
@@ -186,7 +274,7 @@ Then("投稿したフィーチャーリクエストが一覧に表示される",
   }
 
   try {
-    const productPage = new ProductPage(browserSession.page, userUrl);
+    const productPage = new UserProductPage(browserSession.page, userUrl);
     await productPage.waitForFeatureRequest(createdFeatureTitle);
     await productPage.captureFullPageScreenshot(authScreenshotPath);
   } finally {

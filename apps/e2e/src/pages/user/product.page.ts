@@ -3,7 +3,7 @@ import type { Page } from "playwright";
 import { mkdir } from "node:fs/promises";
 import { dirname } from "node:path";
 
-export class ProductPage {
+export class UserProductPage {
   constructor(
     private readonly page: Page,
     private readonly baseUrl: string,
