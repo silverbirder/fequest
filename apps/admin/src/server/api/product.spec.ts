@@ -63,12 +63,21 @@ const createTestHarness = (options: HarnessOptions = {}) => {
     where: featureUpdateWhere,
   }));
 
+  const featureDeleteWhere = vi.fn();
+
   const update = vi.fn((table) => {
     if (table === products) {
       return { set: productUpdateSet };
     }
     if (table === featureRequests) {
       return { set: featureUpdateSet };
+    }
+    throw new Error("Unexpected table");
+  });
+
+  const deleteWhere = vi.fn((table) => {
+    if (table === featureRequests) {
+      return { where: featureDeleteWhere };
     }
     throw new Error("Unexpected table");
   });
@@ -85,6 +94,7 @@ const createTestHarness = (options: HarnessOptions = {}) => {
   });
 
   const db = {
+    delete: deleteWhere,
     insert,
     query: {
       featureRequests: {
@@ -106,6 +116,7 @@ const createTestHarness = (options: HarnessOptions = {}) => {
 
   return {
     caller,
+    featureDeleteWhere,
     featureUpdateWhere,
     findFirstFeatureRequest,
     findFirstProduct,
@@ -399,6 +410,55 @@ describe("productRouter.setFeatureStatus", () => {
 
     await expect(
       caller.setFeatureStatus({ featureId: 11, status: "open" }),
+    ).rejects.toBeInstanceOf(TRPCError);
+  });
+});
+
+describe("productRouter.deleteFeatureRequest", () => {
+  it("deletes a feature request belonging to the user's product", async () => {
+    const { caller, featureDeleteWhere, findFirstFeatureRequest } =
+      createTestHarness({
+        featureRequest: {
+          id: 21,
+          product: { userId: "user-1" },
+          productId: 5,
+        },
+        session: {
+          expires: "",
+          user: { id: "user-1", name: "Owner" },
+        },
+      });
+
+    const result = await caller.deleteFeatureRequest({ featureId: 21 });
+
+    expect(findFirstFeatureRequest).toHaveBeenCalled();
+    expect(featureDeleteWhere).toHaveBeenCalled();
+    expect(result).toEqual({ id: 21, productId: 5 });
+  });
+
+  it("throws NOT_FOUND when the feature request is missing or not owned", async () => {
+    const { caller } = createTestHarness({
+      featureRequest: {
+        id: 22,
+        product: { userId: "someone-else" },
+        productId: 9,
+      },
+      session: {
+        expires: "",
+        user: { id: "user-1", name: "Owner" },
+      },
+    });
+
+    await expect(
+      caller.deleteFeatureRequest({ featureId: 22 }),
+    ).rejects.toMatchObject({ code: "NOT_FOUND" });
+  });
+
+  it("throws UNAUTHORIZED when no session is present", async () => {
+    const { caller } = createTestHarness({ session: null });
+
+    await expect(
+      caller.deleteFeatureRequest({ featureId: 3 }),
     ).rejects.toBeInstanceOf(TRPCError);
   });
 });

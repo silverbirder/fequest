@@ -9,6 +9,7 @@ describe("Product", () => {
     await render(
       <Product
         onDelete={async () => {}}
+        onDeleteFeatureRequest={async () => {}}
         onUpdateFeatureStatus={async () => {}}
         onUpdateName={async () => {}}
         product={{ featureRequests: [], id: 1, name: "Fequest" }}
@@ -29,6 +30,7 @@ describe("Product", () => {
     await render(
       <Product
         onDelete={async () => {}}
+        onDeleteFeatureRequest={async () => {}}
         onUpdateFeatureStatus={async () => {}}
         onUpdateName={async () => {}}
         product={{
@@ -75,6 +77,7 @@ describe("Product", () => {
     await render(
       <Product
         onDelete={async () => {}}
+        onDeleteFeatureRequest={async () => {}}
         onUpdateFeatureStatus={async () => {}}
         onUpdateName={async () => {}}
         product={{ featureRequests: [], id: 3, name: "Empty Product" }}
@@ -89,6 +92,7 @@ describe("Product", () => {
     await render(
       <Product
         onDelete={async () => {}}
+        onDeleteFeatureRequest={async () => {}}
         onUpdateFeatureStatus={async () => {}}
         onUpdateName={async () => {}}
         product={{ featureRequests: [], id: 7, name: "Deletable" }}
@@ -111,5 +115,40 @@ describe("Product", () => {
     expect(button?.getAttribute("data-variant") ?? button?.className).toContain(
       "destructive",
     );
+  });
+
+  it("renders a delete button for each feature request with identifiers", async () => {
+    await render(
+      <Product
+        onDelete={async () => {}}
+        onDeleteFeatureRequest={async () => {}}
+        onUpdateFeatureStatus={async () => {}}
+        onUpdateName={async () => {}}
+        product={{
+          featureRequests: [
+            { content: "", id: 1, status: "open", title: "First" },
+            { content: "", id: 2, status: "closed", title: "Second" },
+          ],
+          id: 42,
+          name: "Fequest",
+        }}
+      />,
+    );
+
+    const forms = document.querySelectorAll<HTMLFormElement>(
+      'form[data-slot="feature-delete-form"]',
+    );
+    expect(forms).toHaveLength(2);
+
+    const firstHidden = forms[0]?.querySelector<HTMLInputElement>(
+      'input[name="featureId"]',
+    );
+    const firstProductId = forms[0]?.querySelector<HTMLInputElement>(
+      'input[name="productId"]',
+    );
+
+    expect(firstHidden?.value).toBe("1");
+    expect(firstProductId?.value).toBe("42");
+    expect(forms[0]?.textContent ?? "").toContain("質問を削除");
   });
 });

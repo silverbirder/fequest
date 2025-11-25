@@ -27,6 +27,7 @@ type ProductDetail = {
 
 type Props = {
   onDelete: (formData: FormData) => Promise<void>;
+  onDeleteFeatureRequest: (formData: FormData) => Promise<void>;
   onUpdateFeatureStatus: (formData: FormData) => Promise<void>;
   onUpdateName: (formData: FormData) => Promise<void>;
   product: ProductDetail;
@@ -60,6 +61,7 @@ const formatDateTime = (value?: Date | null | string) => {
 
 export const Product = ({
   onDelete,
+  onDeleteFeatureRequest,
   onUpdateFeatureStatus,
   onUpdateName,
   product,
@@ -206,6 +208,25 @@ export const Product = ({
                           />
                           <Button size="sm" type="submit" variant="outline">
                             {copy.actionLabel}
+                          </Button>
+                        </form>
+                        <form
+                          action={onDeleteFeatureRequest}
+                          data-feature-id={feature.id}
+                          data-slot="feature-delete-form"
+                        >
+                          <input
+                            name="productId"
+                            type="hidden"
+                            value={product.id}
+                          />
+                          <input
+                            name="featureId"
+                            type="hidden"
+                            value={feature.id}
+                          />
+                          <Button size="sm" type="submit" variant="destructive">
+                            質問を削除
                           </Button>
                         </form>
                       </HStack>

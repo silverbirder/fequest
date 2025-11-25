@@ -41,6 +41,10 @@ const setFeatureStatusInputSchema = object({
   status: picklist(featureRequestStatuses),
 });
 
+const deleteFeatureRequestInputSchema = object({
+  featureId: number(),
+});
+
 const deleteInputSchema = object({
   id: number(),
 });
@@ -132,6 +136,35 @@ export const productRouter = createTRPCRouter({
       });
 
       return { id: input.id };
+    }),
+
+  deleteFeatureRequest: protectedProcedure
+    .input(deleteFeatureRequestInputSchema)
+    .mutation(async ({ ctx, input }) => {
+      const feature = await ctx.db.query.featureRequests.findFirst({
+        columns: { id: true, productId: true },
+        where: (feature, { eq }) => eq(feature.id, input.featureId),
+        with: {
+          product: {
+            columns: {
+              userId: true,
+            },
+          },
+        },
+      });
+
+      if (!feature || feature.product?.userId !== ctx.session.user.id) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Feature request not found",
+        });
+      }
+
+      await ctx.db
+        .delete(featureRequests)
+        .where(eq(featureRequests.id, input.featureId));
+
+      return { id: feature.id, productId: feature.productId };
     }),
 
   list: protectedProcedure.query(async ({ ctx }) => {
