@@ -22,15 +22,18 @@ const createCaller = createCallerFactory(productRouter);
 type HarnessOptions = {
   cookies?: Record<string, string>;
   product?: unknown;
+  products?: unknown[];
   session?: null | Session;
 };
 
 const createTestHarness = (options: HarnessOptions = {}) => {
   const findFirst = vi.fn().mockResolvedValue(options.product);
+  const findMany = vi.fn().mockResolvedValue(options.products ?? []);
   const db = {
     query: {
       products: {
         findFirst,
+        findMany,
       },
     },
   } as unknown as Database;
@@ -49,7 +52,7 @@ const createTestHarness = (options: HarnessOptions = {}) => {
     session: options.session ?? null,
   });
 
-  return { caller, findFirst };
+  return { caller, findFirst, findMany };
 };
 
 afterEach(() => {
@@ -177,5 +180,61 @@ describe("productRouter.byId", () => {
     const { caller } = createTestHarness({ product: undefined });
 
     await expect(caller.byId({ id: 999 })).resolves.toBeNull();
+  });
+});
+
+describe("productRouter.list", () => {
+  it("returns public product summaries ordered by creation date", async () => {
+    const productRecords = [
+      {
+        featureRequests: [
+          {
+            id: 1,
+            reactions: [{ id: 10 }, { id: 11 }],
+          },
+          {
+            id: 2,
+            reactions: [],
+          },
+        ],
+        id: 1,
+        name: "First",
+      },
+      {
+        featureRequests: [],
+        id: 2,
+        name: "Second",
+      },
+    ];
+
+    const { caller, findMany } = createTestHarness({
+      products: productRecords,
+    });
+
+    const result = await caller.list();
+
+    expect(findMany).toHaveBeenCalled();
+    const queryOptions = findMany.mock.calls[0]?.[0];
+    expect(queryOptions?.columns).toEqual({ id: true, name: true });
+    expect(
+      queryOptions?.with?.featureRequests?.with?.reactions?.columns,
+    ).toEqual({
+      id: true,
+    });
+
+    expect(result).toEqual([
+      {
+        featureCount: 2,
+        id: 1,
+        name: "First",
+        reactionCount: 2,
+      },
+      {
+        featureCount: 0,
+        id: 2,
+        name: "Second",
+        reactionCount: 0,
+      },
+    ]);
   });
 });

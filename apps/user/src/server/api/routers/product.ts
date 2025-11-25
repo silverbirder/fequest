@@ -4,6 +4,13 @@ import { integer, minValue, number, object, pipe } from "valibot";
 
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 
+type ProductSummary = {
+  featureCount: number;
+  id: number;
+  name: string;
+  reactionCount: number;
+};
+
 export const productRouter = createTRPCRouter({
   byId: publicProcedure
     .input(
@@ -62,4 +69,44 @@ export const productRouter = createTRPCRouter({
         }),
       };
     }),
+
+  list: publicProcedure.query(async ({ ctx }) => {
+    const products = await ctx.db.query.products.findMany({
+      columns: {
+        id: true,
+        name: true,
+      },
+      orderBy: (product, { desc }) => desc(product.createdAt),
+      with: {
+        featureRequests: {
+          columns: {
+            id: true,
+          },
+          with: {
+            reactions: {
+              columns: {
+                id: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    return products.map((product) => {
+      const featureCount = product.featureRequests?.length ?? 0;
+      const reactionCount =
+        product.featureRequests?.reduce(
+          (total, feature) => total + (feature.reactions?.length ?? 0),
+          0,
+        ) ?? 0;
+
+      return {
+        featureCount,
+        id: product.id,
+        name: product.name,
+        reactionCount,
+      } satisfies ProductSummary;
+    });
+  }),
 });

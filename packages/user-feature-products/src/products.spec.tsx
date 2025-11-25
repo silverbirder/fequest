@@ -4,11 +4,33 @@ import { render } from "vitest-browser-react";
 import { Products } from "./products";
 
 describe("Products", () => {
-  it("renders provided children", async () => {
-    await render(<Products>Child content</Products>);
+  it("renders each product with counts and link", async () => {
+    await render(
+      <Products
+        products={[
+          { featureCount: 2, id: 1, name: "First", reactionCount: 3 },
+          { featureCount: 0, id: 2, name: "Second", reactionCount: 0 },
+        ]}
+      />,
+    );
 
-    const element = document.querySelector("div");
-    expect(element).not.toBeNull();
-    expect(element?.textContent ?? "").toContain("Child content");
+    const text = document.body.textContent ?? "";
+    expect(text).toContain("First");
+    expect(text).toContain("質問 2件 ・ リアクション 3件");
+    expect(text).toContain("Second");
+    expect(text).toContain("質問 0件 ・ リアクション 0件");
+
+    const links = Array.from(document.querySelectorAll("a")).map((a) =>
+      a.getAttribute("href"),
+    );
+    expect(links).toContain("/1");
+    expect(links).toContain("/2");
+  });
+
+  it("renders empty state when no products", async () => {
+    await render(<Products products={[]} />);
+
+    const text = document.body.textContent ?? "";
+    expect(text).toContain("まだ公開されているプロダクトがありません");
   });
 });
