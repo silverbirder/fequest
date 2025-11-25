@@ -11,6 +11,7 @@ export type SeededProductData = {
   openFeatureTitle: string;
   productId: number;
   productName: string;
+  userId: string;
 };
 
 const buildUserRecord = (id: string) => ({
@@ -87,5 +88,6 @@ export const seedProductData = async (
     openFeatureTitle,
     productId: product.id,
     productName: product.name,
+    userId,
   };
 };

@@ -22,7 +22,10 @@ export const startUser = async (
   ).build("fequest-user", { deleteOnExit: true });
 
   const container = await userContainer
-    .withEnvironment({ DATABASE_URL: databaseUrl })
+    .withEnvironment({
+      AUTH_TRUST_HOST: "true",
+      DATABASE_URL: databaseUrl,
+    })
     .withNetwork(network)
     .withExposedPorts(USER_PORT)
     .start();

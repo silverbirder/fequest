@@ -15,6 +15,13 @@ export class ProductPage {
     return screenshotPath;
   }
 
+  async createFeatureRequest(title: string) {
+    const input = this.page.getByLabel("新しいフィーチャーリクエスト");
+    await input.fill(title);
+    await input.press("Enter");
+    await this.page.waitForLoadState("networkidle");
+  }
+
   async goto(productId: number) {
     await this.page.goto(`${this.baseUrl}/${productId}`, {
       waitUntil: "networkidle",
