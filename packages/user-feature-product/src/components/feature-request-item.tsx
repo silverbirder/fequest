@@ -2,11 +2,9 @@
 
 import { Button, RequestCard, VStack } from "@repo/ui/components";
 import Form from "next/form";
-import { type ComponentProps, useRef } from "react";
+import { type ComponentProps, useMemo, useRef } from "react";
 
 import type { ReactionSummary } from "../libs/reaction-summary";
-
-const AVAILABLE_EMOJIS = ["👍", "🎉", "❤️", "🔥", "💡"] as const;
 
 type Props = {
   avatar: RequestCardAvatar;
@@ -37,9 +35,7 @@ export const FeatureRequestItem = ({
   const actionInputRef = useRef<HTMLInputElement>(null);
 
   const handleReact = (emoji: string) => {
-    const clickedReaction = reactionOptions.find(
-      (reaction) => reaction.emoji === emoji,
-    );
+    const clickedReaction = reactionMap.get(emoji);
     const nextAction = clickedReaction?.reactedByViewer ? "down" : "up";
     if (actionInputRef.current) {
       actionInputRef.current.value = nextAction;
@@ -54,13 +50,11 @@ export const FeatureRequestItem = ({
     }
   };
 
-  const reactionMap = new Map(
-    reactions.map((reaction) => [reaction.emoji, reaction]),
+  const reactionMap = useMemo(
+    () => new Map(reactions.map((reaction) => [reaction.emoji, reaction])),
+    [reactions],
   );
-  const reactionOptions = AVAILABLE_EMOJIS.map(
-    (emoji) =>
-      reactionMap.get(emoji) ?? { count: 0, emoji, reactedByViewer: false },
-  );
+  const reactionOptions = reactions;
 
   const footerActions =
     canDelete && onDeleteFeatureRequest ? (
@@ -81,6 +75,7 @@ export const FeatureRequestItem = ({
       <RequestCard
         avatar={avatar}
         detail={detail}
+        enableEmojiPicker
         footerActions={footerActions}
         onReact={handleReact}
         reactions={reactionOptions}
@@ -95,7 +90,7 @@ export const FeatureRequestItem = ({
           type="hidden"
         />
         <input
-          defaultValue={reactionOptions[0]?.emoji ?? AVAILABLE_EMOJIS[0]}
+          defaultValue={reactionOptions[0]?.emoji ?? ""}
           name="emoji"
           ref={emojiInputRef}
           type="hidden"

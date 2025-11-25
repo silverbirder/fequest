@@ -16,6 +16,7 @@ import {
 } from "../../shadcn";
 import { Text } from "../../typography";
 import { BubbleText } from "../bubble-text";
+import { EmojiPicker } from "../emoji-picker";
 import { EmojiReaction } from "../emoji-reaction";
 
 type Props = ComponentProps<typeof BubbleText> & {
@@ -30,6 +31,7 @@ type Props = ComponentProps<typeof BubbleText> & {
     title?: string;
     updatedAt?: Date | null | string;
   };
+  enableEmojiPicker?: boolean;
   footerActions?: ReactNode;
   onReact?: (emoji: string) => void;
   reactions?: {
@@ -60,6 +62,7 @@ const formatDateTime = (value?: Date | null | string) => {
 export const RequestCard = ({
   avatar,
   detail,
+  enableEmojiPicker = false,
   footerActions,
   onReact,
   reactions,
@@ -146,6 +149,9 @@ export const RequestCard = ({
               onClick={onReact ? () => onReact(reaction.emoji) : undefined}
             />
           ))}
+          {enableEmojiPicker && onReact ? (
+            <EmojiPicker label="リアクションを追加" onSelect={onReact} />
+          ) : null}
         </HStack>
       </VStack>
     </HStack>

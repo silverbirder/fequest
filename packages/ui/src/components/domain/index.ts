@@ -1,4 +1,5 @@
 export * from "./bubble-input";
 export * from "./bubble-text";
+export * from "./emoji-picker";
 export * from "./emoji-reaction";
 export * from "./request-card";

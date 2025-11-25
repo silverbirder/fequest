@@ -13,6 +13,7 @@ const meta = {
       title: "コメント機能の追加",
       updatedAt: "2024-12-05T08:45:00.000Z",
     },
+    enableEmojiPicker: true,
     reactions: [
       { count: 12, emoji: "👍", reactedByViewer: true },
       { count: 5, emoji: "❤️", reactedByViewer: false },
