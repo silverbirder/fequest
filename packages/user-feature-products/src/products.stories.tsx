@@ -4,6 +4,7 @@ import { Products } from "./products";
 
 const meta = {
   component: Products,
+  title: "Feature/User/Products",
 } satisfies Meta<typeof Products>;
 
 export default meta;

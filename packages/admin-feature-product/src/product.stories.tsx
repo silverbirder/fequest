@@ -32,7 +32,7 @@ const meta = {
     },
   },
   component: Product,
-  title: "Features/Admin/Product",
+  title: "Feature/Admin/Product",
 } satisfies Meta<typeof Product>;
 
 export default meta;
