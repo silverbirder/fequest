@@ -2,7 +2,7 @@ import "@repo/ui/globals.css";
 import { Providers } from "@repo/ui/providers/theme-provider";
 import { Header } from "@repo/user-feature-header";
 import { type Metadata } from "next";
-import { Geist } from "next/font/google";
+import { Noto_Sans_JP } from "next/font/google";
 
 import { auth, signIn, signOut } from "~/server/auth";
 import { TRPCReactProvider } from "~/trpc/react";
@@ -13,8 +13,10 @@ export const metadata: Metadata = {
   title: "Fequest",
 };
 
-const geist = Geist({
+const notoSansJP = Noto_Sans_JP({
+  display: "swap",
   subsets: ["latin"],
+  weight: ["400", "500", "700"],
 });
 
 export default async function RootLayout({
@@ -34,7 +36,7 @@ export default async function RootLayout({
 
   return (
     <html lang="ja" suppressHydrationWarning>
-      <body className={geist.className}>
+      <body className={notoSansJP.className}>
         <TRPCReactProvider>
           <Providers>
             <Header
