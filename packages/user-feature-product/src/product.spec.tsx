@@ -1,7 +1,19 @@
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { render } from "vitest-browser-react";
 
 import { Product } from "./product";
+
+vi.mock("@repo/ui/components", async () => {
+  const actual = await vi.importActual<typeof import("@repo/ui/components")>(
+    "@repo/ui/components",
+  );
+  return {
+    ...actual,
+    MdxContent: ({ source }: { source: string }) => (
+      <div data-testid="mdx-mock">{source}</div>
+    ),
+  };
+});
 
 const waitForDialog = () =>
   new Promise<void>((resolve) => {
@@ -25,6 +37,12 @@ const createProductFixture = (ownerId: string) => ({
   featureRequests: [
     {
       content: "ユーザーがプロフィール画像をアップロードできるようにする",
+      contentNode: (
+        <div>
+          <h2>プロフィール画像アップロード</h2>
+          <p>ユーザーがプロフィール画像をアップロードできるようにする</p>
+        </div>
+      ),
       id: 1,
       reactionSummaries: [],
       status: "open",

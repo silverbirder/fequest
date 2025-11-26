@@ -30,6 +30,7 @@ export const FeatureRequestItem = ({
   reactions,
   text,
 }: Props) => {
+  const idBase = `feature-${featureId}`;
   const formRef = useRef<HTMLFormElement>(null);
   const emojiInputRef = useRef<HTMLInputElement>(null);
   const actionInputRef = useRef<HTMLInputElement>(null);
@@ -77,6 +78,7 @@ export const FeatureRequestItem = ({
         detail={detail}
         enableEmojiPicker
         footerActions={footerActions}
+        idBase={idBase}
         onReact={handleReact}
         reactions={reactionOptions}
         text={text}

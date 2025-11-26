@@ -26,13 +26,14 @@ type Props = ComponentProps<typeof BubbleText> & {
     src?: string;
   };
   detail: {
-    content: string;
+    content: ReactNode;
     createdAt?: Date | null | string;
     title?: string;
     updatedAt?: Date | null | string;
   };
   enableEmojiPicker?: boolean;
   footerActions?: ReactNode;
+  idBase?: string;
   onReact?: (emoji: string) => void;
   reactions?: {
     count: number;
@@ -64,6 +65,7 @@ export const RequestCard = ({
   detail,
   enableEmojiPicker = false,
   footerActions,
+  idBase = "request-card",
   onReact,
   reactions,
   text,
@@ -74,6 +76,9 @@ export const RequestCard = ({
   const dialogTriggerLabel = dialogTitle
     ? `${dialogTitle}の詳細を表示`
     : "詳細を表示";
+  const mdxContent = detail.content;
+  const dialogContentId = `${idBase}-dialog-content`;
+  const emojiMenuId = `${idBase}-emoji-menu`;
 
   return (
     <HStack align="baseline" gap="sm">
@@ -85,6 +90,7 @@ export const RequestCard = ({
         <Dialog>
           <DialogTrigger asChild>
             <button
+              aria-controls={dialogContentId}
               aria-label={dialogTriggerLabel}
               className="rounded-none border-none bg-transparent p-0 text-left"
               type="button"
@@ -92,7 +98,7 @@ export const RequestCard = ({
               <BubbleText text={text} />
             </button>
           </DialogTrigger>
-          <DialogContent>
+          <DialogContent id={dialogContentId}>
             <VStack gap="lg">
               <DialogHeader className="gap-4">
                 <HStack align="center" gap="md">
@@ -116,11 +122,7 @@ export const RequestCard = ({
                 </Text>
               </VStack>
               <Box className="w-full rounded-md border bg-muted/20 p-4">
-                <Text asChild size="md">
-                  <p className="whitespace-pre-wrap break-words">
-                    {detail.content}
-                  </p>
-                </Text>
+                {mdxContent}
               </Box>
               <DialogFooter className="w-full">
                 <div className="flex w-full items-center justify-between gap-2">
@@ -150,7 +152,12 @@ export const RequestCard = ({
             />
           ))}
           {enableEmojiPicker && onReact ? (
-            <EmojiPicker label="リアクションを追加" onSelect={onReact} />
+            <EmojiPicker
+              label="リアクションを追加"
+              menuId={emojiMenuId}
+              onSelect={onReact}
+              triggerId={`${emojiMenuId}-trigger`}
+            />
           ) : null}
         </HStack>
       </VStack>

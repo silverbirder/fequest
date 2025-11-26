@@ -2,6 +2,7 @@ import {
   BubbleInput,
   Heading,
   HStack,
+  MdxContent,
   Text,
   VStack,
 } from "@repo/ui/components";
@@ -26,7 +27,7 @@ type FeatureRequest = {
   };
 };
 
-type Product = {
+type ProductData = {
   featureRequests?: FeatureRequest[] | null;
   id: number;
   name: string;
@@ -38,7 +39,7 @@ type Props = {
   onCreateFeatureRequest: (formData: FormData) => Promise<void>;
   onDeleteFeatureRequest?: (formData: FormData) => Promise<void>;
   onReactToFeature: (formData: FormData) => Promise<void>;
-  product: Product;
+  product: ProductData;
 };
 
 const getAvatarFallbackText = (text?: null | string) => {
@@ -72,20 +73,12 @@ const toIsoString = (value?: Date | null | string) => {
   return date.toISOString();
 };
 
-export const Product = ({
-  canCreateFeatureRequest,
-  currentUserId,
-  onCreateFeatureRequest,
-  onDeleteFeatureRequest,
-  onReactToFeature,
-  product,
-}: Props) => {
-  const title = product.name;
-  const featureRequests = product.featureRequests ?? [];
+export const Product = (props: Props) => {
+  const featureRequests: FeatureRequest[] = props.product.featureRequests ?? [];
 
   return (
     <VStack gap="xl">
-      <Heading size="lg">{title}</Heading>
+      <Heading size="lg">{props.product.name}</Heading>
       <VStack gap="lg">
         {featureRequests.length === 0 ? (
           <Text>フィーチャーはまだありません。</Text>
@@ -93,17 +86,19 @@ export const Product = ({
           <HStack align="start" gap="lg">
             {featureRequests.map((feature) => {
               const isOwner =
-                Boolean(currentUserId) &&
+                Boolean(props.currentUserId) &&
                 Boolean(feature.user?.id) &&
-                feature.user?.id === currentUserId;
-              const canDelete = Boolean(onDeleteFeatureRequest && isOwner);
+                feature.user?.id === props.currentUserId;
+              const canDelete = Boolean(
+                props.onDeleteFeatureRequest && isOwner,
+              );
               const text = feature.title?.trim() ?? "";
               return (
                 <FeatureRequestItem
                   avatar={createAvatarProps(feature)}
                   canDelete={canDelete}
                   detail={{
-                    content: feature.content,
+                    content: <MdxContent source={feature.content} />,
                     createdAt: toIsoString(feature.createdAt),
                     title: text,
                     updatedAt: toIsoString(feature.updatedAt),
@@ -111,9 +106,9 @@ export const Product = ({
                   featureId={feature.id}
                   key={feature.id}
                   onDeleteFeatureRequest={
-                    canDelete ? onDeleteFeatureRequest : undefined
+                    canDelete ? props.onDeleteFeatureRequest : undefined
                   }
-                  onReactToFeature={onReactToFeature}
+                  onReactToFeature={props.onReactToFeature}
                   reactions={feature.reactionSummaries ?? []}
                   text={text}
                 />
@@ -122,8 +117,8 @@ export const Product = ({
           </HStack>
         )}
       </VStack>
-      {canCreateFeatureRequest ? (
-        <Form action={onCreateFeatureRequest} className="w-full">
+      {props.canCreateFeatureRequest ? (
+        <Form action={props.onCreateFeatureRequest} className="w-full">
           <BubbleInput
             aria-label="新しいフィーチャーリクエスト"
             autoComplete="off"

@@ -3,9 +3,9 @@ import { render } from "vitest-browser-react";
 
 import { RequestCard } from "./request-card";
 
-const waitForDialog = () =>
+const waitForDialog = (delay = 0) =>
   new Promise<void>((resolve) => {
-    setTimeout(() => resolve(), 0);
+    setTimeout(() => resolve(), delay);
   });
 
 const openDialog = async () => {
@@ -22,7 +22,15 @@ describe("RequestCard", () => {
       <RequestCard
         avatar={{ fallbackText: "CF" }}
         detail={{
-          content: "Detailed content",
+          content: (
+            <div className="prose prose-slate prose-sm dark:prose-invert">
+              <h2>Heading</h2>
+              <ul>
+                <li>item1</li>
+                <li>item2</li>
+              </ul>
+            </div>
+          ),
           createdAt: "2024-01-01T00:00:00.000Z",
           title: "Child content",
           updatedAt: "2024-01-02T00:00:00.000Z",
@@ -31,10 +39,17 @@ describe("RequestCard", () => {
       />,
     );
 
+    await openDialog();
+    await waitForDialog(25);
+
     const element = document.querySelector("div");
     expect(element).not.toBeNull();
     expect(element?.textContent ?? "").toContain("Child content");
     expect(element?.textContent ?? "").toContain("CF");
+    const empty = document.querySelector(".mdx-empty");
+    expect(empty).toBeNull();
+    const heading = document.querySelector(".prose h2");
+    expect(heading?.textContent ?? "").toContain("Heading");
   });
 
   it("renders footer actions when provided", async () => {
@@ -42,7 +57,15 @@ describe("RequestCard", () => {
       <RequestCard
         avatar={{ fallbackText: "CF" }}
         detail={{
-          content: "Detailed content",
+          content: (
+            <div className="prose prose-slate prose-sm dark:prose-invert">
+              <h2>Heading</h2>
+              <ul>
+                <li>item1</li>
+                <li>item2</li>
+              </ul>
+            </div>
+          ),
           createdAt: "2024-01-01T00:00:00.000Z",
           title: "Child content",
           updatedAt: "2024-01-02T00:00:00.000Z",
@@ -63,7 +86,15 @@ describe("RequestCard", () => {
       <RequestCard
         avatar={{ fallbackText: "CF" }}
         detail={{
-          content: "Detailed content",
+          content: (
+            <div className="prose prose-slate prose-sm dark:prose-invert">
+              <h2>Heading</h2>
+              <ul>
+                <li>item1</li>
+                <li>item2</li>
+              </ul>
+            </div>
+          ),
           createdAt: "2024-01-01T00:00:00.000Z",
           title: "Child content",
           updatedAt: "2024-01-02T00:00:00.000Z",

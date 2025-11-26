@@ -10,12 +10,16 @@ import {
 
 type Props = {
   label?: string;
+  menuId?: string;
   onSelect?: (emoji: string) => void;
+  triggerId?: string;
 };
 
 export const EmojiPicker = ({
   label = "リアクションを追加",
+  menuId,
   onSelect,
+  triggerId,
 }: Props) => {
   const handleSelect = (emoji: undefined | { native?: string }) => {
     const nativeEmoji = emoji?.native;
@@ -26,11 +30,18 @@ export const EmojiPicker = ({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button aria-label={label} size="sm" type="button" variant="outline">
+        <Button
+          aria-controls={menuId}
+          aria-label={label}
+          id={triggerId}
+          size="sm"
+          type="button"
+          variant="outline"
+        >
           ＋
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="border-0 p-0">
+      <DropdownMenuContent className="border-0 p-0" id={menuId}>
         <Picker
           data={data}
           navPosition="none"

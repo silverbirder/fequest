@@ -17,7 +17,15 @@ const openDialog = async () => {
 };
 
 const baseDetail = {
-  content: "Feature detail body",
+  content: (
+    <div>
+      <h2>Heading</h2>
+      <ul>
+        <li>item1</li>
+        <li>item2</li>
+      </ul>
+    </div>
+  ),
   createdAt: "2024-01-01T00:00:00.000Z",
   title: "Child feature",
   updatedAt: "2024-01-02T00:00:00.000Z",
