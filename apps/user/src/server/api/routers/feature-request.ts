@@ -176,4 +176,42 @@ export const featureRequestsRouter = createTRPCRouter({
         featureRequestId: featureRequest.id,
       };
     }),
+  update: protectedProcedure
+    .input(
+      object({
+        content: pipe(
+          string(),
+          transform((value) => value.trim()),
+          minLength(0),
+          maxLength(10000),
+        ),
+        id: pipe(number(), integer(), minValue(1)),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const featureRequest = await ctx.db.query.featureRequests.findFirst({
+        columns: { id: true, productId: true, userId: true },
+        where: (fr, { eq }) => eq(fr.id, input.id),
+      });
+
+      if (!featureRequest) {
+        throw new TRPCError({ code: "NOT_FOUND" });
+      }
+
+      if (featureRequest.userId !== ctx.session.user.id) {
+        throw new TRPCError({ code: "FORBIDDEN" });
+      }
+
+      const [updated] = await ctx.db
+        .update(featureRequests)
+        .set({ content: input.content })
+        .where(eq(featureRequests.id, input.id))
+        .returning({
+          content: featureRequests.content,
+          id: featureRequests.id,
+          updatedAt: featureRequests.updatedAt,
+        });
+
+      return updated ?? null;
+    }),
 });

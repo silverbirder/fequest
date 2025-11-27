@@ -2,7 +2,6 @@ import {
   BubbleInput,
   Heading,
   HStack,
-  MdxContent,
   Text,
   VStack,
 } from "@repo/ui/components";
@@ -10,6 +9,7 @@ import Form from "next/form";
 
 import type { ReactionSummary } from "./libs/reaction-summary";
 
+import { FeatureRequestContent } from "./components/feature-request-content";
 import { FeatureRequestItem } from "./components/feature-request-item";
 
 type FeatureRequest = {
@@ -39,6 +39,7 @@ type Props = {
   onCreateFeatureRequest: (formData: FormData) => Promise<void>;
   onDeleteFeatureRequest?: (formData: FormData) => Promise<void>;
   onReactToFeature: (formData: FormData) => Promise<void>;
+  onUpdateFeatureRequest?: (formData: FormData) => Promise<void>;
   product: ProductData;
 };
 
@@ -98,7 +99,14 @@ export const Product = (props: Props) => {
                   avatar={createAvatarProps(feature)}
                   canDelete={canDelete}
                   detail={{
-                    content: <MdxContent source={feature.content} />,
+                    content: (
+                      <FeatureRequestContent
+                        content={feature.content}
+                        featureId={feature.id}
+                        isOwner={isOwner}
+                        onUpdateFeatureRequest={props.onUpdateFeatureRequest}
+                      />
+                    ),
                     createdAt: toIsoString(feature.createdAt),
                     title: text,
                     updatedAt: toIsoString(feature.updatedAt),

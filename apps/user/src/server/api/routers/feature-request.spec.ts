@@ -440,3 +440,109 @@ describe("featureRequestsRouter.delete", () => {
     expect(harness.deleteMock).not.toHaveBeenCalled();
   });
 });
+
+describe("featureRequestsRouter.update", () => {
+  const createUpdateHarness = (
+    options: {
+      featureRequest?: null | {
+        id: number;
+        productId?: number;
+        userId?: null | string;
+      };
+      sessionUserId?: null | string;
+      updated?: { content: string; id: number; updatedAt?: string };
+    } = {},
+  ) => {
+    const featureRequest = Object.hasOwn(options, "featureRequest")
+      ? options.featureRequest
+      : { id: 9, productId: 2, userId: "owner-user" };
+
+    const findFirst = vi.fn().mockResolvedValue(featureRequest);
+
+    const defaultUpdated = options.updated ?? {
+      content: "updated content",
+      id: featureRequest ? featureRequest.id : 0,
+      updatedAt: new Date().toISOString(),
+    };
+    const returning = vi.fn().mockResolvedValue([defaultUpdated]);
+    const where = vi.fn(() => ({ returning }));
+    const set = vi.fn(() => ({ where }));
+    const updateMock = vi.fn(() => ({ set }));
+
+    const db = {
+      query: {
+        featureRequests: {
+          findFirst,
+        },
+      },
+      update: updateMock,
+    } as unknown as Database;
+
+    const resolvedSession =
+      options.sessionUserId === undefined
+        ? ({
+            expires: new Date().toISOString(),
+            user: { id: featureRequest?.userId ?? "owner-user" },
+          } as Session)
+        : options.sessionUserId === null
+          ? null
+          : ({
+              expires: new Date().toISOString(),
+              user: { id: options.sessionUserId },
+            } as Session);
+
+    const caller = createCaller({
+      db,
+      headers: new Headers(),
+      session: resolvedSession,
+    });
+
+    return { caller, findFirst, returning, set, updateMock, where };
+  };
+
+  it("updates content when owner requests it", async () => {
+    const harness = createUpdateHarness();
+
+    const result = await harness.caller.update({
+      content: "  New content  ",
+      id: 9,
+    });
+
+    expect(harness.findFirst).toHaveBeenCalledWith({
+      columns: { id: true, productId: true, userId: true },
+      where: expect.any(Function),
+    });
+    expect(harness.updateMock).toHaveBeenCalledWith(featureRequests);
+    expect(harness.set).toHaveBeenCalledWith({ content: "New content" });
+    expect(harness.returning).toHaveBeenCalledWith({
+      content: featureRequests.content,
+      id: featureRequests.id,
+      updatedAt: featureRequests.updatedAt,
+    });
+    expect(result).toEqual({
+      content: expect.any(String),
+      id: 9,
+      updatedAt: expect.any(String),
+    });
+  });
+
+  it("throws FORBIDDEN when a different user attempts update", async () => {
+    const harness = createUpdateHarness({ sessionUserId: "other-user" });
+
+    await expect(
+      harness.caller.update({ content: "ok", id: 9 }),
+    ).rejects.toMatchObject({ code: "FORBIDDEN" });
+
+    expect(harness.updateMock).not.toHaveBeenCalled();
+  });
+
+  it("throws NOT_FOUND when the feature request is missing", async () => {
+    const harness = createUpdateHarness({ featureRequest: null });
+
+    await expect(
+      harness.caller.update({ content: "ok", id: 999 }),
+    ).rejects.toMatchObject({ code: "NOT_FOUND" });
+
+    expect(harness.updateMock).not.toHaveBeenCalled();
+  });
+});

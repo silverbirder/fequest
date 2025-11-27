@@ -7,6 +7,7 @@ import { auth } from "~/server/auth";
 import { api } from "~/trpc/server";
 
 import { createCreateFeatureRequest } from "./create-feature-request";
+import { createUpdateFeatureRequest } from "./create-update-feature-request";
 import { createDeleteFeatureRequest } from "./delete-feature-request";
 import { createReactToFeature } from "./react-to-feature";
 
@@ -32,6 +33,7 @@ export default async function Page({ params }: PageProps<"/[id]">) {
 
   const createFeatureRequest = createCreateFeatureRequest({ productId });
   const reactToFeature = createReactToFeature({ productId });
+  const updateFeatureRequest = createUpdateFeatureRequest({ productId });
   const deleteFeatureRequest = createDeleteFeatureRequest({ productId });
 
   const canCreateFeatureRequest = Boolean(session?.user);
@@ -43,6 +45,7 @@ export default async function Page({ params }: PageProps<"/[id]">) {
       onCreateFeatureRequest={createFeatureRequest}
       onDeleteFeatureRequest={deleteFeatureRequest}
       onReactToFeature={reactToFeature}
+      onUpdateFeatureRequest={updateFeatureRequest}
       product={product}
     />
   );
