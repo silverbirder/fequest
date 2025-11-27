@@ -1,6 +1,7 @@
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
 
+import { Box } from "../../layout";
 import {
   Button,
   DropdownMenu,
@@ -41,16 +42,18 @@ export const EmojiPicker = ({
           ＋
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="border-0 p-0" id={menuId}>
-        <Picker
-          data={data}
-          navPosition="none"
-          onEmojiSelect={handleSelect}
-          previewPosition="none"
-          searchPosition="none"
-          skinTonePosition="search"
-          theme="auto"
-        />
+      <DropdownMenuContent id={menuId}>
+        <Box bg="transparent" p="none">
+          <Picker
+            data={data}
+            navPosition="none"
+            onEmojiSelect={handleSelect}
+            previewPosition="none"
+            searchPosition="none"
+            skinTonePosition="search"
+            theme="auto"
+          />
+        </Box>
       </DropdownMenuContent>
     </DropdownMenu>
   );

@@ -10,7 +10,7 @@ type Props = {
 };
 
 export const MdxContent = ({ components, source }: Props) => (
-  <Box className="prose prose-slate prose-sm dark:prose-invert">
+  <Box prose="sm">
     <MDXRemote components={components} source={source} />
   </Box>
 );

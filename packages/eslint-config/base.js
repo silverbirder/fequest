@@ -31,4 +31,24 @@ export const config = [
   {
     ignores: ["dist/**"],
   },
+  {
+    files: ["packages/**/*.tsx", "apps/**/*.tsx"],
+    excludedFiles: [
+      "packages/ui/src/components/layout/**",
+      "packages/ui/src/components/shadcn/**",
+      "packages/ui/src/components/typography/**",
+      "**/*.spec.tsx",
+      "**/*.stories.tsx",
+    ],
+    rules: {
+      "no-restricted-syntax": [
+        "error",
+        {
+          selector: "JSXAttribute[name.name='className']",
+          message:
+            "Using `className` is prohibited. Use shared UI primitives (layout, shadcn, typography) or style-props instead.",
+        },
+      ],
+    },
+  },
 ];

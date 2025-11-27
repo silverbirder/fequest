@@ -1,4 +1,5 @@
 import {
+  Box,
   BubbleInput,
   Heading,
   HStack,
@@ -126,15 +127,17 @@ export const Product = (props: Props) => {
         )}
       </VStack>
       {props.canCreateFeatureRequest ? (
-        <Form action={props.onCreateFeatureRequest} className="w-full">
-          <BubbleInput
-            aria-label="新しいフィーチャーリクエスト"
-            autoComplete="off"
-            maxLength={255}
-            name="title"
-            required
-          />
-        </Form>
+        <Box asChild w="full">
+          <Form action={props.onCreateFeatureRequest}>
+            <BubbleInput
+              aria-label="新しいフィーチャーリクエスト"
+              autoComplete="off"
+              maxLength={255}
+              name="title"
+              required
+            />
+          </Form>
+        </Box>
       ) : (
         <Text>ログインするとフィーチャーを登録できます。</Text>
       )}

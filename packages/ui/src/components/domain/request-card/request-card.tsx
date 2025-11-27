@@ -89,27 +89,31 @@ export const RequestCard = ({
       <VStack gap="xs">
         <Dialog>
           <DialogTrigger asChild>
-            <button
+            <Button
               aria-controls={dialogContentId}
               aria-label={dialogTriggerLabel}
-              className="rounded-none border-none bg-transparent p-0 text-left"
               type="button"
+              variant="ghost"
             >
               <BubbleText text={text} />
-            </button>
+            </Button>
           </DialogTrigger>
           <DialogContent id={dialogContentId}>
             <VStack gap="lg">
-              <DialogHeader className="gap-4">
+              <DialogHeader>
                 <HStack align="center" gap="md">
-                  <Avatar className="size-12">
+                  <Avatar>
                     <AvatarImage alt={avatar.alt} src={avatar.src} />
-                    <AvatarFallback className="text-lg">
-                      {avatar.fallbackText}
+                    <AvatarFallback>
+                      <Text asChild size="xl">
+                        <span>{avatar.fallbackText}</span>
+                      </Text>
                     </AvatarFallback>
                   </Avatar>
-                  <DialogTitle className="text-left text-xl">
-                    {dialogTitle}
+                  <DialogTitle>
+                    <Text align="left" size="xl">
+                      {dialogTitle}
+                    </Text>
                   </DialogTitle>
                 </HStack>
               </DialogHeader>
@@ -121,22 +125,22 @@ export const RequestCard = ({
                   更新日: {updatedAtText}
                 </Text>
               </VStack>
-              <Box className="w-full rounded-md border bg-muted/20 p-4">
+              <Box bg="muted" p="md" radius="md" w="full">
                 {mdxContent}
               </Box>
-              <DialogFooter className="w-full">
-                <div className="flex w-full items-center justify-between gap-2">
+              <DialogFooter>
+                <HStack align="center" gap="sm" justify="between" w="full">
                   {footerActions ? (
-                    <div className="flex gap-2">{footerActions}</div>
+                    <HStack gap="sm">{footerActions}</HStack>
                   ) : (
-                    <div className="flex-1" />
+                    <Box w="full" />
                   )}
                   <DialogClose asChild>
                     <Button type="button" variant="outline">
                       閉じる
                     </Button>
                   </DialogClose>
-                </div>
+                </HStack>
               </DialogFooter>
             </VStack>
           </DialogContent>

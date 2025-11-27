@@ -5,6 +5,7 @@ import {
   Avatar,
   AvatarFallback,
   AvatarImage,
+  Box,
   Button,
   Container,
   DropdownMenu,
@@ -12,6 +13,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
   HStack,
+  Text,
 } from "@repo/ui/components";
 import Link from "next/link";
 
@@ -50,21 +52,19 @@ export const Header = ({
   const isAuthenticated = Boolean(user);
 
   return (
-    <header className="border-b bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <Container className="py-4" padding="md">
+    <header>
+      <Container padding="md">
         <HStack align="center" justify="between">
-          <Link
-            className="text-lg font-semibold tracking-tight text-foreground"
-            href={homeHref}
-          >
-            {appName}
+          <Link href={homeHref}>
+            <Text size="lg" weight="semibold">
+              {appName}
+            </Text>
           </Link>
-
           {isAuthenticated ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
-                  className="rounded-full p-0"
+                  aria-label="ユーザーメニュー"
                   size="icon"
                   variant="ghost"
                 >
@@ -77,16 +77,16 @@ export const Header = ({
                       {createFallbackText(user?.name)}
                     </AvatarFallback>
                   </Avatar>
-                  <span className="sr-only">ユーザーメニュー</span>
                 </Button>
               </DropdownMenuTrigger>
-
               <DropdownMenuContent align="end" sideOffset={8}>
                 <DropdownMenuItem asChild>
-                  <form action={logoutAction} className="w-full">
-                    <button className="w-full text-left" type="submit">
-                      ログアウト
-                    </button>
+                  <form action={logoutAction}>
+                    <Box w="full">
+                      <Button size="sm" type="submit" variant="ghost">
+                        ログアウト
+                      </Button>
+                    </Box>
                   </form>
                 </DropdownMenuItem>
               </DropdownMenuContent>

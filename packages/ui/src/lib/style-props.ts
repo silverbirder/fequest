@@ -176,17 +176,28 @@ const caret = cva("", {
   },
 });
 
+const prose = cva("", {
+  variants: {
+    prose: {
+      sm: "prose prose-slate prose-sm dark:prose-invert",
+    },
+  },
+});
+
 type BackgroundProps = VariantProps<typeof background>;
 type CaretProps = VariantProps<typeof caret>;
 type ForegroundProps = VariantProps<typeof foreground>;
 type LayoutProps = VariantProps<typeof layout>;
+type ProseProps = VariantProps<typeof prose>;
 type RadiusProps = VariantProps<typeof radius>;
+
 type SpacingProps = VariantProps<typeof spacing>;
 
 type StyleProps = BackgroundProps &
   CaretProps &
   ForegroundProps &
   LayoutProps &
+  ProseProps &
   RadiusProps &
   SpacingProps;
 
@@ -198,6 +209,7 @@ const stylePropsClassNames = (props?: Partial<StyleProps>) =>
     spacing(props ?? {}),
     layout(props ?? {}),
     caret(props ?? {}),
+    prose(props ?? {}),
   );
 
 const stylePropKeys = [
@@ -219,6 +231,7 @@ const stylePropKeys = [
   "translateY",
   "rotate",
   "caret",
+  "prose",
 ] as const;
 
 type StylePropKey = (typeof stylePropKeys)[number];
@@ -261,6 +274,7 @@ export type {
   CaretProps,
   ForegroundProps,
   LayoutProps,
+  ProseProps,
   RadiusProps,
   SpacingProps,
   StylePropKey,

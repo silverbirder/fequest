@@ -29,16 +29,17 @@ exports[`Product > renders provided props 1`] = `
     <form
       action="javascript:throw new Error('A React form was unexpectedly submitted. If you called form.submit() manually, consider using form.requestSubmit() instead. If you\\'re trying to use event.stopPropagation() in a submit event handler, consider also calling event.preventDefault().')"
       class="w-full"
+      data-slot="box"
     >
       <div
-        class="flex items-stretch flex-col gap-1 justify-start flex-nowrap group"
+        class="flex items-stretch flex-col gap-1 justify-start flex-nowrap"
         data-orientation="column"
         data-slot="stack"
       >
         <input
           aria-label="新しいフィーチャーリクエスト"
           autocomplete="off"
-          class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 w-full min-w-0 border bg-transparent text-base transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border-none bg-none hover:bg-gray-100 shadow-none rounded-md p-3"
+          class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"
           data-slot="input"
           maxlength="255"
           name="title"
@@ -47,7 +48,7 @@ exports[`Product > renders provided props 1`] = `
           type="text"
         />
         <span
-          class="text-left block font-normal opacity-0 text-gray-500 text-sm transition-opacity duration-200 group-hover:opacity-100 group-focus-within:opacity-100"
+          class="text-left text-muted-foreground block text-sm font-normal"
           data-slot="text"
         >
           Enterで送信

@@ -1,4 +1,4 @@
-import { MdxContent, VStack } from "@repo/ui/components";
+import { Box, HStack, MdxContent, VStack } from "@repo/ui/components";
 
 import { FeatureRequestContentEditor } from "./feature-request-content-editor";
 
@@ -12,18 +12,18 @@ type Props = {
 export const FeatureRequestContent = (props: Props) => {
   return (
     <VStack gap="sm">
-      <div className="w-full">
+      <Box w="full">
         {props.isOwner && props.onUpdateFeatureRequest ? (
-          <div className="flex justify-end">
+          <HStack justify="end">
             <FeatureRequestContentEditor
               content={props.content}
               featureId={props.featureId}
               onUpdateFeatureRequest={props.onUpdateFeatureRequest}
             />
-          </div>
+          </HStack>
         ) : null}
         <MdxContent source={props.content} />
-      </div>
+      </Box>
     </VStack>
   );
 };

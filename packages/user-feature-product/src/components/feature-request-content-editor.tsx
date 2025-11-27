@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@repo/ui/components";
+import { Box, Button, HStack } from "@repo/ui/components";
 import Form from "next/form";
 import { useState } from "react";
 
@@ -20,19 +20,21 @@ export const FeatureRequestContentEditor = (props: Props) => {
       編集
     </Button>
   ) : (
-    <Form action={props.onUpdateFeatureRequest} className="w-full">
-      <input name="featureId" type="hidden" value={props.featureId} />
-      <textarea
-        className="w-full min-h-[200px] rounded-md border p-2"
-        defaultValue={props.content}
-        name="content"
-      />
-      <div className="mt-2 flex gap-2">
-        <Button type="submit">保存</Button>
-        <Button onClick={() => setEditing(false)} type="button" variant="ghost">
-          取消
-        </Button>
-      </div>
-    </Form>
+    <Box asChild w="full">
+      <Form action={props.onUpdateFeatureRequest}>
+        <input name="featureId" type="hidden" value={String(props.featureId)} />
+        <textarea defaultValue={props.content} name="content" />
+        <HStack gap="sm">
+          <Button type="submit">保存</Button>
+          <Button
+            onClick={() => setEditing(false)}
+            type="button"
+            variant="ghost"
+          >
+            取消
+          </Button>
+        </HStack>
+      </Form>
+    </Box>
   );
 };
