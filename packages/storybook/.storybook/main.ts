@@ -16,6 +16,9 @@ const config: StorybookConfig = {
     getAbsolutePath("@storybook/addon-a11y"),
     getAbsolutePath("@storybook/addon-vitest"),
   ],
+  features: {
+    experimentalRSC: true,
+  },
   framework: {
     name: getAbsolutePath("@storybook/nextjs-vite"),
     options: {},
