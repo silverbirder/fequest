@@ -34,9 +34,7 @@ export const config = [
   {
     files: ["packages/**/*.tsx", "apps/**/*.tsx"],
     excludedFiles: [
-      "packages/ui/src/components/layout/**",
-      "packages/ui/src/components/shadcn/**",
-      "packages/ui/src/components/typography/**",
+      "packages/ui/src/components/common/**",
       "**/*.spec.tsx",
       "**/*.stories.tsx",
     ],

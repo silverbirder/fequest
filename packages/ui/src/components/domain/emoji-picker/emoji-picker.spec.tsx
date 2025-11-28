@@ -4,7 +4,7 @@ import { render } from "vitest-browser-react";
 
 import { EmojiPicker } from "./emoji-picker";
 
-vi.mock("../../shadcn", () => ({
+vi.mock("../../common/shadcn", () => ({
   Button: ({ children, ...props }: ComponentProps<"button">) => (
     <button {...props}>{children}</button>
   ),

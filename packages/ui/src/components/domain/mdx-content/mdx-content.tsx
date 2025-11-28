@@ -2,7 +2,7 @@ import type { MDXComponents } from "mdx/types";
 
 import { MDXRemote } from "next-mdx-remote-client/rsc";
 
-import { Box } from "../../layout";
+import { Box } from "../../common/layout";
 
 type Props = {
   components?: MDXComponents;

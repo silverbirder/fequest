@@ -1,8 +1,8 @@
 import type { ComponentPropsWithoutRef } from "react";
 
-import { VStack } from "../../layout";
-import { Input } from "../../shadcn";
-import { Text } from "../../typography";
+import { VStack } from "../../common/layout";
+import { Input } from "../../common/shadcn";
+import { Text } from "../../common/typography";
 
 type BubbleInputProps = ComponentPropsWithoutRef<typeof Input> & {
   helperText?: string;

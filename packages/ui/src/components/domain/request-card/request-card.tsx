@@ -1,6 +1,6 @@
 import type { ComponentProps, ReactNode } from "react";
 
-import { Box, HStack, VStack } from "../../layout";
+import { Box, HStack, VStack } from "../../common/layout";
 import {
   Avatar,
   AvatarFallback,
@@ -13,8 +13,8 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "../../shadcn";
-import { Text } from "../../typography";
+} from "../../common/shadcn";
+import { Text } from "../../common/typography";
 import { BubbleText } from "../bubble-text";
 import { EmojiPicker } from "../emoji-picker";
 import { EmojiReaction } from "../emoji-reaction";

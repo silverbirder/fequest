@@ -1,6 +1,6 @@
-import { HStack } from "../../layout";
-import { Button } from "../../shadcn";
-import { Text } from "../../typography";
+import { HStack } from "../../common/layout";
+import { Button } from "../../common/shadcn";
+import { Text } from "../../common/typography";
 
 type Props = {
   active?: boolean;

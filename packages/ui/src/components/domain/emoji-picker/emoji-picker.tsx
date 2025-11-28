@@ -1,13 +1,13 @@
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
 
-import { Box } from "../../layout";
+import { Box } from "../../common/layout";
 import {
   Button,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
-} from "../../shadcn";
+} from "../../common/shadcn";
 
 type Props = {
   label?: string;
