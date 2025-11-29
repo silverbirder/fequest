@@ -1,0 +1,19 @@
+diff --git a/dist/index.js b/dist/index.js
+index fea08abf208444c9d46998e683ee129b7bf8408e..2be31f7edeab9d32c11a7ee314863c275d2e7011 100644
+--- a/dist/index.js
++++ b/dist/index.js
+@@ -1769,12 +1769,14 @@ function getMatcherState(assertion, expect) {
+ 		subsetEquality
+ 	};
+ 	let task = util.flag(assertion, "vitest-test");
++	const currentTestName = task?.fullTestName ?? ''
+ 	if ((task === null || task === void 0 ? void 0 : task.type) !== "test") {
+ 		task = undefined;
+ 	}
+ 	const matcherState = {
+ 		...getState(expect),
+ 		task,
++		currentTestName,
+ 		customTesters: getCustomEqualityTesters(),
+ 		isNot,
+ 		utils: jestUtils,

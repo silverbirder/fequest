@@ -32,5 +32,10 @@
   "packageManager": "pnpm@9.0.0",
   "engines": {
     "node": ">=20"
+  },
+  "pnpm": {
+    "patchedDependencies": {
+      "@vitest/expect@4.0.14": "patches/@vitest__expect@4.0.14.patch"
+    }
   }
 }

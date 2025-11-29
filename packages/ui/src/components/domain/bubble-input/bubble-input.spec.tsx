@@ -1,7 +1,11 @@
+import { composeStories } from "@storybook/react-vite";
 import { describe, expect, it } from "vitest";
 import { render } from "vitest-browser-react";
 
 import { BubbleInput } from "./bubble-input";
+import * as stories from "./bubble-input.stories";
+
+const { Default } = composeStories(stories);
 
 describe("BubbleInput", () => {
   it("accepts helper text and input props", async () => {
@@ -12,5 +16,14 @@ describe("BubbleInput", () => {
 
     const input = document.querySelector("input[name=request]");
     expect(input).not.toBeNull();
+  });
+
+  it("matches Default story snapshot", async () => {
+    const { getByTestId } = await render(
+      <div data-testid="test">
+        <Default />
+      </div>,
+    );
+    await expect(getByTestId("test")).toMatchScreenshot();
   });
 });
