@@ -1,0 +1,27 @@
+:root {
+  --hue-base: 120;
+
+  --tone-100: 1;
+  --tone-90: 0.9;
+  --tone-80: 0.8;
+  --tone-70: 0.7;
+  --tone-60: 0.6;
+  --tone-50: 0.5;
+  --tone-40: 0.4;
+  --tone-30: 0.3;
+  --tone-20: 0.2;
+  --tone-10: 0.1;
+  --tone-0: 0;
+
+  --chroma-100: 1;
+  --chroma-90: 0.6;
+  --chroma-80: 0.36;
+  --chroma-70: 0.216;
+  --chroma-60: 0.13;
+  --chroma-50: 0.078;
+  --chroma-40: 0.047;
+  --chroma-30: 0.028;
+  --chroma-20: 0.017;
+  --chroma-10: 0.01;
+  --chroma-0: 0.006;
+}

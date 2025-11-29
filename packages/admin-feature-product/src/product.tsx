@@ -172,11 +172,7 @@ export const Product = ({
                       </VStack>
                       <HStack align="center" gap="sm" justify="end">
                         <Box
-                          bg={
-                            feature.status === "open"
-                              ? "primary-subtle"
-                              : "gray-100"
-                          }
+                          bg={feature.status === "open" ? "accent" : "muted"}
                           px="sm"
                           py="xs"
                           radius="full"

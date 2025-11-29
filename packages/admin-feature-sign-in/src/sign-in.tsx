@@ -10,13 +10,7 @@ export const SignIn = ({
   onGoogleSignIn,
 }: Props) => {
   return (
-    <Center
-      bg="gray-50"
-      px="md"
-      py="xl"
-      style={{ minHeight: "100vh" }}
-      w="full"
-    >
+    <Center bg="muted" px="md" py="xl" style={{ minHeight: "100vh" }} w="full">
       <Box
         bg="white"
         p="xl"
