@@ -1,5 +1,6 @@
 import tailwindPostcss from "@tailwindcss/postcss";
 import react from "@vitejs/plugin-react";
+import nextjs from "vite-plugin-storybook-nextjs";
 import { playwright } from "@vitest/browser-playwright";
 import { defineConfig, mergeConfig } from "vitest/config";
 
@@ -13,7 +14,7 @@ const baseConfig = {
       plugins: [tailwindPostcss()],
     },
   },
-  plugins: [react()],
+  plugins: [react(), nextjs({dir: "../../apps/user"})],
   test: {
     include: ["src/**/*.test.{ts,tsx}", "src/**/*.spec.{ts,tsx}"],
     setupFiles: ["@repo/vitest-config/setup"],

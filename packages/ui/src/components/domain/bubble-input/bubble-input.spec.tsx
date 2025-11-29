@@ -1,4 +1,4 @@
-import { composeStories } from "@storybook/react-vite";
+import { composeStories } from "@storybook/nextjs-vite";
 import { describe, expect, it } from "vitest";
 import { render } from "vitest-browser-react";
 
@@ -19,11 +19,8 @@ describe("BubbleInput", () => {
   });
 
   it("matches Default story snapshot", async () => {
-    const { getByTestId } = await render(
-      <div data-testid="test">
-        <Default />
-      </div>,
-    );
-    await expect(getByTestId("test")).toMatchScreenshot();
+    await Default.run();
+
+    await expect(document.body).toMatchScreenshot();
   });
 });
