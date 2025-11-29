@@ -17,7 +17,7 @@ export const BubbleText = ({ text }: Props) => {
         position="absolute"
         radius="xs"
         rotate="45"
-        top="1/2"
+        top="4"
         translateY="-1/2"
         w="3"
       />

@@ -14,6 +14,7 @@ const stackVariants = cva("flex", {
     gap: "md",
     inline: false,
     justify: "start",
+    self: "stretch",
     wrap: "nowrap",
   },
   variants: {
@@ -48,6 +49,13 @@ const stackVariants = cva("flex", {
       end: "justify-end",
       evenly: "justify-evenly",
       start: "justify-start",
+    },
+    self: {
+      baseline: "self-baseline",
+      center: "self-center",
+      end: "self-end",
+      start: "self-start",
+      stretch: "self-stretch",
     },
     wrap: {
       nowrap: "flex-nowrap",

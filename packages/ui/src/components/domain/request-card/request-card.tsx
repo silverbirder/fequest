@@ -1,5 +1,7 @@
 import type { ComponentProps, ReactNode } from "react";
 
+import { Expand } from "lucide-react";
+
 import { Box, HStack, VStack } from "../../common/layout";
 import {
   Avatar,
@@ -81,21 +83,22 @@ export const RequestCard = ({
   const emojiMenuId = `${idBase}-emoji-menu`;
 
   return (
-    <HStack align="baseline" gap="sm">
-      <Avatar>
-        <AvatarImage alt={avatar.alt} src={avatar.src}></AvatarImage>
-        <AvatarFallback>{avatar.fallbackText}</AvatarFallback>
-      </Avatar>
-      <VStack gap="xs">
+    <HStack align="start" gap="sm">
+      <VStack gap="sm" justify="between" self="stretch">
+        <Avatar>
+          <AvatarImage alt={avatar.alt} src={avatar.src}></AvatarImage>
+          <AvatarFallback>{avatar.fallbackText}</AvatarFallback>
+        </Avatar>
         <Dialog>
           <DialogTrigger asChild>
             <Button
               aria-controls={dialogContentId}
               aria-label={dialogTriggerLabel}
+              size="icon"
               type="button"
-              variant="ghost"
+              variant="outline"
             >
-              <BubbleText text={text} />
+              <Expand />
             </Button>
           </DialogTrigger>
           <DialogContent id={dialogContentId}>
@@ -145,6 +148,9 @@ export const RequestCard = ({
             </VStack>
           </DialogContent>
         </Dialog>
+      </VStack>
+      <VStack gap="sm">
+        <BubbleText text={text} />
         <HStack gap="xs">
           {reactions?.map((reaction, index) => (
             <EmojiReaction

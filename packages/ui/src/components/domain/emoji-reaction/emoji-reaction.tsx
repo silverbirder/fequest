@@ -15,7 +15,7 @@ export const EmojiReaction = ({ active, count, emoji, onClick }: Props) => {
       aria-pressed={active}
       onClick={onClick}
       size="sm"
-      variant={active ? "default" : "outline"}
+      variant={active ? "secondary" : "outline"}
     >
       <HStack caret="transparent" gap="xs">
         <Text size="md">{emoji}</Text>
