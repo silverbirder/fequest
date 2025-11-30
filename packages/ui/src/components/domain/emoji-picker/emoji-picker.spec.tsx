@@ -8,13 +8,13 @@ vi.mock("../../common/shadcn", () => ({
   Button: ({ children, ...props }: ComponentProps<"button">) => (
     <button {...props}>{children}</button>
   ),
-  DropdownMenu: ({ children }: PropsWithChildren) => (
-    <div data-testid="mock-dropdown">{children}</div>
+  Popover: ({ children }: PropsWithChildren) => (
+    <div data-testid="mock-popover">{children}</div>
   ),
-  DropdownMenuContent: ({ children }: PropsWithChildren) => (
+  PopoverContent: ({ children }: PropsWithChildren) => (
     <div data-testid="mock-content">{children}</div>
   ),
-  DropdownMenuTrigger: ({ children }: PropsWithChildren) => <>{children}</>,
+  PopoverTrigger: ({ children }: PropsWithChildren) => <>{children}</>,
 }));
 
 vi.mock("@emoji-mart/react", () => ({

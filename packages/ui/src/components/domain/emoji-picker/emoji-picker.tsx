@@ -1,12 +1,11 @@
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
 
-import { Box } from "../../common/layout";
 import {
   Button,
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
 } from "../../common/shadcn";
 
 type Props = {
@@ -29,8 +28,8 @@ export const EmojiPicker = ({
   };
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
+    <Popover>
+      <PopoverTrigger asChild>
         <Button
           aria-controls={menuId}
           aria-label={label}
@@ -41,20 +40,10 @@ export const EmojiPicker = ({
         >
           ＋
         </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent id={menuId}>
-        <Box bg="transparent" p="none">
-          <Picker
-            data={data}
-            navPosition="none"
-            onEmojiSelect={handleSelect}
-            previewPosition="none"
-            searchPosition="none"
-            skinTonePosition="search"
-            theme="auto"
-          />
-        </Box>
-      </DropdownMenuContent>
-    </DropdownMenu>
+      </PopoverTrigger>
+      <PopoverContent className="w-full p-0" id={menuId}>
+        <Picker data={data} onEmojiSelect={handleSelect} />
+      </PopoverContent>
+    </Popover>
   );
 };
