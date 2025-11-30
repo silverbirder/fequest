@@ -1,6 +1,6 @@
 import { composeStories } from "@storybook/nextjs-vite";
-import { afterEach, describe, expect, it } from "vitest";
-import { cleanup, render } from "vitest-browser-react";
+import { describe, expect, it } from "vitest";
+import { render } from "vitest-browser-react";
 
 import { RequestDialog } from "./request-dialog";
 import * as stories from "./request-dialog.stories";
@@ -21,14 +21,12 @@ const openDialog = async (label: string) => {
 };
 
 describe("RequestDialog", () => {
-  afterEach(() => {
-    cleanup();
-  });
-
   it.each(Object.entries(Stories))("should %s snapshot", async (_, Story) => {
     await Story.run();
 
     await expect(document.body).toMatchScreenshot();
+
+    document.body.innerHTML = "";
   });
 
   it("renders provided detail content and metadata", async () => {

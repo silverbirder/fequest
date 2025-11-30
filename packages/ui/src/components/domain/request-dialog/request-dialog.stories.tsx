@@ -31,4 +31,12 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {};
+export const Default: Story = {
+  play: async ({ canvasElement }) => {
+    const label = meta.args?.dialogTriggerLabel ?? "詳細を表示";
+    const trigger = canvasElement.querySelector<HTMLButtonElement>(
+      `button[aria-label='${label}']`,
+    );
+    trigger?.click();
+  },
+};
