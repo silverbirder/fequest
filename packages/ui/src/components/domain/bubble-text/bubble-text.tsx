@@ -23,11 +23,11 @@ export const BubbleText = ({ children, text }: Props) => {
         translateY="-1/2"
         w="3"
       />
-      <HStack gap="sm" justify="between" self="stretch" wrap="wrap">
+      <HStack justify="between" self="stretch">
         <Text color="subtle" size="md">
           {text}
         </Text>
-        {children}
+        <div className="shrink-0">{children}</div>
       </HStack>
     </Box>
   );
