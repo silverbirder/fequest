@@ -1,7 +1,11 @@
+import { composeStories } from "@storybook/nextjs-vite";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { render } from "vitest-browser-react";
 
 import { Product } from "./product";
+import * as stories from "./product.stories";
+
+const Stories = composeStories(stories);
 
 vi.mock("@repo/ui/components", async () => {
   const actual = await vi.importActual<typeof import("@repo/ui/components")>(
@@ -60,6 +64,14 @@ const createProductFixture = (ownerId: string) => ({
 });
 
 describe("Product", () => {
+  it.each(Object.entries(Stories))("should %s snapshot", async (_, Story) => {
+    await Story.run();
+
+    await expect(document.body).toMatchScreenshot();
+
+    document.body.innerHTML = "";
+  });
+
   it("renders provided props", async () => {
     const { asFragment, baseElement } = await render(
       <Product

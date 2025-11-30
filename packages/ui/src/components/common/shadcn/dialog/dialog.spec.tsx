@@ -1,3 +1,4 @@
+import { composeStories } from "@storybook/nextjs-vite";
 import { describe, expect, it } from "vitest";
 import { render } from "vitest-browser-react";
 
@@ -10,8 +11,19 @@ import {
   DialogHeader,
   DialogTitle,
 } from "./dialog";
+import * as stories from "./dialog.stories";
+
+const Stories = composeStories(stories);
 
 describe("Dialog", () => {
+  it.each(Object.entries(Stories))("should %s snapshot", async (_, Story) => {
+    await Story.run();
+
+    await expect(document.body).toMatchScreenshot();
+
+    document.body.innerHTML = "";
+  });
+
   it("renders the overlay and content when open", async () => {
     await render(
       <Dialog open>

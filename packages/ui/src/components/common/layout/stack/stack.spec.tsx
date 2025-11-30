@@ -1,9 +1,21 @@
+import { composeStories } from "@storybook/nextjs-vite";
 import { describe, expect, it } from "vitest";
 import { render } from "vitest-browser-react";
 
 import { HStack, VStack } from "./stack";
+import * as stories from "./stack.stories";
+
+const Stories = composeStories(stories);
 
 describe("Stack", () => {
+  it.each(Object.entries(Stories))("should %s snapshot", async (_, Story) => {
+    await Story.run();
+
+    await expect(document.body).toMatchScreenshot();
+
+    document.body.innerHTML = "";
+  });
+
   it("renders a horizontal layout with centered alignment by default", async () => {
     await render(
       <HStack>

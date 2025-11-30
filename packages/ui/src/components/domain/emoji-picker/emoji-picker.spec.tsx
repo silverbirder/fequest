@@ -1,8 +1,12 @@
+import { composeStories } from "@storybook/nextjs-vite";
 import { ComponentProps, PropsWithChildren } from "react";
 import { describe, expect, it, vi } from "vitest";
 import { render } from "vitest-browser-react";
 
 import { EmojiPicker } from "./emoji-picker";
+import * as stories from "./emoji-picker.stories";
+
+const Stories = composeStories(stories);
 
 vi.mock("../../common/shadcn", () => ({
   Button: ({ children, ...props }: ComponentProps<"button">) => (
@@ -36,6 +40,14 @@ vi.mock("@emoji-mart/data", () => ({
 }));
 
 describe("EmojiPicker", () => {
+  it.each(Object.entries(Stories))("should %s snapshot", async (_, Story) => {
+    await Story.run();
+
+    await expect(document.body).toMatchScreenshot();
+
+    document.body.innerHTML = "";
+  });
+
   it("invokes onSelect with chosen emoji", async () => {
     const handleSelect = vi.fn();
     await render(<EmojiPicker onSelect={handleSelect} />);

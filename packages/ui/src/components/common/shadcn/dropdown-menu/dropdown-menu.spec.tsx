@@ -1,3 +1,4 @@
+import { composeStories } from "@storybook/nextjs-vite";
 import { describe, expect, it } from "vitest";
 import { render } from "vitest-browser-react";
 
@@ -11,8 +12,19 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "./dropdown-menu";
+import * as stories from "./dropdown-menu.stories";
+
+const Stories = composeStories(stories);
 
 describe("DropdownMenu", () => {
+  it.each(Object.entries(Stories))("should %s snapshot", async (_, Story) => {
+    await Story.run();
+
+    await expect(document.body).toMatchScreenshot();
+
+    document.body.innerHTML = "";
+  });
+
   it("renders the content and menu items when open", async () => {
     await render(
       <DropdownMenu open>

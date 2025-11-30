@@ -1,9 +1,21 @@
+import { composeStories } from "@storybook/nextjs-vite";
 import { describe, expect, it } from "vitest";
 import { render } from "vitest-browser-react";
 
 import { Grid } from "./grid";
+import * as stories from "./grid.stories";
+
+const Stories = composeStories(stories);
 
 describe("Grid", () => {
+  it.each(Object.entries(Stories))("should %s snapshot", async (_, Story) => {
+    await Story.run();
+
+    await expect(document.body).toMatchScreenshot();
+
+    document.body.innerHTML = "";
+  });
+
   it("renders a grid layout with default columns and gap", async () => {
     await render(
       <Grid>

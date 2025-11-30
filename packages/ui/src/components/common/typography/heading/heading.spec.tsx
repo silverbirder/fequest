@@ -1,9 +1,21 @@
+import { composeStories } from "@storybook/nextjs-vite";
 import { describe, expect, it } from "vitest";
 import { render } from "vitest-browser-react";
 
 import { Heading } from "./heading";
+import * as stories from "./heading.stories";
+
+const Stories = composeStories(stories);
 
 describe("Heading", () => {
+  it.each(Object.entries(Stories))("should %s snapshot", async (_, Story) => {
+    await Story.run();
+
+    await expect(document.body).toMatchScreenshot();
+
+    document.body.innerHTML = "";
+  });
+
   it("renders the correct heading level by default", async () => {
     await render(<Heading>Dashboard</Heading>);
 

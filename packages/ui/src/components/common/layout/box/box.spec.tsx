@@ -1,9 +1,21 @@
+import { composeStories } from "@storybook/nextjs-vite";
 import { describe, expect, it } from "vitest";
 import { render } from "vitest-browser-react";
 
 import { Box } from "./box";
+import * as stories from "./box.stories";
+
+const Stories = composeStories(stories);
 
 describe("Box", () => {
+  it.each(Object.entries(Stories))("should %s snapshot", async (_, Story) => {
+    await Story.run();
+
+    await expect(document.body).toMatchScreenshot();
+
+    document.body.innerHTML = "";
+  });
+
   it("renders a div wrapper by default", async () => {
     await render(<Box className="bg-muted">Content</Box>);
 

@@ -1,9 +1,21 @@
+import { composeStories } from "@storybook/nextjs-vite";
 import { describe, expect, it } from "vitest";
 import { render } from "vitest-browser-react";
 
 import { Input } from "./input";
+import * as stories from "./input.stories";
+
+const Stories = composeStories(stories);
 
 describe("Input", () => {
+  it.each(Object.entries(Stories))("should %s snapshot", async (_, Story) => {
+    await Story.run();
+
+    await expect(document.body).toMatchScreenshot();
+
+    document.body.innerHTML = "";
+  });
+
   it("renders with base styles", async () => {
     await render(<Input placeholder="Your name" type="text" />);
 

@@ -1,8 +1,12 @@
+import { composeStories } from "@storybook/nextjs-vite";
 import React from "react";
 import { describe, expect, it, vi } from "vitest";
 import { render } from "vitest-browser-react";
 
 import { Dashboard } from "./dashboard";
+import * as stories from "./dashboard.stories";
+
+const Stories = composeStories(stories);
 
 vi.mock("next/link", () => {
   const Link = React.forwardRef<
@@ -20,6 +24,14 @@ vi.mock("next/link", () => {
 });
 
 describe("Dashboard", () => {
+  it.each(Object.entries(Stories))("should %s snapshot", async (_, Story) => {
+    await Story.run();
+
+    await expect(document.body).toMatchScreenshot();
+
+    document.body.innerHTML = "";
+  });
+
   it("shows product cards with counts", async () => {
     await render(
       <Dashboard

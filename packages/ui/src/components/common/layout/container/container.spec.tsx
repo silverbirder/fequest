@@ -1,9 +1,21 @@
+import { composeStories } from "@storybook/nextjs-vite";
 import { describe, expect, it } from "vitest";
 import { render } from "vitest-browser-react";
 
 import { Container } from "./container";
+import * as stories from "./container.stories";
+
+const Stories = composeStories(stories);
 
 describe("Container", () => {
+  it.each(Object.entries(Stories))("should %s snapshot", async (_, Story) => {
+    await Story.run();
+
+    await expect(document.body).toMatchScreenshot();
+
+    document.body.innerHTML = "";
+  });
+
   it("applies default max width and padding", async () => {
     await render(<Container>content</Container>);
 

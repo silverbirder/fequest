@@ -1,9 +1,21 @@
+import { composeStories } from "@storybook/nextjs-vite";
 import { describe, expect, it, vi } from "vitest";
 import { render } from "vitest-browser-react";
 
 import { FeatureRequestContentEditor } from "./feature-request-content-editor";
+import * as stories from "./feature-request-content-editor.stories";
+
+const Stories = composeStories(stories);
 
 describe("FeatureRequestContentEditor", () => {
+  it.each(Object.entries(Stories))("should %s snapshot", async (_, Story) => {
+    await Story.run();
+
+    await expect(document.body).toMatchScreenshot();
+
+    document.body.innerHTML = "";
+  });
+
   it("renders nothing when no update handler is provided", async () => {
     await render(<FeatureRequestContentEditor content="hi" featureId={1} />);
 

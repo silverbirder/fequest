@@ -1,7 +1,11 @@
+import { composeStories } from "@storybook/nextjs-vite";
 import { describe, expect, it } from "vitest";
 import { render } from "vitest-browser-react";
 
 import { FeatureRequestItem } from "./feature-request-item";
+import * as stories from "./feature-request-item.stories";
+
+const Stories = composeStories(stories);
 
 const waitForDialog = () =>
   new Promise<void>((resolve) => {
@@ -47,6 +51,14 @@ const renderItem = (
   );
 
 describe("FeatureRequestItem", () => {
+  it.each(Object.entries(Stories))("should %s snapshot", async (_, Story) => {
+    await Story.run();
+
+    await expect(document.body).toMatchScreenshot();
+
+    document.body.innerHTML = "";
+  });
+
   it("shows the delete action when deletion is allowed", async () => {
     await renderItem({
       canDelete: true,

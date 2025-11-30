@@ -1,10 +1,22 @@
+import { composeStories } from "@storybook/nextjs-vite";
 import React from "react";
 import { describe, expect, it } from "vitest";
 import { render } from "vitest-browser-react";
 
 import { Product } from "./product";
+import * as stories from "./product.stories";
+
+const Stories = composeStories(stories);
 
 describe("Product", () => {
+  it.each(Object.entries(Stories))("should %s snapshot", async (_, Story) => {
+    await Story.run();
+
+    await expect(document.body).toMatchScreenshot();
+
+    document.body.innerHTML = "";
+  });
+
   it("shows rename form with the current product name", async () => {
     await render(
       <Product
