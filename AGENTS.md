@@ -7,7 +7,6 @@ Mandatory rules for any AI coding assistant working in this repository. Do not p
 - **Use `repo/ui` for all UI**: Layout, typography, and components must come from `repo/ui`. Do not add Tailwind `className` outside `repo/ui`.
 - **Component typing style**: Declare `type Props = { ... }` and write `export const Xxx = (props: Props) => { ... }`. Do not use `React.FC`.
 - **Tests and stories are required**: Every change needs a spec. Components must also have Storybook stories.
-- **Must pass formatting/lint**: Run `pnpm ci:fix` after changes and ensure it succeeds before a PR/commit.
 - **Vitest browser tests may need elevation**: When running `pnpm test:fix` (or any task that spins up Vitest browser mode), be prepared to rerun with elevated permissions if port binding is blocked; prefer `pnpm test:fix` and request elevation when necessary.
 - **UI lives in packages**: Implement UI in `packages/*` (e.g., `repo/ui`). The `apps/*` layer should only handle server actions and data fetching, then render package-provided UI.
 - **Acknowledge this file**: When an AI agent loads this repository, it must explicitly state that it has read `AGENTS.md` before proceeding with work.
@@ -18,7 +17,6 @@ Mandatory rules for any AI coding assistant working in this repository. Do not p
 - Editing existing code: Replace stray Tailwind usage with `repo/ui` components where possible.
 - File starter: Begin with `type Props` + `export const` form; add `memo` or `forwardRef` afterward if needed.
 - Tests: Place unit tests in `*.spec.ts(x)`. Add `*.stories.tsx` for components.
-- Final gate: Run `pnpm ci:fix` to pass format, lint, and type checks.
 
 ## Prohibited
 
