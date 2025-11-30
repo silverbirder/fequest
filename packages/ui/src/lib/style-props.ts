@@ -238,7 +238,7 @@ const caret = cva("", {
 const prose = cva("", {
   variants: {
     prose: {
-      sm: "prose prose-slate prose-sm dark:prose-invert",
+      sm: "prose",
     },
   },
 });

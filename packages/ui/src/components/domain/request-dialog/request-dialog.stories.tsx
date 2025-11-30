@@ -9,7 +9,7 @@ const meta = {
     },
     detail: {
       content: (
-        <div className="prose prose-slate prose-sm dark:prose-invert">
+        <div className="prose">
           <h2>コメント機能の追加</h2>
           <ul>
             <li>ユーザーが通知をまとめて確認できるようにして欲しいです。</li>

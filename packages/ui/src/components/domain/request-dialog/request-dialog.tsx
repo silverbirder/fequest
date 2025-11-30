@@ -112,7 +112,7 @@ export const RequestDialog = ({
               更新日: {updatedAtText}
             </Text>
           </VStack>
-          <Box bg="muted" p="md" radius="md" w="full">
+          <Box p="md" radius="md" w="full">
             {detail.content}
           </Box>
           <DialogFooter>
