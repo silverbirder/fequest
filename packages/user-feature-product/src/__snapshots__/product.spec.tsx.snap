@@ -3,58 +3,68 @@
 exports[`Product > renders provided props 1`] = `
 <DocumentFragment>
   <div
-    class="flex items-start flex-col gap-8 justify-start self-stretch flex-nowrap"
-    data-orientation="column"
-    data-slot="stack"
+    class="mx-auto w-full px-4 sm:px-6 lg:px-8 max-w-7xl"
+    data-slot="container"
   >
-    <h2
-      class="text-foreground tracking-tight text-left text-lg leading-snug font-bold"
-      data-level="2"
-      data-slot="heading"
-    >
-      Sample Product
-    </h2>
     <div
-      class="flex items-start flex-col gap-6 justify-start self-stretch flex-nowrap"
-      data-orientation="column"
-      data-slot="stack"
-    >
-      <span
-        class="text-foreground text-left block text-base font-normal"
-        data-slot="text"
-      >
-        フィーチャーはまだありません。
-      </span>
-    </div>
-    <form
-      action="javascript:throw new Error('A React form was unexpectedly submitted. If you called form.submit() manually, consider using form.requestSubmit() instead. If you\\'re trying to use event.stopPropagation() in a submit event handler, consider also calling event.preventDefault().')"
-      class="w-full"
-      data-slot="box"
+      class="flex items-center justify-center flex-row gap-2"
+      data-slot="center"
     >
       <div
-        class="flex items-stretch flex-col gap-1 justify-start self-stretch flex-nowrap"
+        class="flex items-start flex-col gap-8 justify-start self-stretch flex-nowrap"
         data-orientation="column"
         data-slot="stack"
       >
-        <input
-          aria-label="新しいフィーチャーリクエスト"
-          autocomplete="off"
-          class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"
-          data-slot="input"
-          maxlength="255"
-          name="title"
-          placeholder="新しいリクエストを入力..."
-          required=""
-          type="text"
-        />
-        <span
-          class="text-left text-muted-foreground block text-sm font-normal"
-          data-slot="text"
+        <h2
+          class="text-foreground tracking-tight text-left text-lg leading-snug font-bold"
+          data-level="2"
+          data-slot="heading"
         >
-          Enterで送信
-        </span>
+          Sample Product
+        </h2>
+        <div
+          class="flex items-start flex-col gap-6 justify-start self-stretch flex-nowrap"
+          data-orientation="column"
+          data-slot="stack"
+        >
+          <span
+            class="text-foreground text-left block text-base font-normal"
+            data-slot="text"
+          >
+            フィーチャーはまだありません。
+          </span>
+        </div>
+        <form
+          action="javascript:throw new Error('A React form was unexpectedly submitted. If you called form.submit() manually, consider using form.requestSubmit() instead. If you\\'re trying to use event.stopPropagation() in a submit event handler, consider also calling event.preventDefault().')"
+          class="w-full"
+          data-slot="box"
+        >
+          <div
+            class="flex items-stretch flex-col gap-1 justify-start self-stretch flex-nowrap"
+            data-orientation="column"
+            data-slot="stack"
+          >
+            <input
+              aria-label="新しいフィーチャーリクエスト"
+              autocomplete="off"
+              class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"
+              data-slot="input"
+              maxlength="255"
+              name="title"
+              placeholder="新しいリクエストを入力..."
+              required=""
+              type="text"
+            />
+            <span
+              class="text-left text-muted-foreground block text-sm font-normal"
+              data-slot="text"
+            >
+              Enterで送信
+            </span>
+          </div>
+        </form>
       </div>
-    </form>
+    </div>
   </div>
 </DocumentFragment>
 `;
