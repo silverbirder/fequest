@@ -7,7 +7,6 @@ import {
   AvatarImage,
   Box,
   Button,
-  Container,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -53,53 +52,47 @@ export const Header = ({
 
   return (
     <header>
-      <Container padding="md">
-        <HStack align="center" justify="between">
-          <Link href={homeHref}>
-            <Text size="lg" weight="semibold">
-              {appName}
-            </Text>
-          </Link>
-          {isAuthenticated ? (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  aria-label="ユーザーメニュー"
-                  size="icon"
-                  variant="ghost"
-                >
-                  <Avatar>
-                    <AvatarImage
-                      alt={user?.name ?? "ログイン済みユーザー"}
-                      src={user?.image ?? undefined}
-                    />
-                    <AvatarFallback delayMs={0}>
-                      {createFallbackText(user?.name)}
-                    </AvatarFallback>
-                  </Avatar>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" sideOffset={8}>
-                <DropdownMenuItem asChild>
-                  <form action={logoutAction}>
-                    <Box w="full">
-                      <Button size="sm" type="submit" variant="ghost">
-                        ログアウト
-                      </Button>
-                    </Box>
-                  </form>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          ) : (
-            <form action={loginAction}>
-              <Button size="sm" type="submit" variant="outline">
-                ログイン
+      <HStack align="center" justify="between" p="md">
+        <Link href={homeHref}>
+          <Text size="lg" weight="semibold">
+            {appName}
+          </Text>
+        </Link>
+        {isAuthenticated ? (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button aria-label="ユーザーメニュー" size="icon" variant="ghost">
+                <Avatar>
+                  <AvatarImage
+                    alt={user?.name ?? "ログイン済みユーザー"}
+                    src={user?.image ?? undefined}
+                  />
+                  <AvatarFallback delayMs={0}>
+                    {createFallbackText(user?.name)}
+                  </AvatarFallback>
+                </Avatar>
               </Button>
-            </form>
-          )}
-        </HStack>
-      </Container>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" sideOffset={8}>
+              <DropdownMenuItem asChild>
+                <form action={logoutAction}>
+                  <Box w="full">
+                    <Button size="sm" type="submit" variant="ghost">
+                      ログアウト
+                    </Button>
+                  </Box>
+                </form>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        ) : (
+          <form action={loginAction}>
+            <Button size="sm" type="submit" variant="outline">
+              ログイン
+            </Button>
+          </form>
+        )}
+      </HStack>
     </header>
   );
 };
