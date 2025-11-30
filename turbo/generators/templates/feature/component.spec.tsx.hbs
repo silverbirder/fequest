@@ -1,9 +1,21 @@
+import { composeStories } from "@storybook/nextjs-vite";
 import { render } from "vitest-browser-react";
 import { describe, expect, it } from "vitest";
 
+import * as stories from "./{{kebabCase name}}.stories";
 import { {{pascalCase name}} } from "./{{kebabCase name}}";
 
+const Stories = composeStories(stories);
+
 describe("{{pascalCase name}}", () => {
+  it.each(Object.entries(Stories))("should %s snapshot", async (_, Story) => {
+    await Story.run();
+
+    await expect(document.body).toMatchScreenshot();
+
+    document.body.innerHTML = "";
+  });
+
   it("renders provided children", async () => {
     await render(
       <{{pascalCase name}}>Child content</{{pascalCase name}}>,
