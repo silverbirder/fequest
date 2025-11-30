@@ -42,7 +42,7 @@
   );
 
   /* ---- Muted ---- */
-  --muted: oklch(var(--light-muted) var(--chroma-secondary) var(--hue-base));
+  --muted: oklch(var(--light-muted) var(--chroma-muted) var(--hue-base));
   --muted-foreground: oklch(
     var(--light-muted-fg) var(--chroma-muted-fg) var(--hue-base)
   );

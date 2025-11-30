@@ -80,6 +80,7 @@
   --chroma-secondary-fg: var(--chroma-20);
 
   /* ---- Muted ---- */
+  --chroma-muted: var(--chroma-40);  /* muted の彩度（控えめ） */
   --chroma-muted-fg: var(--chroma-50); /* muted の文字の彩度（やや中間） */
 
   /* ---- Accent ---- */
