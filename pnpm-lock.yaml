@@ -510,30 +510,12 @@ importers:
         specifier: ^16.0.0
         version: 16.0.1(@babel/core@7.28.5)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
     devDependencies:
-      '@repo/admin-feature-dashboard':
-        specifier: workspace:*
-        version: link:../admin-feature-dashboard
-      '@repo/admin-feature-product':
-        specifier: workspace:*
-        version: link:../admin-feature-product
-      '@repo/admin-feature-sign-in':
-        specifier: workspace:*
-        version: link:../admin-feature-sign-in
       '@repo/eslint-config':
         specifier: workspace:*
         version: link:../eslint-config
       '@repo/typescript-config':
         specifier: workspace:*
         version: link:../typescript-config
-      '@repo/user-feature-header':
-        specifier: workspace:*
-        version: link:../user-feature-header
-      '@repo/user-feature-product':
-        specifier: workspace:*
-        version: link:../user-feature-product
-      '@repo/user-feature-products':
-        specifier: workspace:*
-        version: link:../user-feature-products
       '@storybook/addon-a11y':
         specifier: ^10.1.0
         version: 10.1.0(storybook@10.1.0(@testing-library/dom@10.4.0)(prettier@3.6.2)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))
@@ -546,9 +528,6 @@ importers:
       '@storybook/nextjs-vite':
         specifier: ^10.1.0
         version: 10.1.0(@babel/core@7.28.5)(esbuild@0.25.11)(next@16.0.1(@babel/core@7.28.5)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(rollup@4.52.5)(storybook@10.1.0(@testing-library/dom@10.4.0)(prettier@3.6.2)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(typescript@5.9.2)(vite@7.1.12(@types/node@22.18.13)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.44.0)(tsx@4.20.6)(yaml@2.8.1))(webpack@5.102.1(esbuild@0.25.11))
-      '@storycap-testrun/browser':
-        specifier: ^2.0.0
-        version: 2.0.0(@vitest/browser@4.0.14(vite@7.1.12(@types/node@22.18.13)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.44.0)(tsx@4.20.6)(yaml@2.8.1))(vitest@4.0.14(@types/node@22.18.13)(@vitest/browser-playwright@4.0.14)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.44.0)(tsx@4.20.6)(yaml@2.8.1)))
       '@tailwindcss/postcss':
         specifier: ^4.1.11
         version: 4.1.16
@@ -2538,14 +2517,6 @@ packages:
     peerDependenciesMeta:
       typescript:
         optional: true
-
-  '@storycap-testrun/browser@2.0.0':
-    resolution: {integrity: sha512-lO5AbCCRHYWofzrcoZK1Jtcz06AP5ay42cSJRXtL/t4d9XxVQZKFNvB20ayUknZMlhSQtfVMt8/56r0xBOC8KQ==}
-    peerDependencies:
-      '@vitest/browser': '*'
-
-  '@storycap-testrun/internal@2.0.0':
-    resolution: {integrity: sha512-TOfjR/yiZtgcZGHj9bndquJ0s0LKM50Zz9rx3KCPO2BnlXYd5oGJZLKtLWbgTFPDHo/fCLJYhT40uk6+WED5Qg==}
 
   '@swc/helpers@0.5.15':
     resolution: {integrity: sha512-JQ5TuMi45Owi4/BIMAJBoSQoOJu12oOk/gADqlcUL9JEdHB8vyjUSsxqeNXnmXHjYKMi2WcYtezGEEhqUI/E2g==}
@@ -7937,13 +7908,6 @@ snapshots:
       typescript: 5.9.2
     transitivePeerDependencies:
       - supports-color
-
-  '@storycap-testrun/browser@2.0.0(@vitest/browser@4.0.14(vite@7.1.12(@types/node@22.18.13)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.44.0)(tsx@4.20.6)(yaml@2.8.1))(vitest@4.0.14(@types/node@22.18.13)(@vitest/browser-playwright@4.0.14)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.44.0)(tsx@4.20.6)(yaml@2.8.1)))':
-    dependencies:
-      '@storycap-testrun/internal': 2.0.0
-      '@vitest/browser': 4.0.14(vite@7.1.12(@types/node@22.18.13)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.44.0)(tsx@4.20.6)(yaml@2.8.1))(vitest@4.0.14(@types/node@22.18.13)(@vitest/browser-playwright@4.0.14)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.44.0)(tsx@4.20.6)(yaml@2.8.1))
-
-  '@storycap-testrun/internal@2.0.0': {}
 
   '@swc/helpers@0.5.15':
     dependencies:
