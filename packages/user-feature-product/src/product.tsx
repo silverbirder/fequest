@@ -1,8 +1,9 @@
 import {
   Box,
   BubbleInput,
+  Center,
+  Container,
   Heading,
-  HStack,
   Text,
   VStack,
 } from "@repo/ui/components";
@@ -79,68 +80,74 @@ export const Product = (props: Props) => {
   const featureRequests: FeatureRequest[] = props.product.featureRequests ?? [];
 
   return (
-    <VStack gap="xl">
-      <Heading size="lg">{props.product.name}</Heading>
-      <VStack gap="lg">
-        {featureRequests.length === 0 ? (
-          <Text>フィーチャーはまだありません。</Text>
-        ) : (
-          <HStack align="start" gap="lg">
-            {featureRequests.map((feature) => {
-              const isOwner =
-                Boolean(props.currentUserId) &&
-                Boolean(feature.user?.id) &&
-                feature.user?.id === props.currentUserId;
-              const canDelete = Boolean(
-                props.onDeleteFeatureRequest && isOwner,
-              );
-              const text = feature.title?.trim() ?? "";
-              return (
-                <FeatureRequestItem
-                  avatar={createAvatarProps(feature)}
-                  canDelete={canDelete}
-                  detail={{
-                    content: (
-                      <FeatureRequestContent
-                        content={feature.content}
-                        featureId={feature.id}
-                        isOwner={isOwner}
-                        onUpdateFeatureRequest={props.onUpdateFeatureRequest}
-                      />
-                    ),
-                    createdAt: toIsoString(feature.createdAt),
-                    title: text,
-                    updatedAt: toIsoString(feature.updatedAt),
-                  }}
-                  featureId={feature.id}
-                  key={feature.id}
-                  onDeleteFeatureRequest={
-                    canDelete ? props.onDeleteFeatureRequest : undefined
-                  }
-                  onReactToFeature={props.onReactToFeature}
-                  reactions={feature.reactionSummaries ?? []}
-                  text={text}
+    <Container>
+      <Center>
+        <VStack gap="xl">
+          <Heading size="lg">{props.product.name}</Heading>
+          <VStack gap="lg">
+            {featureRequests.length === 0 ? (
+              <Text>フィーチャーはまだありません。</Text>
+            ) : (
+              <VStack align="start" gap="lg">
+                {featureRequests.map((feature) => {
+                  const isOwner =
+                    Boolean(props.currentUserId) &&
+                    Boolean(feature.user?.id) &&
+                    feature.user?.id === props.currentUserId;
+                  const canDelete = Boolean(
+                    props.onDeleteFeatureRequest && isOwner,
+                  );
+                  const text = feature.title?.trim() ?? "";
+                  return (
+                    <FeatureRequestItem
+                      avatar={createAvatarProps(feature)}
+                      canDelete={canDelete}
+                      detail={{
+                        content: (
+                          <FeatureRequestContent
+                            content={feature.content}
+                            featureId={feature.id}
+                            isOwner={isOwner}
+                            onUpdateFeatureRequest={
+                              props.onUpdateFeatureRequest
+                            }
+                          />
+                        ),
+                        createdAt: toIsoString(feature.createdAt),
+                        title: text,
+                        updatedAt: toIsoString(feature.updatedAt),
+                      }}
+                      featureId={feature.id}
+                      key={feature.id}
+                      onDeleteFeatureRequest={
+                        canDelete ? props.onDeleteFeatureRequest : undefined
+                      }
+                      onReactToFeature={props.onReactToFeature}
+                      reactions={feature.reactionSummaries ?? []}
+                      text={text}
+                    />
+                  );
+                })}
+              </VStack>
+            )}
+          </VStack>
+          {props.canCreateFeatureRequest ? (
+            <Box asChild w="full">
+              <Form action={props.onCreateFeatureRequest}>
+                <BubbleInput
+                  aria-label="新しいフィーチャーリクエスト"
+                  autoComplete="off"
+                  maxLength={255}
+                  name="title"
+                  required
                 />
-              );
-            })}
-          </HStack>
-        )}
-      </VStack>
-      {props.canCreateFeatureRequest ? (
-        <Box asChild w="full">
-          <Form action={props.onCreateFeatureRequest}>
-            <BubbleInput
-              aria-label="新しいフィーチャーリクエスト"
-              autoComplete="off"
-              maxLength={255}
-              name="title"
-              required
-            />
-          </Form>
-        </Box>
-      ) : (
-        <Text>ログインするとフィーチャーを登録できます。</Text>
-      )}
-    </VStack>
+              </Form>
+            </Box>
+          ) : (
+            <Text>ログインするとフィーチャーを登録できます。</Text>
+          )}
+        </VStack>
+      </Center>
+    </Container>
   );
 };
