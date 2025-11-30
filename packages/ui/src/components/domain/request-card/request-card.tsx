@@ -1,6 +1,6 @@
 import type { ComponentProps, ReactNode } from "react";
 
-import { Expand } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 
 import { Box, HStack, VStack } from "../../common/layout";
 import {
@@ -89,69 +89,70 @@ export const RequestCard = ({
           <AvatarImage alt={avatar.alt} src={avatar.src}></AvatarImage>
           <AvatarFallback>{avatar.fallbackText}</AvatarFallback>
         </Avatar>
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button
-              aria-controls={dialogContentId}
-              aria-label={dialogTriggerLabel}
-              size="icon"
-              type="button"
-              variant="outline"
-            >
-              <Expand />
-            </Button>
-          </DialogTrigger>
-          <DialogContent id={dialogContentId}>
-            <VStack gap="lg">
-              <DialogHeader>
-                <HStack align="center" gap="md">
-                  <Avatar>
-                    <AvatarImage alt={avatar.alt} src={avatar.src} />
-                    <AvatarFallback>
-                      <Text asChild size="xl">
-                        <span>{avatar.fallbackText}</span>
-                      </Text>
-                    </AvatarFallback>
-                  </Avatar>
-                  <DialogTitle>
-                    <Text align="left" size="xl">
-                      {dialogTitle}
-                    </Text>
-                  </DialogTitle>
-                </HStack>
-              </DialogHeader>
-              <VStack gap="xs">
-                <Text color="subtle" size="sm">
-                  作成日: {createdAtText}
-                </Text>
-                <Text color="subtle" size="sm">
-                  更新日: {updatedAtText}
-                </Text>
-              </VStack>
-              <Box bg="muted" p="md" radius="md" w="full">
-                {mdxContent}
-              </Box>
-              <DialogFooter>
-                <HStack align="center" gap="sm" justify="between" w="full">
-                  {footerActions ? (
-                    <HStack gap="sm">{footerActions}</HStack>
-                  ) : (
-                    <Box w="full" />
-                  )}
-                  <DialogClose asChild>
-                    <Button type="button" variant="outline">
-                      閉じる
-                    </Button>
-                  </DialogClose>
-                </HStack>
-              </DialogFooter>
-            </VStack>
-          </DialogContent>
-        </Dialog>
       </VStack>
       <VStack gap="sm">
-        <BubbleText text={text} />
-        <HStack gap="xs">
+        <BubbleText text={text}>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button
+                aria-controls={dialogContentId}
+                aria-label={dialogTriggerLabel}
+                size="icon"
+                type="button"
+                variant="link"
+              >
+                <ChevronRight />
+              </Button>
+            </DialogTrigger>
+            <DialogContent id={dialogContentId}>
+              <VStack gap="lg">
+                <DialogHeader>
+                  <HStack align="center" gap="md">
+                    <Avatar>
+                      <AvatarImage alt={avatar.alt} src={avatar.src} />
+                      <AvatarFallback>
+                        <Text asChild size="xl">
+                          <span>{avatar.fallbackText}</span>
+                        </Text>
+                      </AvatarFallback>
+                    </Avatar>
+                    <DialogTitle>
+                      <Text align="left" size="xl">
+                        {dialogTitle}
+                      </Text>
+                    </DialogTitle>
+                  </HStack>
+                </DialogHeader>
+                <VStack gap="xs">
+                  <Text color="subtle" size="sm">
+                    作成日: {createdAtText}
+                  </Text>
+                  <Text color="subtle" size="sm">
+                    更新日: {updatedAtText}
+                  </Text>
+                </VStack>
+                <Box bg="muted" p="md" radius="md" w="full">
+                  {mdxContent}
+                </Box>
+                <DialogFooter>
+                  <HStack align="center" gap="sm" justify="between" w="full">
+                    {footerActions ? (
+                      <HStack gap="sm">{footerActions}</HStack>
+                    ) : (
+                      <Box w="full" />
+                    )}
+                    <DialogClose asChild>
+                      <Button type="button" variant="outline">
+                        閉じる
+                      </Button>
+                    </DialogClose>
+                  </HStack>
+                </DialogFooter>
+              </VStack>
+            </DialogContent>
+          </Dialog>
+        </BubbleText>
+        <HStack gap="xs" wrap="wrap">
           {reactions?.map((reaction, index) => (
             <EmojiReaction
               active={reaction.reactedByViewer}
