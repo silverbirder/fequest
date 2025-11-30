@@ -4,3 +4,4 @@ export * from "./emoji-picker";
 export * from "./emoji-reaction";
 export * from "./mdx-content";
 export * from "./request-card";
+export * from "./request-dialog";

@@ -1,25 +1,11 @@
 import type { ComponentProps, ReactNode } from "react";
 
-import { ChevronRight } from "lucide-react";
-
-import { Box, HStack, VStack } from "../../common/layout";
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-  Button,
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "../../common/shadcn";
-import { Text } from "../../common/typography";
+import { HStack, VStack } from "../../common/layout";
+import { Avatar, AvatarFallback, AvatarImage } from "../../common/shadcn";
 import { BubbleText } from "../bubble-text";
 import { EmojiPicker } from "../emoji-picker";
 import { EmojiReaction } from "../emoji-reaction";
+import { RequestDialog } from "../request-dialog";
 
 type Props = ComponentProps<typeof BubbleText> & {
   avatar: {
@@ -44,24 +30,6 @@ type Props = ComponentProps<typeof BubbleText> & {
   }[];
 };
 
-const dateTimeFormatter = new Intl.DateTimeFormat("ja-JP", {
-  dateStyle: "medium",
-  timeStyle: "short",
-});
-
-const formatDateTime = (value?: Date | null | string) => {
-  if (!value) {
-    return "-";
-  }
-
-  const date = value instanceof Date ? value : new Date(value);
-  if (Number.isNaN(date.getTime())) {
-    return "-";
-  }
-
-  return dateTimeFormatter.format(date);
-};
-
 export const RequestCard = ({
   avatar,
   detail,
@@ -73,13 +41,9 @@ export const RequestCard = ({
   text,
 }: Props) => {
   const dialogTitle = detail.title?.trim() || text;
-  const createdAtText = formatDateTime(detail.createdAt);
-  const updatedAtText = formatDateTime(detail.updatedAt);
   const dialogTriggerLabel = dialogTitle
     ? `${dialogTitle}の詳細を表示`
     : "詳細を表示";
-  const mdxContent = detail.content;
-  const dialogContentId = `${idBase}-dialog-content`;
   const emojiMenuId = `${idBase}-emoji-menu`;
 
   return (
@@ -92,65 +56,14 @@ export const RequestCard = ({
       </VStack>
       <VStack gap="sm">
         <BubbleText text={text}>
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button
-                aria-controls={dialogContentId}
-                aria-label={dialogTriggerLabel}
-                size="icon"
-                type="button"
-                variant="link"
-              >
-                <ChevronRight />
-              </Button>
-            </DialogTrigger>
-            <DialogContent id={dialogContentId}>
-              <VStack gap="lg">
-                <DialogHeader>
-                  <HStack align="center" gap="md">
-                    <Avatar>
-                      <AvatarImage alt={avatar.alt} src={avatar.src} />
-                      <AvatarFallback>
-                        <Text asChild size="xl">
-                          <span>{avatar.fallbackText}</span>
-                        </Text>
-                      </AvatarFallback>
-                    </Avatar>
-                    <DialogTitle>
-                      <Text align="left" size="xl">
-                        {dialogTitle}
-                      </Text>
-                    </DialogTitle>
-                  </HStack>
-                </DialogHeader>
-                <VStack gap="xs">
-                  <Text color="subtle" size="sm">
-                    作成日: {createdAtText}
-                  </Text>
-                  <Text color="subtle" size="sm">
-                    更新日: {updatedAtText}
-                  </Text>
-                </VStack>
-                <Box bg="muted" p="md" radius="md" w="full">
-                  {mdxContent}
-                </Box>
-                <DialogFooter>
-                  <HStack align="center" gap="sm" justify="between" w="full">
-                    {footerActions ? (
-                      <HStack gap="sm">{footerActions}</HStack>
-                    ) : (
-                      <Box w="full" />
-                    )}
-                    <DialogClose asChild>
-                      <Button type="button" variant="outline">
-                        閉じる
-                      </Button>
-                    </DialogClose>
-                  </HStack>
-                </DialogFooter>
-              </VStack>
-            </DialogContent>
-          </Dialog>
+          <RequestDialog
+            avatar={avatar}
+            detail={detail}
+            dialogTitle={dialogTitle}
+            dialogTriggerLabel={dialogTriggerLabel}
+            footerActions={footerActions}
+            idBase={idBase}
+          />
         </BubbleText>
         <HStack gap="xs" wrap="wrap">
           {reactions?.map((reaction, index) => (
