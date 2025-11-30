@@ -7,9 +7,15 @@ import { Noto_Sans_JP } from "next/font/google";
 import { auth, signIn, signOut } from "~/server/auth";
 import { TRPCReactProvider } from "~/trpc/react";
 
+const baseUrl = process.env.BASE_URL ?? "https://fequest.vercel.app";
+
 export const metadata: Metadata = {
-  description: "機能リクエストができるサービスです。",
-  icons: [{ rel: "icon", url: "/favicon.ico" }],
+  description: "機能リクエスト・共有プラットフォーム",
+  icons: [{ rel: "icon", url: "/icon/48" }],
+  metadataBase: new URL(baseUrl),
+  robots: {
+    index: true,
+  },
   title: "Fequest",
 };
 

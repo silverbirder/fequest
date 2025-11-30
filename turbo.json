@@ -9,7 +9,8 @@
     "DATABASE_URL",
     "SKIP_ENV_VALIDATION",
     "VERCEL_URL",
-    "PORT"
+    "PORT",
+    "BASE_URL"
   ],
   "tasks": {
     "build": {
