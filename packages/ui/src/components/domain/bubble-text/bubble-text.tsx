@@ -27,7 +27,7 @@ export const BubbleText = ({ children, text }: Props) => {
         <Text color="subtle" size="md">
           {text}
         </Text>
-        <div className="shrink-0">{children}</div>
+        <Box shrink="0">{children}</Box>
       </HStack>
     </Box>
   );

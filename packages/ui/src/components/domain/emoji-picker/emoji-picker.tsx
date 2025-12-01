@@ -41,7 +41,7 @@ export const EmojiPicker = ({
           ＋
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-full p-0" id={menuId}>
+      <PopoverContent id={menuId}>
         <Picker data={data} onEmojiSelect={handleSelect} />
       </PopoverContent>
     </Popover>

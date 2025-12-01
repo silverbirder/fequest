@@ -185,6 +185,26 @@ const spacing = cva("", {
 
 const layout = cva("", {
   variants: {
+    basis: {
+      "0": "basis-0",
+      "1/2": "basis-1/2",
+      "1/3": "basis-1/3",
+      "1/4": "basis-1/4",
+      "2/3": "basis-2/3",
+      "3/4": "basis-3/4",
+      auto: "basis-auto",
+      full: "basis-full",
+    },
+    flex: {
+      "1": "flex-1",
+      auto: "flex-auto",
+      initial: "flex-initial",
+      none: "flex-none",
+    },
+    grow: {
+      "0": "grow-0",
+      "1": "grow",
+    },
     h: {
       "3": "h-3",
       auto: "h-auto",
@@ -206,6 +226,10 @@ const layout = cva("", {
     rotate: {
       "45": "rotate-45",
     },
+    shrink: {
+      "0": "shrink-0",
+      "1": "shrink",
+    },
     top: {
       "1/2": "top-1/2",
       "4": "top-4",
@@ -220,6 +244,17 @@ const layout = cva("", {
       full: "w-full",
       max: "w-max",
       min: "w-min",
+    },
+  },
+});
+
+const border = cva("", {
+  variants: {
+    border: {
+      dashed: "border border-dashed",
+      default: "border",
+      dotted: "border border-dotted",
+      none: "border-none",
     },
   },
 });
@@ -244,6 +279,7 @@ const prose = cva("", {
 });
 
 type BackgroundProps = VariantProps<typeof background>;
+type BorderProps = VariantProps<typeof border>;
 type CaretProps = VariantProps<typeof caret>;
 type ForegroundProps = VariantProps<typeof foreground>;
 type LayoutProps = VariantProps<typeof layout>;
@@ -253,6 +289,7 @@ type RadiusProps = VariantProps<typeof radius>;
 type SpacingProps = VariantProps<typeof spacing>;
 
 type StyleProps = BackgroundProps &
+  BorderProps &
   CaretProps &
   ForegroundProps &
   LayoutProps &
@@ -267,6 +304,7 @@ const stylePropsClassNames = (props?: Partial<StyleProps>) =>
     radius(props ?? {}),
     spacing(props ?? {}),
     layout(props ?? {}),
+    border(props ?? {}),
     caret(props ?? {}),
     prose(props ?? {}),
   );
@@ -288,6 +326,7 @@ const stylePropKeys = [
   "mr",
   "mb",
   "ml",
+  "border",
   "radius",
   "position",
   "w",
@@ -296,6 +335,10 @@ const stylePropKeys = [
   "left",
   "translateY",
   "rotate",
+  "flex",
+  "grow",
+  "shrink",
+  "basis",
   "caret",
   "prose",
 ] as const;
@@ -326,6 +369,7 @@ const splitStyleProps = <Props extends Record<string, unknown>>(
 
 export {
   background,
+  border,
   caret,
   foreground,
   layout,
@@ -337,6 +381,7 @@ export {
 
 export type {
   BackgroundProps,
+  BorderProps,
   CaretProps,
   ForegroundProps,
   LayoutProps,

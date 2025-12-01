@@ -2,6 +2,7 @@ import js from "@eslint/js";
 import eslintConfigPrettier from "eslint-config-prettier";
 import onlyWarn from "eslint-plugin-only-warn";
 import perfectionist from "eslint-plugin-perfectionist";
+import pluginReact from "eslint-plugin-react";
 import turboPlugin from "eslint-plugin-turbo";
 import tseslint from "typescript-eslint";
 
@@ -32,21 +33,23 @@ export const config = [
     ignores: ["dist/**"],
   },
   {
-    files: ["packages/**/*.tsx", "apps/**/*.tsx"],
-    excludedFiles: [
-      "packages/ui/src/components/common/**",
+    files: ["**/*.tsx"],
+    plugins: { react: pluginReact },
+    rules: {
+      "react/forbid-dom-props": ["error", { forbid: ["className"] }],
+      "react/forbid-component-props": ["error", { forbid: ["className"] }],
+    },
+  },
+  {
+    files: [
       "**/*.spec.tsx",
       "**/*.stories.tsx",
+      "**/src/components/common/**",
+      "**/src/app/layout.tsx",
     ],
     rules: {
-      "no-restricted-syntax": [
-        "error",
-        {
-          selector: "JSXAttribute[name.name='className']",
-          message:
-            "Using `className` is prohibited. Use shared UI primitives (layout, shadcn, typography) or style-props instead.",
-        },
-      ],
+      "react/forbid-dom-props": "off",
+      "react/forbid-component-props": "off",
     },
   },
 ];
