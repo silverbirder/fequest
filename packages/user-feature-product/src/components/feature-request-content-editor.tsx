@@ -1,6 +1,7 @@
 "use client";
 
 import { Box, Button, HStack } from "@repo/ui/components";
+import { Pencil } from "lucide-react";
 import Form from "next/form";
 import { useState } from "react";
 
@@ -16,8 +17,8 @@ export const FeatureRequestContentEditor = (props: Props) => {
   if (!props.onUpdateFeatureRequest) return null;
 
   return !editing ? (
-    <Button onClick={() => setEditing(true)} size="sm">
-      編集
+    <Button onClick={() => setEditing(true)} size="icon" variant="ghost">
+      <Pencil />
     </Button>
   ) : (
     <Box asChild w="full">

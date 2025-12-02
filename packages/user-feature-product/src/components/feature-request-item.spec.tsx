@@ -67,7 +67,7 @@ describe("FeatureRequestItem", () => {
 
     await openDialog();
 
-    expect(document.body.textContent).toContain("リクエストを削除");
+    expect(document.body.textContent).toContain("削除");
   });
 
   it("renders custom emoji reactions from props", async () => {

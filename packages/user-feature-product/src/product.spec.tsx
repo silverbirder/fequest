@@ -104,7 +104,7 @@ describe("Product", () => {
 
     await openDialog();
 
-    expect(document.body.textContent).toContain("リクエストを削除");
+    expect(document.body.textContent).toContain("削除");
   });
 
   it.skip("omits delete action when the viewer is not the creator", async () => {

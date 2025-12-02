@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 
+import { FeatureRequestContent } from "./feature-request-content";
 import { FeatureRequestItem } from "./feature-request-item";
 
 const meta = {
@@ -37,3 +38,35 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
+
+export const OwnedByAuthor: Story = {
+  args: {
+    avatar: {
+      fallbackText: "ME",
+      src: "https://api.dicebear.com/7.x/initials/svg?seed=ME",
+    },
+    canDelete: true,
+    detail: {
+      content: (
+        <FeatureRequestContent
+          content={`## 自分のリクエスト\n\n- フィードバック用のスクリーンショットを追加\n- 通知設定をデフォルトで有効化\n- 週次でのステータス更新を希望`}
+          featureId={1}
+          isOwner
+          onUpdateFeatureRequest={async () => {}}
+        />
+      ),
+      createdAt: "2024-12-01T09:00:00.000Z",
+      title: "自分のリクエスト",
+      updatedAt: "2024-12-06T07:45:00.000Z",
+    },
+    featureId: 1,
+    onDeleteFeatureRequest: async () => {},
+    onReactToFeature: async () => {},
+    reactions: [
+      { count: 8, emoji: "👍", reactedByViewer: true },
+      { count: 3, emoji: "🎉", reactedByViewer: false },
+      { count: 1, emoji: "💡", reactedByViewer: false },
+    ],
+    text: "通知設定をデフォルトで有効にしたい",
+  },
+};

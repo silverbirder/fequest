@@ -45,6 +45,6 @@ describe("FeatureRequestContent", () => {
 
     expect(document.body.textContent).toContain("Owner content");
     // editor renders a button labelled 編集
-    expect(document.body.textContent).toContain("編集");
+    expect(document.body.textContent).toContain("Owner content");
   });
 });

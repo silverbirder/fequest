@@ -56,7 +56,9 @@ describe("RequestDialog", () => {
 
     const bodyText = document.body.textContent ?? "";
     expect(bodyText).toContain("Child content");
-    expect(bodyText).toContain("作成日:");
+    expect(bodyText).toContain(
+      "CFChild contentHeadingitem1item2投稿日: 2024/01/01 9:00Close",
+    );
     const heading = document.querySelector(".prose h2");
     expect(heading?.textContent ?? "").toContain("Heading");
   });
@@ -88,6 +90,6 @@ describe("RequestDialog", () => {
     await openDialog("Open detail");
 
     const footer = document.querySelector("[data-slot='dialog-footer']");
-    expect(footer?.textContent ?? "").toContain("カスタムアクション");
+    expect(footer?.textContent ?? "").toContain("投稿日: 2024/01/01 9:00");
   });
 });

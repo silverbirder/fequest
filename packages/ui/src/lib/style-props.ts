@@ -195,6 +195,9 @@ const layout = cva("", {
       auto: "basis-auto",
       full: "basis-full",
     },
+    bottom: {
+      "0": "bottom-0",
+    },
     flex: {
       "1": "flex-1",
       auto: "flex-auto",
@@ -216,12 +219,18 @@ const layout = cva("", {
     left: {
       "-1": "-left-1",
     },
+    minH: {
+      "30": "min-h-30",
+    },
     position: {
       absolute: "absolute",
       fixed: "fixed",
       relative: "relative",
       static: "static",
       sticky: "sticky",
+    },
+    right: {
+      "0": "right-0",
     },
     rotate: {
       "45": "rotate-45",
@@ -231,6 +240,7 @@ const layout = cva("", {
       "1": "shrink",
     },
     top: {
+      "0": "top-0",
       "1/2": "top-1/2",
       "4": "top-4",
     },
@@ -331,8 +341,11 @@ const stylePropKeys = [
   "position",
   "w",
   "h",
+  "minH",
   "top",
   "left",
+  "right",
+  "bottom",
   "translateY",
   "rotate",
   "flex",

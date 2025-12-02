@@ -71,7 +71,7 @@ type StackProps = Omit<React.HTMLAttributes<HTMLDivElement>, keyof StyleProps> &
 
 const Stack = React.forwardRef<HTMLDivElement, StackProps>(
   (
-    { align, className, direction, gap, inline, justify, wrap, ...props },
+    { align, className, direction, gap, inline, justify, self, wrap, ...props },
     ref,
   ) => {
     const orientation = direction ?? "column";
@@ -80,7 +80,7 @@ const Stack = React.forwardRef<HTMLDivElement, StackProps>(
     return (
       <div
         className={cn(
-          stackVariants({ align, direction, gap, inline, justify, wrap }),
+          stackVariants({ align, direction, gap, inline, justify, self, wrap }),
           stylePropsClassNames(styleProps),
           className,
         )}

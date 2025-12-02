@@ -62,7 +62,7 @@ export const FeatureRequestItem = ({
       ? {
           action: onDeleteFeatureRequest,
           fields: { featureId },
-          label: "リクエストを削除",
+          label: "削除",
           variant: "destructive" as const,
         }
       : undefined;

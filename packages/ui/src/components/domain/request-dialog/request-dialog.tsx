@@ -10,7 +10,6 @@ import {
   AvatarImage,
   Button,
   Dialog,
-  DialogClose,
   DialogContent,
   DialogFooter,
   DialogHeader,
@@ -74,7 +73,6 @@ export const RequestDialog = ({
   idBase = "request-card",
 }: Props) => {
   const createdAtText = formatDateTime(detail.createdAt);
-  const updatedAtText = formatDateTime(detail.updatedAt);
   const dialogContentId = `${idBase}-dialog-content`;
   const titleText = dialogTitle?.trim() || detail.title?.trim() || "詳細";
   const triggerLabel =
@@ -113,51 +111,37 @@ export const RequestDialog = ({
               </DialogTitle>
             </HStack>
           </DialogHeader>
-          <VStack gap="xs">
-            <Text color="subtle" size="sm">
-              作成日: {createdAtText}
-            </Text>
-            <Text color="subtle" size="sm">
-              更新日: {updatedAtText}
-            </Text>
+          <VStack w="full">
+            <Box bg="muted" p="xs" radius="sm" w="full">
+              {detail.content}
+            </Box>
+            {footerAction && (
+              <HStack self="end">
+                <Form action={footerAction.action}>
+                  {Object.entries(footerAction.fields ?? {}).map(
+                    ([name, value]) => (
+                      <input
+                        key={name}
+                        name={name}
+                        type="hidden"
+                        value={String(value)}
+                      />
+                    ),
+                  )}
+                  <Button
+                    type={footerAction.type ?? "submit"}
+                    variant={footerAction.variant ?? "destructive"}
+                  >
+                    {footerAction.label}
+                  </Button>
+                </Form>
+              </HStack>
+            )}
           </VStack>
-          <Box p="md" radius="md" w="full">
-            {detail.content}
-          </Box>
           <DialogFooter>
-            <HStack align="center" gap="sm" justify="between" w="full">
-              {footerAction ? (
-                <HStack gap="sm">
-                  <Box asChild>
-                    <Form action={footerAction.action}>
-                      {Object.entries(footerAction.fields ?? {}).map(
-                        ([name, value]) => (
-                          <input
-                            key={name}
-                            name={name}
-                            type="hidden"
-                            value={String(value)}
-                          />
-                        ),
-                      )}
-                      <Button
-                        type={footerAction.type ?? "submit"}
-                        variant={footerAction.variant ?? "destructive"}
-                      >
-                        {footerAction.label}
-                      </Button>
-                    </Form>
-                  </Box>
-                </HStack>
-              ) : (
-                <Box w="full" />
-              )}
-              <DialogClose asChild>
-                <Button type="button" variant="outline">
-                  閉じる
-                </Button>
-              </DialogClose>
-            </HStack>
+            <Text color="subtle" size="sm">
+              投稿日: {createdAtText}
+            </Text>
           </DialogFooter>
         </VStack>
       </DialogContent>

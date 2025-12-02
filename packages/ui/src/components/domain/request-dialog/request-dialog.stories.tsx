@@ -23,6 +23,13 @@ const meta = {
     },
     dialogTitle: "コメント機能の追加",
     dialogTriggerLabel: "コメント機能の追加の詳細を表示",
+    footerAction: {
+      action: async () => {},
+      fields: {
+        requestId: "req-001",
+      },
+      label: "削除",
+    },
   },
   component: RequestDialog,
   title: "Domain/RequestDialog",

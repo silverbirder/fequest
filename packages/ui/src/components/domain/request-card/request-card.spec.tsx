@@ -94,7 +94,7 @@ describe("RequestCard", () => {
     await openDialog();
 
     const footer = document.querySelector("[data-slot='dialog-footer']");
-    expect(footer?.textContent ?? "").toContain("カスタムアクション");
+    expect(footer?.textContent ?? "").toContain("投稿日: 2024/01/01 9:00");
   });
 
   it("shows emoji picker trigger when enabled", async () => {
