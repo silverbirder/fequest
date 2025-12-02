@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, Button, RequestCard, Text, VStack } from "@repo/ui/components";
+import { RequestCard, VStack } from "@repo/ui/components";
 import Form from "next/form";
 import { type ComponentProps, useMemo, useRef } from "react";
 
@@ -57,17 +57,15 @@ export const FeatureRequestItem = ({
   );
   const reactionOptions = reactions;
 
-  const footerActions =
-    canDelete && onDeleteFeatureRequest ? (
-      <Box asChild>
-        <Form action={onDeleteFeatureRequest}>
-          <input name="featureId" type="hidden" value={featureId} />
-          <Button type="submit" variant="ghost">
-            <Text color="destructive">リクエストを削除</Text>
-          </Button>
-        </Form>
-      </Box>
-    ) : null;
+  const footerAction =
+    canDelete && onDeleteFeatureRequest
+      ? {
+          action: onDeleteFeatureRequest,
+          fields: { featureId },
+          label: "リクエストを削除",
+          variant: "destructive" as const,
+        }
+      : undefined;
 
   return (
     <VStack gap="xs">
@@ -75,7 +73,7 @@ export const FeatureRequestItem = ({
         avatar={avatar}
         detail={detail}
         enableEmojiPicker
-        footerActions={footerActions}
+        footerAction={footerAction}
         idBase={idBase}
         onReact={handleReact}
         reactions={reactionOptions}

@@ -61,7 +61,7 @@ describe("RequestDialog", () => {
     expect(heading?.textContent ?? "").toContain("Heading");
   });
 
-  it("renders footer actions when provided", async () => {
+  it("renders footer action when provided", async () => {
     await render(
       <RequestDialog
         avatar={{ fallbackText: "CF" }}
@@ -77,7 +77,11 @@ describe("RequestDialog", () => {
         }}
         dialogTitle="Child content"
         dialogTriggerLabel="Open detail"
-        footerActions={<span>カスタムアクション</span>}
+        footerAction={{
+          action: async () => {},
+          fields: { featureId: 1 },
+          label: "カスタムアクション",
+        }}
       />,
     );
 

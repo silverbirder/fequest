@@ -1,6 +1,7 @@
-import type { ReactNode } from "react";
+import type { ComponentProps, ReactNode } from "react";
 
 import { ChevronRight } from "lucide-react";
+import Form from "next/form";
 
 import { Box, HStack, VStack } from "../../common/layout";
 import {
@@ -18,6 +19,14 @@ import {
 } from "../../common/shadcn";
 import { Text } from "../../common/typography";
 
+export type FooterAction = {
+  action: (formData: FormData) => Promise<void> | void;
+  fields?: Record<string, boolean | number | string>;
+  label: string;
+  type?: ComponentProps<typeof Button>["type"];
+  variant?: ComponentProps<typeof Button>["variant"];
+};
+
 type Detail = {
   content: ReactNode;
   createdAt?: Date | null | string;
@@ -34,7 +43,7 @@ type Props = {
   detail: Detail;
   dialogTitle?: string;
   dialogTriggerLabel?: string;
-  footerActions?: ReactNode;
+  footerAction?: FooterAction;
   idBase?: string;
 };
 
@@ -61,7 +70,7 @@ export const RequestDialog = ({
   detail,
   dialogTitle,
   dialogTriggerLabel,
-  footerActions,
+  footerAction,
   idBase = "request-card",
 }: Props) => {
   const createdAtText = formatDateTime(detail.createdAt);
@@ -117,8 +126,29 @@ export const RequestDialog = ({
           </Box>
           <DialogFooter>
             <HStack align="center" gap="sm" justify="between" w="full">
-              {footerActions ? (
-                <HStack gap="sm">{footerActions}</HStack>
+              {footerAction ? (
+                <HStack gap="sm">
+                  <Box asChild>
+                    <Form action={footerAction.action}>
+                      {Object.entries(footerAction.fields ?? {}).map(
+                        ([name, value]) => (
+                          <input
+                            key={name}
+                            name={name}
+                            type="hidden"
+                            value={String(value)}
+                          />
+                        ),
+                      )}
+                      <Button
+                        type={footerAction.type ?? "submit"}
+                        variant={footerAction.variant ?? "destructive"}
+                      >
+                        {footerAction.label}
+                      </Button>
+                    </Form>
+                  </Box>
+                </HStack>
               ) : (
                 <Box w="full" />
               )}

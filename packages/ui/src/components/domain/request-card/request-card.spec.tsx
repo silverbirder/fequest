@@ -64,7 +64,7 @@ describe("RequestCard", () => {
     expect(heading?.textContent ?? "").toContain("Heading");
   });
 
-  it("renders footer actions when provided", async () => {
+  it("renders footer action when provided", async () => {
     await render(
       <RequestCard
         avatar={{ fallbackText: "CF" }}
@@ -82,7 +82,11 @@ describe("RequestCard", () => {
           title: "Child content",
           updatedAt: "2024-01-02T00:00:00.000Z",
         }}
-        footerActions={<span>カスタムアクション</span>}
+        footerAction={{
+          action: async () => {},
+          label: "カスタムアクション",
+          variant: "destructive",
+        }}
         text="Child content"
       />,
     );

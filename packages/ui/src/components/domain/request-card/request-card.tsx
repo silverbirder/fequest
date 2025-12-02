@@ -1,5 +1,7 @@
 import type { ComponentProps, ReactNode } from "react";
 
+import type { FooterAction } from "../request-dialog";
+
 import { HStack, VStack } from "../../common/layout";
 import { Avatar, AvatarFallback, AvatarImage } from "../../common/shadcn";
 import { BubbleText } from "../bubble-text";
@@ -20,7 +22,7 @@ type Props = ComponentProps<typeof BubbleText> & {
     updatedAt?: Date | null | string;
   };
   enableEmojiPicker?: boolean;
-  footerActions?: ReactNode;
+  footerAction?: FooterAction;
   idBase?: string;
   onReact?: (emoji: string) => void;
   reactions?: {
@@ -34,7 +36,7 @@ export const RequestCard = ({
   avatar,
   detail,
   enableEmojiPicker = false,
-  footerActions,
+  footerAction,
   idBase = "request-card",
   onReact,
   reactions,
@@ -61,7 +63,7 @@ export const RequestCard = ({
             detail={detail}
             dialogTitle={dialogTitle}
             dialogTriggerLabel={dialogTriggerLabel}
-            footerActions={footerActions}
+            footerAction={footerAction}
             idBase={idBase}
           />
         </BubbleText>
