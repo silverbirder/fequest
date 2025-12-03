@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { render } from "vitest-browser-react";
 
 import { FeatureRequestContent } from "./feature-request-content";
@@ -51,5 +51,31 @@ describe("FeatureRequestContent", () => {
     const textarea = document.querySelector("textarea");
     expect(textarea).not.toBeNull();
     expect(textarea?.value).toBe("Editable content");
+  });
+
+  it("closes editor after successful save", async () => {
+    const updateFeatureRequest = vi.fn(async () => {});
+
+    await render(
+      <FeatureRequestContent
+        content="Editable content"
+        featureId={4}
+        isOwner
+        onUpdateFeatureRequest={updateFeatureRequest}
+      />,
+    );
+
+    document
+      .querySelector<HTMLButtonElement>('button[aria-label="編集する"]')
+      ?.click();
+
+    await waitForNextTick();
+
+    document.querySelector<HTMLButtonElement>('button[type="submit"]')?.click();
+
+    await waitForNextTick();
+
+    expect(updateFeatureRequest).toHaveBeenCalledOnce();
+    expect(document.querySelector("textarea")).toBeNull();
   });
 });

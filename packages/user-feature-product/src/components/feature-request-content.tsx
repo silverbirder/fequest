@@ -17,6 +17,19 @@ export const FeatureRequestContent = (props: Props) => {
   const onUpdateFeatureRequest = props.onUpdateFeatureRequest;
   const showEditor = props.isOwner && Boolean(onUpdateFeatureRequest);
 
+  const handleUpdateFeatureRequest = async (formData: FormData) => {
+    if (!onUpdateFeatureRequest) {
+      return;
+    }
+
+    try {
+      await onUpdateFeatureRequest(formData);
+      setEditing(false);
+    } catch (error) {
+      console.error("Failed to update feature request", error);
+    }
+  };
+
   return (
     <Box minH="30" position="relative" w="full">
       {showEditor ? (
@@ -35,7 +48,7 @@ export const FeatureRequestContent = (props: Props) => {
       ) : null}
       {editing && showEditor ? (
         <Box asChild w="full">
-          <Form action={onUpdateFeatureRequest!}>
+          <Form action={handleUpdateFeatureRequest}>
             <input
               name="featureId"
               type="hidden"
