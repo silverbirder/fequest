@@ -20,40 +20,49 @@ export const FeatureRequestContent = (props: Props) => {
   return (
     <Box minH="30" position="relative" w="full">
       {showEditor ? (
-        <Box bottom="0" position="absolute" right="0">
+        <Box position="absolute" right="0" top="0">
           {!editing ? (
             <Button
+              aria-label="編集する"
               onClick={() => setEditing(true)}
               size="icon"
               variant="ghost"
             >
               <Pencil />
             </Button>
-          ) : (
-            <Box asChild w="full">
-              <Form action={onUpdateFeatureRequest!}>
-                <input
-                  name="featureId"
-                  type="hidden"
-                  value={String(props.featureId)}
-                />
-                <textarea defaultValue={props.content} name="content" />
-                <HStack gap="sm">
-                  <Button type="submit">保存</Button>
-                  <Button
-                    onClick={() => setEditing(false)}
-                    type="button"
-                    variant="ghost"
-                  >
-                    取消
-                  </Button>
-                </HStack>
-              </Form>
-            </Box>
-          )}
+          ) : null}
         </Box>
       ) : null}
-      <Text>{props.content}</Text>
+      {editing && showEditor ? (
+        <Box asChild w="full">
+          <Form action={onUpdateFeatureRequest!}>
+            <input
+              name="featureId"
+              type="hidden"
+              value={String(props.featureId)}
+            />
+            <textarea
+              defaultValue={props.content}
+              name="content"
+              style={{
+                width: "100%",
+              }}
+            />
+            <HStack gap="sm">
+              <Button type="submit">保存</Button>
+              <Button
+                onClick={() => setEditing(false)}
+                type="button"
+                variant="ghost"
+              >
+                取消
+              </Button>
+            </HStack>
+          </Form>
+        </Box>
+      ) : (
+        <Text>{props.content}</Text>
+      )}
     </Box>
   );
 };
