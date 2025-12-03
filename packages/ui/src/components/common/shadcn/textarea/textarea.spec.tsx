@@ -53,4 +53,21 @@ describe("Textarea", () => {
     expect(textareaEl?.value).toBe("Hello");
     expect(textareaEl?.getAttribute("aria-invalid")).toBe("true");
   });
+
+  it("applies display variant classes", async () => {
+    await render(
+      <Textarea readOnly rows={3} value="Static text" variant="display" />,
+    );
+
+    const textareaEl = document.querySelector<HTMLTextAreaElement>(
+      'textarea[data-slot="textarea"]',
+    );
+    expect(textareaEl).not.toBeNull();
+    const className = textareaEl?.className ?? "";
+    expect(className).toContain("resize-none");
+    expect(className).toContain("border-transparent");
+    expect(className).toContain("shadow-none");
+    expect(className).toContain("px-3");
+    expect(className).toContain("py-2");
+  });
 });

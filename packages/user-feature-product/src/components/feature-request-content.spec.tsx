@@ -16,7 +16,10 @@ describe("FeatureRequestContent", () => {
       />,
     );
 
-    expect(document.body.textContent).toContain("Hello **MDX**");
+    const textarea = document.querySelector("textarea");
+    expect(textarea).not.toBeNull();
+    expect(textarea?.readOnly).toBe(true);
+    expect(textarea?.value).toBe("Hello **MDX**");
     expect(document.querySelector("button")).toBeNull();
   });
 
@@ -30,7 +33,9 @@ describe("FeatureRequestContent", () => {
       />,
     );
 
-    expect(document.body.textContent).toContain("Owner content");
+    const textarea = document.querySelector("textarea");
+    expect(textarea?.readOnly).toBe(true);
+    expect(textarea?.value).toBe("Owner content");
     expect(document.querySelector("button")).not.toBeNull();
   });
 
@@ -50,6 +55,7 @@ describe("FeatureRequestContent", () => {
 
     const textarea = document.querySelector("textarea");
     expect(textarea).not.toBeNull();
+    expect(textarea?.readOnly).toBe(false);
     expect(textarea?.value).toBe("Editable content");
   });
 
@@ -76,6 +82,8 @@ describe("FeatureRequestContent", () => {
     await waitForNextTick();
 
     expect(updateFeatureRequest).toHaveBeenCalledOnce();
-    expect(document.querySelector("textarea")).toBeNull();
+    const textarea = document.querySelector("textarea");
+    expect(textarea).not.toBeNull();
+    expect(textarea?.readOnly).toBe(true);
   });
 });

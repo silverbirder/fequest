@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, Button, HStack, Text, Textarea } from "@repo/ui/components";
+import { Box, Button, HStack, Textarea } from "@repo/ui/components";
 import { Pencil } from "lucide-react";
 import Form from "next/form";
 import { useState } from "react";
@@ -68,7 +68,7 @@ export const FeatureRequestContent = (props: Props) => {
           </Form>
         </Box>
       ) : (
-        <Text>{props.content}</Text>
+        <Textarea readOnly value={props.content} variant="display" />
       )}
     </Box>
   );

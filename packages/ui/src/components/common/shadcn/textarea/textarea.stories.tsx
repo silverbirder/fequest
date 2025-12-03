@@ -36,3 +36,11 @@ export const Invalid: Story = {
     placeholder: "Required field",
   },
 };
+
+export const Display: Story = {
+  args: {
+    defaultValue: "Read-only appearance without focus/resize styles",
+    readOnly: true,
+    variant: "display",
+  },
+};
