@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, Button, HStack, Text } from "@repo/ui/components";
+import { Box, Button, HStack, Text, Textarea } from "@repo/ui/components";
 import { Pencil } from "lucide-react";
 import Form from "next/form";
 import { useState } from "react";
@@ -41,13 +41,7 @@ export const FeatureRequestContent = (props: Props) => {
               type="hidden"
               value={String(props.featureId)}
             />
-            <textarea
-              defaultValue={props.content}
-              name="content"
-              style={{
-                width: "100%",
-              }}
-            />
+            <Textarea defaultValue={props.content} name="content" />
             <HStack gap="sm">
               <Button type="submit">保存</Button>
               <Button
