@@ -21,9 +21,9 @@ vi.mock("next/navigation", () => ({
   useSearchParams: () => mocks.searchParams,
 }));
 
-const waitForDialog = () =>
+const waitForDialog = (delay = 25) =>
   new Promise<void>((resolve) => {
-    setTimeout(() => resolve(), 0);
+    setTimeout(() => resolve(), delay);
   });
 
 const openDialog = async () => {
@@ -118,7 +118,7 @@ describe("FeatureRequestItem", () => {
     );
     closeButton?.click();
 
-    await waitForDialog();
+    await waitForDialog(50);
 
     expect(mocks.replace).toHaveBeenLastCalledWith("/products/1", {
       scroll: false,
@@ -134,6 +134,8 @@ describe("FeatureRequestItem", () => {
     });
 
     await openDialog();
+
+    await waitForDialog(50);
 
     expect(mocks.replace).toHaveBeenLastCalledWith("/products/1?open=2", {
       scroll: false,

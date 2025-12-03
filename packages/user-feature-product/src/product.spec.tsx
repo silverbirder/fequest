@@ -21,18 +21,6 @@ vi.mock("next/navigation", () => ({
   useSearchParams: () => navigationMocks.searchParams,
 }));
 
-vi.mock("@repo/ui/components", async () => {
-  const actual = await vi.importActual<typeof import("@repo/ui/components")>(
-    "@repo/ui/components",
-  );
-  return {
-    ...actual,
-    MdxContent: ({ source }: { source: string }) => (
-      <div data-testid="mdx-mock">{source}</div>
-    ),
-  };
-});
-
 const waitForDialog = () =>
   new Promise<void>((resolve) => {
     setTimeout(() => resolve(), 0);

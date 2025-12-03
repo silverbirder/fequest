@@ -1,22 +1,13 @@
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 import { render } from "vitest-browser-react";
 
 import { FeatureRequestContent } from "./feature-request-content";
 
-vi.mock("@repo/ui/components", async () => {
-  const actual = await vi.importActual<typeof import("@repo/ui/components")>(
-    "@repo/ui/components",
-  );
-  return {
-    ...actual,
-    MdxContent: ({ source }: { source: string }) => (
-      <div data-testid="mdx-mock">{source}</div>
-    ),
-  };
-});
+const waitForNextTick = () =>
+  new Promise<void>((resolve) => setTimeout(resolve, 0));
 
 describe("FeatureRequestContent", () => {
-  it("renders MDX preview and no editor when not owner", async () => {
+  it("renders content and no editor when not owner", async () => {
     await render(
       <FeatureRequestContent
         content="Hello **MDX**"
@@ -40,7 +31,25 @@ describe("FeatureRequestContent", () => {
     );
 
     expect(document.body.textContent).toContain("Owner content");
-    // editor renders a button labelled 編集
-    expect(document.body.textContent).toContain("Owner content");
+    expect(document.querySelector("button")).not.toBeNull();
+  });
+
+  it("opens editor when owner clicks edit", async () => {
+    await render(
+      <FeatureRequestContent
+        content="Editable content"
+        featureId={3}
+        isOwner
+        onUpdateFeatureRequest={async () => {}}
+      />,
+    );
+
+    document.querySelector<HTMLButtonElement>("button")?.click();
+
+    await waitForNextTick();
+
+    const textarea = document.querySelector("textarea");
+    expect(textarea).not.toBeNull();
+    expect(textarea?.value).toBe("Editable content");
   });
 });
