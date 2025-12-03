@@ -1,11 +1,25 @@
 import { composeStories } from "@storybook/nextjs-vite";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { render } from "vitest-browser-react";
 
 import { Product } from "./product";
 import * as stories from "./product.stories";
 
 const Stories = composeStories(stories);
+
+const navigationMocks = vi.hoisted(() => ({
+  pathname: "/products/1",
+  replace: vi.fn(),
+  searchParams: new URLSearchParams(),
+}));
+
+vi.mock("next/navigation", () => ({
+  usePathname: () => navigationMocks.pathname,
+  useRouter: () => ({
+    replace: navigationMocks.replace,
+  }),
+  useSearchParams: () => navigationMocks.searchParams,
+}));
 
 vi.mock("@repo/ui/components", async () => {
   const actual = await vi.importActual<typeof import("@repo/ui/components")>(
@@ -33,8 +47,9 @@ const openDialog = async (index = 0) => {
   await waitForDialog();
 };
 
-afterEach(() => {
-  document.body.innerHTML = "";
+beforeEach(() => {
+  navigationMocks.searchParams = new URLSearchParams();
+  navigationMocks.replace.mockReset();
 });
 
 const createProductFixture = (ownerId: string) => ({
@@ -65,11 +80,13 @@ const createProductFixture = (ownerId: string) => ({
 
 describe("Product", () => {
   it.each(Object.entries(Stories))("should %s snapshot", async (_, Story) => {
+    const originalInnerHtml = document.body.innerHTML;
+
     await Story.run();
 
     await expect(document.body).toMatchScreenshot();
 
-    document.body.innerHTML = "";
+    document.body.innerHTML = originalInnerHtml;
   });
 
   it("renders provided props", async () => {
@@ -90,7 +107,7 @@ describe("Product", () => {
     await expect.element(baseElement).toMatchScreenshot();
   });
 
-  it("shows delete action when the current user owns a feature request", async () => {
+  it("opens feature detail when openFeatureRequestId matches", async () => {
     await render(
       <Product
         canCreateFeatureRequest
@@ -98,16 +115,19 @@ describe("Product", () => {
         onCreateFeatureRequest={async () => {}}
         onDeleteFeatureRequest={async () => {}}
         onReactToFeature={async () => {}}
+        openFeatureRequestId={1}
         product={createProductFixture("user-owner")}
       />,
     );
 
-    await openDialog();
+    await waitForDialog();
 
-    expect(document.body.textContent).toContain("削除");
+    expect(document.body.textContent ?? "").toContain(
+      "プロフィール画像アップロード",
+    );
   });
 
-  it.skip("omits delete action when the viewer is not the creator", async () => {
+  it("omits delete action when the viewer is not the creator", async () => {
     await render(
       <Product
         canCreateFeatureRequest

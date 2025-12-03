@@ -9,11 +9,13 @@ const Stories = composeStories(stories);
 
 describe("Products", () => {
   it.each(Object.entries(Stories))("should %s snapshot", async (_, Story) => {
+    const originalInnerHtml = document.body.innerHTML;
+
     await Story.run();
 
     await expect(document.body).toMatchScreenshot();
 
-    document.body.innerHTML = "";
+    document.body.innerHTML = originalInnerHtml;
   });
 
   it("renders each product with counts and link", async () => {

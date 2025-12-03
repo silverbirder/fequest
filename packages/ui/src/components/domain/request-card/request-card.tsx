@@ -15,6 +15,7 @@ type Props = ComponentProps<typeof BubbleText> & {
     fallbackText?: string;
     src?: string;
   };
+  defaultOpen?: boolean;
   detail: {
     content: ReactNode;
     createdAt?: Date | null | string;
@@ -24,6 +25,7 @@ type Props = ComponentProps<typeof BubbleText> & {
   enableEmojiPicker?: boolean;
   footerAction?: FooterAction;
   idBase?: string;
+  onOpenChange?: (open: boolean) => void;
   onReact?: (emoji: string) => void;
   reactions?: {
     count: number;
@@ -34,10 +36,12 @@ type Props = ComponentProps<typeof BubbleText> & {
 
 export const RequestCard = ({
   avatar,
+  defaultOpen,
   detail,
   enableEmojiPicker = false,
   footerAction,
   idBase = "request-card",
+  onOpenChange,
   onReact,
   reactions,
   text,
@@ -60,11 +64,13 @@ export const RequestCard = ({
         <BubbleText text={text}>
           <RequestDialog
             avatar={avatar}
+            defaultOpen={defaultOpen}
             detail={detail}
             dialogTitle={dialogTitle}
             dialogTriggerLabel={dialogTriggerLabel}
             footerAction={footerAction}
             idBase={idBase}
+            onOpenChange={onOpenChange}
           />
         </BubbleText>
         <HStack gap="xs" wrap="wrap">

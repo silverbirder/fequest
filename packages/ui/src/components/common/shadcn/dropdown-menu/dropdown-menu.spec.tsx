@@ -18,11 +18,13 @@ const Stories = composeStories(stories);
 
 describe("DropdownMenu", () => {
   it.each(Object.entries(Stories))("should %s snapshot", async (_, Story) => {
+    const originalInnerHtml = document.body.innerHTML;
+
     await Story.run();
 
     await expect(document.body).toMatchScreenshot();
 
-    document.body.innerHTML = "";
+    document.body.innerHTML = originalInnerHtml;
   });
 
   it("renders the content and menu items when open", async () => {

@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { render } from "vitest-browser-react";
 
 import { FeatureRequestContent } from "./feature-request-content";
@@ -13,10 +13,6 @@ vi.mock("@repo/ui/components", async () => {
       <div data-testid="mdx-mock">{source}</div>
     ),
   };
-});
-
-afterEach(() => {
-  document.body.innerHTML = "";
 });
 
 describe("FeatureRequestContent", () => {

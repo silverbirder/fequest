@@ -9,19 +9,25 @@ import { api } from "~/trpc/server";
 import { createCreateFeatureRequest } from "./create-feature-request";
 import { createUpdateFeatureRequest } from "./create-update-feature-request";
 import { createDeleteFeatureRequest } from "./delete-feature-request";
+import { getOpenFeatureRequestId } from "./get-open-feature-request-id";
 import { createReactToFeature } from "./react-to-feature";
 
 const paramsSchema = object({
   id: idSchema,
 });
 
-export default async function Page({ params }: PageProps<"/[id]">) {
-  const parsedParams = safeParse(paramsSchema, await params);
+export default async function Page({
+  params,
+  searchParams,
+}: PageProps<"/[id]">) {
+  const resolvedParams = await params;
+  const resolvedSearchParams = await searchParams;
+  const parsedParams = safeParse(paramsSchema, resolvedParams);
   if (!parsedParams.success) {
     notFound();
   }
   const productId = parsedParams.output.id;
-
+  const openFeatureRequestId = getOpenFeatureRequestId(resolvedSearchParams);
   const [product, session] = await Promise.all([
     api.product.byId({ id: productId }),
     auth(),
@@ -46,6 +52,7 @@ export default async function Page({ params }: PageProps<"/[id]">) {
       onDeleteFeatureRequest={deleteFeatureRequest}
       onReactToFeature={reactToFeature}
       onUpdateFeatureRequest={updateFeatureRequest}
+      openFeatureRequestId={openFeatureRequestId}
       product={product}
     />
   );

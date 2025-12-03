@@ -42,6 +42,7 @@ type Props = {
   onDeleteFeatureRequest?: (formData: FormData) => Promise<void>;
   onReactToFeature: (formData: FormData) => Promise<void>;
   onUpdateFeatureRequest?: (formData: FormData) => Promise<void>;
+  openFeatureRequestId?: null | number;
   product: ProductData;
 };
 
@@ -97,11 +98,15 @@ export const Product = (props: Props) => {
                   const canDelete = Boolean(
                     props.onDeleteFeatureRequest && isOwner,
                   );
+                  const isOpenTarget =
+                    typeof props.openFeatureRequestId === "number" &&
+                    props.openFeatureRequestId === feature.id;
                   const text = feature.title?.trim() ?? "";
                   return (
                     <FeatureRequestItem
                       avatar={createAvatarProps(feature)}
                       canDelete={canDelete}
+                      defaultOpen={isOpenTarget}
                       detail={{
                         content: (
                           <FeatureRequestContent

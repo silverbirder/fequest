@@ -1,4 +1,5 @@
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
 import { api } from "~/trpc/server";
 
@@ -22,16 +23,23 @@ export const createCreateFeatureRequest = ({
       return;
     }
 
+    let createdId: null | number = null;
+
     try {
-      await api.featureRequests.create({
+      const featureRequest = await api.featureRequests.create({
         productId,
         title: trimmed,
       });
+      createdId = featureRequest?.id ?? null;
     } catch (error) {
       console.error("Failed to create feature request", error);
     }
 
     revalidatePath(`/${productId}`);
+
+    if (createdId) {
+      redirect(`/${productId}?open=${createdId}`);
+    }
   };
 };
 

@@ -1,7 +1,10 @@
 "use client";
 
+import type { Route } from "next";
+
 import { RequestCard, VStack } from "@repo/ui/components";
 import Form from "next/form";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { type ComponentProps, useMemo, useRef } from "react";
 
 import type { ReactionSummary } from "../libs/reaction-summary";
@@ -9,6 +12,7 @@ import type { ReactionSummary } from "../libs/reaction-summary";
 type Props = {
   avatar: RequestCardAvatar;
   canDelete?: boolean;
+  defaultOpen?: boolean;
   detail: RequestCardDetail;
   featureId: number;
   onDeleteFeatureRequest?: (formData: FormData) => Promise<void>;
@@ -23,6 +27,7 @@ type RequestCardDetail = ComponentProps<typeof RequestCard>["detail"];
 export const FeatureRequestItem = ({
   avatar,
   canDelete,
+  defaultOpen,
   detail,
   featureId,
   onDeleteFeatureRequest,
@@ -34,6 +39,9 @@ export const FeatureRequestItem = ({
   const formRef = useRef<HTMLFormElement>(null);
   const emojiInputRef = useRef<HTMLInputElement>(null);
   const actionInputRef = useRef<HTMLInputElement>(null);
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   const handleReact = (emoji: string) => {
     const clickedReaction = reactionMap.get(emoji);
@@ -67,14 +75,36 @@ export const FeatureRequestItem = ({
         }
       : undefined;
 
+  const handleDialogOpenChange = (isOpen: boolean) => {
+    if (!pathname) {
+      return;
+    }
+
+    const params = new URLSearchParams(searchParams.toString());
+    const currentOpen = searchParams.get("open");
+
+    if (isOpen) {
+      params.set("open", String(featureId));
+    } else if (currentOpen === String(featureId)) {
+      params.delete("open");
+    } else {
+      return;
+    }
+
+    const nextUrl = params.toString() ? `${pathname}?${params}` : pathname;
+    router.replace(nextUrl as Route, { scroll: false });
+  };
+
   return (
     <VStack gap="xs">
       <RequestCard
         avatar={avatar}
+        defaultOpen={defaultOpen}
         detail={detail}
         enableEmojiPicker
         footerAction={footerAction}
         idBase={idBase}
+        onOpenChange={handleDialogOpenChange}
         onReact={handleReact}
         reactions={reactionOptions}
         text={text}

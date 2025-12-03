@@ -22,11 +22,13 @@ const openDialog = async (label: string) => {
 
 describe("RequestDialog", () => {
   it.each(Object.entries(Stories))("should %s snapshot", async (_, Story) => {
+    const originalInnerHtml = document.body.innerHTML;
+
     await Story.run();
 
     await expect(document.body).toMatchScreenshot();
 
-    document.body.innerHTML = "";
+    document.body.innerHTML = originalInnerHtml;
   });
 
   it("renders provided detail content and metadata", async () => {
@@ -91,5 +93,25 @@ describe("RequestDialog", () => {
 
     const footer = document.querySelector("[data-slot='dialog-footer']");
     expect(footer?.textContent ?? "").toContain("投稿日: 2024/01/01 9:00");
+  });
+
+  it("opens by default when defaultOpen is true", async () => {
+    await render(
+      <RequestDialog
+        avatar={{ fallbackText: "CF" }}
+        defaultOpen
+        detail={{
+          content: <p>Auto open content</p>,
+          createdAt: "2024-01-01T00:00:00.000Z",
+          title: "自動で開く",
+        }}
+        dialogTitle="自動で開く"
+        dialogTriggerLabel="Open detail"
+      />,
+    );
+
+    await waitForDialog();
+
+    expect(document.body.textContent ?? "").toContain("Auto open content");
   });
 });

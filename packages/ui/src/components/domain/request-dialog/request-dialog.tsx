@@ -39,11 +39,13 @@ type Props = {
     fallbackText?: string;
     src?: string;
   };
+  defaultOpen?: boolean;
   detail: Detail;
   dialogTitle?: string;
   dialogTriggerLabel?: string;
   footerAction?: FooterAction;
   idBase?: string;
+  onOpenChange?: (open: boolean) => void;
 };
 
 const dateTimeFormatter = new Intl.DateTimeFormat("ja-JP", {
@@ -66,11 +68,13 @@ const formatDateTime = (value?: Date | null | string) => {
 
 export const RequestDialog = ({
   avatar,
+  defaultOpen,
   detail,
   dialogTitle,
   dialogTriggerLabel,
   footerAction,
   idBase = "request-card",
+  onOpenChange,
 }: Props) => {
   const createdAtText = formatDateTime(detail.createdAt);
   const dialogContentId = `${idBase}-dialog-content`;
@@ -80,7 +84,7 @@ export const RequestDialog = ({
     (titleText ? `${titleText}の詳細を表示` : "詳細を表示");
 
   return (
-    <Dialog>
+    <Dialog defaultOpen={defaultOpen} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>
         <Button
           aria-controls={dialogContentId}
