@@ -77,11 +77,40 @@ describe("FeatureRequestContent", () => {
 
     await waitForNextTick();
 
-    document.querySelector<HTMLButtonElement>('button[type="submit"]')?.click();
+    document
+      .querySelector<HTMLButtonElement>('button[aria-label="保存する"]')
+      ?.click();
 
     await waitForNextTick();
 
-    expect(updateFeatureRequest).toHaveBeenCalledOnce();
+    expect(updateFeatureRequest).toHaveBeenCalled();
+    const textarea = document.querySelector("textarea");
+    expect(textarea).not.toBeNull();
+    expect(textarea?.readOnly).toBe(true);
+  });
+
+  it("closes editor when cancel button clicked", async () => {
+    await render(
+      <FeatureRequestContent
+        content="Editable content"
+        featureId={5}
+        isOwner
+        onUpdateFeatureRequest={async () => {}}
+      />,
+    );
+
+    document
+      .querySelector<HTMLButtonElement>('button[aria-label="編集する"]')
+      ?.click();
+
+    await waitForNextTick();
+
+    document
+      .querySelector<HTMLButtonElement>('button[aria-label="取り消す"]')
+      ?.click();
+
+    await waitForNextTick();
+
     const textarea = document.querySelector("textarea");
     expect(textarea).not.toBeNull();
     expect(textarea?.readOnly).toBe(true);

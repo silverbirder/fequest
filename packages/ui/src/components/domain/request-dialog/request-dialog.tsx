@@ -3,7 +3,7 @@ import type { ComponentProps, ReactNode } from "react";
 import { ChevronRight } from "lucide-react";
 import Form from "next/form";
 
-import { Box, HStack, VStack } from "../../common/layout";
+import { HStack, VStack } from "../../common/layout";
 import {
   Avatar,
   AvatarFallback,
@@ -116,9 +116,7 @@ export const RequestDialog = ({
             </HStack>
           </DialogHeader>
           <VStack w="full">
-            <Box bg="muted" p="xs" radius="sm" w="full">
-              {detail.content}
-            </Box>
+            {detail.content}
             {footerAction && (
               <HStack self="end">
                 <Form action={footerAction.action}>

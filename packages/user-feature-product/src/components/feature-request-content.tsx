@@ -1,7 +1,7 @@
 "use client";
 
-import { Box, Button, HStack, Textarea } from "@repo/ui/components";
-import { Pencil } from "lucide-react";
+import { Box, Button, HStack, Textarea, VStack } from "@repo/ui/components";
+import { Pencil, Save, X } from "lucide-react";
 import Form from "next/form";
 import { useState } from "react";
 
@@ -31,45 +31,52 @@ export const FeatureRequestContent = (props: Props) => {
   };
 
   return (
-    <Box minH="30" position="relative" w="full">
-      {showEditor ? (
-        <Box position="absolute" right="0" top="0">
-          {!editing ? (
-            <Button
-              aria-label="編集する"
-              onClick={() => setEditing(true)}
-              size="icon"
-              variant="ghost"
-            >
-              <Pencil />
-            </Button>
-          ) : null}
-        </Box>
-      ) : null}
-      {editing && showEditor ? (
-        <Box asChild w="full">
-          <Form action={handleUpdateFeatureRequest}>
-            <input
-              name="featureId"
-              type="hidden"
-              value={String(props.featureId)}
+    <Box w="full">
+      <Form action={handleUpdateFeatureRequest}>
+        <input name="featureId" type="hidden" value={String(props.featureId)} />
+        <VStack gap="sm">
+          <Box bg="muted" p="xs" radius="sm" w="full">
+            <Textarea
+              defaultValue={editing ? props.content : undefined}
+              placeholder="機能リクエストの内容を記載してください"
+              readOnly={!editing}
+              value={editing ? undefined : props.content}
+              variant={editing ? "default" : "display"}
             />
-            <Textarea defaultValue={props.content} name="content" />
-            <HStack gap="sm">
-              <Button type="submit">保存</Button>
+          </Box>
+          <HStack gap="sm">
+            {showEditor && !editing && (
               <Button
-                onClick={() => setEditing(false)}
-                type="button"
+                aria-label="編集する"
+                onClick={() => setEditing(true)}
+                size="sm"
                 variant="ghost"
               >
-                取消
+                <Pencil />
+                編集
               </Button>
-            </HStack>
-          </Form>
-        </Box>
-      ) : (
-        <Textarea readOnly value={props.content} variant="display" />
-      )}
+            )}
+            {editing && (
+              <>
+                <Button aria-label="保存する" size="sm" type="submit">
+                  <Save />
+                  保存
+                </Button>
+                <Button
+                  aria-label="取り消す"
+                  onClick={() => setEditing(false)}
+                  size="sm"
+                  type="button"
+                  variant="ghost"
+                >
+                  <X />
+                  取り消す
+                </Button>
+              </>
+            )}
+          </HStack>
+        </VStack>
+      </Form>
     </Box>
   );
 };
