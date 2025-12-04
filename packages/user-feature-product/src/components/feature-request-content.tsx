@@ -21,7 +21,6 @@ export const FeatureRequestContent = (props: Props) => {
     if (!onUpdateFeatureRequest) {
       return;
     }
-
     try {
       await onUpdateFeatureRequest(formData);
       setEditing(false);
@@ -38,6 +37,7 @@ export const FeatureRequestContent = (props: Props) => {
           <Box bg="muted" p="xs" radius="sm" w="full">
             <Textarea
               defaultValue={editing ? props.content : undefined}
+              name="content"
               placeholder="機能リクエストの内容を記載してください"
               readOnly={!editing}
               value={editing ? undefined : props.content}

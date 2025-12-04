@@ -60,7 +60,9 @@ describe("FeatureRequestContent", () => {
   });
 
   it("closes editor after successful save", async () => {
-    const updateFeatureRequest = vi.fn(async () => {});
+    const updateFeatureRequest = vi.fn<(formData: FormData) => Promise<void>>(
+      async () => {},
+    );
 
     await render(
       <FeatureRequestContent
@@ -77,6 +79,9 @@ describe("FeatureRequestContent", () => {
 
     await waitForNextTick();
 
+    document.querySelector<HTMLTextAreaElement>("textarea")!.value =
+      "Updated content";
+
     document
       .querySelector<HTMLButtonElement>('button[aria-label="保存する"]')
       ?.click();
@@ -84,6 +89,13 @@ describe("FeatureRequestContent", () => {
     await waitForNextTick();
 
     expect(updateFeatureRequest).toHaveBeenCalled();
+    const lastCall = updateFeatureRequest.mock.calls.at(-1);
+    if (!lastCall) {
+      throw new Error("updateFeatureRequest was not called");
+    }
+
+    const submittedFormData = lastCall[0] as FormData | undefined;
+    expect(submittedFormData?.get("content")).toBe("Updated content");
     const textarea = document.querySelector("textarea");
     expect(textarea).not.toBeNull();
     expect(textarea?.readOnly).toBe(true);
