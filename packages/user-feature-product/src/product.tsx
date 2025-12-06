@@ -58,9 +58,10 @@ const getAvatarFallbackText = (text?: null | string) => {
 const createAvatarProps = (feature: FeatureRequest) => {
   const referenceText = feature.user?.name ?? feature.title ?? feature.content;
   return {
-    alt: feature.user?.name ?? undefined,
+    alt: feature.user?.name,
     fallbackText: getAvatarFallbackText(referenceText),
-    src: feature.user?.image ?? undefined,
+    name: referenceText,
+    src: feature.user?.image,
   };
 };
 

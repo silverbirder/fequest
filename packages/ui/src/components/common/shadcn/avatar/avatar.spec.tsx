@@ -2,7 +2,7 @@ import { composeStories } from "@storybook/nextjs-vite";
 import { describe, expect, it } from "vitest";
 import { render } from "vitest-browser-react";
 
-import { Avatar, AvatarFallback, AvatarImage } from "./avatar";
+import { Avatar, AvatarFallback, AvatarImage, AvatarRoot } from "./avatar";
 import * as stories from "./avatar.stories";
 
 const Stories = composeStories(stories);
@@ -20,13 +20,13 @@ describe("Avatar", () => {
 
   it("renders the avatar root with default styles", async () => {
     await render(
-      <Avatar className="border">
+      <AvatarRoot className="border">
         <AvatarImage
           alt="Sample"
           src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg=="
         />
         <AvatarFallback>SS</AvatarFallback>
-      </Avatar>,
+      </AvatarRoot>,
     );
 
     const avatar = document.querySelector<HTMLElement>('[data-slot="avatar"]');
@@ -39,13 +39,13 @@ describe("Avatar", () => {
 
   it("renders the image and applies sizing classes", async () => {
     await render(
-      <Avatar>
+      <AvatarRoot>
         <AvatarImage
           alt="Jane Doe"
           src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg=="
         />
         <AvatarFallback>JD</AvatarFallback>
-      </Avatar>,
+      </AvatarRoot>,
     );
 
     await expect
@@ -61,9 +61,9 @@ describe("Avatar", () => {
 
   it("shows the fallback content", async () => {
     await render(
-      <Avatar>
+      <AvatarRoot>
         <AvatarFallback className="font-semibold">AB</AvatarFallback>
-      </Avatar>,
+      </AvatarRoot>,
     );
 
     const fallback = document.querySelector<HTMLElement>(
@@ -72,5 +72,23 @@ describe("Avatar", () => {
     expect(fallback).not.toBeNull();
     expect(fallback?.textContent).toBe("AB");
     expect(fallback?.getAttribute("class") ?? "").toContain("font-semibold");
+  });
+
+  it("derives fallback initials from name when src is missing", async () => {
+    await render(<Avatar name="Jane Doe" src={undefined} />);
+
+    const fallback = document.querySelector<HTMLElement>(
+      '[data-slot="avatar-fallback"]',
+    );
+    expect(fallback?.textContent).toBe("JD");
+  });
+
+  it("prefers explicit fallback text over derived initials", async () => {
+    await render(<Avatar fallbackText="ZZ" name="John Doe" src={undefined} />);
+
+    const fallback = document.querySelector<HTMLElement>(
+      '[data-slot="avatar-fallback"]',
+    );
+    expect(fallback?.textContent).toBe("ZZ");
   });
 });

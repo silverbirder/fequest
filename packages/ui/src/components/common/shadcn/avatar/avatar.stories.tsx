@@ -1,8 +1,12 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 
-import { Avatar, AvatarFallback, AvatarImage } from "./avatar";
+import { Avatar } from "./avatar";
 
 const meta = {
+  args: {
+    name: "shadcn",
+    src: "https://github.com/shadcn.png",
+  },
   component: Avatar,
   title: "Common/Shadcn/Avatar",
 } satisfies Meta<typeof Avatar>;
@@ -10,20 +14,11 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
-  render: (args) => (
-    <Avatar {...args}>
-      <AvatarImage alt="shadcn" src="https://github.com/shadcn.png" />
-      <AvatarFallback>SC</AvatarFallback>
-    </Avatar>
-  ),
-};
+export const Default: Story = {};
 
 export const WithFallback: Story = {
-  render: (args) => (
-    <Avatar {...args}>
-      <AvatarImage alt="No avatar available" src="/invalid-path.jpg" />
-      <AvatarFallback>NA</AvatarFallback>
-    </Avatar>
-  ),
+  args: {
+    fallbackText: "SC",
+    src: undefined,
+  },
 };

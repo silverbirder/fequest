@@ -6,8 +6,6 @@ import Form from "next/form";
 import { HStack, VStack } from "../../common/layout";
 import {
   Avatar,
-  AvatarFallback,
-  AvatarImage,
   Button,
   Dialog,
   DialogContent,
@@ -35,9 +33,10 @@ type Detail = {
 
 type Props = {
   avatar: {
-    alt?: string;
-    fallbackText?: string;
-    src?: string;
+    alt?: null | string;
+    fallbackText?: null | string;
+    name?: null | string;
+    src?: null | string;
   };
   defaultOpen?: boolean;
   detail: Detail;
@@ -100,14 +99,12 @@ export const RequestDialog = ({
         <VStack gap="lg">
           <DialogHeader>
             <HStack align="center" gap="md">
-              <Avatar>
-                <AvatarImage alt={avatar.alt} src={avatar.src} />
-                <AvatarFallback>
-                  <Text asChild size="xl">
-                    <span>{avatar.fallbackText}</span>
-                  </Text>
-                </AvatarFallback>
-              </Avatar>
+              <Avatar
+                alt={avatar.alt}
+                fallbackText={avatar.fallbackText}
+                name={avatar.name}
+                src={avatar.src}
+              />
               <DialogTitle>
                 <Text align="left" size="xl">
                   {titleText}

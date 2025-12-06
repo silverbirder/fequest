@@ -3,8 +3,6 @@ import type { UrlObject } from "url";
 
 import {
   Avatar,
-  AvatarFallback,
-  AvatarImage,
   Box,
   Button,
   DropdownMenu,
@@ -29,18 +27,6 @@ type User = {
   name?: null | string;
 };
 
-const createFallbackText = (name?: null | string) => {
-  const trimmed = (name ?? "").trim();
-  if (trimmed.length === 0) return "U";
-
-  const words = trimmed.split(/\s+/);
-  if (words.length >= 2) {
-    return (words[0]?.[0] ?? "").concat(words[1]?.[0] ?? "").toUpperCase();
-  }
-
-  return trimmed.slice(0, 2).toUpperCase();
-};
-
 export const Header = ({
   appName = "Fequest",
   homeHref = "/",
@@ -62,15 +48,7 @@ export const Header = ({
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button aria-label="ユーザーメニュー" size="icon" variant="ghost">
-                <Avatar>
-                  <AvatarImage
-                    alt={user?.name ?? "ログイン済みユーザー"}
-                    src={user?.image ?? undefined}
-                  />
-                  <AvatarFallback delayMs={0}>
-                    {createFallbackText(user?.name)}
-                  </AvatarFallback>
-                </Avatar>
+                <Avatar alt={user?.name} name={user?.name} src={user?.image} />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" sideOffset={8}>

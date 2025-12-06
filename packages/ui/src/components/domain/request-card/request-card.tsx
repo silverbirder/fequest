@@ -3,7 +3,7 @@ import type { ComponentProps, ReactNode } from "react";
 import type { FooterAction } from "../request-dialog";
 
 import { HStack, VStack } from "../../common/layout";
-import { Avatar, AvatarFallback, AvatarImage } from "../../common/shadcn";
+import { Avatar } from "../../common/shadcn";
 import { BubbleText } from "../bubble-text";
 import { EmojiPicker } from "../emoji-picker";
 import { EmojiReaction } from "../emoji-reaction";
@@ -11,9 +11,10 @@ import { RequestDialog } from "../request-dialog";
 
 type Props = ComponentProps<typeof BubbleText> & {
   avatar: {
-    alt?: string;
-    fallbackText?: string;
-    src?: string;
+    alt?: null | string;
+    fallbackText?: null | string;
+    name?: null | string;
+    src?: null | string;
   };
   defaultOpen?: boolean;
   detail: {
@@ -55,10 +56,12 @@ export const RequestCard = ({
   return (
     <HStack align="start" gap="sm">
       <VStack gap="sm" justify="between" self="stretch">
-        <Avatar>
-          <AvatarImage alt={avatar.alt} src={avatar.src}></AvatarImage>
-          <AvatarFallback>{avatar.fallbackText}</AvatarFallback>
-        </Avatar>
+        <Avatar
+          alt={avatar.alt}
+          fallbackText={avatar.fallbackText}
+          name={avatar.name}
+          src={avatar.src}
+        />
       </VStack>
       <VStack gap="sm">
         <BubbleText text={text}>
