@@ -1,5 +1,7 @@
+import { featureRequestTitleSchema, positiveIntSchema } from "@repo/schema";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { safeParse } from "valibot";
 
 import { api } from "~/trpc/server";
 
@@ -14,12 +16,10 @@ export const createCreateFeatureRequest = ({
     "use server";
 
     const title = formData.get("title");
-    if (typeof title !== "string") {
-      return;
-    }
+    const parsedProductId = safeParse(positiveIntSchema, productId);
+    const parsedTitle = safeParse(featureRequestTitleSchema, title);
 
-    const trimmed = title.trim();
-    if (trimmed.length === 0) {
+    if (!parsedProductId.success || !parsedTitle.success) {
       return;
     }
 
@@ -27,8 +27,8 @@ export const createCreateFeatureRequest = ({
 
     try {
       const featureRequest = await api.featureRequests.create({
-        productId,
-        title: trimmed,
+        productId: parsedProductId.output,
+        title: parsedTitle.output,
       });
       createdId = featureRequest?.id ?? null;
     } catch (error) {

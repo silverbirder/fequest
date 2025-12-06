@@ -1,4 +1,6 @@
+import { setFeatureStatusSchema } from "@repo/schema";
 import { revalidatePath } from "next/cache";
+import { safeParse } from "valibot";
 
 import { api } from "~/trpc/server";
 
@@ -6,8 +8,7 @@ type UpdateFeatureStatusOptions = {
   productId: number;
 };
 
-const isFeatureStatus = (value: unknown): value is "closed" | "open" =>
-  value === "open" || value === "closed";
+const featureStatusSchema = setFeatureStatusSchema(["open", "closed"] as const);
 
 export const createUpdateFeatureStatus = ({
   productId,
@@ -18,12 +19,16 @@ export const createUpdateFeatureStatus = ({
     const featureId = Number(formData.get("featureId"));
     const status = formData.get("status");
 
-    if (Number.isNaN(featureId) || !isFeatureStatus(status)) {
+    const parsed = safeParse(featureStatusSchema, {
+      featureId,
+      status,
+    });
+    if (!parsed.success) {
       return;
     }
 
     try {
-      await api.product.setFeatureStatus({ featureId, status });
+      await api.product.setFeatureStatus(parsed.output);
     } catch (error) {
       console.error("Failed to update feature status", error);
     }

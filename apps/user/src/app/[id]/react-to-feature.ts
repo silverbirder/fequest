@@ -1,6 +1,11 @@
+import {
+  reactionAnonymousIdentifierSchema,
+  reactToFeatureRequestSchema,
+} from "@repo/schema";
 import { ensureAnonymousIdentifier } from "@repo/user-cookie";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
+import { safeParse } from "valibot";
 
 import { api } from "~/trpc/server";
 
@@ -18,28 +23,32 @@ export const createReactToFeature = ({
     const emoji = formData.get("emoji");
     const action = formData.get("action");
 
-    if (!Number.isInteger(featureId) || featureId <= 0) {
-      return;
-    }
+    const parsedInput = safeParse(reactToFeatureRequestSchema, {
+      action,
+      emoji,
+      id: featureId,
+    });
 
-    if (typeof emoji !== "string" || emoji.length === 0) {
-      return;
-    }
-
-    if (action !== "up" && action !== "down") {
+    if (!parsedInput.success) {
       return;
     }
 
     const cookieStore = await cookies();
     const anonymousIdentifier = ensureAnonymousIdentifier(cookieStore);
+    const parsedAnonymous = safeParse(
+      reactionAnonymousIdentifierSchema,
+      anonymousIdentifier,
+    );
+
+    const payload = {
+      ...parsedInput.output,
+      anonymousIdentifier: parsedAnonymous.success
+        ? parsedAnonymous.output
+        : undefined,
+    };
 
     try {
-      await api.featureRequests.react({
-        action,
-        anonymousIdentifier,
-        emoji,
-        id: featureId,
-      });
+      await api.featureRequests.react(payload);
     } catch (error) {
       console.error("Failed to react to feature request", error);
     }

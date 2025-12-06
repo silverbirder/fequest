@@ -308,13 +308,12 @@ describe("featureRequestsRouter.react", () => {
 
     await expect(
       harness.caller.react({
-        action: "sideways",
+        action: "sideways" as unknown as "up",
         emoji: "🔥",
         id: 12,
       }),
     ).rejects.toMatchObject({
       code: "BAD_REQUEST",
-      message: "action must be either 'up' or 'down'",
     });
   });
 });

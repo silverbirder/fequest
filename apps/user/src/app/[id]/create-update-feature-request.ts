@@ -1,4 +1,6 @@
+import { updateFeatureRequestSchema } from "@repo/schema";
 import { revalidatePath } from "next/cache";
+import { safeParse } from "valibot";
 
 import { api } from "~/trpc/server";
 
@@ -15,18 +17,19 @@ export const createUpdateFeatureRequest = ({
     const featureId = Number(formData.get("featureId"));
     const content = formData.get("content");
 
-    if (!Number.isInteger(featureId) || featureId <= 0) {
-      return;
-    }
+    const parsedInput = safeParse(updateFeatureRequestSchema, {
+      content,
+      id: featureId,
+    });
 
-    if (typeof content !== "string") {
+    if (!parsedInput.success) {
       return;
     }
 
     try {
       await api.featureRequests.update({
-        content: content.trim(),
-        id: featureId,
+        content: parsedInput.output.content,
+        id: parsedInput.output.id,
       });
     } catch (error) {
       console.error("Failed to update feature request", error);

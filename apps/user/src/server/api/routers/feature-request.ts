@@ -1,18 +1,12 @@
 import { featureRequestReactions, featureRequests } from "@repo/db";
+import {
+  createFeatureRequestSchema,
+  deleteFeatureRequestSchema,
+  reactToFeatureRequestSchema,
+  updateFeatureRequestSchema,
+} from "@repo/schema";
 import { TRPCError } from "@trpc/server";
 import { and, eq, isNull, sql } from "drizzle-orm";
-import {
-  integer,
-  maxLength,
-  minLength,
-  minValue,
-  number,
-  object,
-  optional,
-  pipe,
-  string,
-  transform,
-} from "valibot";
 
 import {
   createTRPCRouter,
@@ -22,17 +16,7 @@ import {
 
 export const featureRequestsRouter = createTRPCRouter({
   create: protectedProcedure
-    .input(
-      object({
-        productId: pipe(number(), integer(), minValue(1)),
-        title: pipe(
-          string(),
-          transform((value) => value.trim()),
-          minLength(1),
-          maxLength(255),
-        ),
-      }),
-    )
+    .input(createFeatureRequestSchema)
     .mutation(async ({ ctx, input }) => {
       const product = await ctx.db.query.products.findFirst({
         columns: { id: true },
@@ -61,11 +45,7 @@ export const featureRequestsRouter = createTRPCRouter({
       return featureRequest;
     }),
   delete: protectedProcedure
-    .input(
-      object({
-        id: pipe(number(), integer(), minValue(1)),
-      }),
-    )
+    .input(deleteFeatureRequestSchema)
     .mutation(async ({ ctx, input }) => {
       const featureRequest = await ctx.db.query.featureRequests.findFirst({
         columns: { id: true, userId: true },
@@ -87,26 +67,9 @@ export const featureRequestsRouter = createTRPCRouter({
       return { id: featureRequest.id };
     }),
   react: publicProcedure
-    .input(
-      object({
-        action: pipe(string(), minLength(2), maxLength(8)),
-        anonymousIdentifier: optional(
-          pipe(string(), minLength(1), maxLength(255)),
-        ),
-        emoji: pipe(string(), minLength(1), maxLength(32)),
-        id: pipe(number(), integer(), minValue(1)),
-      }),
-    )
+    .input(reactToFeatureRequestSchema)
     .mutation(async ({ ctx, input }) => {
-      const action =
-        input.action === "down" ? "down" : input.action === "up" ? "up" : null;
-
-      if (!action) {
-        throw new TRPCError({
-          code: "BAD_REQUEST",
-          message: "action must be either 'up' or 'down'",
-        });
-      }
+      const action = input.action;
 
       const featureRequest = await ctx.db.query.featureRequests.findFirst({
         columns: { id: true },
@@ -177,17 +140,7 @@ export const featureRequestsRouter = createTRPCRouter({
       };
     }),
   update: protectedProcedure
-    .input(
-      object({
-        content: pipe(
-          string(),
-          transform((value) => value.trim()),
-          minLength(0),
-          maxLength(10000),
-        ),
-        id: pipe(number(), integer(), minValue(1)),
-      }),
-    )
+    .input(updateFeatureRequestSchema)
     .mutation(async ({ ctx, input }) => {
       const featureRequest = await ctx.db.query.featureRequests.findFirst({
         columns: { id: true, productId: true, userId: true },

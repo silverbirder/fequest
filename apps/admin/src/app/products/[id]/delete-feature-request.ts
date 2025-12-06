@@ -1,4 +1,6 @@
+import { deleteProductFeatureRequestSchema } from "@repo/schema";
 import { revalidatePath } from "next/cache";
+import { safeParse } from "valibot";
 
 import { api } from "~/trpc/server";
 
@@ -15,11 +17,11 @@ export const createDeleteFeatureRequest = ({
     const featureId = Number(formData.get("featureId"));
     const submittedProductId = Number(formData.get("productId"));
 
-    if (
-      !Number.isInteger(featureId) ||
-      featureId <= 0 ||
-      submittedProductId !== productId
-    ) {
+    const parsed = safeParse(deleteProductFeatureRequestSchema, {
+      featureId,
+    });
+
+    if (!parsed.success || submittedProductId !== productId) {
       return;
     }
 

@@ -1,4 +1,6 @@
+import { renameProductSchema } from "@repo/schema";
 import { revalidatePath } from "next/cache";
+import { safeParse } from "valibot";
 
 import { api } from "~/trpc/server";
 
@@ -13,21 +15,13 @@ export const createRenameProduct = ({ productId }: RenameProductOptions) => {
     const targetId = Number(formData.get("productId"));
     const name = formData.get("name");
 
-    if (
-      Number.isNaN(targetId) ||
-      targetId !== productId ||
-      typeof name !== "string"
-    ) {
-      return;
-    }
-
-    const trimmed = name.trim();
-    if (trimmed.length === 0) {
+    const parsed = safeParse(renameProductSchema, { id: targetId, name });
+    if (!parsed.success || parsed.output.id !== productId) {
       return;
     }
 
     try {
-      await api.product.rename({ id: targetId, name: trimmed });
+      await api.product.rename(parsed.output);
     } catch (error) {
       console.error("Failed to rename product", error);
     }

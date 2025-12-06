@@ -1,7 +1,15 @@
 import { safeParse } from "valibot";
 import { describe, expect, it } from "vitest";
 
-import { idSchema } from "./base";
+import {
+  createFeatureRequestSchema,
+  featureRequestTitleSchema,
+  idSchema,
+  positiveIntSchema,
+  productNameSchema,
+  reactionActionSchema,
+  setFeatureStatusSchema,
+} from "./base";
 
 const invalidMessage = "Invalid ID";
 
@@ -42,5 +50,78 @@ describe("idSchema", () => {
     if (!result.success) {
       expect(result.issues[0]?.message).toBe(invalidMessage);
     }
+  });
+});
+
+describe("positiveIntSchema", () => {
+  it("accepts positive integers", () => {
+    const result = safeParse(positiveIntSchema, 3);
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.output).toBe(3);
+    }
+  });
+
+  it("rejects zero or negative", () => {
+    expect(safeParse(positiveIntSchema, 0).success).toBe(false);
+    expect(safeParse(positiveIntSchema, -5).success).toBe(false);
+  });
+});
+
+describe("productNameSchema", () => {
+  it("trims and requires content", () => {
+    const result = safeParse(productNameSchema, "  Roadmap ");
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.output).toBe("Roadmap");
+    }
+  });
+
+  it("rejects empty", () => {
+    expect(safeParse(productNameSchema, "   ").success).toBe(false);
+  });
+});
+
+describe("featureRequestTitleSchema", () => {
+  it("trims and limits length", () => {
+    const result = safeParse(featureRequestTitleSchema, "  Title ");
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.output).toBe("Title");
+    }
+  });
+});
+
+describe("createFeatureRequestSchema", () => {
+  it("validates shape", () => {
+    const result = safeParse(createFeatureRequestSchema, {
+      productId: 1,
+      title: "Export CSV",
+    });
+    expect(result.success).toBe(true);
+  });
+});
+
+describe("reactionActionSchema", () => {
+  it("only allows up/down", () => {
+    expect(safeParse(reactionActionSchema, "up").success).toBe(true);
+    expect(safeParse(reactionActionSchema, "down").success).toBe(true);
+    expect(safeParse(reactionActionSchema, "sideways").success).toBe(false);
+  });
+});
+
+describe("setFeatureStatusSchema", () => {
+  const schema = setFeatureStatusSchema(["open", "closed"] as const);
+
+  it("accepts allowed status", () => {
+    expect(safeParse(schema, { featureId: 10, status: "open" }).success).toBe(
+      true,
+    );
+  });
+
+  it("rejects invalid status", () => {
+    expect(
+      safeParse(schema, { featureId: 10, status: "pending" }).success,
+    ).toBe(false);
   });
 });

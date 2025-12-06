@@ -3,45 +3,23 @@ import {
   featureRequestStatuses,
   products,
 } from "@repo/db/schema";
+import {
+  createProductSchema,
+  deleteProductFeatureRequestSchema,
+  deleteProductSchema,
+  productIdSchema,
+  renameProductSchema,
+  setFeatureStatusSchema,
+} from "@repo/schema";
 import { type ProductSummary } from "@repo/type";
 import { TRPCError } from "@trpc/server";
 import { and, eq } from "drizzle-orm";
-import {
-  maxLength,
-  minLength,
-  number,
-  object,
-  picklist,
-  pipe,
-  string,
-  trim,
-} from "valibot";
 
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 
-const productIdSchema = object({ id: number() });
-
-const createInputSchema = object({
-  name: pipe(string(), trim(), minLength(1), maxLength(256)),
-});
-
-const renameInputSchema = object({
-  id: number(),
-  name: pipe(string(), trim(), minLength(1), maxLength(256)),
-});
-
-const setFeatureStatusInputSchema = object({
-  featureId: number(),
-  status: picklist(featureRequestStatuses),
-});
-
-const deleteFeatureRequestInputSchema = object({
-  featureId: number(),
-});
-
-const deleteInputSchema = object({
-  id: number(),
-});
+const setFeatureStatusInputSchema = setFeatureStatusSchema(
+  featureRequestStatuses,
+);
 
 export const productRouter = createTRPCRouter({
   byId: protectedProcedure
@@ -84,11 +62,11 @@ export const productRouter = createTRPCRouter({
     }),
 
   create: protectedProcedure
-    .input(createInputSchema)
+    .input(createProductSchema)
     .mutation(async ({ ctx, input }) => {
       const [product] = await ctx.db
         .insert(products)
-        .values({ name: input.name.trim(), userId: ctx.session.user.id })
+        .values({ name: input.name, userId: ctx.session.user.id })
         .returning({ id: products.id, name: products.name });
 
       if (!product) {
@@ -102,7 +80,7 @@ export const productRouter = createTRPCRouter({
     }),
 
   delete: protectedProcedure
-    .input(deleteInputSchema)
+    .input(deleteProductSchema)
     .mutation(async ({ ctx, input }) => {
       const product = await ctx.db.query.products.findFirst({
         columns: {
@@ -133,7 +111,7 @@ export const productRouter = createTRPCRouter({
     }),
 
   deleteFeatureRequest: protectedProcedure
-    .input(deleteFeatureRequestInputSchema)
+    .input(deleteProductFeatureRequestSchema)
     .mutation(async ({ ctx, input }) => {
       const feature = await ctx.db.query.featureRequests.findFirst({
         columns: { id: true, productId: true },
@@ -201,11 +179,11 @@ export const productRouter = createTRPCRouter({
   }),
 
   rename: protectedProcedure
-    .input(renameInputSchema)
+    .input(renameProductSchema)
     .mutation(async ({ ctx, input }) => {
       const updatedProducts = await ctx.db
         .update(products)
-        .set({ name: input.name.trim() })
+        .set({ name: input.name })
         .where(
           and(
             eq(products.id, input.id),

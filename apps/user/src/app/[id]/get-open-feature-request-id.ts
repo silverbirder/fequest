@@ -1,16 +1,11 @@
+import { idSchema } from "@repo/schema";
+import { safeParse } from "valibot";
+
 type SearchParams = Record<string, string | string[] | undefined> | undefined;
 
 export const getOpenFeatureRequestId = (searchParams: SearchParams) => {
   const raw = searchParams?.open;
-  const value = Array.isArray(raw)
-    ? Number(raw[0])
-    : typeof raw === "string"
-      ? Number(raw)
-      : null;
-
-  if (value === null || !Number.isInteger(value) || value <= 0) {
-    return null;
-  }
-
-  return value;
+  const candidate = Array.isArray(raw) ? raw[0] : raw;
+  const parsed = safeParse(idSchema, candidate);
+  return parsed.success ? parsed.output : null;
 };
