@@ -1,3 +1,4 @@
+import { type ProductSummary } from "@repo/type";
 import {
   Box,
   Button,
@@ -22,13 +23,6 @@ import {
 } from "@repo/ui/components";
 import Link from "next/link";
 import { type ReactNode, useId } from "react";
-
-type ProductSummary = {
-  featureCount: number;
-  id: number;
-  name: string;
-  reactionCount: number;
-};
 
 const formatCount = (value: number) =>
   new Intl.NumberFormat("ja-JP").format(value);

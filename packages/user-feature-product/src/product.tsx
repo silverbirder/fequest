@@ -1,3 +1,4 @@
+import { type FeatureRequestCore, type FeatureRequestUser } from "@repo/type";
 import {
   Box,
   BubbleInput,
@@ -14,19 +15,9 @@ import type { ReactionSummary } from "./libs/reaction-summary";
 import { FeatureRequestContent } from "./components/feature-request-content";
 import { FeatureRequestItem } from "./components/feature-request-item";
 
-type FeatureRequest = {
-  content: string;
-  createdAt?: Date | null | string;
-  id: number;
+type FeatureRequest = FeatureRequestCore & {
   reactionSummaries?: null | ReactionSummary[];
-  status: string;
-  title?: null | string;
-  updatedAt?: Date | null | string;
-  user?: null | {
-    id?: null | string;
-    image?: null | string;
-    name?: null | string;
-  };
+  user?: FeatureRequestUser | null;
 };
 
 type ProductData = {

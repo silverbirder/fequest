@@ -12,6 +12,7 @@
     "check-types": "tsc --noEmit"
   },
   "dependencies": {
+    "@repo/type": "workspace:*",
     "@repo/ui": "workspace:*",
     "next": "^16.0.7"
   },

@@ -3,6 +3,7 @@ import {
   featureRequestStatuses,
   products,
 } from "@repo/db/schema";
+import { type ProductSummary } from "@repo/type";
 import { TRPCError } from "@trpc/server";
 import { and, eq } from "drizzle-orm";
 import {
@@ -17,13 +18,6 @@ import {
 } from "valibot";
 
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
-
-type ProductSummary = {
-  featureCount: number;
-  id: number;
-  name: string;
-  reactionCount: number;
-};
 
 const productIdSchema = object({ id: number() });
 

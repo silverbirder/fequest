@@ -1,3 +1,4 @@
+import { type ProductSummary } from "@repo/type";
 import {
   Box,
   Button,
@@ -8,13 +9,6 @@ import {
   VStack,
 } from "@repo/ui/components";
 import Link from "next/link";
-
-type ProductSummary = {
-  featureCount: number;
-  id: number;
-  name: string;
-  reactionCount: number;
-};
 
 type Props = {
   products: ProductSummary[];

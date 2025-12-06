@@ -1,7 +1,9 @@
+import { type FeatureRequestStatus } from "@repo/type";
 import { composeStories } from "@storybook/nextjs-vite";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { render } from "vitest-browser-react";
 
+import { type ReactionSummary } from "./libs/reaction-summary";
 import { Product } from "./product";
 import * as stories from "./product.stories";
 
@@ -44,15 +46,9 @@ const createProductFixture = (ownerId: string) => ({
   featureRequests: [
     {
       content: "ユーザーがプロフィール画像をアップロードできるようにする",
-      contentNode: (
-        <div>
-          <h2>プロフィール画像アップロード</h2>
-          <p>ユーザーがプロフィール画像をアップロードできるようにする</p>
-        </div>
-      ),
       id: 1,
-      reactionSummaries: [],
-      status: "open",
+      reactionSummaries: [] as ReactionSummary[],
+      status: "open" as FeatureRequestStatus,
       title: "プロフィール画像アップロード",
       updatedAt: "2024-01-02T00:00:00.000Z",
       user: {

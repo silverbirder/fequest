@@ -1,15 +1,9 @@
+import { type ProductSummary } from "@repo/type";
 import { getAnonymousIdentifierFromHeaders } from "@repo/user-cookie";
 import { summarizeReactions } from "@repo/user-feature-product";
 import { integer, minValue, number, object, pipe } from "valibot";
 
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
-
-type ProductSummary = {
-  featureCount: number;
-  id: number;
-  name: string;
-  reactionCount: number;
-};
 
 export const productRouter = createTRPCRouter({
   byId: publicProcedure

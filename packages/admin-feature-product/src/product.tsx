@@ -1,3 +1,4 @@
+import { type FeatureRequestCore, type FeatureRequestStatus } from "@repo/type";
 import {
   Box,
   Button,
@@ -8,16 +9,7 @@ import {
   VStack,
 } from "@repo/ui/components";
 
-type FeatureRequest = {
-  content: string;
-  createdAt?: Date | null | string;
-  id: number;
-  status: FeatureRequestStatus;
-  title?: null | string;
-  updatedAt?: Date | null | string;
-};
-
-type FeatureRequestStatus = "closed" | "open";
+type FeatureRequest = FeatureRequestCore;
 
 type ProductDetail = {
   featureRequests?: FeatureRequest[];
