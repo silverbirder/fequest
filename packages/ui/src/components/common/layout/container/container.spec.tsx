@@ -61,4 +61,18 @@ describe("Container", () => {
     expect(className).toContain("max-w-xl");
     expect(className).toContain("px-0");
   });
+
+  it("supports composing via asChild", async () => {
+    await render(
+      <Container asChild padding="sm">
+        <main data-testid="custom">content</main>
+      </Container>,
+    );
+
+    const container = document.querySelector<HTMLElement>(
+      '[data-slot="container"]',
+    );
+    expect(container?.tagName.toLowerCase()).toBe("main");
+    expect(container?.className ?? "").toContain("px-2");
+  });
 });

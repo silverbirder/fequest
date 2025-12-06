@@ -1,3 +1,4 @@
+import { type AsChildProp, resolveSlotComponent } from "@repo/ui/lib/as-child";
 import {
   splitStyleProps,
   type StyleProps,
@@ -65,20 +66,33 @@ const stackVariants = cva("flex", {
   },
 });
 
-type StackProps = Omit<React.HTMLAttributes<HTMLDivElement>, keyof StyleProps> &
+type StackProps = AsChildProp &
+  Omit<React.HTMLAttributes<HTMLDivElement>, keyof StyleProps> &
   StyleProps &
   VariantProps<typeof stackVariants>;
 
 const Stack = React.forwardRef<HTMLDivElement, StackProps>(
   (
-    { align, className, direction, gap, inline, justify, self, wrap, ...props },
+    {
+      align,
+      asChild = false,
+      className,
+      direction,
+      gap,
+      inline,
+      justify,
+      self,
+      wrap,
+      ...props
+    },
     ref,
   ) => {
+    const Comp = resolveSlotComponent(asChild, "div");
     const orientation = direction ?? "column";
     const { restProps, styleProps } = splitStyleProps(props);
 
     return (
-      <div
+      <Comp
         className={cn(
           stackVariants({ align, direction, gap, inline, justify, self, wrap }),
           stylePropsClassNames(styleProps),

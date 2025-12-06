@@ -1,4 +1,4 @@
-import { Slot } from "@radix-ui/react-slot";
+import { type AsChildProp, resolveSlotComponent } from "@repo/ui/lib/as-child";
 import {
   splitStyleProps,
   type StyleProps,
@@ -7,14 +7,13 @@ import {
 import { cn } from "@repo/ui/lib/utils";
 import React from "react";
 
-type BoxProps = Omit<React.ComponentPropsWithoutRef<"div">, keyof StyleProps> &
-  StyleProps & {
-    asChild?: boolean;
-  };
+type BoxProps = AsChildProp &
+  Omit<React.ComponentPropsWithoutRef<"div">, keyof StyleProps> &
+  StyleProps;
 
 const Box = React.forwardRef<HTMLDivElement, BoxProps>(
   ({ asChild = false, className, ...props }, ref) => {
-    const Comp = asChild ? Slot : "div";
+    const Comp = resolveSlotComponent(asChild, "div");
     const { restProps, styleProps } = splitStyleProps(props);
 
     return (

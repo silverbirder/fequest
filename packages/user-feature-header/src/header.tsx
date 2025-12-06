@@ -28,7 +28,7 @@ type User = {
 };
 
 export const Header = ({
-  appName = "Fequest",
+  appName = "🗳️ Fequest",
   homeHref = "/",
   loginAction,
   logoutAction,
@@ -37,10 +37,21 @@ export const Header = ({
   const isAuthenticated = Boolean(user);
 
   return (
-    <header>
-      <HStack align="center" justify="between" p="md">
+    <HStack
+      align="center"
+      asChild
+      backdrop="lg"
+      borderBottom="default"
+      justify="between"
+      p="md"
+      position="sticky"
+      shadow="sm"
+      top="0"
+      w="full"
+    >
+      <header>
         <Link href={homeHref}>
-          <Text size="lg" weight="semibold">
+          <Text size="2xl" weight="semibold">
             {appName}
           </Text>
         </Link>
@@ -70,7 +81,7 @@ export const Header = ({
             </Button>
           </form>
         )}
-      </HStack>
-    </header>
+      </header>
+    </HStack>
   );
 };

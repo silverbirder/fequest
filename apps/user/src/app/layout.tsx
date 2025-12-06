@@ -48,7 +48,7 @@ export default async function RootLayout({
             <Header
               loginAction={signInWithGoogle}
               logoutAction={signOutUser}
-              user={session?.user ?? null}
+              user={session?.user}
             />
             {children}
           </Providers>

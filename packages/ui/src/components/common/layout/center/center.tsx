@@ -1,4 +1,4 @@
-import { Slot } from "@radix-ui/react-slot";
+import { type AsChildProp, resolveSlotComponent } from "@repo/ui/lib/as-child";
 import {
   splitStyleProps,
   type StyleProps,
@@ -34,18 +34,14 @@ const centerVariants = cva("flex items-center justify-center", {
   },
 });
 
-type CenterProps = Omit<
-  React.ComponentPropsWithoutRef<"div">,
-  keyof StyleProps
-> &
+type CenterProps = AsChildProp &
+  Omit<React.ComponentPropsWithoutRef<"div">, keyof StyleProps> &
   StyleProps &
-  VariantProps<typeof centerVariants> & {
-    asChild?: boolean;
-  };
+  VariantProps<typeof centerVariants>;
 
 const Center = React.forwardRef<HTMLDivElement, CenterProps>(
   ({ asChild = false, className, direction, gap, inline, ...props }, ref) => {
-    const Comp = asChild ? Slot : "div";
+    const Comp = resolveSlotComponent(asChild, "div");
     const { restProps, styleProps } = splitStyleProps(props);
 
     return (

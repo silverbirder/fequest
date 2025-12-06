@@ -266,6 +266,42 @@ const border = cva("", {
       dotted: "border border-dotted",
       none: "border-none",
     },
+    borderBottom: {
+      dashed: "border-b border-dashed",
+      default: "border-b",
+      dotted: "border-b border-dotted",
+      none: "border-b-0",
+    },
+    borderLeft: {
+      dashed: "border-l border-dashed",
+      default: "border-l",
+      dotted: "border-l border-dotted",
+      none: "border-l-0",
+    },
+    borderRight: {
+      dashed: "border-r border-dashed",
+      default: "border-r",
+      dotted: "border-r border-dotted",
+      none: "border-r-0",
+    },
+    borderTop: {
+      dashed: "border-t border-dashed",
+      default: "border-t",
+      dotted: "border-t border-dotted",
+      none: "border-t-0",
+    },
+  },
+});
+
+const shadow = cva("", {
+  variants: {
+    shadow: {
+      lg: "shadow-lg",
+      md: "shadow-md",
+      none: "shadow-none",
+      sm: "shadow-sm",
+      xl: "shadow-xl",
+    },
   },
 });
 
@@ -280,6 +316,18 @@ const caret = cva("", {
   },
 });
 
+const opacity = cva("", {
+  variants: {
+    opacity: {
+      "0": "opacity-0",
+      "25": "opacity-25",
+      "50": "opacity-50",
+      "75": "opacity-75",
+      "100": "opacity-100",
+    },
+  },
+});
+
 const prose = cva("", {
   variants: {
     prose: {
@@ -288,23 +336,41 @@ const prose = cva("", {
   },
 });
 
+const backdrop = cva("", {
+  variants: {
+    backdrop: {
+      lg: "backdrop-blur-lg",
+      md: "backdrop-blur-md",
+      none: "backdrop-blur-0",
+      sm: "backdrop-blur-sm",
+      xl: "backdrop-blur-xl",
+    },
+  },
+});
+
+type BackdropProps = VariantProps<typeof backdrop>;
 type BackgroundProps = VariantProps<typeof background>;
 type BorderProps = VariantProps<typeof border>;
 type CaretProps = VariantProps<typeof caret>;
 type ForegroundProps = VariantProps<typeof foreground>;
 type LayoutProps = VariantProps<typeof layout>;
+type OpacityProps = VariantProps<typeof opacity>;
 type ProseProps = VariantProps<typeof prose>;
 type RadiusProps = VariantProps<typeof radius>;
+type ShadowProps = VariantProps<typeof shadow>;
 
 type SpacingProps = VariantProps<typeof spacing>;
 
-type StyleProps = BackgroundProps &
+type StyleProps = BackdropProps &
+  BackgroundProps &
   BorderProps &
   CaretProps &
   ForegroundProps &
   LayoutProps &
+  OpacityProps &
   ProseProps &
   RadiusProps &
+  ShadowProps &
   SpacingProps;
 
 const stylePropsClassNames = (props?: Partial<StyleProps>) =>
@@ -315,7 +381,10 @@ const stylePropsClassNames = (props?: Partial<StyleProps>) =>
     spacing(props ?? {}),
     layout(props ?? {}),
     border(props ?? {}),
+    backdrop(props ?? {}),
+    shadow(props ?? {}),
     caret(props ?? {}),
+    opacity(props ?? {}),
     prose(props ?? {}),
   );
 
@@ -337,7 +406,14 @@ const stylePropKeys = [
   "mb",
   "ml",
   "border",
+  "borderBottom",
+  "borderTop",
+  "borderLeft",
+  "borderRight",
+  "shadow",
+  "backdrop",
   "radius",
+  "opacity",
   "position",
   "w",
   "h",
@@ -381,25 +457,31 @@ const splitStyleProps = <Props extends Record<string, unknown>>(
 };
 
 export {
+  backdrop,
   background,
   border,
   caret,
   foreground,
   layout,
+  opacity,
   radius,
+  shadow,
   spacing,
   splitStyleProps,
   stylePropsClassNames,
 };
 
 export type {
+  BackdropProps,
   BackgroundProps,
   BorderProps,
   CaretProps,
   ForegroundProps,
   LayoutProps,
+  OpacityProps,
   ProseProps,
   RadiusProps,
+  ShadowProps,
   SpacingProps,
   StylePropKey,
   StyleProps,

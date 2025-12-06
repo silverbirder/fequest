@@ -1,4 +1,4 @@
-import { Slot } from "@radix-ui/react-slot";
+import { type AsChildProp, resolveSlotComponent } from "@repo/ui/lib/as-child";
 import {
   splitStyleProps,
   type StyleProps,
@@ -60,11 +60,10 @@ const flexVariants = cva("flex", {
   },
 });
 
-type FlexProps = Omit<React.ComponentPropsWithoutRef<"div">, keyof StyleProps> &
+type FlexProps = AsChildProp &
+  Omit<React.ComponentPropsWithoutRef<"div">, keyof StyleProps> &
   StyleProps &
-  VariantProps<typeof flexVariants> & {
-    asChild?: boolean;
-  };
+  VariantProps<typeof flexVariants>;
 
 const Flex = React.forwardRef<HTMLDivElement, FlexProps>(
   (
@@ -81,7 +80,7 @@ const Flex = React.forwardRef<HTMLDivElement, FlexProps>(
     },
     ref,
   ) => {
-    const Comp = asChild ? Slot : "div";
+    const Comp = resolveSlotComponent(asChild, "div");
     const { restProps, styleProps } = splitStyleProps(props);
 
     return (

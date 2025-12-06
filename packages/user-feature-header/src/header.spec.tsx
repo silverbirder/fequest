@@ -38,6 +38,23 @@ describe("Header", () => {
     expect(button?.textContent).toContain("ログイン");
   });
 
+  it("keeps the header sticky at the top", async () => {
+    await render(
+      <Header
+        loginAction={async () => {}}
+        logoutAction={async () => {}}
+        user={null}
+      />,
+    );
+
+    const header = document.querySelector<HTMLElement>(
+      "header[data-slot='stack']",
+    );
+
+    expect(header?.className).toContain("sticky");
+    expect(header?.className).toContain("top-0");
+  });
+
   it("uses provided login action when given", async () => {
     const loginAction = async () => {};
     const logoutAction = async () => {};

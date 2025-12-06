@@ -1,3 +1,4 @@
+import { type AsChildProp, resolveSlotComponent } from "@repo/ui/lib/as-child";
 import {
   splitStyleProps,
   type StyleProps,
@@ -32,21 +33,30 @@ const containerVariants = cva("mx-auto w-full", {
   },
 });
 
-type ContainerProps = Omit<
-  React.ComponentPropsWithoutRef<"div">,
-  keyof StyleProps
-> &
+type ContainerProps = AsChildProp &
+  Omit<React.ComponentPropsWithoutRef<"div">, keyof StyleProps> &
   StyleProps &
   VariantProps<typeof containerVariants> & {
     centerContent?: boolean;
   };
 
 const Container = React.forwardRef<HTMLDivElement, ContainerProps>(
-  ({ centerContent = false, className, padding, size, ...props }, ref) => {
+  (
+    {
+      asChild = false,
+      centerContent = false,
+      className,
+      padding,
+      size,
+      ...props
+    },
+    ref,
+  ) => {
+    const Comp = resolveSlotComponent(asChild, "div");
     const { restProps, styleProps } = splitStyleProps(props);
 
     return (
-      <div
+      <Comp
         className={cn(
           containerVariants({ padding, size }),
           centerContent && "flex flex-col items-center text-center",

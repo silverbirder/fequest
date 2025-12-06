@@ -1,4 +1,4 @@
-import { Slot } from "@radix-ui/react-slot";
+import { type AsChildProp, resolveSlotComponent } from "@repo/ui/lib/as-child";
 import {
   splitStyleProps,
   type StyleProps,
@@ -58,13 +58,10 @@ const sizeByLevel: Record<HeadingLevel, HeadingSize> = {
   6: "lg",
 };
 
-type HeadingProps = Omit<
-  React.HTMLAttributes<HTMLHeadingElement>,
-  keyof StyleProps
-> &
+type HeadingProps = AsChildProp &
+  Omit<React.HTMLAttributes<HTMLHeadingElement>, keyof StyleProps> &
   StyleProps &
   VariantProps<typeof headingVariants> & {
-    asChild?: boolean;
     level?: HeadingLevel;
   };
 
@@ -83,7 +80,7 @@ const Heading = React.forwardRef<HTMLHeadingElement, HeadingProps>(
     },
     ref,
   ) => {
-    const Component: ElementType = asChild ? Slot : (`h${level}` as const);
+    const Component: ElementType = resolveSlotComponent(asChild, `h${level}`);
     const computedSize = size ?? sizeByLevel[level] ?? "3xl";
     const { restProps, styleProps } = splitStyleProps(props);
 

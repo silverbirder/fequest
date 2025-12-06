@@ -71,4 +71,16 @@ describe("Stack", () => {
     expect(className).toContain("flex-wrap");
     expect(className).toContain("inline-flex");
   });
+
+  it("supports composing via asChild", async () => {
+    await render(
+      <HStack asChild gap="sm">
+        <section data-testid="custom">content</section>
+      </HStack>,
+    );
+
+    const stack = document.querySelector<HTMLElement>('[data-slot="stack"]');
+    expect(stack?.tagName.toLowerCase()).toBe("section");
+    expect(stack?.getAttribute("class") ?? "").toContain("gap-2");
+  });
 });

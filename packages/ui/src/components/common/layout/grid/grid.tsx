@@ -1,4 +1,4 @@
-import { Slot } from "@radix-ui/react-slot";
+import { type AsChildProp, resolveSlotComponent } from "@repo/ui/lib/as-child";
 import {
   splitStyleProps,
   type StyleProps,
@@ -79,11 +79,10 @@ const gridVariants = cva("grid", {
   },
 });
 
-type GridProps = Omit<React.ComponentPropsWithoutRef<"div">, keyof StyleProps> &
+type GridProps = AsChildProp &
+  Omit<React.ComponentPropsWithoutRef<"div">, keyof StyleProps> &
   StyleProps &
-  VariantProps<typeof gridVariants> & {
-    asChild?: boolean;
-  };
+  VariantProps<typeof gridVariants>;
 
 const Grid = React.forwardRef<HTMLDivElement, GridProps>(
   (
@@ -101,7 +100,7 @@ const Grid = React.forwardRef<HTMLDivElement, GridProps>(
     },
     ref,
   ) => {
-    const Comp = asChild ? Slot : "div";
+    const Comp = resolveSlotComponent(asChild, "div");
     const { restProps, styleProps } = splitStyleProps(props);
 
     return (
