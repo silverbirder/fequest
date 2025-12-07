@@ -1,4 +1,11 @@
-import { Box, Button, Center, Heading, Stack, Text } from "@repo/ui/components";
+import {
+  Box,
+  Button,
+  Center,
+  Heading,
+  Text,
+  VStack,
+} from "@repo/ui/components";
 
 type Props = {
   appName?: string;
@@ -10,7 +17,7 @@ export const SignIn = ({
   onGoogleSignIn,
 }: Props) => {
   return (
-    <Center bg="muted" minH="screen" px="md" py="xl" w="full">
+    <Center minH="screen" px="md" py="xl" w="full">
       <Box
         bg="white"
         border="default"
@@ -20,8 +27,8 @@ export const SignIn = ({
         shadow="lg"
         w="full"
       >
-        <Stack gap="lg">
-          <Stack align="center" gap="xs">
+        <VStack gap="lg">
+          <VStack align="center" gap="xs">
             <Text casing="uppercase" color="muted" size="xs" weight="medium">
               {appName}
             </Text>
@@ -31,16 +38,15 @@ export const SignIn = ({
             <Text align="center" color="muted" size="sm">
               管理画面を利用するには、Googleでログインしてください。
             </Text>
-          </Stack>
-
-          <Stack gap="md">
+          </VStack>
+          <Center w="full">
             <form action={onGoogleSignIn}>
               <Button data-slot="google-signin" size="lg" type="submit">
                 Googleで続行
               </Button>
             </form>
-          </Stack>
-        </Stack>
+          </Center>
+        </VStack>
       </Box>
     </Center>
   );

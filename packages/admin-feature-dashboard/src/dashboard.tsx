@@ -104,7 +104,6 @@ export const Dashboard = ({ onCreateProduct, products }: Props) => {
           }
         />
       </HStack>
-
       {products.length === 0 ? (
         <Empty>
           <EmptyMedia variant="icon">🤔</EmptyMedia>
@@ -126,7 +125,7 @@ export const Dashboard = ({ onCreateProduct, products }: Props) => {
           </EmptyContent>
         </Empty>
       ) : (
-        <VStack gap="md">
+        <HStack gap="md" w="full" wrap="wrap">
           {products.map((product) => (
             <ProductCard
               href={{ pathname: `/products/${product.id}` }}
@@ -136,7 +135,7 @@ export const Dashboard = ({ onCreateProduct, products }: Props) => {
               requestCount={product.featureCount}
             />
           ))}
-        </VStack>
+        </HStack>
       )}
     </VStack>
   );

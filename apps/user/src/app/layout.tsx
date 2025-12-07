@@ -1,5 +1,5 @@
 import "@repo/ui/globals.css";
-import { Header } from "@repo/ui/components";
+import { Center, Container, Header, VStack } from "@repo/ui/components";
 import { Providers } from "@repo/ui/providers/theme-provider";
 import { type Metadata } from "next";
 import { Noto_Sans_JP } from "next/font/google";
@@ -45,12 +45,16 @@ export default async function RootLayout({
       <body className={notoSansJP.className}>
         <TRPCReactProvider>
           <Providers>
-            <Header
-              loginAction={signInWithGoogle}
-              logoutAction={signOutUser}
-              user={session?.user}
-            />
-            {children}
+            <VStack gap="lg">
+              <Header
+                loginAction={signInWithGoogle}
+                logoutAction={signOutUser}
+                user={session?.user}
+              />
+              <Container>
+                <Center>{children}</Center>
+              </Container>
+            </VStack>
           </Providers>
         </TRPCReactProvider>
       </body>

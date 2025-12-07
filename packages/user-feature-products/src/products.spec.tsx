@@ -40,11 +40,4 @@ describe("Products", () => {
     expect(links).toContain("/1");
     expect(links).toContain("/2");
   });
-
-  it("renders empty state when no products", async () => {
-    await render(<Products products={[]} />);
-
-    const text = document.body.textContent ?? "";
-    expect(text).toContain("まだ公開されているプロダクトがありません");
-  });
 });

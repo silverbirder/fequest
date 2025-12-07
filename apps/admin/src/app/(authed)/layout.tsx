@@ -1,4 +1,4 @@
-import { Header } from "@repo/ui/components";
+import { Center, Container, Header, VStack } from "@repo/ui/components";
 import { redirect } from "next/navigation";
 import { type ReactNode } from "react";
 
@@ -26,15 +26,17 @@ const ConsoleLayout = async ({ children }: Props) => {
   };
 
   return (
-    <>
+    <VStack gap="lg">
       <Header
         appName="🗳️ Fequest Admin"
         loginAction={signInWithGoogle}
         logoutAction={signOutUser}
         user={session?.user}
       />
-      {children}
-    </>
+      <Container>
+        <Center>{children}</Center>
+      </Container>
+    </VStack>
   );
 };
 

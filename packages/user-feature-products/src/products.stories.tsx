@@ -28,9 +28,3 @@ export const WithProducts: Story = {
     ],
   },
 };
-
-export const Empty: Story = {
-  args: {
-    products: [],
-  },
-};
