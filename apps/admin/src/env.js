@@ -29,6 +29,7 @@ export const env = createEnv({
     AUTH_SECRET: process.env.AUTH_SECRET,
     DATABASE_URL: process.env.DATABASE_URL,
     NODE_ENV: process.env.NODE_ENV,
+    USER_DOMAIN_URL: process.env.USER_DOMAIN_URL,
   },
   /**
    * Specify your server-side environment variables schema here. This way you can ensure the app
@@ -44,6 +45,7 @@ export const env = createEnv({
       picklist(["development", "test", "production"]),
       "development"
     ),
+    USER_DOMAIN_URL: pipe(string(), url()),
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

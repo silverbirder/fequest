@@ -4,6 +4,7 @@ import { Providers } from "@repo/ui/providers/theme-provider";
 import { type Metadata } from "next";
 import { Noto_Sans_JP } from "next/font/google";
 
+import { env } from "~/env";
 import { auth, signIn, signOut } from "~/server/auth";
 import { TRPCReactProvider } from "~/trpc/react";
 
@@ -47,6 +48,10 @@ export default async function RootLayout({
           <Providers>
             <VStack gap="lg">
               <Header
+                appendLink={{
+                  href: env.ADMIN_DOMAIN_URL,
+                  label: "管理ページへ",
+                }}
                 loginAction={signInWithGoogle}
                 logoutAction={signOutUser}
                 user={session?.user}

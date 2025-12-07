@@ -11,7 +11,8 @@
     "VERCEL_URL",
     "PORT",
     "BASE_URL",
-    "ADMIN_DOMAIN_URL"
+    "ADMIN_DOMAIN_URL",
+    "USER_DOMAIN_URL"
   ],
   "tasks": {
     "build": {

@@ -20,6 +20,10 @@ export const LoggedOut: Story = {
 
 export const LoggedIn: Story = {
   args: {
+    appendLink: {
+      href: "https://admin.fequest.local",
+      label: "管理ページへ",
+    },
     loginAction: async () => {},
     logoutAction: async () => {},
     user: {

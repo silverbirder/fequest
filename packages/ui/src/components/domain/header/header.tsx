@@ -16,6 +16,7 @@ import {
 } from "../../common";
 
 type Props = {
+  appendLink?: { href: string; label: string };
   appName?: string;
   homeHref?: Route | UrlObject;
   loginAction: () => Promise<void>;
@@ -29,6 +30,7 @@ type User = {
 };
 
 export const Header = ({
+  appendLink,
   appName = "🗳️ Fequest",
   homeHref = "/",
   loginAction,
@@ -65,6 +67,21 @@ export const Header = ({
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" sideOffset={8}>
+              {appendLink && (
+                <DropdownMenuItem asChild>
+                  <Box w="full">
+                    <Button asChild size="sm" variant="ghost">
+                      <a
+                        href={appendLink.href}
+                        rel="noreferrer"
+                        target="_blank"
+                      >
+                        {appendLink.label}
+                      </a>
+                    </Button>
+                  </Box>
+                </DropdownMenuItem>
+              )}
               <DropdownMenuItem asChild>
                 <form action={logoutAction}>
                   <Box w="full">

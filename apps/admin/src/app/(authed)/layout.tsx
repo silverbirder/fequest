@@ -2,6 +2,7 @@ import { Center, Container, Header, VStack } from "@repo/ui/components";
 import { redirect } from "next/navigation";
 import { type ReactNode } from "react";
 
+import { env } from "~/env";
 import { auth, signIn, signOut } from "~/server/auth";
 
 type Props = Readonly<{
@@ -28,6 +29,10 @@ const ConsoleLayout = async ({ children }: Props) => {
   return (
     <VStack gap="lg">
       <Header
+        appendLink={{
+          href: env.USER_DOMAIN_URL,
+          label: "ユーザーページへ",
+        }}
         appName="🗳️ Fequest Admin"
         loginAction={signInWithGoogle}
         logoutAction={signOutUser}

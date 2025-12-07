@@ -90,6 +90,10 @@ describe("Header", () => {
   it("opens dropdown menu on avatar click and shows logout", async () => {
     await render(
       <Header
+        appendLink={{
+          href: "https://admin.fequest.local",
+          label: "管理ページへ",
+        }}
         loginAction={async () => {}}
         logoutAction={async () => {}}
         user={{
@@ -131,5 +135,61 @@ describe("Header", () => {
     );
 
     expect(menu?.textContent ?? "").toContain("ログアウト");
+  });
+
+  it("shows a cross-portal link when provided", async () => {
+    const href = "https://admin.fequest.local";
+
+    await render(
+      <Header
+        appendLink={{
+          href,
+          label: "管理ページへ",
+        }}
+        loginAction={async () => {}}
+        logoutAction={async () => {}}
+        user={{
+          image: null,
+          name: "Fequest User",
+        }}
+      />,
+    );
+
+    const trigger = document.querySelector<HTMLElement>(
+      "[data-slot='dropdown-menu-trigger']",
+    );
+
+    trigger?.dispatchEvent(
+      new PointerEvent("pointerdown", {
+        bubbles: true,
+        button: 0,
+        pointerId: 1,
+        pointerType: "mouse",
+      }),
+    );
+    trigger?.dispatchEvent(
+      new PointerEvent("pointerup", {
+        bubbles: true,
+        button: 0,
+        pointerId: 1,
+        pointerType: "mouse",
+      }),
+    );
+    trigger?.dispatchEvent(
+      new MouseEvent("click", { bubbles: true, button: 0 }),
+    );
+
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    const menu = document.querySelector<HTMLElement>(
+      "[data-slot='dropdown-menu-content']",
+    );
+    const switchAnchor = menu?.querySelector<HTMLAnchorElement>(
+      `a[href='${href}']`,
+    );
+
+    expect(menu?.textContent ?? "").toContain("管理ページへ");
+    expect(switchAnchor).not.toBeNull();
   });
 });
