@@ -5,7 +5,7 @@ type Props = {
   products: ProductSummary[];
 };
 
-export const Products = ({ products }: Props) => {
+export const Top = ({ products }: Props) => {
   return (
     <HStack gap="md" wrap="wrap">
       {products.map((product) => (

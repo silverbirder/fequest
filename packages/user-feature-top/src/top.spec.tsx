@@ -2,12 +2,12 @@ import { composeStories } from "@storybook/nextjs-vite";
 import { describe, expect, it } from "vitest";
 import { render } from "vitest-browser-react";
 
-import { Products } from "./products";
-import * as stories from "./products.stories";
+import { Top } from "./top";
+import * as stories from "./top.stories";
 
 const Stories = composeStories(stories);
 
-describe("Products", () => {
+describe("Top", () => {
   it.each(Object.entries(Stories))("should %s snapshot", async (_, Story) => {
     const originalInnerHtml = document.body.innerHTML;
 
@@ -20,7 +20,7 @@ describe("Products", () => {
 
   it("renders each product with counts and link", async () => {
     await render(
-      <Products
+      <Top
         products={[
           { featureCount: 2, id: 1, name: "First", reactionCount: 3 },
           { featureCount: 0, id: 2, name: "Second", reactionCount: 0 },

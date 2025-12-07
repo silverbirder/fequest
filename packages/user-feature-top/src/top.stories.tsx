@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 
-import { Products } from "./products";
+import { Top } from "./top";
 
 const meta = {
-  component: Products,
-  title: "Feature/User/Products",
-} satisfies Meta<typeof Products>;
+  component: Top,
+  title: "Feature/User/Top",
+} satisfies Meta<typeof Top>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
