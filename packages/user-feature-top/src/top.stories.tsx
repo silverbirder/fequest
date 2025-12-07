@@ -12,6 +12,7 @@ type Story = StoryObj<typeof meta>;
 
 export const WithProducts: Story = {
   args: {
+    adminDomain: "https://admin.fequest.test",
     products: [
       {
         featureCount: 3,

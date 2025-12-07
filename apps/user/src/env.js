@@ -24,6 +24,7 @@ export const env = createEnv({
    * middlewares) or client-side so we need to destruct manually.
    */
   runtimeEnv: {
+    ADMIN_DOMAIN_URL: process.env.ADMIN_DOMAIN_URL,
     AUTH_GOOGLE_ID: process.env.AUTH_GOOGLE_ID,
     AUTH_GOOGLE_SECRET: process.env.AUTH_GOOGLE_SECRET,
     AUTH_SECRET: process.env.AUTH_SECRET,
@@ -35,6 +36,7 @@ export const env = createEnv({
    * isn't built with invalid env vars.
    */
   server: {
+    ADMIN_DOMAIN_URL: pipe(string(), url()),
     AUTH_GOOGLE_ID: string(),
     AUTH_GOOGLE_SECRET: string(),
     AUTH_SECRET:

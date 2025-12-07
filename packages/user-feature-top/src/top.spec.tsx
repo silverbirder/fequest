@@ -19,8 +19,11 @@ describe("Top", () => {
   });
 
   it("renders each product with counts and link", async () => {
+    const adminDomain = "https://admin.example.com";
+
     await render(
       <Top
+        adminDomain={adminDomain}
         products={[
           { featureCount: 2, id: 1, name: "First", reactionCount: 3 },
           { featureCount: 0, id: 2, name: "Second", reactionCount: 0 },
@@ -34,6 +37,7 @@ describe("Top", () => {
     expect(text).toContain(
       "ユーザーの『ほしい』と開発者の『つくる』をつなぎ、プロダクトを共に育てる場所です。",
     );
+    expect(text).toContain("管理ページへ");
     expect(text).toContain("First");
     expect(text).toContain("リクエスト 2件");
     expect(text).toContain("Second");
@@ -42,6 +46,7 @@ describe("Top", () => {
     const links = Array.from(document.querySelectorAll("a")).map((a) =>
       a.getAttribute("href"),
     );
+    expect(links).toContain(adminDomain);
     expect(links).toContain("/1");
     expect(links).toContain("/2");
   });
