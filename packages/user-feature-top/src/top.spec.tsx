@@ -29,6 +29,11 @@ describe("Top", () => {
     );
 
     const text = document.body.textContent ?? "";
+    expect(text).toContain("Fequest");
+    expect(text).toContain("ほしいとつくるを共有するプラットフォーム");
+    expect(text).toContain(
+      "ユーザーの『ほしい』と開発者の『つくる』をつなぎ、プロダクトを共に育てる場所です。",
+    );
     expect(text).toContain("First");
     expect(text).toContain("リクエスト 2件");
     expect(text).toContain("Second");
