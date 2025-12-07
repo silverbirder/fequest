@@ -4,7 +4,7 @@ import { Header } from "./header";
 
 const meta = {
   component: Header,
-  title: "Feature/User/Header",
+  title: "Domain/Header",
 } satisfies Meta<typeof Header>;
 
 export default meta;

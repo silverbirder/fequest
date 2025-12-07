@@ -1,6 +1,6 @@
 import "@repo/ui/globals.css";
+import { Header } from "@repo/ui/components";
 import { Providers } from "@repo/ui/providers/theme-provider";
-import { Header } from "@repo/user-feature-header";
 import { type Metadata } from "next";
 import { Noto_Sans_JP } from "next/font/google";
 

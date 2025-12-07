@@ -1,6 +1,8 @@
 import type { Route } from "next";
 import type { UrlObject } from "url";
 
+import Link from "next/link";
+
 import {
   Avatar,
   Box,
@@ -11,8 +13,7 @@ import {
   DropdownMenuTrigger,
   HStack,
   Text,
-} from "@repo/ui/components";
-import Link from "next/link";
+} from "../../common";
 
 type Props = {
   appName?: string;

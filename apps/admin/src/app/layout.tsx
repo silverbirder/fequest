@@ -2,6 +2,7 @@ import "@repo/ui/globals.css";
 import { Providers } from "@repo/ui/providers/theme-provider";
 import { type Metadata } from "next";
 import { Noto_Sans_JP } from "next/font/google";
+import { type ReactNode } from "react";
 
 import { TRPCReactProvider } from "~/trpc/react";
 
@@ -23,9 +24,11 @@ const notoSansJP = Noto_Sans_JP({
   weight: ["400", "500", "700"],
 });
 
-export default function RootLayout({
-  children,
-}: Readonly<{ children: React.ReactNode }>) {
+type Props = Readonly<{
+  children: ReactNode;
+}>;
+
+export default function RootLayout({ children }: Props) {
   return (
     <html lang="ja" suppressHydrationWarning>
       <body className={notoSansJP.className}>

@@ -21,7 +21,6 @@
     "@repo/type": "workspace:*",
     "@repo/ui": "workspace:*",
     "@repo/user-cookie": "workspace:*",
-    "@repo/user-feature-header": "workspace:*",
     "@repo/user-feature-product": "workspace:*",
     "@repo/user-feature-products": "workspace:*",
     "@t3-oss/env-nextjs": "^0.12.0",

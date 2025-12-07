@@ -3,7 +3,7 @@ import { Dashboard } from "@repo/admin-feature-dashboard";
 import { auth } from "~/server/auth";
 import { api } from "~/trpc/server";
 
-import { createProduct } from "./create-product";
+import { createProduct } from "../create-product";
 
 export default async function Page() {
   const session = await auth();
