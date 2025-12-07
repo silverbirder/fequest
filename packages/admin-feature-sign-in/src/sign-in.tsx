@@ -32,7 +32,7 @@ export const SignIn = ({ onGoogleSignIn }: Props) => {
               </Text>
             </VStack>
           </VStack>
-          <VStack align="start" gap="sm">
+          <VStack align="center" gap="sm">
             <Text color="subtle">
               管理画面を利用するには、Googleでログインしてください。
             </Text>
