@@ -1,6 +1,5 @@
 import { type ProductSummary } from "@repo/type";
 import {
-  Box,
   Button,
   Dialog,
   DialogClose,
@@ -18,11 +17,10 @@ import {
   EmptyTitle,
   HStack,
   Input,
+  ProductCard,
   Text,
   VStack,
 } from "@repo/ui/components";
-import { formatCount } from "@repo/util";
-import Link from "next/link";
 import { type ReactNode, useId } from "react";
 
 type CreateProductDialogProps = {
@@ -130,26 +128,13 @@ export const Dashboard = ({ onCreateProduct, products }: Props) => {
       ) : (
         <VStack gap="md">
           {products.map((product) => (
-            <Box bg="card" key={product.id} p="md" radius="md">
-              <HStack align="center" justify="between">
-                <VStack gap="xs">
-                  <Text size="lg" weight="semibold">
-                    {product.name}
-                  </Text>
-                  <HStack align="center" gap="md">
-                    <Text color="muted" size="sm">
-                      質問: {formatCount(product.featureCount)}件
-                    </Text>
-                    <Text color="muted" size="sm">
-                      リアクション: {formatCount(product.reactionCount)}件
-                    </Text>
-                  </HStack>
-                </VStack>
-                <Button asChild variant="outline">
-                  <Link href={`/products/${product.id}`}>開く</Link>
-                </Button>
-              </HStack>
-            </Box>
+            <ProductCard
+              href={{ pathname: `/products/${product.id}` }}
+              key={product.id}
+              logoUrl={product.logoUrl}
+              name={product.name}
+              requestCount={product.featureCount}
+            />
           ))}
         </VStack>
       )}

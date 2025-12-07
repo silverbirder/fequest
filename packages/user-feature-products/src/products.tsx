@@ -1,15 +1,12 @@
 import { type ProductSummary } from "@repo/type";
 import {
-  Box,
-  Button,
   Empty,
   EmptyContent,
   EmptyMedia,
+  ProductCard,
   Text,
   VStack,
 } from "@repo/ui/components";
-import { formatCount } from "@repo/util";
-import Link from "next/link";
 
 type Props = {
   products: ProductSummary[];
@@ -32,20 +29,13 @@ export const Products = ({ products }: Props) => {
       {hasProducts ? (
         <VStack gap="md" w="full">
           {products.map((product) => (
-            <Box bg="card" key={product.id} p="md" radius="md" w="full">
-              <VStack align="start" gap="xs" w="full">
-                <Text size="lg" weight="semibold">
-                  {product.name}
-                </Text>
-                <Text color="muted" size="sm">
-                  質問 {formatCount(product.featureCount)}件 ・ リアクション{" "}
-                  {formatCount(product.reactionCount)}件
-                </Text>
-                <Button asChild size="sm" variant="outline">
-                  <Link href={`/${product.id}`}>プロダクトを開く</Link>
-                </Button>
-              </VStack>
-            </Box>
+            <ProductCard
+              href={{ pathname: `/${product.id}` }}
+              key={product.id}
+              logoUrl={product.logoUrl}
+              name={product.name}
+              requestCount={product.featureCount}
+            />
           ))}
         </VStack>
       ) : (

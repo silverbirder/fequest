@@ -11,6 +11,7 @@
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
+    "@repo/util": "workspace:*",
     "@repo/vitest-config": "workspace:*",
     "@storybook/nextjs-vite": "^10.1.0",
     "@tailwindcss/postcss": "^4.1.11",

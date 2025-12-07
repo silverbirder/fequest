@@ -185,6 +185,10 @@ const spacing = cva("", {
 
 const layout = cva("", {
   variants: {
+    aspectRatio: {
+      square: "aspect-square",
+      video: "aspect-video",
+    },
     basis: {
       "0": "basis-0",
       "1/2": "basis-1/2",
@@ -482,6 +486,7 @@ const stylePropKeys = [
   "overflow",
   "overflowX",
   "overflowY",
+  "aspectRatio",
   "translateY",
   "rotate",
   "flex",

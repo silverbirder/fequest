@@ -11,9 +11,13 @@ const Stories = composeStories(stories);
 vi.mock("next/link", () => {
   const Link = React.forwardRef<
     HTMLAnchorElement,
-    { children: React.ReactNode; href: string }
+    { children: React.ReactNode; href: string | { pathname: string } }
   >(({ children, href, ...rest }, ref) => (
-    <a href={href} ref={ref} {...rest}>
+    <a
+      href={typeof href === "string" ? href : href.pathname}
+      ref={ref}
+      {...rest}
+    >
       {children}
     </a>
   ));
@@ -48,11 +52,9 @@ describe("Dashboard", () => {
     const html = document.body.textContent ?? "";
     expect(html).toContain("あなたのプロダクト");
     expect(html).toContain("Alpha");
-    expect(html).toContain("質問: 2件");
-    expect(html).toContain("リアクション: 5件");
+    expect(html).toContain("リクエスト 2件");
     expect(html).toContain("Beta");
-    expect(html).toContain("質問: 0件");
-    expect(html).toContain("リアクション: 0件");
+    expect(html).toContain("リクエスト 0件");
   });
 
   it("renders empty state when no products", async () => {

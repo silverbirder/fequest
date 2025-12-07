@@ -30,9 +30,9 @@ describe("Products", () => {
 
     const text = document.body.textContent ?? "";
     expect(text).toContain("First");
-    expect(text).toContain("質問 2件 ・ リアクション 3件");
+    expect(text).toContain("リクエスト 2件");
     expect(text).toContain("Second");
-    expect(text).toContain("質問 0件 ・ リアクション 0件");
+    expect(text).toContain("リクエスト 0件");
 
     const links = Array.from(document.querySelectorAll("a")).map((a) =>
       a.getAttribute("href"),

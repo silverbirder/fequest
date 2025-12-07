@@ -18,11 +18,36 @@ describe("ProductCard", () => {
     document.body.innerHTML = originalInnerHtml;
   });
 
-  it("renders provided children", async () => {
-    await render(<ProductCard>Child content</ProductCard>);
+  it("renders name, counts, and link", async () => {
+    await render(
+      <ProductCard
+        href={{ pathname: "/products/42" }}
+        name="Fequest"
+        requestCount={1234}
+      />,
+    );
 
-    const element = document.querySelector("div");
-    expect(element).not.toBeNull();
-    expect(element?.textContent ?? "").toContain("Child content");
+    const link = document.querySelector<HTMLAnchorElement>("a");
+    const text = document.body.textContent ?? "";
+
+    expect(link?.getAttribute("href")).toBe("/products/42");
+    expect(text).toContain("Fequest");
+    expect(text).toContain("リクエスト 1,234件");
+  });
+
+  it("falls back to an initial when logo is missing", async () => {
+    await render(
+      <ProductCard
+        href={{ pathname: "/products/1" }}
+        name="Sample"
+        requestCount={5}
+      />,
+    );
+
+    const fallback = document.querySelector<HTMLElement>(
+      "[data-slot='product-card-fallback']",
+    );
+
+    expect(fallback?.textContent).toContain("S");
   });
 });

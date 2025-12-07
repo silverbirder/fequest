@@ -148,6 +148,12 @@ export const productRouter = createTRPCRouter({
     const userId = ctx.session.user.id;
 
     const products = await ctx.db.query.products.findMany({
+      columns: {
+        id: true,
+        logoUrl: true,
+        name: true,
+        userId: true,
+      },
       orderBy: (product, { desc }) => desc(product.createdAt),
       where: (product, { eq }) => eq(product.userId, userId),
       with: {
@@ -177,6 +183,7 @@ export const productRouter = createTRPCRouter({
       return {
         featureCount,
         id: product.id,
+        logoUrl: product.logoUrl,
         name: product.name,
         reactionCount,
       } satisfies ProductSummary;

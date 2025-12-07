@@ -658,6 +658,9 @@ importers:
       '@repo/typescript-config':
         specifier: workspace:*
         version: link:../typescript-config
+      '@repo/util':
+        specifier: workspace:*
+        version: link:../util
       '@repo/vitest-config':
         specifier: workspace:*
         version: link:../vitest-config

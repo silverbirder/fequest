@@ -215,7 +215,11 @@ describe("productRouter.list", () => {
 
     expect(findMany).toHaveBeenCalled();
     const queryOptions = findMany.mock.calls[0]?.[0];
-    expect(queryOptions?.columns).toEqual({ id: true, name: true });
+    expect(queryOptions?.columns).toEqual({
+      id: true,
+      logoUrl: true,
+      name: true,
+    });
     expect(
       queryOptions?.with?.featureRequests?.with?.reactions?.columns,
     ).toEqual({
@@ -226,12 +230,14 @@ describe("productRouter.list", () => {
       {
         featureCount: 2,
         id: 1,
+        logoUrl: undefined,
         name: "First",
         reactionCount: 2,
       },
       {
         featureCount: 0,
         id: 2,
+        logoUrl: undefined,
         name: "Second",
         reactionCount: 0,
       },
