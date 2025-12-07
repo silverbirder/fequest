@@ -3,7 +3,15 @@ import type { UrlObject } from "url";
 import { formatCount } from "@repo/util";
 import Link from "next/link";
 
-import { Box, Center, HStack, Text, VStack } from "../../common";
+import {
+  AspectRatio,
+  Box,
+  Center,
+  HStack,
+  Image,
+  Text,
+  VStack,
+} from "../../common";
 
 type Props = {
   href: UrlObject;
@@ -27,35 +35,36 @@ export const ProductCard = ({ href, logoUrl, name, requestCount }: Props) => {
     <Box asChild border="default" p="md" radius="lg">
       <Link aria-label={`${name}のプロダクトページ`} href={href}>
         <VStack align="start" gap="md" w="full">
-          <Box
-            aspectRatio="square"
-            data-slot="product-card-logo"
-            overflow="hidden"
-            position="relative"
-            radius="md"
-            w="full"
-          >
-            {safeLogoUrl ? (
-              <img
-                alt={`${name}のロゴ`}
-                height="100%"
-                loading="lazy"
-                src={safeLogoUrl}
-                width="100%"
-              />
-            ) : (
-              <Center
-                aria-label={`${name}のロゴ`}
-                data-slot="product-card-fallback"
-                h="full"
-                w="full"
-              >
-                <Text size="xl" weight="semibold">
-                  {initial}
-                </Text>
-              </Center>
-            )}
-          </Box>
+          <AspectRatio data-slot="product-card-logo" ratio={1}>
+            <Box
+              h="full"
+              overflow="hidden"
+              position="relative"
+              radius="md"
+              w="full"
+            >
+              {safeLogoUrl ? (
+                <Image
+                  alt={`${name}のロゴ`}
+                  fill
+                  loading="lazy"
+                  sizes="(max-width: 768px) 100vw, 320px"
+                  src={safeLogoUrl}
+                />
+              ) : (
+                <Center
+                  aria-label={`${name}のロゴ`}
+                  data-slot="product-card-fallback"
+                  h="full"
+                  w="full"
+                >
+                  <Text size="xl" weight="semibold">
+                    {initial}
+                  </Text>
+                </Center>
+              )}
+            </Box>
+          </AspectRatio>
           <VStack align="start" gap="xs" w="full">
             <Text
               data-slot="product-card-name"
