@@ -28,7 +28,7 @@ const ConsoleLayout = async ({ children }: Props) => {
   return (
     <>
       <Header
-        appName="Fequest Admin"
+        appName="🗳️ Fequest Admin"
         loginAction={signInWithGoogle}
         logoutAction={signOutUser}
         user={session?.user}
