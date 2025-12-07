@@ -29,7 +29,15 @@ export const Top = ({ adminDomain, products }: Props) => {
           </Text>
         </VStack>
         <Text color="subtle">
-          ユーザーの『ほしい』と開発者の『つくる』をつなぎ、プロダクトを共に育てる場所です。
+          ユーザーが
+          <Text asChild color="accent" display="inline" weight="bold">
+            <span>ほしい</span>
+          </Text>
+          機能をリクエストし、開発者がそれを
+          <Text asChild color="accent" display="inline" weight="bold">
+            <span>つくる</span>
+          </Text>
+          につなげる、みんなでプロダクトを育てる場所です。
         </Text>
       </VStack>
       <VStack align="start" gap="md" w="full">

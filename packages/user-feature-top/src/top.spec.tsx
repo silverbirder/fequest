@@ -35,7 +35,7 @@ describe("Top", () => {
     expect(text).toContain("Fequest");
     expect(text).toContain("ほしいとつくるを共有するプラットフォーム");
     expect(text).toContain(
-      "ユーザーの『ほしい』と開発者の『つくる』をつなぎ、プロダクトを共に育てる場所です。",
+      "ユーザーがほしい機能をリクエストし、開発者がそれをつくるにつなげる、みんなでプロダクトを育てる場所です。",
     );
     expect(text).toContain("管理ページへ");
     expect(text).toContain("First");
