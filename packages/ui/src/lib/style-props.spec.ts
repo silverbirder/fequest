@@ -14,17 +14,27 @@ describe("style-props", () => {
       borderTop: "dashed",
       flex: "auto",
       grow: "1",
+      maxH: "screen",
+      maxW: "lg",
+      minW: "0",
       opacity: "50",
+      overflow: "hidden",
+      overflowX: "auto",
+      overflowY: "scroll",
       shadow: "md",
       shrink: "0",
+      zIndex: "50",
     });
 
     expect(className).toContain("flex-auto");
     expect(className).toContain("grow");
     expect(className).toContain("shrink-0");
-    expect(className).toContain(
-      "flex-auto grow shrink-0 border border-b border-l border-r-0 border-t border-dashed backdrop-blur-sm shadow-md",
-    );
+    expect(className).toContain("max-h-screen");
+    expect(className).toContain("max-w-lg");
+    expect(className).toContain("min-w-0");
+    expect(className).toContain("overflow-hidden");
+    expect(className).toContain("overflow-x-auto");
+    expect(className).toContain("overflow-y-scroll");
     expect(className).toContain("opacity-50");
     expect(className).toContain("border");
     expect(className).toContain("border-dashed");
@@ -34,6 +44,7 @@ describe("style-props", () => {
     expect(className).toContain("border-t");
     expect(className).toContain("shadow-md");
     expect(className).toContain("backdrop-blur-sm");
+    expect(className).toContain("z-50");
   });
 
   it("splits new style props from the rest", () => {
@@ -48,8 +59,15 @@ describe("style-props", () => {
       flex: "1",
       grow: "0",
       id: "demo",
+      maxH: "full",
+      maxW: "md",
+      minW: "full",
+      overflow: "visible",
+      overflowX: "hidden",
+      overflowY: "auto",
       shadow: "sm",
       shrink: "1",
+      zIndex: "10",
     });
 
     expect(styleProps).toEqual({
@@ -62,8 +80,15 @@ describe("style-props", () => {
       borderTop: "default",
       flex: "1",
       grow: "0",
+      maxH: "full",
+      maxW: "md",
+      minW: "full",
+      overflow: "visible",
+      overflowX: "hidden",
+      overflowY: "auto",
       shadow: "sm",
       shrink: "1",
+      zIndex: "10",
     });
     expect(restProps).toEqual({ id: "demo" });
   });

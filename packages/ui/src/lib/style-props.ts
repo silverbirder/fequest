@@ -219,8 +219,47 @@ const layout = cva("", {
     left: {
       "-1": "-left-1",
     },
+    maxH: {
+      full: "max-h-full",
+      screen: "max-h-screen",
+    },
+    maxW: {
+      "2xl": "max-w-2xl",
+      "3xl": "max-w-3xl",
+      full: "max-w-full",
+      lg: "max-w-lg",
+      md: "max-w-md",
+      none: "max-w-none",
+      sm: "max-w-sm",
+      xl: "max-w-xl",
+    },
     minH: {
       "30": "min-h-30",
+    },
+    minW: {
+      "0": "min-w-0",
+      fit: "min-w-fit",
+      full: "min-w-full",
+      max: "min-w-max",
+      min: "min-w-min",
+    },
+    overflow: {
+      auto: "overflow-auto",
+      hidden: "overflow-hidden",
+      scroll: "overflow-scroll",
+      visible: "overflow-visible",
+    },
+    overflowX: {
+      auto: "overflow-x-auto",
+      hidden: "overflow-x-hidden",
+      scroll: "overflow-x-scroll",
+      visible: "overflow-x-visible",
+    },
+    overflowY: {
+      auto: "overflow-y-auto",
+      hidden: "overflow-y-hidden",
+      scroll: "overflow-y-scroll",
+      visible: "overflow-y-visible",
     },
     position: {
       absolute: "absolute",
@@ -254,6 +293,15 @@ const layout = cva("", {
       full: "w-full",
       max: "w-max",
       min: "w-min",
+    },
+    zIndex: {
+      "0": "z-0",
+      "10": "z-10",
+      "20": "z-20",
+      "30": "z-30",
+      "40": "z-40",
+      "50": "z-50",
+      auto: "z-auto",
     },
   },
 });
@@ -417,11 +465,17 @@ const stylePropKeys = [
   "position",
   "w",
   "h",
+  "maxW",
+  "maxH",
   "minH",
+  "minW",
   "top",
   "left",
   "right",
   "bottom",
+  "overflow",
+  "overflowX",
+  "overflowY",
   "translateY",
   "rotate",
   "flex",
@@ -430,6 +484,7 @@ const stylePropKeys = [
   "basis",
   "caret",
   "prose",
+  "zIndex",
 ] as const;
 
 type StylePropKey = (typeof stylePropKeys)[number];

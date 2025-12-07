@@ -1,15 +1,11 @@
 import { composeStories } from "@storybook/nextjs-vite";
-import { afterEach, describe, expect, it } from "vitest";
+import { describe, expect, it } from "vitest";
 import { render } from "vitest-browser-react";
 
 import { Header } from "./header";
 import * as stories from "./header.stories";
 
 const Stories = composeStories(stories);
-
-afterEach(() => {
-  document.body.innerHTML = "";
-});
 
 describe("Header", () => {
   it.each(Object.entries(Stories))("should %s snapshot", async (_, Story) => {

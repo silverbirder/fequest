@@ -48,6 +48,7 @@ export const Header = ({
       shadow="sm"
       top="0"
       w="full"
+      zIndex="10"
     >
       <header>
         <Link href={homeHref}>
