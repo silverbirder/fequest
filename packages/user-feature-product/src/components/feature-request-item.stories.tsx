@@ -43,7 +43,7 @@ export const OwnedByAuthor: Story = {
   args: {
     avatar: {
       fallbackText: "ME",
-      src: "https://api.dicebear.com/7.x/initials/svg?seed=ME",
+      image: "https://api.dicebear.com/7.x/initials/svg?seed=ME",
     },
     canDelete: true,
     detail: {

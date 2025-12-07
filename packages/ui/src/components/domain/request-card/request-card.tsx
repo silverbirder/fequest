@@ -13,8 +13,8 @@ type Props = ComponentProps<typeof BubbleText> & {
   avatar?: null | {
     alt?: null | string;
     fallbackText?: null | string;
+    image?: null | string;
     name?: null | string;
-    src?: null | string;
   };
   defaultOpen?: boolean;
   detail: {
@@ -60,7 +60,7 @@ export const RequestCard = ({
           alt={avatar?.alt}
           fallbackText={avatar?.fallbackText}
           name={avatar?.name}
-          src={avatar?.src}
+          src={avatar?.image}
         />
       </VStack>
       <VStack gap="sm">
