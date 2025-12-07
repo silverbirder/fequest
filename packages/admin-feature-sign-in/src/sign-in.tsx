@@ -3,49 +3,49 @@ import {
   Button,
   Center,
   Heading,
+  HStack,
   Text,
   VStack,
 } from "@repo/ui/components";
 
 type Props = {
-  appName?: string;
   onGoogleSignIn: () => Promise<void>;
 };
 
-export const SignIn = ({
-  appName = "Fequest Admin",
-  onGoogleSignIn,
-}: Props) => {
+export const SignIn = ({ onGoogleSignIn }: Props) => {
   return (
-    <Center minH="screen" px="md" py="xl" w="full">
-      <Box
-        bg="white"
-        border="default"
-        maxW="3xl"
-        p="xl"
-        radius="2xl"
-        shadow="lg"
-        w="full"
-      >
-        <VStack gap="lg">
-          <VStack align="center" gap="xs">
-            <Text casing="uppercase" color="muted" size="xs" weight="medium">
-              {appName}
-            </Text>
-            <Heading align="center" level={2} size="2xl">
-              サインイン
-            </Heading>
-            <Text align="center" color="muted" size="sm">
+    <Center minH="screen">
+      <Box maxW="3xl" p="xl" w="full">
+        <VStack align="center" gap="2xl">
+          <VStack align="center" gap="md">
+            <VStack align="center" gap="sm">
+              <HStack gap="sm" justify="center">
+                <Text aria-hidden display="inline" size="2xl" weight="bold">
+                  🗳️
+                </Text>
+                <Heading align="center" level={1} size="4xl" weight="extrabold">
+                  Fequest Admin
+                </Heading>
+              </HStack>
+              <Text align="center" color="muted" size="lg">
+                ほしいとつくるを共有するプラットフォーム Fequest の管理画面
+              </Text>
+            </VStack>
+          </VStack>
+          <VStack align="start" gap="sm">
+            <Text color="subtle">
               管理画面を利用するには、Googleでログインしてください。
             </Text>
-          </VStack>
-          <Center w="full">
             <form action={onGoogleSignIn}>
               <Button data-slot="google-signin" size="lg" type="submit">
-                Googleで続行
+                Googleでログイン
               </Button>
             </form>
-          </Center>
+            <Text color="muted" size="xs">
+              ※
+              いつでも退会できます。退会すると、あなたのデータはすべて削除されますのでご安心ください。
+            </Text>
+          </VStack>
         </VStack>
       </Box>
     </Center>

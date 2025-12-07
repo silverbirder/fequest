@@ -4,7 +4,6 @@ import { SignIn } from "./sign-in";
 
 const meta = {
   args: {
-    appName: "Fequest Admin",
     onGoogleSignIn: async () => {},
   },
   component: SignIn,

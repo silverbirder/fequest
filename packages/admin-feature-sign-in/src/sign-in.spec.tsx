@@ -23,6 +23,6 @@ describe("SignIn", () => {
     await render(<SignIn onGoogleSignIn={action} />);
 
     const button = document.querySelector<HTMLButtonElement>("button");
-    expect(button?.textContent).toContain("Googleで続行");
+    expect(button?.textContent).toContain("Googleでログイン");
   });
 });
