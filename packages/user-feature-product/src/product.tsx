@@ -1,5 +1,13 @@
 import { type FeatureRequestCore, type FeatureRequestUser } from "@repo/type";
-import { Box, BubbleInput, Heading, Text, VStack } from "@repo/ui/components";
+import {
+  Box,
+  BubbleInput,
+  Heading,
+  HStack,
+  ProductLogo,
+  Text,
+  VStack,
+} from "@repo/ui/components";
 import { toIsoString } from "@repo/util";
 import Form from "next/form";
 
@@ -14,8 +22,10 @@ type FeatureRequest = FeatureRequestCore & {
 };
 
 type ProductData = {
+  description?: null | string;
   featureRequests?: FeatureRequest[] | null;
   id: number;
+  logoUrl?: null | string;
   name: string;
 };
 
@@ -32,10 +42,26 @@ type Props = {
 
 export const Product = (props: Props) => {
   const featureRequests: FeatureRequest[] = props.product.featureRequests ?? [];
+  const description = props.product.description?.trim() ?? "";
+  const logoUrl = props.product.logoUrl?.trim() || null;
 
   return (
     <VStack gap="xl">
-      <Heading size="lg">{props.product.name}</Heading>
+      <VStack align="start" gap="md">
+        <Box w="logo">
+          <ProductLogo
+            logoUrl={logoUrl}
+            name={props.product.name}
+            sizes="72px"
+          />
+        </Box>
+        <HStack align="start" gap="md" w="full">
+          <VStack align="start" gap="xs" w="full">
+            <Heading size="lg">{props.product.name}</Heading>
+            {description ? <Text color="muted">{description}</Text> : null}
+          </VStack>
+        </HStack>
+      </VStack>
       <VStack gap="lg">
         {featureRequests.length === 0 ? (
           <Text>フィーチャーはまだありません。</Text>

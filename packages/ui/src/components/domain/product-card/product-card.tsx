@@ -3,15 +3,8 @@ import type { UrlObject } from "url";
 import { formatCount } from "@repo/util";
 import Link from "next/link";
 
-import {
-  AspectRatio,
-  Box,
-  Center,
-  HStack,
-  Image,
-  Text,
-  VStack,
-} from "../../common";
+import { Box, HStack, Text, VStack } from "../../common";
+import { ProductLogo } from "../product-logo";
 
 type Props = {
   href: UrlObject;
@@ -20,51 +13,20 @@ type Props = {
   requestCount: number;
 };
 
-const getInitial = (name: string) => {
-  const trimmed = name.trim();
-  if (!trimmed) return "?";
-  return trimmed[0]?.toUpperCase() ?? "?";
-};
-
 export const ProductCard = ({ href, logoUrl, name, requestCount }: Props) => {
   const requestLabel = formatCount(requestCount);
-  const initial = getInitial(name);
-  const safeLogoUrl = logoUrl?.trim() || null;
 
   return (
     <Box asChild border="default" p="md" radius="lg">
       <Link aria-label={`${name}のプロダクトページ`} href={href}>
         <VStack align="start" gap="md" w="full">
-          <AspectRatio data-slot="product-card-logo" ratio={1}>
-            <Box
-              h="full"
-              overflow="hidden"
-              position="relative"
-              radius="md"
-              w="full"
-            >
-              {safeLogoUrl ? (
-                <Image
-                  alt={`${name}のロゴ`}
-                  fill
-                  loading="lazy"
-                  sizes="(max-width: 768px) 100vw, 320px"
-                  src={safeLogoUrl}
-                />
-              ) : (
-                <Center
-                  aria-label={`${name}のロゴ`}
-                  data-slot="product-card-fallback"
-                  h="full"
-                  w="full"
-                >
-                  <Text size="xl" weight="semibold">
-                    {initial}
-                  </Text>
-                </Center>
-              )}
-            </Box>
-          </AspectRatio>
+          <ProductLogo
+            dataSlot="product-card-logo"
+            fallbackSlot="product-card-fallback"
+            logoUrl={logoUrl}
+            name={name}
+            sizes="(max-width: 768px) 100vw, 320px"
+          />
           <VStack align="start" gap="xs" w="full">
             <Text
               data-slot="product-card-name"

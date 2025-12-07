@@ -7,13 +7,67 @@ exports[`Product > renders provided props 1`] = `
     data-orientation="column"
     data-slot="stack"
   >
-    <h2
-      class="text-foreground tracking-tight text-left text-lg leading-snug font-bold"
-      data-level="2"
-      data-slot="heading"
+    <div
+      class="flex items-start flex-col gap-4 justify-start self-stretch flex-nowrap"
+      data-orientation="column"
+      data-slot="stack"
     >
-      Sample Product
-    </h2>
+      <div
+        class="w-12"
+        data-slot="box"
+      >
+        <div
+          data-radix-aspect-ratio-wrapper=""
+          style="position: relative; width: 100%; padding-bottom: 100%;"
+        >
+          <div
+            class="relative"
+            data-slot="product-logo"
+            style="position: absolute; inset: 0px;"
+          >
+            <div
+              class="rounded-md h-full overflow-hidden relative w-full"
+              data-slot="box"
+            >
+              <img
+                alt="Sample Productのロゴ"
+                data-nimg="fill"
+                data-slot="image"
+                decoding="async"
+                loading="lazy"
+                src="https://placehold.co/120x120"
+                style="position: absolute; height: 100%; width: 100%; inset: 0px; color: transparent;"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="flex items-start flex-row gap-4 justify-start self-stretch flex-nowrap w-full"
+        data-orientation="row"
+        data-slot="stack"
+      >
+        <div
+          class="flex items-start flex-col gap-1 justify-start self-stretch flex-nowrap w-full"
+          data-orientation="column"
+          data-slot="stack"
+        >
+          <h2
+            class="text-foreground tracking-tight text-left text-lg leading-snug font-bold"
+            data-level="2"
+            data-slot="heading"
+          >
+            Sample Product
+          </h2>
+          <span
+            class="text-left text-muted-foreground block text-base font-normal"
+            data-slot="text"
+          >
+            サンプルの説明文です。
+          </span>
+        </div>
+      </div>
+    </div>
     <div
       class="flex items-start flex-col gap-6 justify-start self-stretch flex-nowrap"
       data-orientation="column"

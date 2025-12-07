@@ -18,6 +18,7 @@ const meta = {
       });
     },
     product: {
+      description: "ユーザーからのアイデアや改善要望を集めるプロダクトです。",
       featureRequests: [
         {
           content: "ユーザーがプロフィール画像をアップロードできるようにする",
@@ -48,6 +49,7 @@ const meta = {
         },
       ],
       id: 1,
+      logoUrl: "https://placehold.co/120x120",
       name: "サンプルプロダクト",
     },
   },

@@ -43,6 +43,7 @@ beforeEach(() => {
 });
 
 const createProductFixture = (ownerId: string) => ({
+  description: "プロダクトの説明文です。",
   featureRequests: [
     {
       content: "ユーザーがプロフィール画像をアップロードできるようにする",
@@ -59,6 +60,7 @@ const createProductFixture = (ownerId: string) => ({
     },
   ],
   id: 1,
+  logoUrl: "https://placehold.co/120x120",
   name: "Sample Product",
 });
 
@@ -80,8 +82,10 @@ describe("Product", () => {
         onCreateFeatureRequest={async () => {}}
         onReactToFeature={async () => {}}
         product={{
+          description: "サンプルの説明文です。",
           featureRequests: [],
           id: 1,
+          logoUrl: "https://placehold.co/120x120",
           name: "Sample Product",
         }}
       />,
