@@ -10,7 +10,7 @@ import { type ComponentProps, useMemo, useRef } from "react";
 import type { ReactionSummary } from "../libs/reaction-summary";
 
 type Props = {
-  avatar: RequestCardAvatar;
+  avatar?: RequestCardAvatar;
   canDelete?: boolean;
   defaultOpen?: boolean;
   detail: RequestCardDetail;

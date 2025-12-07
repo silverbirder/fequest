@@ -8,6 +8,7 @@ import {
   Text,
   VStack,
 } from "@repo/ui/components";
+import { toIsoString } from "@repo/util";
 import Form from "next/form";
 
 import type { ReactionSummary } from "./libs/reaction-summary";
@@ -37,38 +38,6 @@ type Props = {
   product: ProductData;
 };
 
-const getAvatarFallbackText = (text?: null | string) => {
-  const trimmed = (text ?? "").trim();
-  if (trimmed.length === 0) {
-    return "FR";
-  }
-
-  return trimmed.slice(0, 2).toUpperCase();
-};
-
-const createAvatarProps = (feature: FeatureRequest) => {
-  const referenceText = feature.user?.name ?? feature.title ?? feature.content;
-  return {
-    alt: feature.user?.name,
-    fallbackText: getAvatarFallbackText(referenceText),
-    name: referenceText,
-    src: feature.user?.image,
-  };
-};
-
-const toIsoString = (value?: Date | null | string) => {
-  if (!value) {
-    return null;
-  }
-
-  const date = value instanceof Date ? value : new Date(value);
-  if (Number.isNaN(date.getTime())) {
-    return null;
-  }
-
-  return date.toISOString();
-};
-
 export const Product = (props: Props) => {
   const featureRequests: FeatureRequest[] = props.product.featureRequests ?? [];
 
@@ -96,7 +65,7 @@ export const Product = (props: Props) => {
                   const text = feature.title?.trim() ?? "";
                   return (
                     <FeatureRequestItem
-                      avatar={createAvatarProps(feature)}
+                      avatar={feature.user}
                       canDelete={canDelete}
                       defaultOpen={isOpenTarget}
                       detail={{

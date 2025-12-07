@@ -32,7 +32,7 @@ type Detail = {
 };
 
 type Props = {
-  avatar: {
+  avatar?: null | {
     alt?: null | string;
     fallbackText?: null | string;
     name?: null | string;
@@ -100,10 +100,10 @@ export const RequestDialog = ({
           <DialogHeader>
             <HStack align="center" gap="md">
               <Avatar
-                alt={avatar.alt}
-                fallbackText={avatar.fallbackText}
-                name={avatar.name}
-                src={avatar.src}
+                alt={avatar?.alt}
+                fallbackText={avatar?.fallbackText}
+                name={avatar?.name}
+                src={avatar?.src}
               />
               <DialogTitle>
                 <Text align="left" size="xl">

@@ -10,7 +10,7 @@ import { EmojiReaction } from "../emoji-reaction";
 import { RequestDialog } from "../request-dialog";
 
 type Props = ComponentProps<typeof BubbleText> & {
-  avatar: {
+  avatar?: null | {
     alt?: null | string;
     fallbackText?: null | string;
     name?: null | string;
@@ -57,10 +57,10 @@ export const RequestCard = ({
     <HStack align="start" gap="sm">
       <VStack gap="sm" justify="between" self="stretch">
         <Avatar
-          alt={avatar.alt}
-          fallbackText={avatar.fallbackText}
-          name={avatar.name}
-          src={avatar.src}
+          alt={avatar?.alt}
+          fallbackText={avatar?.fallbackText}
+          name={avatar?.name}
+          src={avatar?.src}
         />
       </VStack>
       <VStack gap="sm">

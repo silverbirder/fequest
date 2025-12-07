@@ -8,14 +8,12 @@ import {
   Text,
   VStack,
 } from "@repo/ui/components";
+import { formatCount } from "@repo/util";
 import Link from "next/link";
 
 type Props = {
   products: ProductSummary[];
 };
-
-const formatCount = (value: number) =>
-  new Intl.NumberFormat("ja-JP").format(value);
 
 export const Products = ({ products }: Props) => {
   const hasProducts = products.length > 0;

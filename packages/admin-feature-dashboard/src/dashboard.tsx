@@ -21,11 +21,9 @@ import {
   Text,
   VStack,
 } from "@repo/ui/components";
+import { formatCount } from "@repo/util";
 import Link from "next/link";
 import { type ReactNode, useId } from "react";
-
-const formatCount = (value: number) =>
-  new Intl.NumberFormat("ja-JP").format(value);
 
 type CreateProductDialogProps = {
   onCreateProduct: Props["onCreateProduct"];
