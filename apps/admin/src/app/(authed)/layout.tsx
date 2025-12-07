@@ -9,7 +9,7 @@ type Props = Readonly<{
   children: ReactNode;
 }>;
 
-const ConsoleLayout = async ({ children }: Props) => {
+const Layout = async ({ children }: Props) => {
   const session = await auth();
 
   if (!session?.user) {
@@ -45,4 +45,4 @@ const ConsoleLayout = async ({ children }: Props) => {
   );
 };
 
-export default ConsoleLayout;
+export default Layout;
