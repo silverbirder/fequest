@@ -36,8 +36,11 @@ export const config = [
     files: ["**/*.tsx"],
     plugins: { react: pluginReact },
     rules: {
-      "react/forbid-dom-props": ["error", { forbid: ["className"] }],
-      "react/forbid-component-props": ["error", { forbid: ["className"] }],
+      "react/forbid-dom-props": ["error", { forbid: ["className", "style"] }],
+      "react/forbid-component-props": [
+        "error",
+        { forbid: ["className", "style"] },
+      ],
     },
   },
   {
@@ -46,6 +49,8 @@ export const config = [
       "**/*.stories.tsx",
       "**/src/components/common/**",
       "**/src/app/layout.tsx",
+      "**/src/app/apple-icon.tsx",
+      "**/src/app/icon.tsx",
     ],
     rules: {
       "react/forbid-dom-props": "off",

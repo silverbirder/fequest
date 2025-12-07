@@ -10,27 +10,19 @@ export const SignIn = ({
   onGoogleSignIn,
 }: Props) => {
   return (
-    <Center bg="muted" px="md" py="xl" style={{ minHeight: "100vh" }} w="full">
+    <Center bg="muted" minH="screen" px="md" py="xl" w="full">
       <Box
         bg="white"
+        border="default"
+        maxW="3xl"
         p="xl"
         radius="2xl"
-        style={{
-          border: "1px solid rgba(15, 23, 42, 0.06)",
-          boxShadow: "0 24px 80px rgba(0, 0, 0, 0.08)",
-          maxWidth: "420px",
-        }}
+        shadow="lg"
         w="full"
       >
         <Stack gap="lg">
           <Stack align="center" gap="xs">
-            <Text
-              casing="uppercase"
-              color="muted"
-              size="xs"
-              style={{ letterSpacing: "0.2em" }}
-              weight="medium"
-            >
+            <Text casing="uppercase" color="muted" size="xs" weight="medium">
               {appName}
             </Text>
             <Heading align="center" level={2} size="2xl">
@@ -43,12 +35,7 @@ export const SignIn = ({
 
           <Stack gap="md">
             <form action={onGoogleSignIn}>
-              <Button
-                data-slot="google-signin"
-                size="lg"
-                style={{ width: "100%" }}
-                type="submit"
-              >
+              <Button data-slot="google-signin" size="lg" type="submit">
                 Googleで続行
               </Button>
             </form>

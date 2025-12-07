@@ -79,14 +79,10 @@ export const Product = ({
           <Text size="sm" weight="semibold">
             プロダクト名
           </Text>
-          <form
-            action={onUpdateName}
-            data-slot="rename-form"
-            style={{ width: "100%" }}
-          >
+          <form action={onUpdateName} data-slot="rename-form">
             <input name="productId" type="hidden" value={product.id} />
             <HStack align="center" gap="sm" justify="start" wrap="wrap">
-              <Box style={{ flex: "1 1 240px" }}>
+              <Box>
                 <Input
                   aria-label="プロダクト名"
                   defaultValue={product.name}
@@ -113,11 +109,7 @@ export const Product = ({
               ロゴと説明文を設定して、ユーザーにわかりやすく伝えましょう。
             </Text>
           </VStack>
-          <form
-            action={onUpdateDetails}
-            data-slot="details-form"
-            style={{ width: "100%" }}
-          >
+          <form action={onUpdateDetails} data-slot="details-form">
             <input name="productId" type="hidden" value={product.id} />
             <VStack align="start" gap="md" w="full">
               <VStack align="start" gap="xs" w="full">
@@ -171,11 +163,7 @@ export const Product = ({
           <Text color="muted" size="sm">
             この操作は取り消せません。プロダクトと関連する質問がすべて削除されます。
           </Text>
-          <form
-            action={onDelete}
-            data-slot="delete-form"
-            style={{ width: "100%" }}
-          >
+          <form action={onDelete} data-slot="delete-form">
             <input name="productId" type="hidden" value={product.id} />
             <Button size="sm" type="submit" variant="destructive">
               プロダクトを削除
@@ -205,10 +193,10 @@ export const Product = ({
               return (
                 <Box
                   bg="card"
+                  border="default"
                   key={feature.id}
                   p="md"
                   radius="md"
-                  style={{ border: "1px solid rgba(0,0,0,0.04)" }}
                   w="full"
                 >
                   <VStack gap="sm" w="full">

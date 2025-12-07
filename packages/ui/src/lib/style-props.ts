@@ -234,7 +234,12 @@ const layout = cva("", {
       xl: "max-w-xl",
     },
     minH: {
-      "30": "min-h-30",
+      "0": "min-h-0",
+      fit: "min-h-fit",
+      full: "min-h-full",
+      max: "min-h-max",
+      min: "min-h-min",
+      screen: "min-h-screen",
     },
     minW: {
       "0": "min-w-0",
@@ -242,6 +247,7 @@ const layout = cva("", {
       full: "min-w-full",
       max: "min-w-max",
       min: "min-w-min",
+      screen: "min-w-screen",
     },
     overflow: {
       auto: "overflow-auto",
