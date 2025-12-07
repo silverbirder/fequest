@@ -6,20 +6,24 @@ import {
   HStack,
   Input,
   Text,
+  Textarea,
   VStack,
 } from "@repo/ui/components";
 
 type FeatureRequest = FeatureRequestCore;
 
 type ProductDetail = {
+  description?: null | string;
   featureRequests?: FeatureRequest[];
   id: number;
+  logoUrl?: null | string;
   name: string;
 };
 
 type Props = {
   onDelete: (formData: FormData) => Promise<void>;
   onDeleteFeatureRequest: (formData: FormData) => Promise<void>;
+  onUpdateDetails: (formData: FormData) => Promise<void>;
   onUpdateFeatureStatus: (formData: FormData) => Promise<void>;
   onUpdateName: (formData: FormData) => Promise<void>;
   product: ProductDetail;
@@ -54,6 +58,7 @@ const formatDateTime = (value?: Date | null | string) => {
 export const Product = ({
   onDelete,
   onDeleteFeatureRequest,
+  onUpdateDetails,
   onUpdateFeatureStatus,
   onUpdateName,
   product,
@@ -65,7 +70,7 @@ export const Product = ({
       <VStack gap="xs">
         <Heading size="lg">プロダクトの管理</Heading>
         <Text color="muted" size="sm">
-          プロダクト名の更新と、質問のステータス管理を行えます。
+          プロダクト情報の更新と、質問のステータス管理を行えます。
         </Text>
       </VStack>
 
@@ -94,6 +99,66 @@ export const Product = ({
                 名前を保存
               </Button>
             </HStack>
+          </form>
+        </VStack>
+      </Box>
+
+      <Box bg="card" p="lg" radius="lg" w="full">
+        <VStack align="start" gap="md" w="full">
+          <VStack align="start" gap="xs">
+            <Text size="sm" weight="semibold">
+              プロダクトの表示情報
+            </Text>
+            <Text color="muted" size="sm">
+              ロゴと説明文を設定して、ユーザーにわかりやすく伝えましょう。
+            </Text>
+          </VStack>
+          <form
+            action={onUpdateDetails}
+            data-slot="details-form"
+            style={{ width: "100%" }}
+          >
+            <input name="productId" type="hidden" value={product.id} />
+            <VStack align="start" gap="md" w="full">
+              <VStack align="start" gap="xs" w="full">
+                <Text size="sm" weight="medium">
+                  ロゴURL (任意)
+                </Text>
+                <Input
+                  aria-label="プロダクトロゴURL"
+                  defaultValue={product.logoUrl ?? ""}
+                  maxLength={2048}
+                  name="logoUrl"
+                  placeholder="https://example.com/logo.png"
+                />
+                <Text color="muted" size="xs">
+                  画像のURLを入力すると、クライアント側で表示できます。
+                </Text>
+              </VStack>
+
+              <VStack align="start" gap="xs" w="full">
+                <Text size="sm" weight="medium">
+                  プロダクト説明文 (任意)
+                </Text>
+                <Textarea
+                  aria-label="プロダクト説明文"
+                  defaultValue={product.description ?? ""}
+                  maxLength={5000}
+                  name="description"
+                  placeholder="サービスの概要やサポートポリシーを記載してください"
+                  rows={4}
+                />
+                <Text color="muted" size="xs">
+                  5000文字まで登録できます。空欄にすると未設定になります。
+                </Text>
+              </VStack>
+
+              <HStack justify="end" w="full">
+                <Button size="sm" type="submit" variant="default">
+                  表示情報を保存
+                </Button>
+              </HStack>
+            </VStack>
           </form>
         </VStack>
       </Box>

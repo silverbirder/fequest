@@ -10,6 +10,7 @@ import {
   productIdSchema,
   renameProductSchema,
   setFeatureStatusSchema,
+  updateProductDetailsSchema,
 } from "@repo/schema";
 import { type ProductSummary } from "@repo/type";
 import { TRPCError } from "@trpc/server";
@@ -27,7 +28,9 @@ export const productRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       const product = await ctx.db.query.products.findFirst({
         columns: {
+          description: true,
           id: true,
+          logoUrl: true,
           name: true,
         },
         where: (product, { and, eq }) =>
@@ -55,8 +58,10 @@ export const productRouter = createTRPCRouter({
       }
 
       return {
+        description: product.description,
         featureRequests: product.featureRequests ?? [],
         id: product.id,
+        logoUrl: product.logoUrl,
         name: product.name,
       };
     }),
@@ -239,5 +244,64 @@ export const productRouter = createTRPCRouter({
         });
 
       return updated ?? null;
+    }),
+
+  updateDetails: protectedProcedure
+    .input(updateProductDetailsSchema)
+    .mutation(async ({ ctx, input }) => {
+      const product = await ctx.db.query.products.findFirst({
+        columns: {
+          description: true,
+          id: true,
+          logoUrl: true,
+          name: true,
+        },
+        where: (product, { and, eq }) =>
+          and(
+            eq(product.id, input.id),
+            eq(product.userId, ctx.session.user.id),
+          ),
+      });
+
+      if (!product) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Product not found",
+        });
+      }
+
+      const nextValues: Partial<typeof products.$inferInsert> = {};
+
+      if (input.logoUrl !== undefined) {
+        const trimmed = input.logoUrl.trim();
+        nextValues.logoUrl = trimmed.length === 0 ? null : trimmed;
+      }
+
+      if (input.description !== undefined) {
+        const trimmed = input.description.trim();
+        nextValues.description = trimmed.length === 0 ? null : trimmed;
+      }
+
+      if (Object.keys(nextValues).length === 0) {
+        return product;
+      }
+
+      const [updated] = await ctx.db
+        .update(products)
+        .set(nextValues)
+        .where(
+          and(
+            eq(products.id, input.id),
+            eq(products.userId, ctx.session.user.id),
+          ),
+        )
+        .returning({
+          description: products.description,
+          id: products.id,
+          logoUrl: products.logoUrl,
+          name: products.name,
+        });
+
+      return updated ?? product;
     }),
 });

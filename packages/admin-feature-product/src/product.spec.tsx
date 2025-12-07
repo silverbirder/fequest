@@ -24,6 +24,7 @@ describe("Product", () => {
       <Product
         onDelete={async () => {}}
         onDeleteFeatureRequest={async () => {}}
+        onUpdateDetails={async () => {}}
         onUpdateFeatureStatus={async () => {}}
         onUpdateName={async () => {}}
         product={{ featureRequests: [], id: 1, name: "Fequest" }}
@@ -40,11 +41,46 @@ describe("Product", () => {
     expect(renameForm?.textContent ?? "").toContain("名前を保存");
   });
 
+  it("renders product detail form with defaults", async () => {
+    await render(
+      <Product
+        onDelete={async () => {}}
+        onDeleteFeatureRequest={async () => {}}
+        onUpdateDetails={async () => {}}
+        onUpdateFeatureStatus={async () => {}}
+        onUpdateName={async () => {}}
+        product={{
+          description: "Detail text",
+          featureRequests: [],
+          id: 9,
+          logoUrl: "https://example.com/9.png",
+          name: "Detailed",
+        }}
+      />,
+    );
+
+    const logoInput = document.querySelector<HTMLInputElement>(
+      'input[name="logoUrl"]',
+    );
+    expect(logoInput?.value).toBe("https://example.com/9.png");
+
+    const descriptionInput = document.querySelector<HTMLTextAreaElement>(
+      'textarea[name="description"]',
+    );
+    expect(descriptionInput?.value).toBe("Detail text");
+
+    const detailsForm = document.querySelector<HTMLFormElement>(
+      'form[data-slot="details-form"]',
+    );
+    expect(detailsForm?.textContent ?? "").toContain("表示情報を保存");
+  });
+
   it("renders feature requests with status toggles", async () => {
     await render(
       <Product
         onDelete={async () => {}}
         onDeleteFeatureRequest={async () => {}}
+        onUpdateDetails={async () => {}}
         onUpdateFeatureStatus={async () => {}}
         onUpdateName={async () => {}}
         product={{
@@ -92,6 +128,7 @@ describe("Product", () => {
       <Product
         onDelete={async () => {}}
         onDeleteFeatureRequest={async () => {}}
+        onUpdateDetails={async () => {}}
         onUpdateFeatureStatus={async () => {}}
         onUpdateName={async () => {}}
         product={{ featureRequests: [], id: 3, name: "Empty Product" }}
@@ -107,6 +144,7 @@ describe("Product", () => {
       <Product
         onDelete={async () => {}}
         onDeleteFeatureRequest={async () => {}}
+        onUpdateDetails={async () => {}}
         onUpdateFeatureStatus={async () => {}}
         onUpdateName={async () => {}}
         product={{ featureRequests: [], id: 7, name: "Deletable" }}
@@ -136,6 +174,7 @@ describe("Product", () => {
       <Product
         onDelete={async () => {}}
         onDeleteFeatureRequest={async () => {}}
+        onUpdateDetails={async () => {}}
         onUpdateFeatureStatus={async () => {}}
         onUpdateName={async () => {}}
         product={{

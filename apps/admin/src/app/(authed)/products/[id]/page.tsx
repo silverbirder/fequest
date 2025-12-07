@@ -10,6 +10,7 @@ import { createDeleteFeatureRequest } from "./delete-feature-request";
 import { createDeleteProduct } from "./delete-product";
 import { createRenameProduct } from "./rename-product";
 import { createUpdateFeatureStatus } from "./update-feature-status";
+import { createUpdateProductDetails } from "./update-product-details";
 
 const paramsSchema = object({
   id: idSchema,
@@ -34,6 +35,7 @@ export default async function Page({ params }: PageProps<"/products/[id]">) {
 
   const deleteProduct = createDeleteProduct({ productId });
   const deleteFeatureRequest = createDeleteFeatureRequest({ productId });
+  const updateProductDetails = createUpdateProductDetails({ productId });
   const renameProduct = createRenameProduct({ productId });
   const updateFeatureStatus = createUpdateFeatureStatus({ productId });
 
@@ -41,6 +43,7 @@ export default async function Page({ params }: PageProps<"/products/[id]">) {
     <Product
       onDelete={deleteProduct}
       onDeleteFeatureRequest={deleteFeatureRequest}
+      onUpdateDetails={updateProductDetails}
       onUpdateFeatureStatus={updateFeatureStatus}
       onUpdateName={renameProduct}
       product={product}

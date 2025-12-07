@@ -6,9 +6,12 @@ import {
   featureRequestTitleSchema,
   idSchema,
   positiveIntSchema,
+  productDescriptionSchema,
+  productLogoUrlSchema,
   productNameSchema,
   reactionActionSchema,
   setFeatureStatusSchema,
+  updateProductDetailsSchema,
 } from "./base";
 
 const invalidMessage = "Invalid ID";
@@ -79,6 +82,63 @@ describe("productNameSchema", () => {
 
   it("rejects empty", () => {
     expect(safeParse(productNameSchema, "   ").success).toBe(false);
+  });
+});
+
+describe("productLogoUrlSchema", () => {
+  it("trims whitespace and allows empty string", () => {
+    const result = safeParse(
+      productLogoUrlSchema,
+      "  https://example.com/logo.png  ",
+    );
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.output).toBe("https://example.com/logo.png");
+    }
+  });
+
+  it("rejects overly long values", () => {
+    const longValue = "h".repeat(3000);
+    expect(safeParse(productLogoUrlSchema, longValue).success).toBe(false);
+  });
+});
+
+describe("productDescriptionSchema", () => {
+  it("trims and keeps text within limit", () => {
+    const result = safeParse(
+      productDescriptionSchema,
+      "  Explain the product  ",
+    );
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.output).toBe("Explain the product");
+    }
+  });
+
+  it("rejects values beyond max length", () => {
+    const overLimit = "d".repeat(6000);
+    expect(safeParse(productDescriptionSchema, overLimit).success).toBe(false);
+  });
+});
+
+describe("updateProductDetailsSchema", () => {
+  it("accepts optional metadata with trimming", () => {
+    const result = safeParse(updateProductDetailsSchema, {
+      description: "  A helpful summary  ",
+      id: 12,
+      logoUrl: "  https://cdn.example.com/logo.svg  ",
+    });
+
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.output.description).toBe("A helpful summary");
+      expect(result.output.logoUrl).toBe("https://cdn.example.com/logo.svg");
+    }
+  });
+
+  it("allows omitting optional fields", () => {
+    const result = safeParse(updateProductDetailsSchema, { id: 7 });
+    expect(result.success).toBe(true);
   });
 });
 

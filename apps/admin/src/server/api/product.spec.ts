@@ -213,6 +213,7 @@ describe("productRouter.list", () => {
 describe("productRouter.byId", () => {
   it("returns the product and its feature requests for the owner", async () => {
     const product = {
+      description: "Helpful product",
       featureRequests: [
         {
           content: "Request content",
@@ -224,6 +225,7 @@ describe("productRouter.byId", () => {
         },
       ],
       id: 5,
+      logoUrl: "https://cdn.example.com/logo.png",
       name: "Alpha",
     };
 
@@ -248,8 +250,10 @@ describe("productRouter.byId", () => {
     expect(eq).toHaveBeenCalledWith("product.userId", "user-1");
 
     expect(result).toEqual({
+      description: "Helpful product",
       featureRequests: product.featureRequests,
       id: 5,
+      logoUrl: "https://cdn.example.com/logo.png",
       name: "Alpha",
     });
   });
@@ -355,6 +359,97 @@ describe("productRouter.rename", () => {
 
     await expect(
       caller.rename({ id: 3, name: "Invalid" }),
+    ).rejects.toBeInstanceOf(TRPCError);
+  });
+});
+
+describe("productRouter.updateDetails", () => {
+  it("updates logo and description for owned product", async () => {
+    const {
+      caller,
+      findFirstProduct,
+      productUpdateSet,
+      updateProductsReturning,
+    } = createTestHarness({
+      product: { id: 6, name: "Alpha", userId: "user-1" },
+      session: {
+        expires: "",
+        user: { id: "user-1", name: "Owner" },
+      },
+      updatedProducts: [
+        {
+          description: "New description",
+          id: 6,
+          logoUrl: "https://logo.new/img.png",
+          name: "Alpha",
+        },
+      ],
+    });
+
+    const result = await caller.updateDetails({
+      description: "  New description  ",
+      id: 6,
+      logoUrl: " https://logo.new/img.png ",
+    });
+
+    expect(findFirstProduct).toHaveBeenCalled();
+    expect(productUpdateSet).toHaveBeenCalledWith({
+      description: "New description",
+      logoUrl: "https://logo.new/img.png",
+    });
+    expect(updateProductsReturning).toHaveBeenCalled();
+    expect(result).toEqual({
+      description: "New description",
+      id: 6,
+      logoUrl: "https://logo.new/img.png",
+      name: "Alpha",
+    });
+  });
+
+  it("returns existing product when no updatable fields provided", async () => {
+    const existing = {
+      description: "Keep me",
+      id: 8,
+      logoUrl: "https://old/logo.png",
+      name: "Omega",
+      userId: "user-1",
+    };
+
+    const { caller, productUpdateSet, updateProductsReturning } =
+      createTestHarness({
+        product: existing,
+        session: {
+          expires: "",
+          user: { id: "user-1", name: "Owner" },
+        },
+      });
+
+    const result = await caller.updateDetails({ id: 8 });
+
+    expect(productUpdateSet).not.toHaveBeenCalled();
+    expect(updateProductsReturning).not.toHaveBeenCalled();
+    expect(result).toEqual(existing);
+  });
+
+  it("throws NOT_FOUND when product is missing or not owned", async () => {
+    const { caller } = createTestHarness({
+      product: null,
+      session: {
+        expires: "",
+        user: { id: "user-1", name: "Owner" },
+      },
+    });
+
+    await expect(
+      caller.updateDetails({ id: 12, logoUrl: "https://x" }),
+    ).rejects.toMatchObject({ code: "NOT_FOUND" });
+  });
+
+  it("rejects when no session is present", async () => {
+    const { caller } = createTestHarness({ session: null });
+
+    await expect(
+      caller.updateDetails({ id: 3, logoUrl: "https://x" }),
     ).rejects.toBeInstanceOf(TRPCError);
   });
 });

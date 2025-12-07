@@ -41,6 +41,8 @@ export const products = createTable(
   (d) => ({
     id: d.integer().primaryKey().generatedByDefaultAsIdentity(),
     name: d.varchar({ length: 256 }).notNull(),
+    logoUrl: d.varchar({ length: 2048 }),
+    description: d.text(),
     userId: d
       .varchar({ length: 255 })
       .notNull()

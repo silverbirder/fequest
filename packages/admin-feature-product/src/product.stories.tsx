@@ -6,9 +6,11 @@ const meta = {
   args: {
     onDelete: async () => {},
     onDeleteFeatureRequest: async () => {},
+    onUpdateDetails: async () => {},
     onUpdateFeatureStatus: async () => {},
     onUpdateName: async () => {},
     product: {
+      description: "フィーチャー要望をまとめる管理画面です。",
       featureRequests: [
         {
           content: "ユーザーから寄せられた最初の質問です。",
@@ -28,6 +30,7 @@ const meta = {
         },
       ],
       id: 99,
+      logoUrl: "https://example.com/logo.svg",
       name: "Fequest Admin",
     },
   },
@@ -44,6 +47,7 @@ export const EmptyFeatures: Story = {
   args: {
     onDelete: async () => {},
     onDeleteFeatureRequest: async () => {},
+    onUpdateDetails: async () => {},
     product: { featureRequests: [], id: 1, name: "Empty Product" },
   },
 };

@@ -41,10 +41,19 @@ export const productNameSchema = pipe(
   maxLength(256),
 );
 
+export const productLogoUrlSchema = pipe(string(), trim(), maxLength(2048));
+
+export const productDescriptionSchema = pipe(string(), trim(), maxLength(5000));
+
 export const createProductSchema = object({ name: productNameSchema });
 export const renameProductSchema = object({
   id: positiveIntSchema,
   name: productNameSchema,
+});
+export const updateProductDetailsSchema = object({
+  description: optional(productDescriptionSchema),
+  id: positiveIntSchema,
+  logoUrl: optional(productLogoUrlSchema),
 });
 export const deleteProductSchema = object({ id: positiveIntSchema });
 export const deleteProductFeatureRequestSchema = object({
