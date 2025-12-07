@@ -1,9 +1,9 @@
 import {
+  AppLogo,
   Box,
   Button,
   Center,
   Heading,
-  HStack,
   Text,
   VStack,
 } from "@repo/ui/components";
@@ -19,14 +19,9 @@ export const SignIn = ({ onGoogleSignIn }: Props) => {
         <VStack align="center" gap="2xl">
           <VStack align="center" gap="md">
             <VStack align="center" gap="sm">
-              <HStack gap="sm" justify="center">
-                <Text aria-hidden display="inline" size="2xl" weight="bold">
-                  🗳️
-                </Text>
-                <Heading align="center" level={1} size="4xl" weight="extrabold">
-                  Fequest Admin
-                </Heading>
-              </HStack>
+              <AppLogo asChild>
+                <Heading level={1}>Fequest Admin</Heading>
+              </AppLogo>
               <Text align="center" color="muted" size="lg">
                 ほしいとつくるを共有するプラットフォーム Fequest の管理画面
               </Text>

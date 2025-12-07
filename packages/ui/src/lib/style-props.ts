@@ -280,6 +280,8 @@ const layout = cva("", {
       sticky: "sticky",
     },
     right: {
+      "-6": "-right-6",
+      "-4": "-right-4",
       "0": "right-0",
     },
     rotate: {
@@ -290,6 +292,10 @@ const layout = cva("", {
       "1": "shrink",
     },
     top: {
+      "-3": "-top-3",
+      "-2": "-top-2",
+      "-1": "-top-1",
+      "-1/2": "-top-1/2",
       "0": "top-0",
       "1/2": "top-1/2",
       "4": "top-4",

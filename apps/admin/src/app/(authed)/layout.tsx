@@ -33,7 +33,7 @@ const Layout = async ({ children }: Props) => {
           href: env.USER_DOMAIN_URL,
           label: "ユーザーページへ",
         }}
-        appName="🗳️ Fequest Admin"
+        appName="Fequest Admin"
         loginAction={signInWithGoogle}
         logoutAction={signOutUser}
         user={session?.user}

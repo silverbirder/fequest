@@ -1,3 +1,4 @@
+export * from "./app-logo";
 export * from "./bubble-input";
 export * from "./bubble-text";
 export * from "./emoji-picker";

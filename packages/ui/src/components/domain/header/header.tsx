@@ -14,6 +14,7 @@ import {
   HStack,
   Text,
 } from "../../common";
+import { AppLogo } from "../app-logo";
 
 type Props = {
   appendLink?: { href: string; label: string };
@@ -31,7 +32,7 @@ type User = {
 
 export const Header = ({
   appendLink,
-  appName = "🗳️ Fequest",
+  appName = "Fequest",
   homeHref = "/",
   loginAction,
   logoutAction,
@@ -55,9 +56,11 @@ export const Header = ({
     >
       <header>
         <Link href={homeHref}>
-          <Text size="2xl" weight="semibold">
-            {appName}
-          </Text>
+          <AppLogo asChild badgeVariant="spacious">
+            <Text size="lg" weight="bold">
+              {appName}
+            </Text>
+          </AppLogo>
         </Link>
         {isAuthenticated ? (
           <DropdownMenu>

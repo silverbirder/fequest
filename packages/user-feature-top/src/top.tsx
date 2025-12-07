@@ -1,5 +1,6 @@
 import { type ProductSummary } from "@repo/type";
 import {
+  AppLogo,
   Button,
   Heading,
   HStack,
@@ -20,7 +21,9 @@ export const Top = ({ adminDomain, products }: Props) => {
     <VStack align="start" gap="2xl">
       <VStack align="center" gap="md">
         <VStack align="center" gap="sm">
-          <Heading level={1}>🗳️ Fequest</Heading>
+          <AppLogo asChild>
+            <Heading level={1}>Fequest</Heading>
+          </AppLogo>
           <Text color="muted" size="lg">
             ほしいとつくるを共有するプラットフォーム
           </Text>
