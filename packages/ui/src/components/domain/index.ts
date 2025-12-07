@@ -3,5 +3,6 @@ export * from "./bubble-text";
 export * from "./emoji-picker";
 export * from "./emoji-reaction";
 export * from "./header";
+export * from "./product-card";
 export * from "./request-card";
 export * from "./request-dialog";
