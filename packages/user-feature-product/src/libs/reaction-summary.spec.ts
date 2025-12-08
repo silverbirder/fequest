@@ -10,6 +10,7 @@ const createReaction = (
 ): FeatureRequestReaction => ({
   anonymousIdentifier: null,
   emoji: "👍",
+  id: 1,
   userId: null,
   ...overrides,
 });
@@ -54,5 +55,25 @@ describe("summarizeReactions", () => {
     });
 
     expect(result).toEqual([{ count: 2, emoji: "🔥", reactedByViewer: true }]);
+  });
+
+  it("sorts reactions by ascending id before summarizing", () => {
+    const reactions = [
+      createReaction({ emoji: "😀", id: 3 }),
+      createReaction({ emoji: "🎉", id: 1 }),
+      createReaction({ emoji: "😀", id: 4 }),
+      createReaction({ emoji: "👍", id: 2 }),
+    ];
+
+    const result = summarizeReactions(reactions, {
+      viewerAnonymousIdentifier: null,
+      viewerUserId: null,
+    });
+
+    expect(result).toEqual([
+      { count: 1, emoji: "🎉", reactedByViewer: false },
+      { count: 1, emoji: "👍", reactedByViewer: false },
+      { count: 2, emoji: "😀", reactedByViewer: false },
+    ]);
   });
 });

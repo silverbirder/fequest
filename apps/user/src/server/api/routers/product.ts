@@ -13,6 +13,7 @@ export const productRouter = createTRPCRouter({
         featureRequests: {
           with: {
             reactions: {
+              orderBy: (reaction, { asc }) => asc(reaction.id),
               with: {
                 user: {
                   columns: {

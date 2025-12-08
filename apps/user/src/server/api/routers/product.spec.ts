@@ -101,6 +101,7 @@ describe("productRouter.byId", () => {
       featureRequests: {
         with: {
           reactions: {
+            orderBy: expect.any(Function),
             with: {
               user: {
                 columns: {
@@ -173,6 +174,62 @@ describe("productRouter.byId", () => {
 
     expect(result?.featureRequests[0]?.reactionSummaries).toEqual([
       { count: 1, emoji: "👍", reactedByViewer: true },
+    ]);
+  });
+
+  it("returns reaction summaries ordered by reaction id", async () => {
+    const productRecord = {
+      featureRequests: [
+        {
+          id: 1,
+          reactions: [
+            {
+              anonymousIdentifier: null,
+              emoji: "🎉",
+              id: 3,
+              userId: "user-1",
+            },
+            {
+              anonymousIdentifier: null,
+              emoji: "👍",
+              id: 1,
+              userId: "user-2",
+            },
+            {
+              anonymousIdentifier: null,
+              emoji: "🎉",
+              id: 4,
+              userId: "user-3",
+            },
+            {
+              anonymousIdentifier: null,
+              emoji: "👍",
+              id: 2,
+              userId: "user-4",
+            },
+          ],
+        },
+      ],
+      id: 42,
+      name: "Demo Product",
+    };
+
+    const { caller } = createTestHarness({
+      product: productRecord,
+      session: {
+        expires: "",
+        user: {
+          id: "viewer",
+          name: "Test",
+        },
+      },
+    });
+
+    const result = await caller.byId({ id: 42 });
+
+    expect(result?.featureRequests[0]?.reactionSummaries).toEqual([
+      { count: 2, emoji: "👍", reactedByViewer: false },
+      { count: 2, emoji: "🎉", reactedByViewer: false },
     ]);
   });
 

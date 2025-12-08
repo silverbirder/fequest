@@ -1,6 +1,7 @@
 export type FeatureRequestReaction = {
   anonymousIdentifier: null | string;
   emoji: string;
+  id?: number;
   userId: null | string;
 };
 
@@ -41,6 +42,22 @@ export const summarizeReactions = (
     return [];
   }
 
+  const sortedReactions = [...reactions].sort((left, right) => {
+    if (left.id == null && right.id == null) {
+      return 0;
+    }
+
+    if (left.id == null) {
+      return 1;
+    }
+
+    if (right.id == null) {
+      return -1;
+    }
+
+    return left.id - right.id;
+  });
+
   const totals = new Map<
     string,
     {
@@ -49,7 +66,7 @@ export const summarizeReactions = (
     }
   >();
 
-  for (const reaction of reactions) {
+  for (const reaction of sortedReactions) {
     const existing = totals.get(reaction.emoji) ?? {
       count: 0,
       reactedByViewer: false,
