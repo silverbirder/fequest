@@ -5,6 +5,7 @@ import { Product } from "./product";
 const meta = {
   args: {
     canCreateFeatureRequest: true,
+    currentUserId: "owner-1",
     onCreateFeatureRequest: async (formData: FormData) => {
       console.log("Created feature request", {
         title: formData.get("title"),
@@ -30,6 +31,7 @@ const meta = {
           status: "open",
           title: "プロフィール画像アップロード",
           user: {
+            id: "owner-1",
             image: "https://placehold.co/48x48",
             name: "田中 花子",
           },
@@ -43,6 +45,7 @@ const meta = {
           status: "closed",
           title: "管理ダッシュボードのフィルター",
           user: {
+            id: "other-user",
             image: "https://placehold.co/48x48",
             name: "佐藤 健",
           },

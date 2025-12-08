@@ -33,6 +33,10 @@ export const positiveIntSchema = pipe(
 
 export const productIdSchema = object({ id: positiveIntSchema });
 export const featureRequestIdSchema = object({ id: positiveIntSchema });
+export const featureRequestByProductSchema = object({
+  id: positiveIntSchema,
+  productId: positiveIntSchema,
+});
 
 export const productNameSchema = pipe(
   string(),
@@ -82,6 +86,7 @@ export const createFeatureRequestSchema = object({
 export const updateFeatureRequestSchema = object({
   content: featureRequestContentSchema,
   id: positiveIntSchema,
+  title: featureRequestTitleSchema,
 });
 
 export const deleteFeatureRequestSchema = featureRequestIdSchema;

@@ -9,7 +9,7 @@ const meta = {
     },
     detail: {
       content: (
-        <div className="prose">
+        <div>
           <h2>コメント機能の追加</h2>
           <ul>
             <li>ユーザーが通知をまとめて確認できるようにして欲しいです。</li>
@@ -23,13 +23,6 @@ const meta = {
     },
     dialogTitle: "コメント機能の追加",
     dialogTriggerLabel: "コメント機能の追加の詳細を表示",
-    footerAction: {
-      action: async () => {},
-      fields: {
-        requestId: "req-001",
-      },
-      label: "削除",
-    },
   },
   component: RequestDialog,
   title: "Domain/RequestDialog",

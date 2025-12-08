@@ -449,7 +449,12 @@ describe("featureRequestsRouter.update", () => {
         userId?: null | string;
       };
       sessionUserId?: null | string;
-      updated?: { content: string; id: number; updatedAt?: string };
+      updated?: {
+        content: string;
+        id: number;
+        title?: string;
+        updatedAt?: string;
+      };
     } = {},
   ) => {
     const featureRequest = Object.hasOwn(options, "featureRequest")
@@ -461,6 +466,7 @@ describe("featureRequestsRouter.update", () => {
     const defaultUpdated = options.updated ?? {
       content: "updated content",
       id: featureRequest ? featureRequest.id : 0,
+      title: "updated title",
       updatedAt: new Date().toISOString(),
     };
     const returning = vi.fn().mockResolvedValue([defaultUpdated]);
@@ -505,6 +511,7 @@ describe("featureRequestsRouter.update", () => {
     const result = await harness.caller.update({
       content: "  New content  ",
       id: 9,
+      title: "  New title  ",
     });
 
     expect(harness.findFirst).toHaveBeenCalledWith({
@@ -512,15 +519,20 @@ describe("featureRequestsRouter.update", () => {
       where: expect.any(Function),
     });
     expect(harness.updateMock).toHaveBeenCalledWith(featureRequests);
-    expect(harness.set).toHaveBeenCalledWith({ content: "New content" });
+    expect(harness.set).toHaveBeenCalledWith({
+      content: "New content",
+      title: "New title",
+    });
     expect(harness.returning).toHaveBeenCalledWith({
       content: featureRequests.content,
       id: featureRequests.id,
+      title: featureRequests.title,
       updatedAt: featureRequests.updatedAt,
     });
     expect(result).toEqual({
       content: expect.any(String),
       id: 9,
+      title: expect.any(String),
       updatedAt: expect.any(String),
     });
   });
@@ -529,7 +541,7 @@ describe("featureRequestsRouter.update", () => {
     const harness = createUpdateHarness({ sessionUserId: "other-user" });
 
     await expect(
-      harness.caller.update({ content: "ok", id: 9 }),
+      harness.caller.update({ content: "ok", id: 9, title: "t" }),
     ).rejects.toMatchObject({ code: "FORBIDDEN" });
 
     expect(harness.updateMock).not.toHaveBeenCalled();
@@ -539,9 +551,66 @@ describe("featureRequestsRouter.update", () => {
     const harness = createUpdateHarness({ featureRequest: null });
 
     await expect(
-      harness.caller.update({ content: "ok", id: 999 }),
+      harness.caller.update({ content: "ok", id: 999, title: "t" }),
     ).rejects.toMatchObject({ code: "NOT_FOUND" });
 
     expect(harness.updateMock).not.toHaveBeenCalled();
+  });
+});
+
+describe("featureRequestsRouter.byId", () => {
+  it("returns feature request when ids match", async () => {
+    const findFirst = vi.fn().mockResolvedValue({
+      content: "details",
+      id: 12,
+      productId: 3,
+      title: "Title",
+      userId: "user-1",
+    });
+
+    const caller = createCaller({
+      db: {
+        query: { featureRequests: { findFirst } },
+      } as unknown as Database,
+      headers: new Headers(),
+      session: null,
+    });
+
+    const result = await caller.byId({ id: 12, productId: 3 });
+
+    expect(findFirst).toHaveBeenCalledWith({
+      columns: expect.any(Object),
+      where: expect.any(Function),
+      with: expect.any(Object),
+    });
+    expect(result).toMatchObject({ id: 12, productId: 3 });
+  });
+
+  it("returns null when not found", async () => {
+    const findFirst = vi.fn().mockResolvedValue(null);
+
+    const caller = createCaller({
+      db: {
+        query: { featureRequests: { findFirst } },
+      } as unknown as Database,
+      headers: new Headers(),
+      session: null,
+    });
+
+    const result = await caller.byId({ id: 99, productId: 1 });
+
+    expect(result).toBeNull();
+  });
+
+  it("validates input", async () => {
+    const caller = createCaller({
+      db: {
+        query: { featureRequests: { findFirst: vi.fn() } },
+      } as unknown as Database,
+      headers: new Headers(),
+      session: null,
+    });
+
+    await expect(caller.byId({ id: 0, productId: -1 })).rejects.toBeTruthy();
   });
 });

@@ -2,6 +2,7 @@ import { featureRequestReactions, featureRequests } from "@repo/db";
 import {
   createFeatureRequestSchema,
   deleteFeatureRequestSchema,
+  featureRequestByProductSchema,
   reactToFeatureRequestSchema,
   updateFeatureRequestSchema,
 } from "@repo/schema";
@@ -15,6 +16,31 @@ import {
 } from "~/server/api/trpc";
 
 export const featureRequestsRouter = createTRPCRouter({
+  byId: publicProcedure
+    .input(featureRequestByProductSchema)
+    .query(async ({ ctx, input }) => {
+      const featureRequest = await ctx.db.query.featureRequests.findFirst({
+        columns: {
+          content: true,
+          id: true,
+          productId: true,
+          title: true,
+          userId: true,
+        },
+        where: (fr, { and, eq }) =>
+          and(eq(fr.id, input.id), eq(fr.productId, input.productId)),
+        with: {
+          product: {
+            columns: { id: true, name: true },
+          },
+          user: {
+            columns: { id: true, image: true, name: true },
+          },
+        },
+      });
+
+      return featureRequest ?? null;
+    }),
   create: protectedProcedure
     .input(createFeatureRequestSchema)
     .mutation(async ({ ctx, input }) => {
@@ -157,11 +183,12 @@ export const featureRequestsRouter = createTRPCRouter({
 
       const [updated] = await ctx.db
         .update(featureRequests)
-        .set({ content: input.content })
+        .set({ content: input.content, title: input.title })
         .where(eq(featureRequests.id, input.id))
         .returning({
           content: featureRequests.content,
           id: featureRequests.id,
+          title: featureRequests.title,
           updatedAt: featureRequests.updatedAt,
         });
 

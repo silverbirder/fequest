@@ -33,9 +33,7 @@ type Props = {
   canCreateFeatureRequest: boolean;
   currentUserId?: null | string;
   onCreateFeatureRequest: (formData: FormData) => Promise<void>;
-  onDeleteFeatureRequest?: (formData: FormData) => Promise<void>;
   onReactToFeature: (formData: FormData) => Promise<void>;
-  onUpdateFeatureRequest?: (formData: FormData) => Promise<void>;
   openFeatureRequestId?: null | number;
   product: ProductData;
 };
@@ -72,36 +70,29 @@ export const Product = (props: Props) => {
                 Boolean(props.currentUserId) &&
                 Boolean(feature.user?.id) &&
                 feature.user?.id === props.currentUserId;
-              const canDelete = Boolean(
-                props.onDeleteFeatureRequest && isOwner,
-              );
+              const text = feature.title?.trim() ?? "";
               const isOpenTarget =
                 typeof props.openFeatureRequestId === "number" &&
                 props.openFeatureRequestId === feature.id;
-              const text = feature.title?.trim() ?? "";
               return (
                 <FeatureRequestItem
                   avatar={feature.user}
-                  canDelete={canDelete}
                   defaultOpen={isOpenTarget}
                   detail={{
                     content: (
-                      <FeatureRequestContent
-                        content={feature.content}
-                        featureId={feature.id}
-                        isOwner={isOwner}
-                        onUpdateFeatureRequest={props.onUpdateFeatureRequest}
-                      />
+                      <FeatureRequestContent content={feature.content ?? ""} />
                     ),
                     createdAt: toIsoString(feature.createdAt),
                     title: text,
                     updatedAt: toIsoString(feature.updatedAt),
                   }}
+                  editHref={
+                    isOwner
+                      ? { pathname: `/${props.product.id}/${feature.id}/edit` }
+                      : undefined
+                  }
                   featureId={feature.id}
                   key={feature.id}
-                  onDeleteFeatureRequest={
-                    canDelete ? props.onDeleteFeatureRequest : undefined
-                  }
                   onReactToFeature={props.onReactToFeature}
                   reactions={feature.reactionSummaries ?? []}
                   text={text}

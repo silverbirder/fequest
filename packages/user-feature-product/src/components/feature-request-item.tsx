@@ -1,9 +1,12 @@
 "use client";
 
 import type { Route } from "next";
+import type { UrlObject } from "url";
 
-import { RequestCard, VStack } from "@repo/ui/components";
+import { Button, HStack, RequestCard, VStack } from "@repo/ui/components";
+import { Pencil } from "lucide-react";
 import Form from "next/form";
+import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { type ComponentProps, useMemo, useRef } from "react";
 
@@ -11,11 +14,10 @@ import type { ReactionSummary } from "../libs/reaction-summary";
 
 type Props = {
   avatar?: RequestCardAvatar;
-  canDelete?: boolean;
   defaultOpen?: boolean;
   detail: RequestCardDetail;
+  editHref?: UrlObject;
   featureId: number;
-  onDeleteFeatureRequest?: (formData: FormData) => Promise<void>;
   onReactToFeature: (formData: FormData) => Promise<void>;
   reactions: ReactionSummary[];
   text: string;
@@ -26,11 +28,10 @@ type RequestCardDetail = ComponentProps<typeof RequestCard>["detail"];
 
 export const FeatureRequestItem = ({
   avatar,
-  canDelete,
   defaultOpen,
   detail,
+  editHref,
   featureId,
-  onDeleteFeatureRequest,
   onReactToFeature,
   reactions,
   text,
@@ -65,15 +66,25 @@ export const FeatureRequestItem = ({
   );
   const reactionOptions = reactions;
 
-  const footerAction =
-    canDelete && onDeleteFeatureRequest
-      ? {
-          action: onDeleteFeatureRequest,
-          fields: { featureId },
-          label: "削除",
-          variant: "destructive" as const,
-        }
-      : undefined;
+  const detailContent = (
+    <VStack gap="xs">
+      {detail.content}
+      {editHref && (
+        <HStack justify="end" w="full">
+          <Button
+            aria-label="編集ページを開く"
+            asChild
+            size="icon"
+            variant="ghost"
+          >
+            <Link href={editHref} prefetch={false}>
+              <Pencil />
+            </Link>
+          </Button>
+        </HStack>
+      )}
+    </VStack>
+  );
 
   const handleDialogOpenChange = (isOpen: boolean) => {
     if (!pathname) {
@@ -100,9 +111,11 @@ export const FeatureRequestItem = ({
       <RequestCard
         avatar={avatar}
         defaultOpen={defaultOpen}
-        detail={detail}
+        detail={{
+          ...detail,
+          content: detailContent,
+        }}
         enableEmojiPicker
-        footerAction={footerAction}
         idBase={idBase}
         onOpenChange={handleDialogOpenChange}
         onReact={handleReact}

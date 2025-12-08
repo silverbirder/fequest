@@ -19,6 +19,7 @@ const meta = {
       title: "タグ付け機能の追加",
       updatedAt: "2024-11-05T18:30:00.000Z",
     },
+    editHref: { pathname: "/1/1/edit" },
     featureId: 1,
     onReactToFeature: async () => {},
     reactions: [
@@ -45,22 +46,18 @@ export const OwnedByAuthor: Story = {
       fallbackText: "ME",
       image: "https://api.dicebear.com/7.x/initials/svg?seed=ME",
     },
-    canDelete: true,
     detail: {
       content: (
         <FeatureRequestContent
           content={`## 自分のリクエスト\n\n- フィードバック用のスクリーンショットを追加\n- 通知設定をデフォルトで有効化\n- 週次でのステータス更新を希望`}
-          featureId={1}
-          isOwner
-          onUpdateFeatureRequest={async () => {}}
         />
       ),
       createdAt: "2024-12-01T09:00:00.000Z",
       title: "自分のリクエスト",
       updatedAt: "2024-12-06T07:45:00.000Z",
     },
+    editHref: { pathname: "/product/1/feature/1/edit" },
     featureId: 1,
-    onDeleteFeatureRequest: async () => {},
     onReactToFeature: async () => {},
     reactions: [
       { count: 8, emoji: "👍", reactedByViewer: true },

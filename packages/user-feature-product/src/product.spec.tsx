@@ -17,30 +17,9 @@ const navigationMocks = vi.hoisted(() => ({
 
 vi.mock("next/navigation", () => ({
   usePathname: () => navigationMocks.pathname,
-  useRouter: () => ({
-    replace: navigationMocks.replace,
-  }),
+  useRouter: () => ({ replace: navigationMocks.replace }),
   useSearchParams: () => navigationMocks.searchParams,
 }));
-
-const waitForDialog = () =>
-  new Promise<void>((resolve) => {
-    setTimeout(() => resolve(), 0);
-  });
-
-const openDialog = async (index = 0) => {
-  const triggers = document.querySelectorAll<HTMLButtonElement>(
-    "[data-slot='dialog-trigger']",
-  );
-  const trigger = triggers.item(index) ?? null;
-  trigger?.click();
-  await waitForDialog();
-};
-
-beforeEach(() => {
-  navigationMocks.searchParams = new URLSearchParams();
-  navigationMocks.replace.mockReset();
-});
 
 const createProductFixture = (ownerId: string) => ({
   description: "プロダクトの説明文です。",
@@ -65,6 +44,11 @@ const createProductFixture = (ownerId: string) => ({
 });
 
 describe("Product", () => {
+  beforeEach(() => {
+    navigationMocks.searchParams = new URLSearchParams();
+    navigationMocks.replace.mockReset();
+  });
+
   it.each(Object.entries(Stories))("should %s snapshot", async (_, Story) => {
     const originalInnerHtml = document.body.innerHTML;
 
@@ -95,33 +79,25 @@ describe("Product", () => {
     await expect.element(baseElement).toMatchScreenshot();
   });
 
-  it("opens feature detail when openFeatureRequestId matches", async () => {
+  const waitForDialog = () =>
+    new Promise<void>((resolve) => {
+      setTimeout(() => resolve(), 0);
+    });
+
+  const openDialog = async () => {
+    const trigger = document.querySelector<HTMLButtonElement>(
+      "[data-slot='dialog-trigger']",
+    );
+    trigger?.click();
+    await waitForDialog();
+  };
+
+  it("shows edit link for the owner", async () => {
     await render(
       <Product
         canCreateFeatureRequest
         currentUserId="user-owner"
         onCreateFeatureRequest={async () => {}}
-        onDeleteFeatureRequest={async () => {}}
-        onReactToFeature={async () => {}}
-        openFeatureRequestId={1}
-        product={createProductFixture("user-owner")}
-      />,
-    );
-
-    await waitForDialog();
-
-    expect(document.body.textContent ?? "").toContain(
-      "プロフィール画像アップロード",
-    );
-  });
-
-  it("omits delete action when the viewer is not the creator", async () => {
-    await render(
-      <Product
-        canCreateFeatureRequest
-        currentUserId="other-user"
-        onCreateFeatureRequest={async () => {}}
-        onDeleteFeatureRequest={async () => {}}
         onReactToFeature={async () => {}}
         product={createProductFixture("user-owner")}
       />,
@@ -129,6 +105,23 @@ describe("Product", () => {
 
     await openDialog();
 
-    expect(document.body.textContent).not.toContain("リクエストを削除");
+    const editLinks = Array.from(
+      document.querySelectorAll("a[aria-label='編集ページを開く']"),
+    );
+    expect(editLinks).toHaveLength(1);
+  });
+
+  it("omits edit link when the viewer is not the creator", async () => {
+    await render(
+      <Product
+        canCreateFeatureRequest
+        currentUserId="other-user"
+        onCreateFeatureRequest={async () => {}}
+        onReactToFeature={async () => {}}
+        product={createProductFixture("user-owner")}
+      />,
+    );
+
+    expect(document.body.textContent).not.toContain("編集ページを開く");
   });
 });

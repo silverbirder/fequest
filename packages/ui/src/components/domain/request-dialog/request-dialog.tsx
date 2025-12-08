@@ -1,7 +1,6 @@
-import type { ComponentProps, ReactNode } from "react";
+import type { ReactNode } from "react";
 
 import { ChevronRight } from "lucide-react";
-import Form from "next/form";
 
 import { HStack, VStack } from "../../common/layout";
 import {
@@ -15,14 +14,6 @@ import {
   DialogTrigger,
 } from "../../common/shadcn";
 import { Text } from "../../common/typography";
-
-export type FooterAction = {
-  action: (formData: FormData) => Promise<void> | void;
-  fields?: Record<string, boolean | number | string>;
-  label: string;
-  type?: ComponentProps<typeof Button>["type"];
-  variant?: ComponentProps<typeof Button>["variant"];
-};
 
 type Detail = {
   content: ReactNode;
@@ -42,7 +33,6 @@ type Props = {
   detail: Detail;
   dialogTitle?: string;
   dialogTriggerLabel?: string;
-  footerAction?: FooterAction;
   idBase?: string;
   onOpenChange?: (open: boolean) => void;
 };
@@ -71,7 +61,6 @@ export const RequestDialog = ({
   detail,
   dialogTitle,
   dialogTriggerLabel,
-  footerAction,
   idBase = "request-card",
   onOpenChange,
 }: Props) => {
@@ -88,6 +77,7 @@ export const RequestDialog = ({
         <Button
           aria-controls={dialogContentId}
           aria-label={triggerLabel}
+          data-slot="dialog-trigger"
           size="icon"
           type="button"
           variant="link"
@@ -112,31 +102,7 @@ export const RequestDialog = ({
               </DialogTitle>
             </HStack>
           </DialogHeader>
-          <VStack w="full">
-            {detail.content}
-            {footerAction && (
-              <HStack self="end">
-                <Form action={footerAction.action}>
-                  {Object.entries(footerAction.fields ?? {}).map(
-                    ([name, value]) => (
-                      <input
-                        key={name}
-                        name={name}
-                        type="hidden"
-                        value={String(value)}
-                      />
-                    ),
-                  )}
-                  <Button
-                    type={footerAction.type ?? "submit"}
-                    variant={footerAction.variant ?? "destructive"}
-                  >
-                    {footerAction.label}
-                  </Button>
-                </Form>
-              </HStack>
-            )}
-          </VStack>
+          <VStack w="full">{detail.content}</VStack>
           <DialogFooter>
             <Text color="subtle" size="sm">
               投稿日: {createdAtText}

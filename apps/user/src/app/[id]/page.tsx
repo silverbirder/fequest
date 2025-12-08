@@ -7,8 +7,6 @@ import { auth } from "~/server/auth";
 import { api } from "~/trpc/server";
 
 import { createCreateFeatureRequest } from "./create-feature-request";
-import { createUpdateFeatureRequest } from "./create-update-feature-request";
-import { createDeleteFeatureRequest } from "./delete-feature-request";
 import { getOpenFeatureRequestId } from "./get-open-feature-request-id";
 import { createReactToFeature } from "./react-to-feature";
 
@@ -27,7 +25,6 @@ export default async function Page({
     notFound();
   }
   const productId = parsedParams.output.id;
-  const openFeatureRequestId = getOpenFeatureRequestId(resolvedSearchParams);
   const [product, session] = await Promise.all([
     api.product.byId({ id: productId }),
     auth(),
@@ -39,19 +36,16 @@ export default async function Page({
 
   const createFeatureRequest = createCreateFeatureRequest({ productId });
   const reactToFeature = createReactToFeature({ productId });
-  const updateFeatureRequest = createUpdateFeatureRequest({ productId });
-  const deleteFeatureRequest = createDeleteFeatureRequest({ productId });
 
   const canCreateFeatureRequest = Boolean(session?.user);
+  const openFeatureRequestId = getOpenFeatureRequestId(resolvedSearchParams);
 
   return (
     <Product
       canCreateFeatureRequest={canCreateFeatureRequest}
       currentUserId={session?.user?.id ?? null}
       onCreateFeatureRequest={createFeatureRequest}
-      onDeleteFeatureRequest={deleteFeatureRequest}
       onReactToFeature={reactToFeature}
-      onUpdateFeatureRequest={updateFeatureRequest}
       openFeatureRequestId={openFeatureRequestId}
       product={product}
     />

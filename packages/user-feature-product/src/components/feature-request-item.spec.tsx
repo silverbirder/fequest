@@ -7,18 +7,16 @@ import * as stories from "./feature-request-item.stories";
 
 const Stories = composeStories(stories);
 
-const mocks = vi.hoisted(() => ({
+const navigationMocks = vi.hoisted(() => ({
   pathname: "/products/1",
   replace: vi.fn(),
   searchParams: new URLSearchParams(),
 }));
 
 vi.mock("next/navigation", () => ({
-  usePathname: () => mocks.pathname,
-  useRouter: () => ({
-    replace: mocks.replace,
-  }),
-  useSearchParams: () => mocks.searchParams,
+  usePathname: () => navigationMocks.pathname,
+  useRouter: () => ({ replace: navigationMocks.replace }),
+  useSearchParams: () => navigationMocks.searchParams,
 }));
 
 const waitForDialog = (delay = 25) =>
@@ -65,8 +63,8 @@ const renderItem = (
   );
 
 beforeEach(() => {
-  mocks.searchParams = new URLSearchParams();
-  mocks.replace.mockReset();
+  navigationMocks.searchParams = new URLSearchParams();
+  navigationMocks.replace.mockReset();
 });
 
 describe("FeatureRequestItem", () => {
@@ -80,15 +78,16 @@ describe("FeatureRequestItem", () => {
     document.body.innerHTML = originalInnerHtml;
   });
 
-  it("shows the delete action when deletion is allowed", async () => {
+  it("shows the edit link when provided", async () => {
     await renderItem({
-      canDelete: true,
-      onDeleteFeatureRequest: async () => {},
+      editHref: { pathname: "/products/1/1/edit" },
     });
 
     await openDialog();
+    await waitForDialog(50);
 
-    expect(document.body.textContent).toContain("削除");
+    const link = document.querySelector("a[aria-label='編集ページを開く']");
+    expect(link).not.toBeNull();
   });
 
   it("renders custom emoji reactions from props", async () => {
@@ -103,53 +102,35 @@ describe("FeatureRequestItem", () => {
     expect(reactionButton).toBeDefined();
   });
 
-  it("removes open param when dialog closes", async () => {
-    mocks.searchParams = new URLSearchParams("open=1");
+  it("keeps dialog closed until trigger is clicked", async () => {
+    await renderItem();
 
-    await renderItem({
-      defaultOpen: true,
-      featureId: 1,
-    });
+    const dialogBefore = document.querySelector("[role='dialog']");
+    expect(dialogBefore).toBeNull();
+
+    await openDialog();
+
+    await waitForDialog(50);
+
+    const dialogAfter = document.querySelector("[role='dialog']");
+    expect(dialogAfter?.textContent ?? "").toContain("Child feature");
+  });
+
+  it("removes open param when dialog closes", async () => {
+    navigationMocks.searchParams = new URLSearchParams("open=1");
+
+    await renderItem({ defaultOpen: true, featureId: 1 });
 
     await waitForDialog();
 
-    const closeButton = document.querySelector<HTMLButtonElement>(
-      "[data-slot='dialog-close']",
-    );
-    closeButton?.click();
+    document
+      .querySelector<HTMLButtonElement>("[data-slot='dialog-close']")
+      ?.click();
 
     await waitForDialog(50);
 
-    expect(mocks.replace).toHaveBeenLastCalledWith("/products/1", {
+    expect(navigationMocks.replace).toHaveBeenLastCalledWith("/products/1", {
       scroll: false,
     });
-  });
-
-  it("adds open param when dialog opens", async () => {
-    mocks.searchParams = new URLSearchParams();
-
-    await renderItem({
-      defaultOpen: false,
-      featureId: 2,
-    });
-
-    await openDialog();
-
-    await waitForDialog(50);
-
-    expect(mocks.replace).toHaveBeenLastCalledWith("/products/1?open=2", {
-      scroll: false,
-    });
-  });
-
-  it.skip("does not show the delete action when deletion is not allowed", async () => {
-    await renderItem({
-      canDelete: false,
-      onDeleteFeatureRequest: async () => {},
-    });
-
-    await openDialog();
-
-    expect(document.body.textContent).not.toContain("リクエストを削除");
   });
 });

@@ -37,7 +37,7 @@ describe("RequestDialog", () => {
         avatar={{ fallbackText: "CF" }}
         detail={{
           content: (
-            <div className="prose prose-slate prose-sm dark:prose-invert">
+            <div>
               <h2>Heading</h2>
               <ul>
                 <li>item1</li>
@@ -61,38 +61,11 @@ describe("RequestDialog", () => {
     expect(bodyText).toContain(
       "CFChild contentHeadingitem1item2投稿日: 2024/01/01 9:00Close",
     );
-    const heading = document.querySelector(".prose h2");
-    expect(heading?.textContent ?? "").toContain("Heading");
-  });
-
-  it("renders footer action when provided", async () => {
-    await render(
-      <RequestDialog
-        avatar={{ fallbackText: "CF" }}
-        detail={{
-          content: (
-            <div className="prose prose-slate prose-sm dark:prose-invert">
-              <h2>Heading</h2>
-            </div>
-          ),
-          createdAt: "2024-01-01T00:00:00.000Z",
-          title: "Child content",
-          updatedAt: "2024-01-02T00:00:00.000Z",
-        }}
-        dialogTitle="Child content"
-        dialogTriggerLabel="Open detail"
-        footerAction={{
-          action: async () => {},
-          fields: { featureId: 1 },
-          label: "カスタムアクション",
-        }}
-      />,
+    const headings = Array.from(document.querySelectorAll("h2"));
+    const hasDetailHeading = headings.some((node) =>
+      (node.textContent ?? "").includes("Heading"),
     );
-
-    await openDialog("Open detail");
-
-    const footer = document.querySelector("[data-slot='dialog-footer']");
-    expect(footer?.textContent ?? "").toContain("投稿日: 2024/01/01 9:00");
+    expect(hasDetailHeading).toBe(true);
   });
 
   it("opens by default when defaultOpen is true", async () => {

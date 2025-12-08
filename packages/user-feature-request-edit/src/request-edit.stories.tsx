@@ -4,7 +4,17 @@ import { RequestEdit } from "./request-edit";
 
 const meta = {
   args: {
-    children: "RequestEdit",
+    backHref: { pathname: "/1" },
+    defaultValues: {
+      content:
+        "細かな改善案をここに書きます。\nスクリーンショットも共有予定です。",
+      title: "通知設定の改善",
+    },
+    featureId: 1,
+    onDelete: async () => {},
+    onSubmit: async () => {},
+    productName: "Fequest",
+    requestTitle: "通知設定の改善",
   },
   component: RequestEdit,
   title: "Feature/User/RequestEdit",

@@ -18,11 +18,30 @@ describe("RequestEdit", () => {
     document.body.innerHTML = originalInnerHtml;
   });
 
-  it("renders provided children", async () => {
-    await render(<RequestEdit>Child content</RequestEdit>);
+  it("renders form fields with defaults", async () => {
+    await render(
+      <RequestEdit
+        backHref={{ pathname: "/products/1" }}
+        defaultValues={{ content: "内容", title: "タイトル" }}
+        featureId={12}
+        onSubmit={async () => {}}
+        productName="Fequest"
+      />,
+    );
 
-    const element = document.querySelector("div");
-    expect(element).not.toBeNull();
-    expect(element?.textContent ?? "").toContain("Child content");
+    const titleInput = document.querySelector<HTMLInputElement>(
+      "input[name='title']",
+    );
+    expect(titleInput?.value).toBe("タイトル");
+
+    const contentTextarea = document.querySelector<HTMLTextAreaElement>(
+      "textarea[name='content']",
+    );
+    expect(contentTextarea?.value).toBe("内容");
+
+    const hiddenId = document.querySelector<HTMLInputElement>(
+      "input[name='featureId']",
+    );
+    expect(hiddenId?.value).toBe("12");
   });
 });

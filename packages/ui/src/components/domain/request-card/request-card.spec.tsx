@@ -37,7 +37,7 @@ describe("RequestCard", () => {
         avatar={{ fallbackText: "CF" }}
         detail={{
           content: (
-            <div className="prose prose-slate prose-sm dark:prose-invert">
+            <div>
               <h2>Heading</h2>
               <ul>
                 <li>item1</li>
@@ -62,41 +62,11 @@ describe("RequestCard", () => {
     expect(element?.textContent ?? "").toContain("CF");
     const empty = document.querySelector(".mdx-empty");
     expect(empty).toBeNull();
-    const heading = document.querySelector(".prose h2");
-    expect(heading?.textContent ?? "").toContain("Heading");
-  });
-
-  it("renders footer action when provided", async () => {
-    await render(
-      <RequestCard
-        avatar={{ fallbackText: "CF" }}
-        detail={{
-          content: (
-            <div className="prose prose-slate prose-sm dark:prose-invert">
-              <h2>Heading</h2>
-              <ul>
-                <li>item1</li>
-                <li>item2</li>
-              </ul>
-            </div>
-          ),
-          createdAt: "2024-01-01T00:00:00.000Z",
-          title: "Child content",
-          updatedAt: "2024-01-02T00:00:00.000Z",
-        }}
-        footerAction={{
-          action: async () => {},
-          label: "カスタムアクション",
-          variant: "destructive",
-        }}
-        text="Child content"
-      />,
+    const headings = Array.from(document.querySelectorAll("h2"));
+    const hasDetailHeading = headings.some((node) =>
+      (node.textContent ?? "").includes("Heading"),
     );
-
-    await openDialog();
-
-    const footer = document.querySelector("[data-slot='dialog-footer']");
-    expect(footer?.textContent ?? "").toContain("投稿日: 2024/01/01 9:00");
+    expect(hasDetailHeading).toBe(true);
   });
 
   it("shows emoji picker trigger when enabled", async () => {
