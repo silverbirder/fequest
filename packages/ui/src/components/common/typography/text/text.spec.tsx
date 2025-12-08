@@ -32,7 +32,7 @@ describe("Text", () => {
     const className = element?.getAttribute("class") ?? "";
     expect(className).toContain("text-xl");
     expect(className).toContain("font-semibold");
-    expect(className).toContain("text-primary");
+    expect(className).toContain("text-accent");
   });
 
   it("supports composing via asChild", async () => {

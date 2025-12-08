@@ -31,7 +31,7 @@ const textVariants = cva("text-foreground leading-normal block", {
       uppercase: "uppercase tracking-wide",
     },
     color: {
-      accent: "text-primary",
+      accent: "text-accent",
       default: undefined,
       destructive: "text-destructive",
       muted: "text-muted-foreground",

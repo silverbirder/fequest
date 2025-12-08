@@ -8,6 +8,7 @@ import {
   Button,
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -66,6 +67,7 @@ export const RequestDialog = ({
 }: Props) => {
   const createdAtText = formatDateTime(detail.createdAt);
   const dialogContentId = `${idBase}-dialog-content`;
+  const dialogDescriptionId = `${idBase}-dialog-description`;
   const titleText = dialogTitle?.trim() || detail.title?.trim() || "詳細";
   const triggerLabel =
     dialogTriggerLabel?.trim() ||
@@ -85,7 +87,10 @@ export const RequestDialog = ({
           <ChevronRight />
         </Button>
       </DialogTrigger>
-      <DialogContent id={dialogContentId}>
+      <DialogContent
+        aria-describedby={dialogDescriptionId}
+        id={dialogContentId}
+      >
         <VStack gap="lg">
           <DialogHeader>
             <HStack align="center" gap="md">
@@ -101,8 +106,10 @@ export const RequestDialog = ({
                 </Text>
               </DialogTitle>
             </HStack>
+            <DialogDescription id={dialogDescriptionId}>
+              <VStack w="full">{detail.content}</VStack>
+            </DialogDescription>
           </DialogHeader>
-          <VStack w="full">{detail.content}</VStack>
           <DialogFooter>
             <Text color="subtle" size="sm">
               投稿日: {createdAtText}
