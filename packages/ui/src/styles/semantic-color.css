@@ -34,7 +34,7 @@
   --light-accent-fg: var(--tone-20);   /* アクセント文字 */
 
   /* ---- Destructive（危険・警告） ---- */
-  --light-destructive: var(--tone-50);     /* 危険系背景（赤系で暗め） */
+  --light-destructive: var(--tone-40);     /* 危険系背景（赤系で暗め） */
   --light-destructive-fg: var(--tone-10);  /* destructive 上の文字（深い色） */
 
   /* ---- Chart（可視化用の階調） ---- */
@@ -88,7 +88,7 @@
   --chroma-accent-fg: var(--chroma-20);
 
   /* ---- Destructive ---- */
-  --chroma-destructive: var(--chroma-80);
+  --chroma-destructive: var(--chroma-90);
   --chroma-destructive-fg: var(--chroma-30);
 
   /* ---- Chart（可視化用彩度） ---- */

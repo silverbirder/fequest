@@ -55,10 +55,11 @@
 
   /* ---- Destructive（危険アクション） ---- */
   --destructive: oklch(
-    var(--light-destructive) var(--chroma-destructive) var(--hue-base)
+    var(--light-destructive) var(--chroma-destructive) var(--hue-destructive)
   );
   --destructive-foreground: oklch(
-    var(--light-destructive-fg) var(--chroma-destructive-fg) var(--hue-base)
+    var(--light-destructive-fg) var(--chroma-destructive-fg)
+      var(--hue-destructive)
   );
   /* ---- Border / Input / Ring ---- */
   --border: oklch(var(--light-border) var(--chroma-border) var(--hue-base));

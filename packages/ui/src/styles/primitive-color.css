@@ -1,5 +1,6 @@
 :root {
-  --hue-base: 238;
+  --hue-base: 238deg;
+  --hue-destructive: calc(var(--hue-base) + 120deg);
 
   --tone-100: 1;
   --tone-90: 0.9;
