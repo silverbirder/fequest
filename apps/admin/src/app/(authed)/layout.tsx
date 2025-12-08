@@ -27,7 +27,7 @@ const Layout = async ({ children }: Props) => {
   };
 
   return (
-    <VStack gap="lg">
+    <VStack gap="lg" pb="2xl">
       <Header
         appendLink={{
           href: env.USER_DOMAIN_URL,

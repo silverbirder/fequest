@@ -46,7 +46,7 @@ export default async function RootLayout({
       <body className={notoSansJP.className}>
         <TRPCReactProvider>
           <Providers>
-            <VStack gap="lg">
+            <VStack gap="lg" pb="2xl">
               <Header
                 appendLink={{
                   href: env.ADMIN_DOMAIN_URL,
