@@ -40,8 +40,48 @@ type Props = {
 
 export const Product = (props: Props) => {
   const featureRequests: FeatureRequest[] = props.product.featureRequests ?? [];
+  const openFeatureRequests = featureRequests.filter(
+    (feature) => feature.status !== "closed",
+  );
+  const closedFeatureRequests = featureRequests.filter(
+    (feature) => feature.status === "closed",
+  );
   const description = props.product.description?.trim() ?? "";
   const logoUrl = props.product.logoUrl?.trim() || null;
+
+  const renderFeatureRequest = (feature: FeatureRequest) => {
+    const isOwner =
+      Boolean(props.currentUserId) &&
+      Boolean(feature.user?.id) &&
+      feature.user?.id === props.currentUserId;
+    const text = feature.title?.trim() ?? "";
+    const isOpenTarget =
+      typeof props.openFeatureRequestId === "number" &&
+      props.openFeatureRequestId === feature.id;
+
+    return (
+      <FeatureRequestItem
+        avatar={feature.user}
+        defaultOpen={isOpenTarget}
+        detail={{
+          content: <FeatureRequestContent content={feature.content ?? ""} />,
+          createdAt: toIsoString(feature.createdAt),
+          title: text,
+          updatedAt: toIsoString(feature.updatedAt),
+        }}
+        editHref={
+          isOwner
+            ? { pathname: `/${props.product.id}/${feature.id}/edit` }
+            : undefined
+        }
+        featureId={feature.id}
+        key={feature.id}
+        onReactToFeature={props.onReactToFeature}
+        reactions={feature.reactionSummaries ?? []}
+        text={text}
+      />
+    );
+  };
 
   return (
     <VStack gap="xl">
@@ -60,48 +100,17 @@ export const Product = (props: Props) => {
           </VStack>
         </HStack>
       </VStack>
-      <VStack gap="lg">
-        {featureRequests.length === 0 ? (
-          <Text>フィーチャーはまだありません。</Text>
-        ) : (
-          <VStack align="start" gap="lg">
-            {featureRequests.map((feature) => {
-              const isOwner =
-                Boolean(props.currentUserId) &&
-                Boolean(feature.user?.id) &&
-                feature.user?.id === props.currentUserId;
-              const text = feature.title?.trim() ?? "";
-              const isOpenTarget =
-                typeof props.openFeatureRequestId === "number" &&
-                props.openFeatureRequestId === feature.id;
-              return (
-                <FeatureRequestItem
-                  avatar={feature.user}
-                  defaultOpen={isOpenTarget}
-                  detail={{
-                    content: (
-                      <FeatureRequestContent content={feature.content ?? ""} />
-                    ),
-                    createdAt: toIsoString(feature.createdAt),
-                    title: text,
-                    updatedAt: toIsoString(feature.updatedAt),
-                  }}
-                  editHref={
-                    isOwner
-                      ? { pathname: `/${props.product.id}/${feature.id}/edit` }
-                      : undefined
-                  }
-                  featureId={feature.id}
-                  key={feature.id}
-                  onReactToFeature={props.onReactToFeature}
-                  reactions={feature.reactionSummaries ?? []}
-                  text={text}
-                />
-              );
-            })}
-          </VStack>
-        )}
-      </VStack>
+      {openFeatureRequests.length === 0 ? (
+        <Text>
+          {closedFeatureRequests.length === 0
+            ? "フィーチャーはまだありません。"
+            : "オープンのフィーチャーはありません。"}
+        </Text>
+      ) : (
+        <VStack align="start" gap="lg">
+          {openFeatureRequests.map(renderFeatureRequest)}
+        </VStack>
+      )}
       {props.canCreateFeatureRequest ? (
         <Box asChild w="full">
           <Form action={props.onCreateFeatureRequest}>
@@ -116,6 +125,11 @@ export const Product = (props: Props) => {
         </Box>
       ) : (
         <Text>ログインするとフィーチャーを登録できます。</Text>
+      )}
+      {closedFeatureRequests.length > 0 && (
+        <VStack align="start" gap="lg">
+          {closedFeatureRequests.map(renderFeatureRequest)}
+        </VStack>
       )}
     </VStack>
   );

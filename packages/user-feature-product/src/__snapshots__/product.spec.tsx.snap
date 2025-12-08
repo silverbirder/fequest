@@ -68,18 +68,12 @@ exports[`Product > renders provided props 1`] = `
         </div>
       </div>
     </div>
-    <div
-      class="flex items-start flex-col gap-6 justify-start self-stretch flex-nowrap"
-      data-orientation="column"
-      data-slot="stack"
+    <span
+      class="text-foreground text-left block text-base font-normal"
+      data-slot="text"
     >
-      <span
-        class="text-foreground text-left block text-base font-normal"
-        data-slot="text"
-      >
-        フィーチャーはまだありません。
-      </span>
-    </div>
+      フィーチャーはまだありません。
+    </span>
     <form
       action="javascript:throw new Error('A React form was unexpectedly submitted. If you called form.submit() manually, consider using form.requestSubmit() instead. If you\\'re trying to use event.stopPropagation() in a submit event handler, consider also calling event.preventDefault().')"
       class="w-full"

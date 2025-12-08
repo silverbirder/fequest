@@ -11,6 +11,15 @@ export const productRouter = createTRPCRouter({
       where: (product, { eq }) => eq(product.id, input.id),
       with: {
         featureRequests: {
+          columns: {
+            content: true,
+            createdAt: true,
+            id: true,
+            status: true,
+            title: true,
+            updatedAt: true,
+          },
+          orderBy: (feature, { desc }) => desc(feature.createdAt),
           with: {
             reactions: {
               orderBy: (reaction, { asc }) => asc(reaction.id),

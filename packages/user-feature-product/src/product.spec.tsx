@@ -1,4 +1,3 @@
-import { type FeatureRequestStatus } from "@repo/type";
 import { composeStories } from "@storybook/nextjs-vite";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { render } from "vitest-browser-react";
@@ -8,6 +7,9 @@ import { Product } from "./product";
 import * as stories from "./product.stories";
 
 const Stories = composeStories(stories);
+
+type FeatureRequest = NonNullable<ProductData["featureRequests"]>[number];
+type ProductData = Parameters<typeof Product>[0]["product"];
 
 const navigationMocks = vi.hoisted(() => ({
   pathname: "/products/1",
@@ -21,23 +23,40 @@ vi.mock("next/navigation", () => ({
   useSearchParams: () => navigationMocks.searchParams,
 }));
 
-const createProductFixture = (ownerId: string) => ({
+type FeatureRequestFixture = Partial<FeatureRequest> & { id: number };
+
+const createFeatureFixture = (
+  ownerId: string,
+  overrides: FeatureRequestFixture,
+): FeatureRequest => {
+  const { id, ...rest } = overrides;
+  const defaultUser = {
+    id: ownerId,
+    image: "https://placehold.co/48x48",
+    name: "田中 花子",
+  } satisfies FeatureRequest["user"];
+
+  return {
+    content: "ユーザーがプロフィール画像をアップロードできるようにする",
+    createdAt: "2024-01-01T00:00:00.000Z",
+    id,
+    reactionSummaries: [] as ReactionSummary[],
+    status: "open",
+    title: "プロフィール画像アップロード",
+    updatedAt: "2024-01-02T00:00:00.000Z",
+    user: defaultUser,
+    ...rest,
+  } satisfies FeatureRequest;
+};
+
+const createProductFixture = (
+  ownerId: string,
+  featureRequests?: FeatureRequestFixture[],
+): ProductData => ({
   description: "プロダクトの説明文です。",
-  featureRequests: [
-    {
-      content: "ユーザーがプロフィール画像をアップロードできるようにする",
-      id: 1,
-      reactionSummaries: [] as ReactionSummary[],
-      status: "open" as FeatureRequestStatus,
-      title: "プロフィール画像アップロード",
-      updatedAt: "2024-01-02T00:00:00.000Z",
-      user: {
-        id: ownerId,
-        image: "https://placehold.co/48x48",
-        name: "田中 花子",
-      },
-    },
-  ],
+  featureRequests: featureRequests?.map((feature) =>
+    createFeatureFixture(ownerId, feature),
+  ) ?? [createFeatureFixture(ownerId, { id: 1 })],
   id: 1,
   logoUrl: "https://placehold.co/120x120",
   name: "Sample Product",
@@ -123,5 +142,38 @@ describe("Product", () => {
     );
 
     expect(document.body.textContent).not.toContain("編集ページを開く");
+  });
+
+  it("shows closed feature requests under the composer", async () => {
+    await render(
+      <Product
+        canCreateFeatureRequest
+        currentUserId="user-owner"
+        onCreateFeatureRequest={async () => {}}
+        onReactToFeature={async () => {}}
+        product={createProductFixture("user-owner", [
+          {
+            content: "まだ未対応のリクエスト",
+            id: 1,
+            reactionSummaries: [],
+            status: "open",
+            title: "公開中のリクエスト",
+          },
+          {
+            content: "完了した対応",
+            id: 2,
+            reactionSummaries: [],
+            status: "closed",
+            title: "クローズ済みリクエスト",
+          },
+        ])}
+      />,
+    );
+
+    const closedRequest = Array.from(document.querySelectorAll("*"))
+      .map((node) => node.textContent ?? "")
+      .find((text) => text.includes("クローズ済みリクエスト"));
+
+    expect(closedRequest).toBeDefined();
   });
 });

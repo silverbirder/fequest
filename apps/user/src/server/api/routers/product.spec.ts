@@ -99,6 +99,15 @@ describe("productRouter.byId", () => {
     expect(queryOptions).toBeDefined();
     expect(queryOptions?.with).toEqual({
       featureRequests: {
+        columns: {
+          content: true,
+          createdAt: true,
+          id: true,
+          status: true,
+          title: true,
+          updatedAt: true,
+        },
+        orderBy: expect.any(Function),
         with: {
           reactions: {
             orderBy: expect.any(Function),
