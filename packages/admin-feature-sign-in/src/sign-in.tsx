@@ -36,10 +36,6 @@ export const SignIn = ({ onGoogleSignIn }: Props) => {
                 Googleでログイン
               </Button>
             </form>
-            <Text color="muted" size="xs">
-              ※
-              いつでも退会できます。退会すると、あなたのデータはすべて削除されますのでご安心ください。
-            </Text>
           </VStack>
         </VStack>
       </Box>
