@@ -11,11 +11,22 @@ const __dirname = dirname(__filename);
 const repoRoot = resolve(__dirname, "../../../..");
 const userDockerfilePath = "apps/user/Dockerfile";
 const USER_PORT = 3000;
+const ADMIN_PORT = 3001;
+
+type StartUserOptions = Readonly<{
+  adminDomainUrl?: string;
+  hostPort?: number;
+}>;
 
 export const startUser = async (
   network: StartedNetwork,
   databaseUrl: string,
+  options: StartUserOptions = {},
 ) => {
+  const userHostPort = options.hostPort ?? USER_PORT;
+  const adminDomainUrl =
+    options.adminDomainUrl ?? `http://127.0.0.1:${ADMIN_PORT}`;
+
   const userContainer = await GenericContainer.fromDockerfile(
     repoRoot,
     userDockerfilePath,
@@ -23,6 +34,7 @@ export const startUser = async (
 
   const container = await userContainer
     .withEnvironment({
+      ADMIN_DOMAIN_URL: adminDomainUrl,
       AUTH_GOOGLE_ID: "dummy-user-google-id",
       AUTH_GOOGLE_SECRET: "dummy-user-google-secret",
       AUTH_SECRET: "dummy-user-auth-secret",
@@ -31,7 +43,7 @@ export const startUser = async (
       SKIP_ENV_VALIDATION: "1",
     })
     .withNetwork(network)
-    .withExposedPorts(USER_PORT)
+    .withExposedPorts({ container: USER_PORT, host: userHostPort })
     .start();
 
   const mappedPort = container.getMappedPort(USER_PORT);

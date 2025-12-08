@@ -19,6 +19,8 @@ jobs:
       AUTH_GOOGLE_SECRET: dummy-google-secret
       AUTH_SECRET: dummy-auth-secret
       DATABASE_URL: postgresql://postgres:password@localhost:5432/fequest
+      ADMIN_DOMAIN_URL: http://localhost:3001
+      USER_DOMAIN_URL: http://localhost:3000
 
     steps:
       - name: Checkout
@@ -31,6 +33,7 @@ jobs:
           AUTH_GOOGLE_SECRET=${AUTH_GOOGLE_SECRET}
           AUTH_SECRET=${AUTH_SECRET}
           DATABASE_URL=${DATABASE_URL}
+          ADMIN_DOMAIN_URL=${ADMIN_DOMAIN_URL}
           EOF
 
       - name: Create admin env file
@@ -40,6 +43,7 @@ jobs:
           AUTH_GOOGLE_SECRET=${AUTH_GOOGLE_SECRET}
           AUTH_SECRET=${AUTH_SECRET}
           DATABASE_URL=${DATABASE_URL}
+          USER_DOMAIN_URL=${USER_DOMAIN_URL}
           EOF
 
       - name: Setup pnpm

@@ -8,6 +8,7 @@ import {
 } from "@cucumber/cucumber";
 import { migrateDatabase } from "@repo/db/migrate";
 import { stat } from "node:fs/promises";
+import { AddressInfo, createServer } from "node:net";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { Network, StartedNetwork, StartedTestContainer } from "testcontainers";
@@ -33,6 +34,32 @@ const authScreenshotPath = resolve(
   __dirname,
   "product-detail-auth-screenshot.png",
 );
+
+const reservePort = (preferredPort: number) =>
+  new Promise<number>((resolve, reject) => {
+    const server = createServer();
+    server.unref();
+
+    server.once("error", (error: NodeJS.ErrnoException) => {
+      if (error.code === "EADDRINUSE") {
+        const fallbackServer = createServer();
+        fallbackServer.unref();
+        fallbackServer.once("error", reject);
+        fallbackServer.listen(0, () => {
+          const { port } = fallbackServer.address() as AddressInfo;
+          fallbackServer.close(() => resolve(port));
+        });
+        return;
+      }
+
+      reject(error);
+    });
+
+    server.listen(preferredPort, () => {
+      const { port } = server.address() as AddressInfo;
+      server.close(() => resolve(port));
+    });
+  });
 
 setDefaultTimeout(600_000);
 
@@ -72,12 +99,26 @@ BeforeAll(async () => {
 
   await migrateDatabase(hostConnectionString);
 
+  const [adminHostPort, userHostPort] = await Promise.all([
+    reservePort(3001),
+    reservePort(3000),
+  ]);
+
+  const adminDomainUrl = `http://127.0.0.1:${adminHostPort}`;
+  const userDomainUrl = `http://127.0.0.1:${userHostPort}`;
+
   const [
     { container: startedAdminContainer, url: adminBaseUrl },
     { container: startedUserContainer, url: userBaseUrl },
   ] = await Promise.all([
-    startAdmin(startedNetwork, connectionString),
-    startUser(startedNetwork, connectionString),
+    startAdmin(startedNetwork, connectionString, {
+      hostPort: adminHostPort,
+      userDomainUrl,
+    }),
+    startUser(startedNetwork, connectionString, {
+      adminDomainUrl,
+      hostPort: userHostPort,
+    }),
   ]);
 
   adminStartedContainer = startedAdminContainer;
