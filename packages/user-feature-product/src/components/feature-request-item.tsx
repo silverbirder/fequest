@@ -20,6 +20,7 @@ type Props = {
   featureId: number;
   onReactToFeature: (formData: FormData) => Promise<void>;
   reactions: ReactionSummary[];
+  status?: "closed" | "open";
   text: string;
 };
 
@@ -34,6 +35,7 @@ export const FeatureRequestItem = ({
   featureId,
   onReactToFeature,
   reactions,
+  status,
   text,
 }: Props) => {
   const idBase = `feature-${featureId}`;
@@ -120,6 +122,7 @@ export const FeatureRequestItem = ({
         onOpenChange={handleDialogOpenChange}
         onReact={handleReact}
         reactions={reactionOptions}
+        status={status}
         text={text}
       />
       <Form action={onReactToFeature} ref={formRef}>

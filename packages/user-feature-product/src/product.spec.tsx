@@ -175,5 +175,11 @@ describe("Product", () => {
       .find((text) => text.includes("クローズ済みリクエスト"));
 
     expect(closedRequest).toBeDefined();
+
+    const badge = Array.from(document.querySelectorAll("span")).find((node) =>
+      (node.textContent ?? "").includes("完了"),
+    );
+
+    expect(badge).toBeDefined();
   });
 });

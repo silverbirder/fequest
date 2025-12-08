@@ -98,4 +98,26 @@ describe("RequestCard", () => {
     );
     expect(trigger).not.toBeNull();
   });
+
+  it("shows closed badge when status is closed", async () => {
+    await render(
+      <RequestCard
+        avatar={{ fallbackText: "CF" }}
+        detail={{
+          content: <div>内容</div>,
+          createdAt: "2024-01-01T00:00:00.000Z",
+          title: "完了した要望",
+          updatedAt: "2024-01-02T00:00:00.000Z",
+        }}
+        status="closed"
+        text="完了した要望"
+      />,
+    );
+
+    const badge = Array.from(document.querySelectorAll("span")).find((node) =>
+      (node.textContent ?? "").includes("完了"),
+    );
+
+    expect(badge).not.toBeUndefined();
+  });
 });

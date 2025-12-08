@@ -7,6 +7,7 @@ const background = cva("", {
       accent: "bg-accent",
       background: "bg-background",
       black: "bg-black",
+      border: "bg-border",
       card: "bg-card",
       destructive: "bg-destructive",
       muted: "bg-muted",
@@ -223,6 +224,8 @@ const layout = cva("", {
     },
     left: {
       "-1": "-left-1",
+      "-1/2": "-left-1/2",
+      "1/2": "left-1/2",
     },
     maxH: {
       full: "max-h-full",
@@ -285,6 +288,7 @@ const layout = cva("", {
       "0": "right-0",
     },
     rotate: {
+      "15": "rotate-15",
       "45": "rotate-45",
     },
     shrink: {
@@ -299,6 +303,9 @@ const layout = cva("", {
       "0": "top-0",
       "1/2": "top-1/2",
       "4": "top-4",
+    },
+    translateX: {
+      "-1/2": "-translate-x-1/2",
     },
     translateY: {
       "-1/2": "-translate-y-1/2",
@@ -496,6 +503,7 @@ const stylePropKeys = [
   "overflowY",
   "aspectRatio",
   "translateY",
+  "translateX",
   "rotate",
   "flex",
   "grow",

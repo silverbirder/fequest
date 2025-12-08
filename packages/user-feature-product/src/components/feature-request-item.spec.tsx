@@ -116,6 +116,16 @@ describe("FeatureRequestItem", () => {
     expect(dialogAfter?.textContent ?? "").toContain("Child feature");
   });
 
+  it("shows closed badge when status is closed", async () => {
+    await renderItem({ status: "closed" });
+
+    const badge = Array.from(document.querySelectorAll("span")).find((node) =>
+      (node.textContent ?? "").includes("完了"),
+    );
+
+    expect(badge).toBeDefined();
+  });
+
   it("removes open param when dialog closes", async () => {
     navigationMocks.searchParams = new URLSearchParams("open=1");
 

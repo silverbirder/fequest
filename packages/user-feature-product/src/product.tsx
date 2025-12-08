@@ -78,6 +78,7 @@ export const Product = (props: Props) => {
         key={feature.id}
         onReactToFeature={props.onReactToFeature}
         reactions={feature.reactionSummaries ?? []}
+        status={feature.status === "closed" ? "closed" : "open"}
         text={text}
       />
     );

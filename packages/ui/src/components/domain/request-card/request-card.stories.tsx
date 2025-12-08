@@ -37,3 +37,23 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
+
+export const Closed: Story = {
+  args: {
+    detail: {
+      content: (
+        <div>
+          <h2>アップロード完了済み</h2>
+          <p>このリクエストはリリース済みです。</p>
+        </div>
+      ),
+      createdAt: "2024-10-01T10:00:00.000Z",
+      title: "画像アップロード改善",
+      updatedAt: "2024-11-01T10:00:00.000Z",
+    },
+    enableEmojiPicker: false,
+    reactions: [],
+    status: "closed",
+    text: "画像アップロードの改善",
+  },
+};

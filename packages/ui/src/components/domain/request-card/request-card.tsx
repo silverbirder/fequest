@@ -41,6 +41,7 @@ export const RequestCard = ({
   onOpenChange,
   onReact,
   reactions,
+  status,
   text,
 }: Props) => {
   const dialogTitle = detail.title?.trim() || text;
@@ -60,7 +61,7 @@ export const RequestCard = ({
         />
       </VStack>
       <VStack gap="sm">
-        <BubbleText text={text}>
+        <BubbleText status={status} text={text}>
           <RequestDialog
             avatar={avatar}
             defaultOpen={defaultOpen}

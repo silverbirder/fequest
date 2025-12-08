@@ -67,3 +67,21 @@ export const OwnedByAuthor: Story = {
     text: "通知設定をデフォルトで有効にしたい",
   },
 };
+
+export const Closed: Story = {
+  args: {
+    detail: {
+      content: (
+        <FeatureRequestContent
+          content={`## 完了した改善\n\n- ダウンロード速度を改善しました\n- エラー時のリトライを自動化しました`}
+        />
+      ),
+      createdAt: "2024-09-15T09:00:00.000Z",
+      title: "ダウンロード機能の改善",
+      updatedAt: "2024-10-01T08:00:00.000Z",
+    },
+    reactions: [],
+    status: "closed",
+    text: "ダウンロード機能の改善",
+  },
+};
