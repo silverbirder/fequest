@@ -15,6 +15,7 @@ import {
   EmptyHeader,
   EmptyMedia,
   EmptyTitle,
+  Heading,
   HStack,
   Input,
   ProductCard,
@@ -85,25 +86,13 @@ const CreateProductDialog = ({
 
 export const Dashboard = ({ onCreateProduct, products }: Props) => {
   return (
-    <VStack gap="xl">
-      <HStack align="center" justify="between">
-        <VStack gap="xs">
-          <Text size="xl" weight="semibold">
-            あなたのプロダクト
-          </Text>
-          <Text color="muted" size="sm">
-            質問（フィーチャーリクエスト）とリアクションの合計を確認できます。
-          </Text>
-        </VStack>
-        <CreateProductDialog
-          onCreateProduct={onCreateProduct}
-          trigger={
-            <Button type="button" variant="default">
-              プロダクトを作成
-            </Button>
-          }
-        />
-      </HStack>
+    <VStack gap="2xl">
+      <VStack align="center" gap="sm">
+        <Heading level={1}>あなたのプロダクト</Heading>
+        <Text color="muted" size="lg">
+          あなたが登録したプロダクトの一覧です。
+        </Text>
+      </VStack>
       {products.length === 0 ? (
         <Empty>
           <EmptyMedia variant="icon">🤔</EmptyMedia>
@@ -125,17 +114,32 @@ export const Dashboard = ({ onCreateProduct, products }: Props) => {
           </EmptyContent>
         </Empty>
       ) : (
-        <HStack gap="md" w="full" wrap="wrap">
-          {products.map((product) => (
-            <ProductCard
-              href={{ pathname: `/products/${product.id}` }}
-              key={product.id}
-              logoUrl={product.logoUrl}
-              name={product.name}
-              requestCount={product.featureCount}
+        <>
+          <HStack gap="md" w="full" wrap="wrap">
+            {products.map((product) => (
+              <ProductCard
+                href={{ pathname: `/products/${product.id}` }}
+                key={product.id}
+                logoUrl={product.logoUrl}
+                name={product.name}
+                requestCount={product.featureCount}
+              />
+            ))}
+          </HStack>
+          <VStack align="start" borderTop="default" pt="2xl" w="full">
+            <Text>
+              新しいプロダクトを作成して、フィーチャーリクエストを集めましょう。
+            </Text>
+            <CreateProductDialog
+              onCreateProduct={onCreateProduct}
+              trigger={
+                <Button type="button" variant="default">
+                  プロダクトを作成
+                </Button>
+              }
             />
-          ))}
-        </HStack>
+          </VStack>
+        </>
       )}
     </VStack>
   );

@@ -44,7 +44,7 @@ export const Header = ({
     <HStack
       align="center"
       asChild
-      backdrop="lg"
+      backdrop="sm"
       borderBottom="default"
       justify="between"
       p="md"
