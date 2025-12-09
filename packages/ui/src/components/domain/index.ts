@@ -8,3 +8,4 @@ export * from "./product-card";
 export * from "./product-logo";
 export * from "./request-card";
 export * from "./request-dialog";
+export * from "./request-input";

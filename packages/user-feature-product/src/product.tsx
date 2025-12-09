@@ -1,10 +1,10 @@
 import { type FeatureRequestCore, type FeatureRequestUser } from "@repo/type";
 import {
   Box,
-  BubbleInput,
   Heading,
   HStack,
   ProductLogo,
+  RequestInput,
   Text,
   VStack,
 } from "@repo/ui/components";
@@ -31,7 +31,7 @@ type ProductData = {
 
 type Props = {
   canCreateFeatureRequest: boolean;
-  currentUserId?: null | string;
+  currentUser?: FeatureRequestUser | null;
   onCreateFeatureRequest: (formData: FormData) => Promise<void>;
   onReactToFeature: (formData: FormData) => Promise<void>;
   openFeatureRequestId?: null | number;
@@ -40,6 +40,7 @@ type Props = {
 
 export const Product = (props: Props) => {
   const featureRequests: FeatureRequest[] = props.product.featureRequests ?? [];
+  const currentUserId = props.currentUser?.id ?? null;
   const openFeatureRequests = featureRequests.filter(
     (feature) => feature.status !== "closed",
   );
@@ -48,12 +49,13 @@ export const Product = (props: Props) => {
   );
   const description = props.product.description?.trim() ?? "";
   const logoUrl = props.product.logoUrl?.trim() || null;
+  const currentUserAvatar = props.currentUser ?? null;
 
   const renderFeatureRequest = (feature: FeatureRequest) => {
     const isOwner =
-      Boolean(props.currentUserId) &&
+      Boolean(currentUserId) &&
       Boolean(feature.user?.id) &&
-      feature.user?.id === props.currentUserId;
+      feature.user?.id === currentUserId;
     const text = feature.title?.trim() ?? "";
     const isOpenTarget =
       typeof props.openFeatureRequestId === "number" &&
@@ -115,9 +117,10 @@ export const Product = (props: Props) => {
       {props.canCreateFeatureRequest ? (
         <Box asChild w="full">
           <Form action={props.onCreateFeatureRequest}>
-            <BubbleInput
+            <RequestInput
               aria-label="新しいフィーチャーリクエスト"
               autoComplete="off"
+              avatar={currentUserAvatar ?? undefined}
               maxLength={255}
               name="title"
               required

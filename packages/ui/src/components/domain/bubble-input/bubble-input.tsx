@@ -1,6 +1,6 @@
 import type { ComponentPropsWithoutRef } from "react";
 
-import { VStack } from "../../common/layout";
+import { Box, VStack } from "../../common/layout";
 import { Input } from "../../common/shadcn";
 import { Text } from "../../common/typography";
 
@@ -16,7 +16,29 @@ export const BubbleInput = ({
 }: BubbleInputProps) => {
   return (
     <VStack align="stretch" gap="xs">
-      <Input placeholder={placeholder} type={type} {...rest} />
+      <Box position="relative" w="full">
+        <Box
+          aria-hidden
+          bg="muted"
+          caret="transparent"
+          h="3"
+          left="-1"
+          position="absolute"
+          radius="xs"
+          rotate="45"
+          top="4"
+          translateY="-1/2"
+          w="3"
+        />
+        <Box bg="muted" p="md" radius="md" shadow="sm" w="full">
+          <Input
+            appearance="bubble"
+            placeholder={placeholder}
+            type={type}
+            {...rest}
+          />
+        </Box>
+      </Box>
       <Text color="muted" size="sm">
         {helperText}
       </Text>

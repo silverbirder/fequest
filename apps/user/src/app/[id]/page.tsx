@@ -39,11 +39,18 @@ export default async function Page({
 
   const canCreateFeatureRequest = Boolean(session?.user);
   const openFeatureRequestId = getOpenFeatureRequestId(resolvedSearchParams);
+  const currentUser = session?.user
+    ? {
+        id: session.user.id,
+        image: session.user.image ?? null,
+        name: session.user.name ?? null,
+      }
+    : null;
 
   return (
     <Product
       canCreateFeatureRequest={canCreateFeatureRequest}
-      currentUserId={session?.user?.id ?? null}
+      currentUser={currentUser}
       onCreateFeatureRequest={createFeatureRequest}
       onReactToFeature={reactToFeature}
       openFeatureRequestId={openFeatureRequestId}

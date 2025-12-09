@@ -115,7 +115,7 @@ describe("Product", () => {
     await render(
       <Product
         canCreateFeatureRequest
-        currentUserId="user-owner"
+        currentUser={{ id: "user-owner" }}
         onCreateFeatureRequest={async () => {}}
         onReactToFeature={async () => {}}
         product={createProductFixture("user-owner")}
@@ -134,7 +134,7 @@ describe("Product", () => {
     await render(
       <Product
         canCreateFeatureRequest
-        currentUserId="other-user"
+        currentUser={{ id: "other-user" }}
         onCreateFeatureRequest={async () => {}}
         onReactToFeature={async () => {}}
         product={createProductFixture("user-owner")}
@@ -148,7 +148,7 @@ describe("Product", () => {
     await render(
       <Product
         canCreateFeatureRequest
-        currentUserId="user-owner"
+        currentUser={{ id: "user-owner" }}
         onCreateFeatureRequest={async () => {}}
         onReactToFeature={async () => {}}
         product={createProductFixture("user-owner", [

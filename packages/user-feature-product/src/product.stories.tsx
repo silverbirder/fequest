@@ -5,7 +5,11 @@ import { Product } from "./product";
 const meta = {
   args: {
     canCreateFeatureRequest: true,
-    currentUserId: "owner-1",
+    currentUser: {
+      id: "owner-1",
+      image: "https://placehold.co/48x48",
+      name: "田中 花子",
+    },
     onCreateFeatureRequest: async (formData: FormData) => {
       console.log("Created feature request", {
         title: formData.get("title"),

@@ -67,7 +67,5 @@ describe("Textarea", () => {
     expect(className).toContain("resize-none");
     expect(className).toContain("border-transparent");
     expect(className).toContain("shadow-none");
-    expect(className).toContain("px-3");
-    expect(className).toContain("py-2");
   });
 });

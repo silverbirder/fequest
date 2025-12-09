@@ -80,27 +80,65 @@ exports[`Product > renders provided props 1`] = `
       data-slot="box"
     >
       <div
-        class="flex items-stretch flex-col gap-1 justify-start self-stretch flex-nowrap"
-        data-orientation="column"
+        class="flex items-start flex-row gap-2 justify-start self-stretch flex-nowrap w-full"
+        data-orientation="row"
         data-slot="stack"
       >
-        <input
-          aria-label="新しいフィーチャーリクエスト"
-          autocomplete="off"
-          class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"
-          data-slot="input"
-          maxlength="255"
-          name="title"
-          placeholder="新しいリクエストを入力..."
-          required=""
-          type="text"
-        />
         <span
-          class="text-left text-muted-foreground block text-sm font-normal"
-          data-slot="text"
+          class="relative flex size-8 shrink-0 overflow-hidden rounded-full"
+          data-slot="avatar"
         >
-          Enterで送信
+          <span
+            class="bg-muted text-muted-foreground flex size-full items-center justify-center rounded-full text-xs font-semibold uppercase"
+            data-slot="avatar-fallback"
+          >
+            YU
+          </span>
         </span>
+        <div
+          class="flex-1 w-full"
+          data-slot="box"
+        >
+          <div
+            class="flex items-stretch flex-col gap-1 justify-start self-stretch flex-nowrap"
+            data-orientation="column"
+            data-slot="stack"
+          >
+            <div
+              class="relative w-full"
+              data-slot="box"
+            >
+              <div
+                aria-hidden="true"
+                class="bg-muted rounded-xs h-3 -left-1 absolute rotate-45 top-4 -translate-y-1/2 w-3 caret-transparent"
+                data-slot="box"
+              />
+              <div
+                class="bg-muted rounded-md p-3 w-full shadow-sm"
+                data-slot="box"
+              >
+                <input
+                  aria-label="新しいフィーチャーリクエスト"
+                  autocomplete="off"
+                  class="bg-transparent border-0 shadow-none outline-none px-0 py-0 h-auto min-h-0 w-full min-w-0 focus-visible:ring-0 focus-visible:border-none focus-visible:shadow-none"
+                  data-appearance="bubble"
+                  data-slot="input"
+                  maxlength="255"
+                  name="title"
+                  placeholder="新しいリクエストを入力..."
+                  required=""
+                  type="text"
+                />
+              </div>
+            </div>
+            <span
+              class="text-left text-muted-foreground block text-sm font-normal"
+              data-slot="text"
+            >
+              Enterで送信
+            </span>
+          </div>
+        </div>
       </div>
     </form>
   </div>

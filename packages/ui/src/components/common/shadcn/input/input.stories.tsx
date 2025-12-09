@@ -29,3 +29,10 @@ export const Disabled: Story = {
     placeholder: "Disabled input",
   },
 };
+
+export const Bubble: Story = {
+  args: {
+    appearance: "bubble",
+    placeholder: "バブルスタイルの入力",
+  },
+};
