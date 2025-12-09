@@ -1,4 +1,4 @@
-@import "./semantic-color.css";
+@import "./primitive-color.css";
 
 @import "tailwindcss";
 @import "tw-animate-css";
@@ -14,83 +14,63 @@
 ============================================ */
 
   /* ---- 背景 & 文字 ---- */
-  --background: oklch(var(--light-bg) var(--chroma-none) var(--hue-base));
-  --foreground: oklch(var(--light-fg) var(--chroma-low) var(--hue-base));
+  --background: oklch(var(--tone-100) var(--chroma-0) var(--hue-base));
+  --foreground: oklch(var(--tone-20) var(--chroma-30) var(--hue-base));
 
   /* ---- Card（面） ---- */
-  --card: oklch(var(--light-surface) var(--chroma-none) var(--hue-base));
-  --card-foreground: oklch(var(--light-fg) var(--chroma-low) var(--hue-base));
+  --card: oklch(var(--tone-60) var(--chroma-0) var(--hue-base));
+  --card-foreground: oklch(var(--tone-20) var(--chroma-30) var(--hue-base));
 
   /* ---- Popover ---- */
-  --popover: oklch(var(--light-popover) var(--chroma-none) var(--hue-base));
-  --popover-foreground: oklch(
-    var(--light-fg) var(--chroma-low) var(--hue-base)
-  );
+  --popover: oklch(var(--tone-100) var(--chroma-0) var(--hue-base));
+  --popover-foreground: oklch(var(--tone-20) var(--chroma-30) var(--hue-base));
 
   /* ---- Primary ---- */
-  --primary: oklch(var(--light-primary) var(--chroma-primary) var(--hue-base));
-  --primary-foreground: oklch(
-    var(--light-primary-fg) var(--chroma-primary-fg) var(--hue-base)
-  );
+  --primary: oklch(var(--tone-60) var(--chroma-100) var(--hue-base));
+  --primary-foreground: oklch(var(--tone-100) var(--chroma-20) var(--hue-base));
 
   /* ---- Secondary ---- */
-  --secondary: oklch(
-    var(--light-secondary) var(--chroma-secondary) var(--hue-base)
-  );
+  --secondary: oklch(var(--tone-90) var(--chroma-80) var(--hue-base));
   --secondary-foreground: oklch(
-    var(--light-secondary-fg) var(--chroma-secondary-fg) var(--hue-base)
+    var(--tone-20) var(--chroma-20) var(--hue-base)
   );
 
   /* ---- Muted ---- */
-  --muted: oklch(var(--light-muted) var(--chroma-muted) var(--hue-base));
-  --muted-foreground: oklch(
-    var(--light-muted-fg) var(--chroma-muted-fg) var(--hue-base)
-  );
+  --muted: oklch(var(--tone-90) var(--chroma-40) var(--hue-base));
+  --muted-foreground: oklch(var(--tone-50) var(--chroma-50) var(--hue-base));
 
   /* ---- Accent ---- */
-  --accent: oklch(var(--light-accent) var(--chroma-accent) var(--hue-base));
-  --accent-foreground: oklch(
-    var(--light-accent-fg) var(--chroma-accent-fg) var(--hue-base)
-  );
+  --accent: oklch(var(--tone-90) var(--chroma-90) var(--hue-base));
+  --accent-foreground: oklch(var(--tone-20) var(--chroma-20) var(--hue-base));
 
   /* ---- Destructive（危険アクション） ---- */
-  --destructive: oklch(
-    var(--light-destructive) var(--chroma-destructive) var(--hue-destructive)
-  );
+  --destructive: oklch(var(--tone-40) var(--chroma-90) var(--hue-destructive));
   --destructive-foreground: oklch(
-    var(--light-destructive-fg) var(--chroma-destructive-fg)
-      var(--hue-destructive)
+    var(--tone-10) var(--chroma-30) var(--hue-destructive)
   );
+
   /* ---- Border / Input / Ring ---- */
-  --border: oklch(var(--light-border) var(--chroma-border) var(--hue-base));
-  --input: oklch(var(--light-input) var(--chroma-input) var(--hue-base));
-  --ring: oklch(var(--light-ring) var(--chroma-ring) var(--hue-base));
+  --border: oklch(var(--tone-80) var(--chroma-30) var(--hue-base));
+  --input: oklch(var(--tone-90) var(--chroma-10) var(--hue-base));
+  --ring: oklch(var(--tone-70) var(--chroma-0) var(--hue-base));
 
   /* ---- グラフ色（系列カラー） ---- */
-  --chart-1: oklch(var(--light-chart-1) var(--chroma-chart-1) var(--hue-base));
-  --chart-2: oklch(var(--light-chart-2) var(--chroma-chart-2) var(--hue-base));
-  --chart-3: oklch(var(--light-chart-3) var(--chroma-chart-3) var(--hue-base));
-  --chart-4: oklch(var(--light-chart-4) var(--chroma-chart-4) var(--hue-base));
-  --chart-5: oklch(var(--light-chart-5) var(--chroma-chart-5) var(--hue-base));
+  --chart-1: oklch(var(--tone-70) var(--chroma-80) var(--hue-base));
+  --chart-2: oklch(var(--tone-60) var(--chroma-90) var(--hue-base));
+  --chart-3: oklch(var(--tone-50) var(--chroma-100) var(--hue-base));
+  --chart-4: oklch(var(--tone-40) var(--chroma-90) var(--hue-base));
+  --chart-5: oklch(var(--tone-30) var(--chroma-80) var(--hue-base));
 
   /* ---- Sidebar ---- */
-  --sidebar: oklch(var(--light-sidebar) var(--chroma-sidebar) var(--hue-base));
-  --sidebar-foreground: oklch(
-    var(--light-sidebar-fg) var(--chroma-sidebar-fg) var(--hue-base)
-  );
-  --sidebar-primary: oklch(
-    var(--light-sidebar-primary) var(--chroma-sidebar-primary) var(--hue-base)
-  );
+  --sidebar: oklch(var(--tone-90) var(--chroma-10) var(--hue-base));
+  --sidebar-foreground: oklch(var(--tone-20) var(--chroma-40) var(--hue-base));
+  --sidebar-primary: oklch(var(--tone-60) var(--chroma-80) var(--hue-base));
   --sidebar-primary-foreground: oklch(
-    var(--light-sidebar-primary-fg) var(--chroma-sidebar-primary-fg)
-      var(--hue-base)
+    var(--tone-100) var(--chroma-20) var(--hue-base)
   );
-  --sidebar-accent: oklch(
-    var(--light-sidebar-accent) var(--chroma-sidebar-accent) var(--hue-base)
-  );
+  --sidebar-accent: oklch(var(--tone-90) var(--chroma-20) var(--hue-base));
   --sidebar-accent-foreground: oklch(
-    var(--light-sidebar-accent-fg) var(--chroma-sidebar-accent-fg)
-      var(--hue-base)
+    var(--tone-20) var(--chroma-20) var(--hue-base)
   );
 
   /* ---- Sidebar-specific Border / Ring ---- */
