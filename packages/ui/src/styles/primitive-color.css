@@ -3,7 +3,10 @@
   --hue-destructive: calc(var(--hue-base) + 120deg);
 
   --tone-100: 1;
+  --tone-95: 0.95;
+  --tone-92: 0.92;
   --tone-90: 0.9;
+  --tone-85: 0.85;
   --tone-80: 0.8;
   --tone-70: 0.7;
   --tone-60: 0.6;
@@ -11,6 +14,8 @@
   --tone-40: 0.4;
   --tone-30: 0.3;
   --tone-20: 0.2;
+  --tone-15: 0.15;
+  --tone-12: 0.12;
   --tone-10: 0.1;
   --tone-0: 0;
 

@@ -106,7 +106,7 @@ export const RequestDialog = ({
                 </Text>
               </DialogTitle>
             </HStack>
-            <DialogDescription id={dialogDescriptionId}>
+            <DialogDescription asChild id={dialogDescriptionId}>
               <VStack w="full">{detail.content}</VStack>
             </DialogDescription>
           </DialogHeader>

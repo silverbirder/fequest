@@ -74,7 +74,7 @@ export const Product = ({
         </Text>
       </VStack>
 
-      <Box bg="card" p="lg" radius="lg" w="full">
+      <Box bg="white" p="lg" radius="lg" w="full">
         <VStack align="start" gap="sm" w="full">
           <Text size="sm" weight="semibold">
             プロダクト名
@@ -99,7 +99,7 @@ export const Product = ({
         </VStack>
       </Box>
 
-      <Box bg="card" p="lg" radius="lg" w="full">
+      <Box bg="white" p="lg" radius="lg" w="full">
         <VStack align="start" gap="md" w="full">
           <VStack align="start" gap="xs">
             <Text size="sm" weight="semibold">
@@ -155,7 +155,7 @@ export const Product = ({
         </VStack>
       </Box>
 
-      <Box bg="card" p="lg" radius="lg" w="full">
+      <Box bg="white" p="lg" radius="lg" w="full">
         <VStack align="start" gap="sm" w="full">
           <Text size="sm" weight="semibold">
             プロダクトを削除
@@ -181,7 +181,7 @@ export const Product = ({
         </VStack>
 
         {featureRequests.length === 0 ? (
-          <Box bg="card" p="md" radius="md" w="full">
+          <Box bg="white" p="md" radius="md" w="full">
             <Text color="muted">まだ質問がありません。</Text>
           </Box>
         ) : (
@@ -192,7 +192,7 @@ export const Product = ({
 
               return (
                 <Box
-                  bg="card"
+                  bg="white"
                   border="default"
                   key={feature.id}
                   p="md"
@@ -216,19 +216,8 @@ export const Product = ({
                         </Text>
                       </VStack>
                       <HStack align="center" gap="sm" justify="end">
-                        <Box
-                          bg={feature.status === "open" ? "accent" : "muted"}
-                          px="sm"
-                          py="xs"
-                          radius="full"
-                        >
-                          <Text
-                            color={
-                              feature.status === "open" ? "accent" : "muted"
-                            }
-                            size="xs"
-                            weight="medium"
-                          >
+                        <Box bg="muted" px="sm" py="xs" radius="full">
+                          <Text size="xs" weight="medium">
                             {copy.label}
                           </Text>
                         </Box>

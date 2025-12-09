@@ -14,45 +14,45 @@
 ============================================ */
 
   /* ---- 背景 & 文字 ---- */
-  --background: oklch(var(--tone-100) var(--chroma-0) var(--hue-base));
-  --foreground: oklch(var(--tone-20) var(--chroma-30) var(--hue-base));
+  --background: oklch(var(--tone-95) var(--chroma-0) var(--hue-base));
+  --foreground: oklch(var(--tone-10) var(--chroma-20) var(--hue-base));
 
   /* ---- Card（面） ---- */
-  --card: oklch(var(--tone-60) var(--chroma-0) var(--hue-base));
-  --card-foreground: oklch(var(--tone-20) var(--chroma-30) var(--hue-base));
+  --card: oklch(var(--tone-92) var(--chroma-0) var(--hue-base));
+  --card-foreground: oklch(var(--tone-12) var(--chroma-20) var(--hue-base));
 
   /* ---- Popover ---- */
-  --popover: oklch(var(--tone-100) var(--chroma-0) var(--hue-base));
-  --popover-foreground: oklch(var(--tone-20) var(--chroma-30) var(--hue-base));
+  --popover: oklch(var(--tone-95) var(--chroma-0) var(--hue-base));
+  --popover-foreground: oklch(var(--tone-12) var(--chroma-20) var(--hue-base));
 
   /* ---- Primary ---- */
-  --primary: oklch(var(--tone-60) var(--chroma-100) var(--hue-base));
-  --primary-foreground: oklch(var(--tone-100) var(--chroma-20) var(--hue-base));
+  --primary: oklch(var(--tone-40) var(--chroma-90) var(--hue-base));
+  --primary-foreground: oklch(var(--tone-100) var(--chroma-0) var(--hue-base));
 
   /* ---- Secondary ---- */
   --secondary: oklch(var(--tone-90) var(--chroma-80) var(--hue-base));
   --secondary-foreground: oklch(
-    var(--tone-20) var(--chroma-20) var(--hue-base)
+    var(--tone-12) var(--chroma-20) var(--hue-base)
   );
 
   /* ---- Muted ---- */
-  --muted: oklch(var(--tone-90) var(--chroma-40) var(--hue-base));
-  --muted-foreground: oklch(var(--tone-50) var(--chroma-50) var(--hue-base));
+  --muted: oklch(var(--tone-92) var(--chroma-30) var(--hue-base));
+  --muted-foreground: oklch(var(--tone-15) var(--chroma-20) var(--hue-base));
 
   /* ---- Accent ---- */
-  --accent: oklch(var(--tone-90) var(--chroma-90) var(--hue-base));
-  --accent-foreground: oklch(var(--tone-20) var(--chroma-20) var(--hue-base));
+  --accent: oklch(var(--tone-40) var(--chroma-90) var(--hue-base));
+  --accent-foreground: oklch(var(--tone-98) var(--chroma-04) var(--hue-base));
 
   /* ---- Destructive（危険アクション） ---- */
-  --destructive: oklch(var(--tone-40) var(--chroma-90) var(--hue-destructive));
+  --destructive: oklch(var(--tone-30) var(--chroma-80) var(--hue-destructive));
   --destructive-foreground: oklch(
-    var(--tone-10) var(--chroma-30) var(--hue-destructive)
+    var(--tone-10) var(--chroma-20) var(--hue-destructive)
   );
 
   /* ---- Border / Input / Ring ---- */
-  --border: oklch(var(--tone-80) var(--chroma-30) var(--hue-base));
-  --input: oklch(var(--tone-90) var(--chroma-10) var(--hue-base));
-  --ring: oklch(var(--tone-70) var(--chroma-0) var(--hue-base));
+  --border: oklch(var(--tone-85) var(--chroma-20) var(--hue-base));
+  --input: oklch(var(--tone-92) var(--chroma-10) var(--hue-base));
+  --ring: oklch(var(--tone-80) var(--chroma-0) var(--hue-base));
 
   /* ---- グラフ色（系列カラー） ---- */
   --chart-1: oklch(var(--tone-70) var(--chroma-80) var(--hue-base));
@@ -63,14 +63,14 @@
 
   /* ---- Sidebar ---- */
   --sidebar: oklch(var(--tone-90) var(--chroma-10) var(--hue-base));
-  --sidebar-foreground: oklch(var(--tone-20) var(--chroma-40) var(--hue-base));
-  --sidebar-primary: oklch(var(--tone-60) var(--chroma-80) var(--hue-base));
+  --sidebar-foreground: oklch(var(--tone-12) var(--chroma-30) var(--hue-base));
+  --sidebar-primary: oklch(var(--tone-85) var(--chroma-80) var(--hue-base));
   --sidebar-primary-foreground: oklch(
-    var(--tone-100) var(--chroma-20) var(--hue-base)
+    var(--tone-10) var(--chroma-20) var(--hue-base)
   );
-  --sidebar-accent: oklch(var(--tone-90) var(--chroma-20) var(--hue-base));
+  --sidebar-accent: oklch(var(--tone-92) var(--chroma-20) var(--hue-base));
   --sidebar-accent-foreground: oklch(
-    var(--tone-20) var(--chroma-20) var(--hue-base)
+    var(--tone-12) var(--chroma-20) var(--hue-base)
   );
 
   /* ---- Sidebar-specific Border / Ring ---- */
