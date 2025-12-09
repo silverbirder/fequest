@@ -86,13 +86,13 @@ export const Header = ({
                 </DropdownMenuItem>
               )}
               <DropdownMenuItem asChild>
-                <form action={logoutAction}>
-                  <Box w="full">
+                <Box w="full">
+                  <form action={logoutAction}>
                     <Button size="sm" type="submit" variant="ghost">
                       ログアウト
                     </Button>
-                  </Box>
-                </form>
+                  </form>
+                </Box>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

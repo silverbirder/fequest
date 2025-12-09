@@ -41,7 +41,7 @@
 
   /* ---- Accent ---- */
   --accent: oklch(var(--tone-40) var(--chroma-90) var(--hue-base));
-  --accent-foreground: oklch(var(--tone-98) var(--chroma-04) var(--hue-base));
+  --accent-foreground: oklch(var(--tone-95) var(--chroma-0) var(--hue-base));
 
   /* ---- Destructive（危険アクション） ---- */
   --destructive: oklch(var(--tone-30) var(--chroma-80) var(--hue-destructive));
@@ -51,7 +51,7 @@
 
   /* ---- Border / Input / Ring ---- */
   --border: oklch(var(--tone-85) var(--chroma-20) var(--hue-base));
-  --input: oklch(var(--tone-92) var(--chroma-10) var(--hue-base));
+  --input: oklch(var(--tone-85) var(--chroma-20) var(--hue-base));
   --ring: oklch(var(--tone-80) var(--chroma-0) var(--hue-base));
 
   /* ---- グラフ色（系列カラー） ---- */

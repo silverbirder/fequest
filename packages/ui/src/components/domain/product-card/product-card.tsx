@@ -17,7 +17,7 @@ export const ProductCard = ({ href, logoUrl, name, requestCount }: Props) => {
   const requestLabel = formatCount(requestCount);
 
   return (
-    <Box asChild border="default" p="md" radius="lg">
+    <Box asChild bg="white" border="default" p="md" radius="lg">
       <Link aria-label={`${name}のプロダクトページ`} href={href}>
         <VStack align="start" gap="md" w="full">
           <ProductLogo

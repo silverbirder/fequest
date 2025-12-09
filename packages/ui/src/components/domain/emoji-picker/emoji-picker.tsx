@@ -1,5 +1,6 @@
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
+import { Plus } from "lucide-react";
 
 import {
   Button,
@@ -38,7 +39,7 @@ export const EmojiPicker = ({
           type="button"
           variant="outline"
         >
-          ＋
+          <Plus />
         </Button>
       </PopoverTrigger>
       <PopoverContent id={menuId}>
