@@ -52,6 +52,7 @@ describe("Product", () => {
         product={{
           description: "Detail text",
           featureRequests: [],
+          homePageUrl: "https://example.com",
           id: 9,
           logoUrl: "https://example.com/9.png",
           name: "Detailed",
@@ -63,6 +64,11 @@ describe("Product", () => {
       'input[name="logoUrl"]',
     );
     expect(logoInput?.value).toBe("https://example.com/9.png");
+
+    const homePageInput = document.querySelector<HTMLInputElement>(
+      'input[name="homePageUrl"]',
+    );
+    expect(homePageInput?.value).toBe("https://example.com");
 
     const descriptionInput = document.querySelector<HTMLTextAreaElement>(
       'textarea[name="description"]',

@@ -8,6 +8,13 @@ import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 export const productRouter = createTRPCRouter({
   byId: publicProcedure.input(productIdSchema).query(async ({ ctx, input }) => {
     const product = await ctx.db.query.products.findFirst({
+      columns: {
+        description: true,
+        homePageUrl: true,
+        id: true,
+        logoUrl: true,
+        name: true,
+      },
       where: (product, { eq }) => eq(product.id, input.id),
       with: {
         featureRequests: {

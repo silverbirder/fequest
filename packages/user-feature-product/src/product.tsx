@@ -9,6 +9,7 @@ import {
   VStack,
 } from "@repo/ui/components";
 import { toIsoString } from "@repo/util";
+import { Home } from "lucide-react";
 import Form from "next/form";
 
 import type { ReactionSummary } from "./libs/reaction-summary";
@@ -26,6 +27,7 @@ export const FEATURE_CONTENT_FALLBACK = "詳細はありません。";
 type ProductData = {
   description?: null | string;
   featureRequests?: FeatureRequest[] | null;
+  homePageUrl?: null | string;
   id: number;
   logoUrl?: null | string;
   name: string;
@@ -51,6 +53,7 @@ export const Product = (props: Props) => {
   );
   const description = props.product.description?.trim() ?? "";
   const logoUrl = props.product.logoUrl?.trim() || null;
+  const homePageUrl = props.product.homePageUrl?.trim() || null;
   const currentUserAvatar = props.currentUser ?? null;
 
   const renderFeatureRequest = (feature: FeatureRequest) => {
@@ -102,7 +105,29 @@ export const Product = (props: Props) => {
         </Box>
         <HStack align="start" gap="md" w="full">
           <VStack align="start" gap="xs" w="full">
-            <Heading size="lg">{props.product.name}</Heading>
+            <HStack align="end" gap="md" wrap="wrap">
+              <Heading size="lg">{props.product.name}</Heading>
+              {homePageUrl && (
+                <Text
+                  asChild
+                  color="accent"
+                  display="inline"
+                  size="sm"
+                  weight="medium"
+                >
+                  <a
+                    href={homePageUrl}
+                    rel="noreferrer noopener"
+                    target="_blank"
+                  >
+                    <HStack align="center" gap="xs" inline>
+                      <Home size={16} />
+                      <span>公式サイト</span>
+                    </HStack>
+                  </a>
+                </Text>
+              )}
+            </HStack>
             {description ? <Text color="muted">{description}</Text> : null}
           </VStack>
         </HStack>

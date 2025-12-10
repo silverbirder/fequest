@@ -29,6 +29,7 @@ const meta = {
           updatedAt: "2024-02-08T15:45:00.000Z",
         },
       ],
+      homePageUrl: "https://example.com",
       id: 99,
       logoUrl: "https://example.com/logo.svg",
       name: "Fequest Admin",

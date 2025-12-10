@@ -29,6 +29,7 @@ export const productRouter = createTRPCRouter({
       const product = await ctx.db.query.products.findFirst({
         columns: {
           description: true,
+          homePageUrl: true,
           id: true,
           logoUrl: true,
           name: true,
@@ -60,6 +61,7 @@ export const productRouter = createTRPCRouter({
       return {
         description: product.description,
         featureRequests: product.featureRequests ?? [],
+        homePageUrl: product.homePageUrl,
         id: product.id,
         logoUrl: product.logoUrl,
         name: product.name,
@@ -284,6 +286,11 @@ export const productRouter = createTRPCRouter({
         nextValues.logoUrl = trimmed.length === 0 ? null : trimmed;
       }
 
+      if (input.homePageUrl !== undefined) {
+        const trimmed = input.homePageUrl.trim();
+        nextValues.homePageUrl = trimmed.length === 0 ? null : trimmed;
+      }
+
       if (input.description !== undefined) {
         const trimmed = input.description.trim();
         nextValues.description = trimmed.length === 0 ? null : trimmed;
@@ -304,6 +311,7 @@ export const productRouter = createTRPCRouter({
         )
         .returning({
           description: products.description,
+          homePageUrl: products.homePageUrl,
           id: products.id,
           logoUrl: products.logoUrl,
           name: products.name,

@@ -57,6 +57,7 @@ const createProductFixture = (
   featureRequests: featureRequests?.map((feature) =>
     createFeatureFixture(ownerId, feature),
   ) ?? [createFeatureFixture(ownerId, { id: 1 })],
+  homePageUrl: "https://example.com",
   id: 1,
   logoUrl: "https://placehold.co/120x120",
   name: "Sample Product",
@@ -87,6 +88,7 @@ describe("Product", () => {
         product={{
           description: "サンプルの説明文です。",
           featureRequests: [],
+          homePageUrl: "https://example.com",
           id: 1,
           logoUrl: "https://placehold.co/120x120",
           name: "Sample Product",
@@ -96,6 +98,29 @@ describe("Product", () => {
 
     expect(asFragment()).toMatchSnapshot();
     await expect.element(baseElement).toMatchScreenshot();
+  });
+
+  it("shows external link when homePageUrl is provided", async () => {
+    await render(
+      <Product
+        canCreateFeatureRequest
+        onCreateFeatureRequest={async () => {}}
+        onReactToFeature={async () => {}}
+        product={createProductFixture("user-owner")}
+      />,
+    );
+
+    const link = document.querySelector<HTMLAnchorElement>(
+      'a[href="https://example.com"]',
+    );
+
+    expect(link).toBeDefined();
+    expect(link?.textContent).toContain("公式サイト");
+    expect(link?.target).toBe("_blank");
+    expect(link?.rel).toContain("noreferrer");
+
+    const icon = link?.querySelector("svg");
+    expect(icon).toBeDefined();
   });
 
   const waitForDialog = () =>

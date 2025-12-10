@@ -55,6 +55,7 @@ const meta = {
           },
         },
       ],
+      homePageUrl: "https://example.com",
       id: 1,
       logoUrl: "https://placehold.co/120x120",
       name: "サンプルプロダクト",

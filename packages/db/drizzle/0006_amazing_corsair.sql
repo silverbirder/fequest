@@ -1,0 +1,1 @@
+ALTER TABLE "fequest_product" ADD COLUMN "homePageUrl" varchar(2048);

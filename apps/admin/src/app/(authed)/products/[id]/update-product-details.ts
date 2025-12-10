@@ -18,10 +18,12 @@ export const createUpdateProductDetails = (
 
     const targetId = Number(formData.get("productId"));
     const logoUrl = formData.get("logoUrl");
+    const homePageUrl = formData.get("homePageUrl");
     const description = formData.get("description");
 
     const parsed = safeParse(updateProductDetailsSchema, {
       description: typeof description === "string" ? description : undefined,
+      homePageUrl: typeof homePageUrl === "string" ? homePageUrl : undefined,
       id: targetId,
       logoUrl: typeof logoUrl === "string" ? logoUrl : undefined,
     });

@@ -15,6 +15,7 @@ type FeatureRequest = FeatureRequestCore;
 type ProductDetail = {
   description?: null | string;
   featureRequests?: FeatureRequest[];
+  homePageUrl?: null | string;
   id: number;
   logoUrl?: null | string;
   name: string;
@@ -125,6 +126,22 @@ export const Product = ({
                 />
                 <Text color="muted" size="xs">
                   画像のURLを入力すると、クライアント側で表示できます。
+                </Text>
+              </VStack>
+
+              <VStack align="start" gap="xs" w="full">
+                <Text size="sm" weight="medium">
+                  ホームページURL (任意)
+                </Text>
+                <Input
+                  aria-label="プロダクトホームページURL"
+                  defaultValue={product.homePageUrl ?? ""}
+                  maxLength={2048}
+                  name="homePageUrl"
+                  placeholder="https://example.com"
+                />
+                <Text color="muted" size="xs">
+                  プロダクトの公式サイトやLPへのリンクを登録できます。
                 </Text>
               </VStack>
 

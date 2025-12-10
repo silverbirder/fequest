@@ -252,6 +252,7 @@ describe("productRouter.byId", () => {
     expect(result).toEqual({
       description: "Helpful product",
       featureRequests: product.featureRequests,
+      homePageUrl: undefined,
       id: 5,
       logoUrl: "https://cdn.example.com/logo.png",
       name: "Alpha",
@@ -379,6 +380,7 @@ describe("productRouter.updateDetails", () => {
       updatedProducts: [
         {
           description: "New description",
+          homePageUrl: null,
           id: 6,
           logoUrl: "https://logo.new/img.png",
           name: "Alpha",
@@ -400,6 +402,7 @@ describe("productRouter.updateDetails", () => {
     expect(updateProductsReturning).toHaveBeenCalled();
     expect(result).toEqual({
       description: "New description",
+      homePageUrl: null,
       id: 6,
       logoUrl: "https://logo.new/img.png",
       name: "Alpha",

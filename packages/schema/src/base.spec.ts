@@ -125,6 +125,7 @@ describe("updateProductDetailsSchema", () => {
   it("accepts optional metadata with trimming", () => {
     const result = safeParse(updateProductDetailsSchema, {
       description: "  A helpful summary  ",
+      homePageUrl: "  https://example.com  ",
       id: 12,
       logoUrl: "  https://cdn.example.com/logo.svg  ",
     });
@@ -132,6 +133,7 @@ describe("updateProductDetailsSchema", () => {
     expect(result.success).toBe(true);
     if (result.success) {
       expect(result.output.description).toBe("A helpful summary");
+      expect(result.output.homePageUrl).toBe("https://example.com");
       expect(result.output.logoUrl).toBe("https://cdn.example.com/logo.svg");
     }
   });

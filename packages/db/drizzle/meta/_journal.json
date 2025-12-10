@@ -43,6 +43,13 @@
       "when": 1765074704582,
       "tag": "0005_product_details",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1765374928104,
+      "tag": "0006_amazing_corsair",
+      "breakpoints": true
     }
   ]
 }
