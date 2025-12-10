@@ -76,11 +76,12 @@ export const FeatureRequestItem = ({
           <Button
             aria-label="編集ページを開く"
             asChild
-            size="icon"
+            size="sm"
             variant="ghost"
           >
             <Link href={editHref} prefetch={false}>
               <Pencil />
+              編集する
             </Link>
           </Button>
         </HStack>

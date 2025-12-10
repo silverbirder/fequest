@@ -75,7 +75,7 @@ describe("RequestCard", () => {
         avatar={{ fallbackText: "CF" }}
         detail={{
           content: (
-            <div className="prose prose-slate prose-sm dark:prose-invert">
+            <div className="prose prose-slate prose-sm">
               <h2>Heading</h2>
               <ul>
                 <li>item1</li>
