@@ -42,6 +42,7 @@ const textVariants = cva("text-foreground leading-normal block", {
       block: "block",
       inline: "inline",
       "inline-block": "inline-block",
+      none: "hidden",
     },
     size: {
       "2xl": "text-2xl",

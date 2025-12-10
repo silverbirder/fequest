@@ -15,7 +15,7 @@ export const BubbleInput = ({
   ...rest
 }: BubbleInputProps) => {
   return (
-    <VStack align="stretch" gap="xs">
+    <VStack align="stretch" gap="xs" group>
       <Box position="relative" w="full">
         <Box
           aria-hidden
@@ -30,7 +30,7 @@ export const BubbleInput = ({
           translateY="-1/2"
           w="3"
         />
-        <Box bg="muted" p="md" radius="md" shadow="sm" w="full">
+        <Box bg="muted" p="md" radius="md" w="full">
           <Input
             appearance="bubble"
             placeholder={placeholder}
@@ -39,7 +39,17 @@ export const BubbleInput = ({
           />
         </Box>
       </Box>
-      <Text color="muted" size="sm">
+      <Text
+        color="muted"
+        display="block"
+        focusWithinOpacity="100"
+        focusWithinTransition="opacity"
+        focusWithinTransitionDuration="200"
+        opacity="0"
+        size="sm"
+        transition="opacity"
+        transitionDuration="200"
+      >
         {helperText}
       </Text>
     </VStack>

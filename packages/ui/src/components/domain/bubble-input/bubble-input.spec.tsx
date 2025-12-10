@@ -27,4 +27,23 @@ describe("BubbleInput", () => {
     const input = document.querySelector("input[name=request]");
     expect(input).not.toBeNull();
   });
+
+  it("fades helper text in when the input is focused", async () => {
+    await render(<BubbleInput helperText="フォーカス時のみ" />);
+
+    const helper = document.querySelector('[data-slot="text"]');
+    const input = document.querySelector("input");
+
+    expect(helper).not.toBeNull();
+    expect(input).not.toBeNull();
+
+    if (!helper || !(helper instanceof HTMLElement) || !input) return;
+
+    expect(getComputedStyle(helper).opacity).toBe("0");
+
+    input.focus();
+    await new Promise((resolve) => setTimeout(resolve, 260));
+
+    expect(getComputedStyle(helper).opacity).toBe("1");
+  });
 });

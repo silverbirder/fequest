@@ -100,7 +100,7 @@ exports[`Product > renders provided props 1`] = `
           data-slot="box"
         >
           <div
-            class="flex items-stretch flex-col gap-1 justify-start self-stretch flex-nowrap"
+            class="flex items-stretch flex-col gap-1 justify-start self-stretch flex-nowrap group"
             data-orientation="column"
             data-slot="stack"
           >
@@ -114,7 +114,7 @@ exports[`Product > renders provided props 1`] = `
                 data-slot="box"
               />
               <div
-                class="bg-muted rounded-md p-3 w-full shadow-sm"
+                class="bg-muted rounded-md p-3 w-full"
                 data-slot="box"
               >
                 <input
@@ -132,7 +132,7 @@ exports[`Product > renders provided props 1`] = `
               </div>
             </div>
             <span
-              class="text-left text-muted-foreground block text-sm font-normal"
+              class="text-left text-muted-foreground block text-sm font-normal opacity-0 group-focus-within:opacity-100 group-focus-within:transition-opacity group-focus-within:duration-200 transition-opacity duration-200"
               data-slot="text"
             >
               Enterで送信

@@ -203,6 +203,12 @@ const layout = cva("", {
     bottom: {
       "0": "bottom-0",
     },
+    display: {
+      block: "block",
+      inline: "inline",
+      "inline-block": "inline-block",
+      none: "hidden",
+    },
     flex: {
       "1": "flex-1",
       auto: "flex-auto",
@@ -389,6 +395,32 @@ const caret = cva("", {
   },
 });
 
+const interaction = cva("", {
+  variants: {
+    focusWithinDisplay: {
+      block: "group-focus-within:block",
+    },
+    focusWithinOpacity: {
+      "100": "group-focus-within:opacity-100",
+    },
+    focusWithinTransition: {
+      opacity: "group-focus-within:transition-opacity",
+    },
+    focusWithinTransitionDuration: {
+      "200": "group-focus-within:duration-200",
+    },
+    group: {
+      true: "group",
+    },
+    transition: {
+      opacity: "transition-opacity",
+    },
+    transitionDuration: {
+      "200": "duration-200",
+    },
+  },
+});
+
 const opacity = cva("", {
   variants: {
     opacity: {
@@ -426,6 +458,7 @@ type BackgroundProps = VariantProps<typeof background>;
 type BorderProps = VariantProps<typeof border>;
 type CaretProps = VariantProps<typeof caret>;
 type ForegroundProps = VariantProps<typeof foreground>;
+type InteractionProps = VariantProps<typeof interaction>;
 type LayoutProps = VariantProps<typeof layout>;
 type OpacityProps = VariantProps<typeof opacity>;
 type ProseProps = VariantProps<typeof prose>;
@@ -439,6 +472,7 @@ type StyleProps = BackdropProps &
   BorderProps &
   CaretProps &
   ForegroundProps &
+  InteractionProps &
   LayoutProps &
   OpacityProps &
   ProseProps &
@@ -458,6 +492,7 @@ const stylePropsClassNames = (props?: Partial<StyleProps>) =>
     shadow(props ?? {}),
     caret(props ?? {}),
     opacity(props ?? {}),
+    interaction(props ?? {}),
     prose(props ?? {}),
   );
 
@@ -502,6 +537,7 @@ const stylePropKeys = [
   "overflowX",
   "overflowY",
   "aspectRatio",
+  "display",
   "translateY",
   "translateX",
   "rotate",
@@ -510,7 +546,14 @@ const stylePropKeys = [
   "shrink",
   "basis",
   "caret",
+  "focusWithinDisplay",
+  "focusWithinOpacity",
+  "focusWithinTransition",
+  "focusWithinTransitionDuration",
+  "group",
   "prose",
+  "transition",
+  "transitionDuration",
   "zIndex",
 ] as const;
 
@@ -559,6 +602,7 @@ export type {
   BorderProps,
   CaretProps,
   ForegroundProps,
+  InteractionProps,
   LayoutProps,
   OpacityProps,
   ProseProps,
