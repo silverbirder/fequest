@@ -21,6 +21,8 @@ type FeatureRequest = FeatureRequestCore & {
   user?: FeatureRequestUser | null;
 };
 
+export const FEATURE_CONTENT_FALLBACK = "詳細はありません。";
+
 type ProductData = {
   description?: null | string;
   featureRequests?: FeatureRequest[] | null;
@@ -57,6 +59,8 @@ export const Product = (props: Props) => {
       Boolean(feature.user?.id) &&
       feature.user?.id === currentUserId;
     const text = feature.title?.trim() ?? "";
+    const content = feature.content?.trim() ?? "";
+    const detailContent = content || FEATURE_CONTENT_FALLBACK;
     const isOpenTarget =
       typeof props.openFeatureRequestId === "number" &&
       props.openFeatureRequestId === feature.id;
@@ -66,7 +70,7 @@ export const Product = (props: Props) => {
         avatar={feature.user}
         defaultOpen={isOpenTarget}
         detail={{
-          content: <FeatureRequestContent content={feature.content ?? ""} />,
+          content: <FeatureRequestContent content={detailContent} />,
           createdAt: toIsoString(feature.createdAt),
           title: text,
           updatedAt: toIsoString(feature.updatedAt),

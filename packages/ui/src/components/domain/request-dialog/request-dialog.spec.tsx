@@ -59,7 +59,7 @@ describe("RequestDialog", () => {
     const bodyText = document.body.textContent ?? "";
     expect(bodyText).toContain("Child content");
     expect(bodyText).toContain(
-      "CFChild contentHeadingitem1item2投稿日: 2024/01/01 9:00Close",
+      "CFChild contentHeadingitem1item2投稿日: 2024-01-01T00:00:00.000ZClose",
     );
     const headings = Array.from(document.querySelectorAll("h2"));
     const hasDetailHeading = headings.some((node) =>

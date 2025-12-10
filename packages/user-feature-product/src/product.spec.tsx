@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { render } from "vitest-browser-react";
 
 import { type ReactionSummary } from "./libs/reaction-summary";
-import { Product } from "./product";
+import { FEATURE_CONTENT_FALLBACK, Product } from "./product";
 import * as stories from "./product.stories";
 
 const Stories = composeStories(stories);
@@ -142,6 +142,27 @@ describe("Product", () => {
     );
 
     expect(document.body.textContent).not.toContain("編集ページを開く");
+  });
+
+  it("shows fallback content when the feature body is empty", async () => {
+    const feature = createFeatureFixture("user-owner", {
+      content: "   ",
+      id: 1,
+      title: "本文なしのリクエスト",
+    });
+
+    await render(
+      <Product
+        canCreateFeatureRequest
+        currentUser={{ id: "user-owner" }}
+        onCreateFeatureRequest={async () => {}}
+        onReactToFeature={async () => {}}
+        openFeatureRequestId={1}
+        product={createProductFixture("user-owner", [feature])}
+      />,
+    );
+
+    expect(document.body.textContent).toContain(FEATURE_CONTENT_FALLBACK);
   });
 
   it("shows closed feature requests under the composer", async () => {

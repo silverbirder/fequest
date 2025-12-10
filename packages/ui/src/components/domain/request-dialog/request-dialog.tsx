@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 
+import { toIsoString } from "@repo/util";
 import { ChevronRight } from "lucide-react";
 
 import { HStack, VStack } from "../../common/layout";
@@ -38,22 +39,13 @@ type Props = {
   onOpenChange?: (open: boolean) => void;
 };
 
-const dateTimeFormatter = new Intl.DateTimeFormat("ja-JP", {
-  dateStyle: "medium",
-  timeStyle: "short",
-});
-
 const formatDateTime = (value?: Date | null | string) => {
-  if (!value) {
+  const isoString = toIsoString(value);
+  if (!isoString) {
     return "-";
   }
 
-  const date = value instanceof Date ? value : new Date(value);
-  if (Number.isNaN(date.getTime())) {
-    return "-";
-  }
-
-  return dateTimeFormatter.format(date);
+  return isoString;
 };
 
 export const RequestDialog = ({

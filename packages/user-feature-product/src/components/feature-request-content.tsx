@@ -6,7 +6,7 @@ type Props = {
 
 export const FeatureRequestContent = (props: Props) => {
   return (
-    <Box bg="muted" p="xs" radius="sm" w="full">
+    <Box bg="muted" p="md" radius="sm" w="full">
       <Textarea
         aria-label="機能リクエストの内容"
         readOnly
