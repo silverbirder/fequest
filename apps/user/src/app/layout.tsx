@@ -56,7 +56,7 @@ export default async function RootLayout({
                 logoutAction={signOutUser}
                 user={session?.user}
               />
-              <Container>
+              <Container size="lg">
                 <Center>{children}</Center>
               </Container>
             </VStack>

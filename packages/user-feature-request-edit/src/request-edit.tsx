@@ -1,19 +1,20 @@
-import type { PropsWithChildren } from "react";
 import type { UrlObject } from "url";
 
 import {
   Box,
   Button,
+  Heading,
   HStack,
   Input,
   Text,
   Textarea,
   VStack,
 } from "@repo/ui/components";
+import { ArrowLeft } from "lucide-react";
 import Form from "next/form";
 import Link from "next/link";
 
-type Props = PropsWithChildren & {
+type Props = {
   backHref: UrlObject;
   defaultValues: {
     content: string;
@@ -28,7 +29,6 @@ type Props = PropsWithChildren & {
 
 export const RequestEdit = ({
   backHref,
-  children,
   defaultValues,
   featureId,
   onDelete,
@@ -37,74 +37,76 @@ export const RequestEdit = ({
   requestTitle,
 }: Props) => {
   return (
-    <VStack align="start" gap="lg" w="full">
-      <VStack align="start" gap="xs" w="full">
-        <Text size="lg" weight="bold">
-          リクエストを編集
-        </Text>
+    <VStack gap="xl" w="full">
+      <VStack align="start" gap="md" w="full">
+        <Heading size="lg">リクエストの編集</Heading>
         <Text color="muted">
           {productName} へのリクエスト「{requestTitle ?? defaultValues.title}
           」を更新します。
         </Text>
       </VStack>
-      <Form action={onSubmit}>
-        <input name="featureId" type="hidden" value={String(featureId)} />
-        <VStack align="start" gap="md" w="full">
-          <Box asChild w="full">
-            <label>
-              <VStack align="start" gap="xs" w="full">
-                <Text color="subtle" size="sm">
-                  タイトル
-                </Text>
-                <Input
-                  defaultValue={defaultValues.title}
-                  maxLength={255}
-                  name="title"
-                  required
-                />
+      <Box asChild bg="white" p="lg" radius="md" w="full">
+        <VStack align="start" bg="white" gap="lg" w="full">
+          <VStack asChild w="full">
+            <Form action={onSubmit} id="request-edit-form">
+              <input name="featureId" type="hidden" value={String(featureId)} />
+              <VStack align="start" gap="lg" w="full">
+                <Box asChild w="full">
+                  <VStack align="start" gap="xs" w="full">
+                    <Text asChild color="subtle" size="sm">
+                      <label htmlFor="title">タイトル</label>
+                    </Text>
+                    <Input
+                      defaultValue={defaultValues.title}
+                      id="title"
+                      maxLength={255}
+                      name="title"
+                      required
+                    />
+                  </VStack>
+                </Box>
+                <Box asChild w="full">
+                  <VStack align="start" gap="xs" w="full">
+                    <Text asChild color="subtle" size="sm">
+                      <label htmlFor="content">内容</label>
+                    </Text>
+                    <Textarea
+                      defaultValue={defaultValues.content}
+                      id="content"
+                      name="content"
+                      placeholder="改善内容や背景を入力してください"
+                      rows={6}
+                    />
+                  </VStack>
+                </Box>
               </VStack>
-            </label>
-          </Box>
-          <Box asChild w="full">
-            <label>
-              <VStack align="start" gap="xs" w="full">
-                <Text color="subtle" size="sm">
-                  内容
-                </Text>
-                <Textarea
-                  defaultValue={defaultValues.content}
-                  name="content"
-                  placeholder="改善内容や背景を入力してください"
-                  rows={6}
-                />
-              </VStack>
-            </label>
-          </Box>
-          <HStack gap="sm">
-            <Button type="submit">保存する</Button>
-            <Button asChild variant="ghost">
-              <Link href={backHref} prefetch={false}>
-                戻る
-              </Link>
+            </Form>
+          </VStack>
+          <HStack borderTop="default" justify="between" pt="lg" w="full">
+            <Button form="request-edit-form" type="submit">
+              保存する
             </Button>
+            {onDelete && (
+              <Form action={onDelete}>
+                <input
+                  name="featureId"
+                  type="hidden"
+                  value={String(featureId)}
+                />
+                <Button type="submit" variant="destructive">
+                  リクエストを削除
+                </Button>
+              </Form>
+            )}
           </HStack>
         </VStack>
-      </Form>
-      {onDelete ? (
-        <Box asChild w="full">
-          <Form action={onDelete}>
-            <input name="featureId" type="hidden" value={String(featureId)} />
-            <HStack gap="sm">
-              <Button type="submit" variant="destructive">
-                リクエストを削除
-              </Button>
-              {children}
-            </HStack>
-          </Form>
-        </Box>
-      ) : (
-        (children ?? null)
-      )}
+      </Box>
+      <Button asChild variant="link">
+        <Link href={backHref} prefetch={false}>
+          <ArrowLeft />
+          戻る
+        </Link>
+      </Button>
     </VStack>
   );
 };

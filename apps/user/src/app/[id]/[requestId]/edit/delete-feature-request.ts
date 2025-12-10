@@ -1,5 +1,6 @@
 import { deleteFeatureRequestSchema } from "@repo/schema";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import { safeParse } from "valibot";
 
 import { api } from "~/trpc/server";
@@ -27,6 +28,7 @@ export const createDeleteFeatureRequest = ({
     }
 
     revalidatePath(`/${productId}`);
+    redirect(`/${productId}`);
   };
 };
 

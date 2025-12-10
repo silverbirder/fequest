@@ -18,7 +18,7 @@ export const Top = ({ adminDomain, products }: Props) => {
   const adminHref = adminDomain.trim();
 
   return (
-    <VStack align="start" gap="2xl">
+    <VStack gap="2xl" w="full">
       <VStack align="center" gap="md">
         <VStack align="center" gap="sm">
           <AppLogo asChild>

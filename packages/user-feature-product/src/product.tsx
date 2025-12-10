@@ -91,7 +91,7 @@ export const Product = (props: Props) => {
   };
 
   return (
-    <VStack gap="xl">
+    <VStack gap="xl" w="full">
       <VStack align="start" gap="md">
         <Box w="logo">
           <ProductLogo

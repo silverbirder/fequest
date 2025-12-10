@@ -3,7 +3,7 @@
 exports[`Product > renders provided props 1`] = `
 <DocumentFragment>
   <div
-    class="flex items-start flex-col gap-8 justify-start self-stretch flex-nowrap"
+    class="flex items-start flex-col gap-8 justify-start self-stretch flex-nowrap w-full"
     data-orientation="column"
     data-slot="stack"
   >

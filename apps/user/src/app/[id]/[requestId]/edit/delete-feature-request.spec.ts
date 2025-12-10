@@ -2,6 +2,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 
 const mocks = vi.hoisted(() => ({
   delete: vi.fn(),
+  redirect: vi.fn(),
   revalidatePath: vi.fn(),
 }));
 
@@ -15,6 +16,10 @@ vi.mock("~/trpc/server", () => ({
 
 vi.mock("next/cache", () => ({
   revalidatePath: mocks.revalidatePath,
+}));
+
+vi.mock("next/navigation", () => ({
+  redirect: (...args: unknown[]) => mocks.redirect(...args),
 }));
 
 import { createDeleteFeatureRequest } from "./delete-feature-request";
@@ -31,6 +36,7 @@ afterEach(() => {
   vi.clearAllMocks();
   mocks.delete.mockReset();
   mocks.revalidatePath.mockReset();
+  mocks.redirect.mockReset();
 });
 
 describe("createDeleteFeatureRequest", () => {
@@ -41,6 +47,7 @@ describe("createDeleteFeatureRequest", () => {
 
     expect(mocks.delete).toHaveBeenCalledWith({ id: 5 });
     expect(mocks.revalidatePath).toHaveBeenCalledWith("/3");
+    expect(mocks.redirect).toHaveBeenCalledWith("/3");
   });
 
   it("bails when featureId is invalid", async () => {
@@ -50,6 +57,7 @@ describe("createDeleteFeatureRequest", () => {
 
     expect(mocks.delete).not.toHaveBeenCalled();
     expect(mocks.revalidatePath).not.toHaveBeenCalled();
+    expect(mocks.redirect).not.toHaveBeenCalled();
   });
 
   it("still revalidates when deletion fails", async () => {
@@ -63,6 +71,7 @@ describe("createDeleteFeatureRequest", () => {
 
     expect(mocks.delete).toHaveBeenCalledWith({ id: 77 });
     expect(mocks.revalidatePath).toHaveBeenCalledWith("/12");
+    expect(mocks.redirect).toHaveBeenCalledWith("/12");
     errorSpy.mockRestore();
   });
 });

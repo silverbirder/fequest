@@ -38,7 +38,7 @@ const Layout = async ({ children }: Props) => {
         logoutAction={signOutUser}
         user={session?.user}
       />
-      <Container>
+      <Container size="lg">
         <Center>{children}</Center>
       </Container>
     </VStack>
