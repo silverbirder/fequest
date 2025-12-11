@@ -47,4 +47,18 @@ describe("Button", () => {
     expect(linkEl).not.toBeNull();
     expect(linkEl?.className ?? "").toContain("inline-flex");
   });
+
+  it("disables and swaps label when pending", async () => {
+    await render(
+      <Button pending pendingLabel="Loading">
+        Save
+      </Button>,
+    );
+
+    const buttonEl = document.querySelector<HTMLButtonElement>(
+      'button[data-slot="button"]',
+    );
+    expect(buttonEl?.disabled).toBe(true);
+    expect(buttonEl?.textContent).toBe("Loading");
+  });
 });

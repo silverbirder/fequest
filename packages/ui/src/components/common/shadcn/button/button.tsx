@@ -1,3 +1,5 @@
+import type { ReactNode } from "react";
+
 import { Slot } from "@radix-ui/react-slot";
 import { cn } from "@repo/ui/lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
@@ -31,26 +33,40 @@ const buttonVariants = cva(
   },
 );
 
-type ButtonProps = React.ComponentProps<"button"> &
+export type ButtonProps = React.ComponentProps<"button"> &
   VariantProps<typeof buttonVariants> & {
     asChild?: boolean;
+    pending?: boolean;
+    pendingLabel?: ReactNode;
   };
 
 const Button = ({
   asChild = false,
+  children,
   className,
+  disabled,
+  pending = false,
+  pendingLabel,
   size,
   variant,
   ...props
 }: ButtonProps) => {
   const Comp = asChild ? Slot : "button";
+  const isDisabled = disabled ?? pending;
 
   return (
     <Comp
-      className={cn(buttonVariants({ className, size, variant }))}
+      aria-busy={pending || undefined}
+      className={cn(
+        buttonVariants({ className, size, variant }),
+        pending && "cursor-wait",
+      )}
       data-slot="button"
+      disabled={isDisabled}
       {...props}
-    />
+    >
+      {pending ? (pendingLabel ?? children) : children}
+    </Comp>
   );
 };
 

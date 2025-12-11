@@ -6,6 +6,7 @@ import {
   Heading,
   HStack,
   Input,
+  SubmitButton,
   Text,
   Textarea,
   VStack,
@@ -80,25 +81,20 @@ export const RequestEdit = ({
                   </VStack>
                 </Box>
               </VStack>
+              <HStack borderTop="default" justify="between" pt="lg" w="full">
+                <SubmitButton pendingLabel="保存中...">保存する</SubmitButton>
+                {onDelete && (
+                  <Button
+                    formAction={onDelete}
+                    type="submit"
+                    variant="destructive"
+                  >
+                    リクエストを削除
+                  </Button>
+                )}
+              </HStack>
             </Form>
           </VStack>
-          <HStack borderTop="default" justify="between" pt="lg" w="full">
-            <Button form="request-edit-form" type="submit">
-              保存する
-            </Button>
-            {onDelete && (
-              <Form action={onDelete}>
-                <input
-                  name="featureId"
-                  type="hidden"
-                  value={String(featureId)}
-                />
-                <Button type="submit" variant="destructive">
-                  リクエストを削除
-                </Button>
-              </Form>
-            )}
-          </HStack>
         </VStack>
       </Box>
       <Button asChild variant="link">
