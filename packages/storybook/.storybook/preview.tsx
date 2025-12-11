@@ -1,6 +1,7 @@
 import "@repo/ui/globals.css";
 import type { Preview } from "@storybook/nextjs-vite";
 
+import { Toaster } from "@repo/ui/components";
 import { Providers } from "@repo/ui/providers/theme-provider";
 
 const preview: Preview = {
@@ -8,6 +9,7 @@ const preview: Preview = {
     (Story) => (
       <Providers>
         <Story />
+        <Toaster />
       </Providers>
     ),
   ],

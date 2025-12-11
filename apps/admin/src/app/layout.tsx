@@ -1,3 +1,4 @@
+import { Toaster } from "@repo/ui/components";
 import "@repo/ui/globals.css";
 import { Providers } from "@repo/ui/providers/theme-provider";
 import { type Metadata } from "next";
@@ -35,6 +36,7 @@ export default function RootLayout({ children }: Props) {
         <TRPCReactProvider>
           <Providers>{children}</Providers>
         </TRPCReactProvider>
+        <Toaster />
       </body>
     </html>
   );

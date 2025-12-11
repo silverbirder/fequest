@@ -1,5 +1,11 @@
 import "@repo/ui/globals.css";
-import { Center, Container, Header, VStack } from "@repo/ui/components";
+import {
+  Center,
+  Container,
+  Header,
+  Toaster,
+  VStack,
+} from "@repo/ui/components";
 import { Providers } from "@repo/ui/providers/theme-provider";
 import { type Metadata } from "next";
 import { Noto_Sans_JP } from "next/font/google";
@@ -62,6 +68,7 @@ export default async function RootLayout({
             </VStack>
           </Providers>
         </TRPCReactProvider>
+        <Toaster />
       </body>
     </html>
   );

@@ -8,4 +8,5 @@ export * from "./empty";
 export * from "./image";
 export * from "./input";
 export * from "./popover";
+export * from "./sonner";
 export * from "./textarea";
