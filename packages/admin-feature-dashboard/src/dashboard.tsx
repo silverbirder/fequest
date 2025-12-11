@@ -19,6 +19,7 @@ import {
   HStack,
   Input,
   ProductCard,
+  SubmitButton,
   Text,
   VStack,
 } from "@repo/ui/components";
@@ -73,9 +74,9 @@ const CreateProductDialog = ({
                   キャンセル
                 </Button>
               </DialogClose>
-              <Button type="submit" variant="default">
+              <SubmitButton pendingLabel="作成中..." variant="default">
                 作成する
-              </Button>
+              </SubmitButton>
             </DialogFooter>
           </VStack>
         </form>

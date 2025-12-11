@@ -5,6 +5,7 @@ import {
   Heading,
   HStack,
   Input,
+  SubmitButton,
   Text,
   Textarea,
   VStack,
@@ -92,9 +93,13 @@ export const Product = ({
                   required
                 />
               </Box>
-              <Button size="sm" type="submit" variant="default">
+              <SubmitButton
+                pendingLabel="保存中..."
+                size="sm"
+                variant="default"
+              >
                 名前を保存
-              </Button>
+              </SubmitButton>
             </HStack>
           </form>
         </VStack>
@@ -163,9 +168,13 @@ export const Product = ({
               </VStack>
 
               <HStack justify="end" w="full">
-                <Button size="sm" type="submit" variant="default">
+                <SubmitButton
+                  pendingLabel="保存中..."
+                  size="sm"
+                  variant="default"
+                >
                   表示情報を保存
-                </Button>
+                </SubmitButton>
               </HStack>
             </VStack>
           </form>
@@ -253,9 +262,13 @@ export const Product = ({
                             type="hidden"
                             value={copy.nextStatus}
                           />
-                          <Button size="sm" type="submit" variant="outline">
+                          <SubmitButton
+                            pendingLabel="更新中..."
+                            size="sm"
+                            variant="outline"
+                          >
                             {copy.actionLabel}
-                          </Button>
+                          </SubmitButton>
                         </form>
                         <form
                           action={onDeleteFeatureRequest}
