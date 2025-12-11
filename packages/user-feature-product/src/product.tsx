@@ -8,7 +8,6 @@ import {
   Text,
   VStack,
 } from "@repo/ui/components";
-import { toIsoString } from "@repo/util";
 import { Home } from "lucide-react";
 import Form from "next/form";
 
@@ -67,16 +66,15 @@ export const Product = (props: Props) => {
     const isOpenTarget =
       typeof props.openFeatureRequestId === "number" &&
       props.openFeatureRequestId === feature.id;
-
     return (
       <FeatureRequestItem
         avatar={feature.user}
         defaultOpen={isOpenTarget}
         detail={{
           content: <FeatureRequestContent content={detailContent} />,
-          createdAt: toIsoString(feature.createdAt),
+          createdAt: feature.createdAt,
           title: text,
-          updatedAt: toIsoString(feature.updatedAt),
+          updatedAt: feature.updatedAt,
         }}
         editHref={
           isOwner
