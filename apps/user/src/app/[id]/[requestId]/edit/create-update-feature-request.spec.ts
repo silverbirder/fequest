@@ -40,7 +40,7 @@ afterEach(() => {
 });
 
 describe("createUpdateFeatureRequest", () => {
-  it("submits trimmed content and revalidates", async () => {
+  it("submits trimmed content and revalidates without redirect", async () => {
     const action = createUpdateFeatureRequest({ productId: 11 });
 
     await action(
@@ -57,7 +57,7 @@ describe("createUpdateFeatureRequest", () => {
       title: "Updated title",
     });
     expect(mocks.revalidatePath).toHaveBeenCalledWith("/11");
-    expect(mocks.redirect).toHaveBeenCalledWith("/11?open=3");
+    expect(mocks.redirect).not.toHaveBeenCalled();
   });
 
   it("bails when featureId is invalid", async () => {

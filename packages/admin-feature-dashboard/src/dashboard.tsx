@@ -74,7 +74,16 @@ const CreateProductDialog = ({
                   キャンセル
                 </Button>
               </DialogClose>
-              <SubmitButton pendingLabel="作成中..." variant="default">
+              <SubmitButton
+                formAction={onCreateProduct}
+                pendingLabel="作成中..."
+                toastMessages={{
+                  error: "作成に失敗しました",
+                  loading: "作成中...",
+                  success: "プロダクトを作成しました",
+                }}
+                variant="default"
+              >
                 作成する
               </SubmitButton>
             </DialogFooter>

@@ -43,7 +43,10 @@ export default async function Page({
 
   return (
     <RequestEdit
-      backHref={{ pathname: `/${productId}` }}
+      backHref={{
+        pathname: `/${productId}`,
+        query: { open: featureRequest.id },
+      }}
       defaultValues={{
         content: featureRequest.content ?? "",
         title: featureRequest.title ?? "",

@@ -1,6 +1,5 @@
 import { updateFeatureRequestSchema } from "@repo/schema";
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 import { safeParse } from "valibot";
 
 import { api } from "~/trpc/server";
@@ -45,7 +44,7 @@ export const createUpdateFeatureRequest = ({
     revalidatePath(`/${productId}`);
 
     if (updated) {
-      redirect(`/${productId}?open=${parsedInput.output.id}`);
+      return;
     }
   };
 };

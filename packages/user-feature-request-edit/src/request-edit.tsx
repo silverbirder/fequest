@@ -82,7 +82,17 @@ export const RequestEdit = ({
                 </Box>
               </VStack>
               <HStack borderTop="default" justify="between" pt="lg" w="full">
-                <SubmitButton pendingLabel="保存中...">保存する</SubmitButton>
+                <SubmitButton
+                  formAction={onSubmit}
+                  pendingLabel="保存中..."
+                  toastMessages={{
+                    error: "保存に失敗しました",
+                    loading: "保存中...",
+                    success: "保存しました",
+                  }}
+                >
+                  保存する
+                </SubmitButton>
                 {onDelete && (
                   <Button
                     formAction={onDelete}
