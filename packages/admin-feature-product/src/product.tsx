@@ -1,3 +1,5 @@
+"use client";
+
 import { type FeatureRequestCore, type FeatureRequestStatus } from "@repo/type";
 import {
   Box,
@@ -10,6 +12,7 @@ import {
   Textarea,
   VStack,
 } from "@repo/ui/components";
+import { wrapActionWithToast } from "@repo/ui/lib/wrap-action-with-toast";
 
 type FeatureRequest = FeatureRequestCore;
 
@@ -65,6 +68,17 @@ export const Product = ({
   onUpdateName,
   product,
 }: Props) => {
+  const updateNameAction = wrapActionWithToast(onUpdateName, {
+    error: "名前の保存に失敗しました",
+    loading: "名前を保存中...",
+    success: "名前を保存しました",
+  });
+  const updateDetailsAction = wrapActionWithToast(onUpdateDetails, {
+    error: "表示情報の保存に失敗しました",
+    loading: "表示情報を保存中...",
+    success: "表示情報を保存しました",
+  });
+
   const featureRequests = product.featureRequests ?? [];
 
   return (
@@ -81,7 +95,7 @@ export const Product = ({
           <Text size="sm" weight="semibold">
             プロダクト名
           </Text>
-          <form action={onUpdateName} data-slot="rename-form">
+          <form action={updateNameAction} data-slot="rename-form">
             <input name="productId" type="hidden" value={product.id} />
             <HStack align="center" gap="sm" justify="start" wrap="wrap">
               <Box>
@@ -94,14 +108,9 @@ export const Product = ({
                 />
               </Box>
               <SubmitButton
-                formAction={onUpdateName}
+                formAction={updateNameAction}
                 pendingLabel="保存中..."
                 size="sm"
-                toastMessages={{
-                  error: "名前の保存に失敗しました",
-                  loading: "名前を保存中...",
-                  success: "名前を保存しました",
-                }}
                 variant="default"
               >
                 名前を保存
@@ -121,7 +130,7 @@ export const Product = ({
               ロゴと説明文を設定して、ユーザーにわかりやすく伝えましょう。
             </Text>
           </VStack>
-          <form action={onUpdateDetails} data-slot="details-form">
+          <form action={updateDetailsAction} data-slot="details-form">
             <input name="productId" type="hidden" value={product.id} />
             <VStack align="start" gap="md" w="full">
               <VStack align="start" gap="xs" w="full">
@@ -175,14 +184,9 @@ export const Product = ({
 
               <HStack justify="end" w="full">
                 <SubmitButton
-                  formAction={onUpdateDetails}
+                  formAction={updateDetailsAction}
                   pendingLabel="保存中..."
                   size="sm"
-                  toastMessages={{
-                    error: "表示情報の保存に失敗しました",
-                    loading: "表示情報を保存中...",
-                    success: "表示情報を保存しました",
-                  }}
                   variant="default"
                 >
                   表示情報を保存
@@ -235,6 +239,11 @@ export const Product = ({
                   .replace(/す$/, "しています");
               const statusSuccess = formatSuccess(copy.actionLabel);
               const statusLoading = formatLoading(copy.actionLabel);
+              const statusAction = wrapActionWithToast(onUpdateFeatureStatus, {
+                error: `${copy.actionLabel}に失敗しました`,
+                loading: statusLoading,
+                success: statusSuccess,
+              });
 
               return (
                 <Box
@@ -268,7 +277,7 @@ export const Product = ({
                           </Text>
                         </Box>
                         <form
-                          action={onUpdateFeatureStatus}
+                          action={statusAction}
                           data-feature-id={feature.id}
                           data-slot="feature-status-form"
                         >
@@ -283,14 +292,9 @@ export const Product = ({
                             value={copy.nextStatus}
                           />
                           <SubmitButton
-                            formAction={onUpdateFeatureStatus}
+                            formAction={statusAction}
                             pendingLabel="更新中..."
                             size="sm"
-                            toastMessages={{
-                              error: `${copy.actionLabel}に失敗しました`,
-                              loading: statusLoading,
-                              success: statusSuccess,
-                            }}
                             variant="outline"
                           >
                             {copy.actionLabel}

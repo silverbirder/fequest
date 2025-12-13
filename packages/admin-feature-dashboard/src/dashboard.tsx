@@ -1,3 +1,5 @@
+"use client";
+
 import { type ProductSummary } from "@repo/type";
 import {
   Button,
@@ -23,6 +25,7 @@ import {
   Text,
   VStack,
 } from "@repo/ui/components";
+import { wrapActionWithToast } from "@repo/ui/lib/wrap-action-with-toast";
 import { type ReactNode, useId } from "react";
 
 type CreateProductDialogProps = {
@@ -40,6 +43,11 @@ const CreateProductDialog = ({
   trigger,
 }: CreateProductDialogProps) => {
   const inputId = useId();
+  const actionWithToast = wrapActionWithToast(onCreateProduct, {
+    error: "作成に失敗しました",
+    loading: "作成中...",
+    success: "プロダクトを作成しました",
+  });
 
   return (
     <Dialog>
@@ -51,7 +59,7 @@ const CreateProductDialog = ({
             名前を入力して作成すると、そのプロダクトの管理ページに移動します。
           </DialogDescription>
         </DialogHeader>
-        <form action={onCreateProduct} data-slot="create-product-form">
+        <form action={actionWithToast} data-slot="create-product-form">
           <VStack gap="md">
             <VStack align="start" gap="xs">
               <label htmlFor={inputId}>
@@ -75,13 +83,8 @@ const CreateProductDialog = ({
                 </Button>
               </DialogClose>
               <SubmitButton
-                formAction={onCreateProduct}
+                formAction={actionWithToast}
                 pendingLabel="作成中..."
-                toastMessages={{
-                  error: "作成に失敗しました",
-                  loading: "作成中...",
-                  success: "プロダクトを作成しました",
-                }}
                 variant="default"
               >
                 作成する

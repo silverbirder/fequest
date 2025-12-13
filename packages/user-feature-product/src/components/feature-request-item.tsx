@@ -8,7 +8,7 @@ import { Pencil } from "lucide-react";
 import Form from "next/form";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { type ComponentProps, useMemo, useRef } from "react";
+import { type ComponentProps, useRef } from "react";
 
 import type { ReactionSummary } from "../libs/reaction-summary";
 
@@ -62,9 +62,8 @@ export const FeatureRequestItem = ({
     }
   };
 
-  const reactionMap = useMemo(
-    () => new Map(reactions.map((reaction) => [reaction.emoji, reaction])),
-    [reactions],
+  const reactionMap = new Map(
+    reactions.map((reaction) => [reaction.emoji, reaction]),
   );
   const reactionOptions = reactions;
 

@@ -1,3 +1,5 @@
+"use client";
+
 import type { UrlObject } from "url";
 
 import {
@@ -11,6 +13,7 @@ import {
   Textarea,
   VStack,
 } from "@repo/ui/components";
+import { wrapActionWithToast } from "@repo/ui/lib/wrap-action-with-toast";
 import { ArrowLeft } from "lucide-react";
 import Form from "next/form";
 import Link from "next/link";
@@ -37,6 +40,12 @@ export const RequestEdit = ({
   productName,
   requestTitle,
 }: Props) => {
+  const submitAction = wrapActionWithToast(onSubmit, {
+    error: "保存に失敗しました",
+    loading: "保存中...",
+    success: "保存しました",
+  });
+
   return (
     <VStack gap="xl" w="full">
       <VStack align="start" gap="md" w="full">
@@ -49,7 +58,7 @@ export const RequestEdit = ({
       <Box asChild bg="white" p="lg" radius="md" w="full">
         <VStack align="start" bg="white" gap="lg" w="full">
           <VStack asChild w="full">
-            <Form action={onSubmit} id="request-edit-form">
+            <Form action={submitAction} id="request-edit-form">
               <input name="featureId" type="hidden" value={String(featureId)} />
               <VStack align="start" gap="lg" w="full">
                 <Box asChild w="full">
@@ -83,13 +92,8 @@ export const RequestEdit = ({
               </VStack>
               <HStack borderTop="default" justify="between" pt="lg" w="full">
                 <SubmitButton
-                  formAction={onSubmit}
+                  formAction={submitAction}
                   pendingLabel="保存中..."
-                  toastMessages={{
-                    error: "保存に失敗しました",
-                    loading: "保存中...",
-                    success: "保存しました",
-                  }}
                 >
                   保存する
                 </SubmitButton>
