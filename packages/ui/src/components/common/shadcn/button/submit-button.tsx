@@ -10,13 +10,11 @@ type SubmitButtonProps = Omit<
   ButtonProps,
   "pending" | "pendingLabel" | "type"
 > & {
-  autoPending?: boolean;
   pending?: boolean;
   pendingLabel?: ReactNode;
 };
 
 export const SubmitButton = ({
-  autoPending = true,
   children,
   formAction,
   pending,
@@ -24,12 +22,11 @@ export const SubmitButton = ({
   ...props
 }: SubmitButtonProps) => {
   const { pending: formPending } = useFormStatus();
-  const isPending = pending ?? (autoPending ? formPending : false);
 
   return (
     <Button
       formAction={formAction}
-      pending={isPending}
+      pending={pending ?? formPending}
       pendingLabel={pendingLabel ?? children}
       type="submit"
       {...props}
