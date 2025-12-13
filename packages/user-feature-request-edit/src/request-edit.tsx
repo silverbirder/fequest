@@ -17,6 +17,7 @@ import { wrapActionWithToast } from "@repo/ui/lib/wrap-action-with-toast";
 import { ArrowLeft } from "lucide-react";
 import Form from "next/form";
 import Link from "next/link";
+import { useId } from "react";
 
 type Props = {
   backHref: UrlObject;
@@ -40,6 +41,9 @@ export const RequestEdit = ({
   productName,
   requestTitle,
 }: Props) => {
+  const submitFormId = useId();
+  const deleteFormId = useId();
+
   const submitAction = wrapActionWithToast(onSubmit, {
     error: "保存に失敗しました",
     loading: "保存中...",
@@ -57,57 +61,64 @@ export const RequestEdit = ({
       </VStack>
       <Box asChild bg="white" p="lg" radius="md" w="full">
         <VStack align="start" bg="white" gap="lg" w="full">
-          <VStack asChild w="full">
-            <Form action={submitAction} id="request-edit-form">
-              <input name="featureId" type="hidden" value={String(featureId)} />
-              <VStack align="start" gap="lg" w="full">
-                <Box asChild w="full">
-                  <VStack align="start" gap="xs" w="full">
-                    <Text asChild color="subtle" size="sm">
-                      <label htmlFor="title">タイトル</label>
-                    </Text>
-                    <Input
-                      defaultValue={defaultValues.title}
-                      id="title"
-                      maxLength={255}
-                      name="title"
-                      required
-                    />
-                  </VStack>
-                </Box>
-                <Box asChild w="full">
-                  <VStack align="start" gap="xs" w="full">
-                    <Text asChild color="subtle" size="sm">
-                      <label htmlFor="content">内容</label>
-                    </Text>
-                    <Textarea
-                      defaultValue={defaultValues.content}
-                      id="content"
-                      name="content"
-                      placeholder="改善内容や背景を入力してください"
-                      rows={6}
-                    />
-                  </VStack>
-                </Box>
+          <VStack align="start" gap="lg" w="full">
+            <Box asChild w="full">
+              <VStack align="start" gap="xs" w="full">
+                <Text asChild color="subtle" size="sm">
+                  <label htmlFor="title">タイトル</label>
+                </Text>
+                <Input
+                  defaultValue={defaultValues.title}
+                  form={submitFormId}
+                  id="title"
+                  maxLength={255}
+                  name="title"
+                  required
+                />
               </VStack>
-              <HStack borderTop="default" justify="between" pt="lg" w="full">
+            </Box>
+            <Box asChild w="full">
+              <VStack align="start" gap="xs" w="full">
+                <Text asChild color="subtle" size="sm">
+                  <label htmlFor="content">内容</label>
+                </Text>
+                <Textarea
+                  defaultValue={defaultValues.content}
+                  form={submitFormId}
+                  id="content"
+                  name="content"
+                  placeholder="改善内容や背景を入力してください"
+                  rows={6}
+                />
+              </VStack>
+            </Box>
+            <HStack borderTop="default" justify="between" pt="lg" w="full">
+              <Form action={submitAction} id={submitFormId}>
+                <input
+                  name="featureId"
+                  type="hidden"
+                  value={String(featureId)}
+                />
                 <SubmitButton
                   formAction={submitAction}
                   pendingLabel="保存中..."
                 >
                   保存する
                 </SubmitButton>
-                {onDelete && (
-                  <Button
-                    formAction={onDelete}
-                    type="submit"
-                    variant="destructive"
-                  >
+              </Form>
+              {onDelete && (
+                <Form action={onDelete} id={deleteFormId}>
+                  <input
+                    name="featureId"
+                    type="hidden"
+                    value={String(featureId)}
+                  />
+                  <Button type="submit" variant="destructive">
                     リクエストを削除
                   </Button>
-                )}
-              </HStack>
-            </Form>
+                </Form>
+              )}
+            </HStack>
           </VStack>
         </VStack>
       </Box>
