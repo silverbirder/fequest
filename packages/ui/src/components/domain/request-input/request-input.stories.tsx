@@ -20,3 +20,10 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
+
+export const Pending: Story = {
+  args: {
+    disabled: true,
+    helperText: "送信中...",
+  },
+};

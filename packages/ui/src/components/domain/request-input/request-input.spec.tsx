@@ -1,13 +1,40 @@
+import type { FormStatus } from "react-dom";
+
 import { composeStories } from "@storybook/nextjs-vite";
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { render } from "vitest-browser-react";
 
 import { RequestInput } from "./request-input";
 import * as stories from "./request-input.stories";
 
+const defaultFormStatus: FormStatus = {
+  action: null,
+  data: null,
+  method: null,
+  pending: false,
+};
+
+const useFormStatusMock = vi.hoisted(() =>
+  vi.fn((): FormStatus => defaultFormStatus),
+);
+
+vi.mock("react-dom", async () => {
+  const actual = await vi.importActual<typeof import("react-dom")>("react-dom");
+
+  return {
+    ...actual,
+    useFormStatus: useFormStatusMock,
+  };
+});
+
 const Stories = composeStories(stories);
 
 describe("RequestInput", () => {
+  afterEach(() => {
+    useFormStatusMock.mockReset();
+    useFormStatusMock.mockImplementation(() => defaultFormStatus);
+  });
+
   it.each(Object.entries(Stories))("should %s screenshot", async (_, Story) => {
     const originalInnerHtml = document.body.innerHTML;
 
@@ -37,5 +64,23 @@ describe("RequestInput", () => {
 
     const helper = document.querySelector("[data-slot='text']");
     expect(helper?.textContent).toContain("入力してください");
+  });
+
+  it("disables input when form submission is pending", async () => {
+    const pendingStatus: FormStatus = {
+      action: "",
+      data: new FormData(),
+      method: "POST",
+      pending: true,
+    };
+    useFormStatusMock.mockImplementation(() => pendingStatus);
+
+    await render(<RequestInput name="request" />);
+
+    const input = document.querySelector("input[name='request']");
+    expect(input).toHaveAttribute("disabled");
+
+    const helper = document.querySelector("[data-slot='text']");
+    expect(helper?.textContent).toContain("送信中...");
   });
 });

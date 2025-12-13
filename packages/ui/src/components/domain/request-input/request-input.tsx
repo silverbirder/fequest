@@ -1,4 +1,8 @@
+"use client";
+
 import type { ComponentProps } from "react";
+
+import { useFormStatus } from "react-dom";
 
 import { Box, HStack } from "../../common/layout";
 import { Avatar } from "../../common/shadcn";
@@ -13,13 +17,23 @@ type Props = ComponentProps<typeof BubbleInput> & {
   };
 };
 
-export const RequestInput = ({ avatar, ...inputProps }: Props) => {
+export const RequestInput = ({
+  avatar,
+  disabled: disabledProp,
+  helperText: helperTextProp,
+  ...inputProps
+}: Props) => {
   const avatarProps = {
     alt: avatar?.alt ?? undefined,
     fallbackText: avatar?.fallbackText ?? "YU",
     name: avatar?.name ?? undefined,
     src: avatar?.image ?? undefined,
   };
+  const { pending: formPending } = useFormStatus();
+  const isDisabled = disabledProp ?? formPending;
+  const helperText = formPending
+    ? (helperTextProp ?? "送信中...")
+    : helperTextProp;
 
   return (
     <HStack align="start" gap="sm" w="full">
@@ -30,7 +44,11 @@ export const RequestInput = ({ avatar, ...inputProps }: Props) => {
         src={avatarProps.src}
       />
       <Box flex="1" w="full">
-        <BubbleInput {...inputProps} />
+        <BubbleInput
+          disabled={isDisabled}
+          helperText={helperText}
+          {...inputProps}
+        />
       </Box>
     </HStack>
   );
