@@ -3,6 +3,14 @@
 import type { UrlObject } from "url";
 
 import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
   Box,
   Button,
   Heading,
@@ -42,13 +50,20 @@ export const RequestEdit = ({
   requestTitle,
 }: Props) => {
   const submitFormId = useId();
-  const deleteFormId = useId();
 
   const submitAction = wrapActionWithToast(onSubmit, {
     error: "保存に失敗しました",
     loading: "保存中...",
     success: "保存しました",
   });
+
+  const deleteAction =
+    onDelete &&
+    wrapActionWithToast(onDelete, {
+      error: "削除に失敗しました",
+      loading: "削除中...",
+      success: "削除しました",
+    });
 
   return (
     <VStack gap="xl" w="full">
@@ -106,18 +121,40 @@ export const RequestEdit = ({
                   保存する
                 </SubmitButton>
               </Form>
-              {onDelete && (
-                <Form action={onDelete} id={deleteFormId}>
-                  <input
-                    name="featureId"
-                    type="hidden"
-                    value={String(featureId)}
-                  />
-                  <Button type="submit" variant="destructive">
-                    リクエストを削除
-                  </Button>
-                </Form>
-              )}
+              {deleteAction ? (
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button variant="destructive">リクエストを削除</Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>
+                        リクエストを削除しますか？
+                      </AlertDialogTitle>
+                      <AlertDialogDescription>
+                        この操作は取り消せません。削除するとリクエストの内容は復元できません。
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <Form action={deleteAction}>
+                      <input
+                        name="featureId"
+                        type="hidden"
+                        value={String(featureId)}
+                      />
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>キャンセル</AlertDialogCancel>
+                        <SubmitButton
+                          formAction={deleteAction}
+                          pendingLabel="削除中..."
+                          variant="destructive"
+                        >
+                          削除する
+                        </SubmitButton>
+                      </AlertDialogFooter>
+                    </Form>
+                  </AlertDialogContent>
+                </AlertDialog>
+              ) : null}
             </HStack>
           </VStack>
         </VStack>

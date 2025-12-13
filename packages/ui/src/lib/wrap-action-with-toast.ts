@@ -6,6 +6,19 @@ export type ToastMessages = {
   success: string;
 };
 
+const isNextRedirectError = (err: unknown): err is { digest: string } => {
+  if (typeof err !== "object" || err === null) {
+    return false;
+  }
+
+  const digest = (err as { digest?: unknown }).digest;
+  if (typeof digest !== "string") {
+    return false;
+  }
+
+  return digest.startsWith("NEXT_REDIRECT") || digest === "NEXT_RESPONSE";
+};
+
 export const wrapActionWithToast = <Args extends unknown[], Result>(
   action: (...args: Args) => Result,
   messages: ToastMessages,
@@ -19,7 +32,12 @@ export const wrapActionWithToast = <Args extends unknown[], Result>(
       toast.success(success, { id: toastId });
       return result;
     } catch (err) {
-      toast.error(error, { id: toastId });
+      if (isNextRedirectError(err)) {
+        toast.success(success, { id: toastId });
+      } else {
+        toast.error(error, { id: toastId });
+      }
+
       throw err;
     }
   }) as (...args: Args) => Promise<Awaited<Result>>;

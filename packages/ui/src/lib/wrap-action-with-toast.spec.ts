@@ -59,4 +59,25 @@ describe("wrapActionWithToast", () => {
     expect(toast.error).toHaveBeenCalledWith("error", { id: "toast-id" });
     expect(toast.success).not.toHaveBeenCalled();
   });
+
+  it("treats NEXT_REDIRECT errors as success", async () => {
+    const redirectError = { digest: "NEXT_REDIRECT;123" };
+    const action = vi.fn(async () => {
+      throw redirectError;
+    });
+    const wrapped = wrapActionWithToast(action, {
+      error: "error",
+      loading: "loading",
+      success: "success",
+    });
+
+    await expect(wrapped()).rejects.toBe(redirectError);
+
+    const { toast } = await import("sonner");
+    expect(toast.loading).toHaveBeenCalledWith("loading");
+    expect(toast.success).toHaveBeenCalledWith("success", {
+      id: "toast-id",
+    });
+    expect(toast.error).not.toHaveBeenCalled();
+  });
 });
