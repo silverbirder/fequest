@@ -13,6 +13,7 @@ import {
   VStack,
 } from "@repo/ui/components";
 import { wrapActionWithToast } from "@repo/ui/lib/wrap-action-with-toast";
+import { toIsoString } from "@repo/util";
 
 type FeatureRequest = FeatureRequestCore;
 
@@ -46,19 +47,6 @@ const statusCopy = (status: FeatureRequestStatus) =>
         label: "クローズ",
         nextStatus: "open" as const,
       };
-
-const formatDateTime = (value?: Date | null | string) => {
-  if (!value) {
-    return "-";
-  }
-
-  const date = value instanceof Date ? value : new Date(value);
-  if (Number.isNaN(date.getTime())) {
-    return "-";
-  }
-
-  return date.toLocaleString("ja-JP");
-};
 
 export const Product = ({
   onDelete,
@@ -323,10 +311,10 @@ export const Product = ({
                     </HStack>
                     <HStack gap="md">
                       <Text color="subtle" size="xs">
-                        作成: {formatDateTime(feature.createdAt)}
+                        作成日: {toIsoString(feature.createdAt)}
                       </Text>
                       <Text color="subtle" size="xs">
-                        更新: {formatDateTime(feature.updatedAt)}
+                        更新日: {toIsoString(feature.updatedAt)}
                       </Text>
                     </HStack>
                   </VStack>

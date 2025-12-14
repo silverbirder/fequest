@@ -39,15 +39,6 @@ type Props = {
   onOpenChange?: (open: boolean) => void;
 };
 
-const formatDateTime = (value?: Date | null | string) => {
-  const isoString = toIsoString(value);
-  if (!isoString) {
-    return "-";
-  }
-
-  return isoString;
-};
-
 export const RequestDialog = ({
   avatar,
   defaultOpen,
@@ -57,7 +48,7 @@ export const RequestDialog = ({
   idBase = "request-card",
   onOpenChange,
 }: Props) => {
-  const createdAtText = formatDateTime(detail.createdAt);
+  const createdAtText = toIsoString(detail.createdAt);
   const dialogContentId = `${idBase}-dialog-content`;
   const dialogDescriptionId = `${idBase}-dialog-description`;
   const titleText = dialogTitle?.trim() || detail.title?.trim() || "詳細";

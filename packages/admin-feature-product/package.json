@@ -23,6 +23,7 @@
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
+    "@repo/util": "workspace:*",
     "@repo/vitest-config": "workspace:*",
     "@storybook/nextjs-vite": "^10.1.4",
     "@types/react": "19.1.0",
