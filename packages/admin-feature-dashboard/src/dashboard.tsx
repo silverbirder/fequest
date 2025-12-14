@@ -15,7 +15,6 @@ import {
   EmptyContent,
   EmptyDescription,
   EmptyHeader,
-  EmptyMedia,
   EmptyTitle,
   Heading,
   HStack,
@@ -100,15 +99,8 @@ const CreateProductDialog = ({
 export const Dashboard = ({ onCreateProduct, products }: Props) => {
   return (
     <VStack gap="2xl">
-      <VStack align="center" gap="sm">
-        <Heading level={2}>あなたのプロダクト</Heading>
-        <Text color="muted" size="lg">
-          あなたが登録したプロダクトの一覧です。
-        </Text>
-      </VStack>
       {products.length === 0 ? (
         <Empty>
-          <EmptyMedia variant="icon">🤔</EmptyMedia>
           <EmptyHeader>
             <EmptyTitle>まだプロダクトがありません</EmptyTitle>
             <EmptyDescription>
@@ -128,6 +120,12 @@ export const Dashboard = ({ onCreateProduct, products }: Props) => {
         </Empty>
       ) : (
         <>
+          <VStack align="center" gap="sm">
+            <Heading level={2}>あなたのプロダクト</Heading>
+            <Text color="muted" size="lg">
+              あなたが登録したプロダクトの一覧です。
+            </Text>
+          </VStack>
           <HStack gap="md" w="full" wrap="wrap">
             {products.map((product) => (
               <ProductCard

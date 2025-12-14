@@ -19,12 +19,16 @@ export const SignIn = ({ onGoogleSignIn }: Props) => {
         <VStack align="center" gap="2xl">
           <VStack align="center" gap="md">
             <VStack align="center" gap="sm">
-              <AppLogo asChild>
-                <Heading level={1}>Fequest Admin</Heading>
-              </AppLogo>
-              <Text align="center" color="muted" size="lg">
-                ほしいとつくるを共有するプラットフォーム Fequest の管理画面
-              </Text>
+              <VStack align="center" justify="center">
+                <AppLogo asChild>
+                  <Heading display="inline-block" level={1}>
+                    Fequest
+                  </Heading>
+                </AppLogo>
+                <Text display="inline-block" size="2xl" weight="bold">
+                  管理画面
+                </Text>
+              </VStack>
             </VStack>
           </VStack>
           <VStack align="center" gap="sm">
