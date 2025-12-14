@@ -3,7 +3,6 @@
 import { type FeatureRequestCore, type FeatureRequestStatus } from "@repo/type";
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -228,22 +227,20 @@ export const Product = ({
                   この操作は取り消せません。プロダクトと関連する質問がすべて削除されます。
                 </AlertDialogDescription>
               </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>キャンセル</AlertDialogCancel>
-                <form action={deleteProductAction} data-slot="delete-form">
-                  <input name="productId" type="hidden" value={product.id} />
-                  <AlertDialogAction asChild type="submit">
-                    <SubmitButton
-                      formAction={deleteProductAction}
-                      pendingLabel="削除中..."
-                      size="sm"
-                      variant="destructive"
-                    >
-                      削除する
-                    </SubmitButton>
-                  </AlertDialogAction>
-                </form>
-              </AlertDialogFooter>
+              <form action={deleteProductAction} data-slot="delete-form">
+                <input name="productId" type="hidden" value={product.id} />
+                <AlertDialogFooter>
+                  <AlertDialogCancel>キャンセル</AlertDialogCancel>
+                  <SubmitButton
+                    formAction={deleteProductAction}
+                    pendingLabel="削除中..."
+                    size="sm"
+                    variant="destructive"
+                  >
+                    削除する
+                  </SubmitButton>
+                </AlertDialogFooter>
+              </form>
             </AlertDialogContent>
           </AlertDialog>
         </VStack>
@@ -352,35 +349,35 @@ export const Product = ({
                                 この操作は取り消せません。質問は完全に削除されます。
                               </AlertDialogDescription>
                             </AlertDialogHeader>
-                            <AlertDialogFooter>
-                              <AlertDialogCancel>キャンセル</AlertDialogCancel>
-                              <form
-                                action={deleteFeatureRequestAction}
-                                data-feature-id={feature.id}
-                                data-slot="feature-delete-form"
-                              >
-                                <input
-                                  name="productId"
-                                  type="hidden"
-                                  value={product.id}
-                                />
-                                <input
-                                  name="featureId"
-                                  type="hidden"
-                                  value={feature.id}
-                                />
-                                <AlertDialogAction asChild type="submit">
-                                  <SubmitButton
-                                    formAction={deleteFeatureRequestAction}
-                                    pendingLabel="削除中..."
-                                    size="sm"
-                                    variant="destructive"
-                                  >
-                                    削除する
-                                  </SubmitButton>
-                                </AlertDialogAction>
-                              </form>
-                            </AlertDialogFooter>
+                            <form
+                              action={deleteFeatureRequestAction}
+                              data-feature-id={feature.id}
+                              data-slot="feature-delete-form"
+                            >
+                              <input
+                                name="productId"
+                                type="hidden"
+                                value={product.id}
+                              />
+                              <input
+                                name="featureId"
+                                type="hidden"
+                                value={feature.id}
+                              />
+                              <AlertDialogFooter>
+                                <AlertDialogCancel>
+                                  キャンセル
+                                </AlertDialogCancel>
+                                <SubmitButton
+                                  formAction={deleteFeatureRequestAction}
+                                  pendingLabel="削除中..."
+                                  size="sm"
+                                  variant="destructive"
+                                >
+                                  削除する
+                                </SubmitButton>
+                              </AlertDialogFooter>
+                            </form>
                           </AlertDialogContent>
                         </AlertDialog>
                       </HStack>
