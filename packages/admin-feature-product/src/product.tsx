@@ -101,7 +101,7 @@ export const Product = ({
 
       <Box bg="white" p="lg" radius="lg" w="full">
         <VStack align="start" gap="sm" w="full">
-          <Text size="sm" weight="semibold">
+          <Text size="sm" weight="bold">
             プロダクト名
           </Text>
           <form action={updateNameAction} data-slot="rename-form">
@@ -132,7 +132,7 @@ export const Product = ({
       <Box bg="white" p="lg" radius="lg" w="full">
         <VStack align="start" gap="md" w="full">
           <VStack align="start" gap="xs">
-            <Text size="sm" weight="semibold">
+            <Text size="sm" weight="bold">
               プロダクトの表示情報
             </Text>
             <Text color="muted" size="sm">
@@ -143,7 +143,7 @@ export const Product = ({
             <input name="productId" type="hidden" value={product.id} />
             <VStack align="start" gap="md" w="full">
               <VStack align="start" gap="xs" w="full">
-                <Text size="sm" weight="medium">
+                <Text size="sm" weight="bold">
                   ロゴURL (任意)
                 </Text>
                 <Input
@@ -159,7 +159,7 @@ export const Product = ({
               </VStack>
 
               <VStack align="start" gap="xs" w="full">
-                <Text size="sm" weight="medium">
+                <Text size="sm" weight="bold">
                   ホームページURL (任意)
                 </Text>
                 <Input
@@ -175,7 +175,7 @@ export const Product = ({
               </VStack>
 
               <VStack align="start" gap="xs" w="full">
-                <Text size="sm" weight="medium">
+                <Text size="sm" weight="bold">
                   プロダクト説明文 (任意)
                 </Text>
                 <Textarea
@@ -203,46 +203,6 @@ export const Product = ({
               </HStack>
             </VStack>
           </form>
-        </VStack>
-      </Box>
-
-      <Box bg="white" p="lg" radius="lg" w="full">
-        <VStack align="start" gap="sm" w="full">
-          <Text size="sm" weight="semibold">
-            プロダクトを削除
-          </Text>
-          <Text color="muted" size="sm">
-            この操作は取り消せません。プロダクトと関連する質問がすべて削除されます。
-          </Text>
-          <AlertDialog>
-            <AlertDialogTrigger asChild>
-              <Button size="sm" type="button" variant="destructive">
-                プロダクトを削除
-              </Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>プロダクトを削除</AlertDialogTitle>
-                <AlertDialogDescription>
-                  この操作は取り消せません。プロダクトと関連する質問がすべて削除されます。
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <form action={deleteProductAction} data-slot="delete-form">
-                <input name="productId" type="hidden" value={product.id} />
-                <AlertDialogFooter>
-                  <AlertDialogCancel>キャンセル</AlertDialogCancel>
-                  <SubmitButton
-                    formAction={deleteProductAction}
-                    pendingLabel="削除中..."
-                    size="sm"
-                    variant="destructive"
-                  >
-                    削除する
-                  </SubmitButton>
-                </AlertDialogFooter>
-              </form>
-            </AlertDialogContent>
-          </AlertDialog>
         </VStack>
       </Box>
 
@@ -295,7 +255,7 @@ export const Product = ({
                       wrap="wrap"
                     >
                       <VStack align="start" gap="xs" w="full">
-                        <Text size="lg" weight="semibold">
+                        <Text size="lg" weight="bold">
                           {title}
                         </Text>
                         <Text color="muted" size="sm">
@@ -304,7 +264,7 @@ export const Product = ({
                       </VStack>
                       <HStack align="center" gap="sm" justify="end">
                         <Box bg="muted" px="sm" py="xs" radius="full">
-                          <Text size="xs" weight="medium">
+                          <Text size="xs" weight="bold">
                             {copy.label}
                           </Text>
                         </Box>
@@ -397,6 +357,46 @@ export const Product = ({
           </VStack>
         )}
       </VStack>
+
+      <Box bg="white" p="lg" radius="lg" w="full">
+        <VStack align="start" gap="sm" w="full">
+          <Text size="sm" weight="bold">
+            プロダクトを削除
+          </Text>
+          <Text color="muted" size="sm">
+            この操作は取り消せません。プロダクトと関連する質問がすべて削除されます。
+          </Text>
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button size="sm" type="button" variant="destructive">
+                プロダクトを削除
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>プロダクトを削除</AlertDialogTitle>
+                <AlertDialogDescription>
+                  この操作は取り消せません。プロダクトと関連する質問がすべて削除されます。
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <form action={deleteProductAction} data-slot="delete-form">
+                <input name="productId" type="hidden" value={product.id} />
+                <AlertDialogFooter>
+                  <AlertDialogCancel>キャンセル</AlertDialogCancel>
+                  <SubmitButton
+                    formAction={deleteProductAction}
+                    pendingLabel="削除中..."
+                    size="sm"
+                    variant="destructive"
+                  >
+                    削除する
+                  </SubmitButton>
+                </AlertDialogFooter>
+              </form>
+            </AlertDialogContent>
+          </AlertDialog>
+        </VStack>
+      </Box>
     </VStack>
   );
 };

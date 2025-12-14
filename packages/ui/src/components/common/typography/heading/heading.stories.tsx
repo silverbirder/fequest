@@ -33,7 +33,7 @@ export const Level3: Story = {
   args: {
     children: "Section Heading",
     level: 3,
-    weight: "semibold",
+    weight: "bold",
   },
 };
 
@@ -41,7 +41,7 @@ export const Level4: Story = {
   args: {
     children: "Section Title",
     level: 4,
-    weight: "semibold",
+    weight: "bold",
   },
 };
 
@@ -49,7 +49,7 @@ export const Level5: Story = {
   args: {
     children: "Subsection Heading",
     level: 5,
-    weight: "medium",
+    weight: "bold",
   },
 };
 

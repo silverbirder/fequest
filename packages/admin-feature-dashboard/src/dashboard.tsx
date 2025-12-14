@@ -54,15 +54,17 @@ const CreateProductDialog = ({
       <DialogContent>
         <DialogHeader>
           <DialogTitle>新しいプロダクトを作成</DialogTitle>
-          <DialogDescription>
-            名前を入力して作成すると、そのプロダクトの管理ページに移動します。
+          <DialogDescription asChild>
+            <Text color="muted" size="md">
+              名前を入力して作成すると、そのプロダクトの管理ページに移動します。
+            </Text>
           </DialogDescription>
         </DialogHeader>
         <form action={actionWithToast} data-slot="create-product-form">
           <VStack gap="md">
             <VStack align="start" gap="xs">
               <label htmlFor={inputId}>
-                <Text size="sm" weight="semibold">
+                <Text size="sm" weight="bold">
                   プロダクト名
                 </Text>
               </label>
@@ -74,6 +76,9 @@ const CreateProductDialog = ({
                 placeholder="例: プロダクトX"
                 required
               />
+              <Text color="muted" size="xs">
+                名前は後から変更できます。
+              </Text>
             </VStack>
             <DialogFooter>
               <DialogClose asChild>
@@ -104,7 +109,7 @@ export const Dashboard = ({ onCreateProduct, products }: Props) => {
           <EmptyHeader>
             <EmptyTitle>まだプロダクトがありません</EmptyTitle>
             <EmptyDescription>
-              新しいプロダクトを作成して、フィーチャーリクエストを集めましょう。
+              新しいプロダクトを作成して、リクエストを集めましょう。
             </EmptyDescription>
           </EmptyHeader>
           <EmptyContent>
@@ -138,9 +143,7 @@ export const Dashboard = ({ onCreateProduct, products }: Props) => {
             ))}
           </HStack>
           <VStack align="start" borderTop="default" pt="2xl" w="full">
-            <Text>
-              新しいプロダクトを作成して、フィーチャーリクエストを集めましょう。
-            </Text>
+            <Text>新しいプロダクトを作成して、リクエストを集めましょう。</Text>
             <CreateProductDialog
               onCreateProduct={onCreateProduct}
               trigger={

@@ -35,7 +35,7 @@ export const Accent: Story = {
   args: {
     children: "Accent emphasis",
     color: "accent",
-    weight: "semibold",
+    weight: "bold",
   },
 };
 

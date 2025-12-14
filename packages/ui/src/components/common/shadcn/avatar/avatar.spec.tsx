@@ -62,7 +62,7 @@ describe("Avatar", () => {
   it("shows the fallback content", async () => {
     await render(
       <AvatarRoot>
-        <AvatarFallback className="font-semibold">AB</AvatarFallback>
+        <AvatarFallback className="font-bold">AB</AvatarFallback>
       </AvatarRoot>,
     );
 
@@ -71,7 +71,7 @@ describe("Avatar", () => {
     );
     expect(fallback).not.toBeNull();
     expect(fallback?.textContent).toBe("AB");
-    expect(fallback?.getAttribute("class") ?? "").toContain("font-semibold");
+    expect(fallback?.getAttribute("class") ?? "").toContain("font-bold");
   });
 
   it("derives fallback initials from name when src is missing", async () => {

@@ -37,7 +37,7 @@ export const BubbleText = ({ children, status = "open", text }: Props) => {
             radius="md"
             shadow="sm"
           >
-            <Text color="subtle" size="sm" weight="semibold">
+            <Text color="subtle" size="sm" weight="bold">
               完了
             </Text>
           </Box>

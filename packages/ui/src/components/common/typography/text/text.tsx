@@ -57,10 +57,7 @@ const textVariants = cva("text-foreground leading-normal block", {
     },
     weight: {
       bold: "font-bold",
-      light: "font-light",
-      medium: "font-medium",
       normal: "font-normal",
-      semibold: "font-semibold",
     },
   },
 });

@@ -20,7 +20,7 @@ describe("Text", () => {
 
   it("renders a span with typography variants", async () => {
     await render(
-      <Text color="accent" size="xl" weight="semibold">
+      <Text color="accent" size="xl" weight="bold">
         Hello
       </Text>,
     );
@@ -31,7 +31,7 @@ describe("Text", () => {
     expect(element).not.toBeNull();
     const className = element?.getAttribute("class") ?? "";
     expect(className).toContain("text-xl");
-    expect(className).toContain("font-semibold");
+    expect(className).toContain("font-bold");
     expect(className).toContain("text-accent");
   });
 

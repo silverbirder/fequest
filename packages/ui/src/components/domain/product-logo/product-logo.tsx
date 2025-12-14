@@ -44,7 +44,7 @@ export const ProductLogo = ({
             h="full"
             w="full"
           >
-            <Text size="xl" weight="semibold">
+            <Text size="xl" weight="bold">
               {initial}
             </Text>
           </Center>

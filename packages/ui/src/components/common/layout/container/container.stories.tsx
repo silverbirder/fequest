@@ -24,7 +24,7 @@ export const CenterContent: Story = {
     centerContent: true,
     children: (
       <div className="max-w-md space-y-2">
-        <h3 className="text-xl font-semibold">Centered layout</h3>
+        <h3 className="text-xl font-bold">Centered layout</h3>
         <p className="text-muted-foreground">
           Center your content both horizontally and vertically within the
           container.

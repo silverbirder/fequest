@@ -65,7 +65,7 @@ exports[`Product > renders provided props 1`] = `
               Sample Product
             </h2>
             <a
-              class="text-left text-accent inline text-sm font-medium"
+              class="text-left text-accent inline text-sm font-bold"
               data-slot="text"
               href="https://example.com"
               rel="noreferrer noopener"
@@ -131,7 +131,7 @@ exports[`Product > renders provided props 1`] = `
           data-slot="avatar"
         >
           <span
-            class="bg-muted text-muted-foreground flex size-full items-center justify-center rounded-full text-xs font-semibold uppercase"
+            class="bg-muted text-muted-foreground flex size-full items-center justify-center rounded-full text-xs font-bold uppercase"
             data-slot="avatar-fallback"
           >
             YU

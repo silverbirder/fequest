@@ -33,7 +33,7 @@ export const AsChild: Story = {
   },
   render: (args) => (
     <AppLogo {...args}>
-      <Text size="2xl" weight="semibold">
+      <Text size="2xl" weight="bold">
         Fequest
       </Text>
     </AppLogo>

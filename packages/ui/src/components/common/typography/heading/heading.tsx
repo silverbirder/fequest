@@ -39,10 +39,7 @@ const headingVariants = cva("text-foreground tracking-tight", {
     },
     weight: {
       bold: "font-bold",
-      extrabold: "font-extrabold",
-      medium: "font-medium",
       regular: "font-normal",
-      semibold: "font-semibold",
     },
   },
 });

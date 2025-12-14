@@ -111,7 +111,7 @@ export const Product = (props: Props) => {
                   color="accent"
                   display="inline"
                   size="sm"
-                  weight="medium"
+                  weight="bold"
                 >
                   <a
                     href={homePageUrl}

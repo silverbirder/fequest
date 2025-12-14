@@ -32,7 +32,7 @@ export const ProductCard = ({ href, logoUrl, name, requestCount }: Props) => {
               data-slot="product-card-name"
               size="lg"
               truncate
-              weight="semibold"
+              weight="bold"
             >
               {name}
             </Text>
@@ -40,10 +40,10 @@ export const ProductCard = ({ href, logoUrl, name, requestCount }: Props) => {
               リクエスト {requestLabel}件
             </Text>
             <HStack align="center" gap="xs">
-              <Text color="accent" size="sm" weight="semibold">
+              <Text color="accent" size="sm" weight="bold">
                 プロダクトページへ
               </Text>
-              <Text aria-hidden color="accent" size="sm" weight="semibold">
+              <Text aria-hidden color="accent" size="sm" weight="bold">
                 →
               </Text>
             </HStack>
