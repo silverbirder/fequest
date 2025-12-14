@@ -15,7 +15,7 @@
     "@repo/type": "workspace:*",
     "@repo/util": "workspace:*",
     "@repo/ui": "workspace:*",
-    "next": "^16.0.7"
+    "next": "16.0.10"
   },
   "peerDependencies": {
     "react": "^19.0.0",
