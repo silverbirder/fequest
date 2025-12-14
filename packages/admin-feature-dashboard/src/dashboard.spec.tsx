@@ -50,7 +50,7 @@ describe("Dashboard", () => {
     );
 
     const html = document.body.textContent ?? "";
-    expect(html).toContain("あなたのプロダクト");
+    expect(html).toContain("プロダクト一覧");
     expect(html).toContain("Alpha");
     expect(html).toContain("リクエスト 2件");
     expect(html).toContain("Beta");
@@ -61,7 +61,7 @@ describe("Dashboard", () => {
     await render(<Dashboard onCreateProduct={vi.fn()} products={[]} />);
 
     const html = document.body.textContent ?? "";
-    expect(html).toContain("まだプロダクトがありません");
+    expect(html).toContain("プロダクトが未登録のようです...。");
     expect(html).toContain("プロダクトを作成");
   });
 

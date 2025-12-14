@@ -15,7 +15,6 @@ import {
   EmptyContent,
   EmptyDescription,
   EmptyHeader,
-  EmptyTitle,
   Heading,
   HStack,
   Input,
@@ -73,7 +72,7 @@ const CreateProductDialog = ({
                 id={inputId}
                 maxLength={256}
                 name="name"
-                placeholder="例: プロダクトX"
+                placeholder="例: Fequest"
                 required
               />
               <Text color="muted" size="xs">
@@ -107,9 +106,11 @@ export const Dashboard = ({ onCreateProduct, products }: Props) => {
       {products.length === 0 ? (
         <Empty>
           <EmptyHeader>
-            <EmptyTitle>まだプロダクトがありません</EmptyTitle>
+            <Text size="lg" weight="bold">
+              プロダクトが未登録のようです...。
+            </Text>
             <EmptyDescription>
-              新しいプロダクトを作成して、リクエストを集めましょう。
+              新しいプロダクトを作成して、リクエストを集めましょう！
             </EmptyDescription>
           </EmptyHeader>
           <EmptyContent>
@@ -126,7 +127,7 @@ export const Dashboard = ({ onCreateProduct, products }: Props) => {
       ) : (
         <>
           <VStack align="center" gap="sm">
-            <Heading level={2}>あなたのプロダクト</Heading>
+            <Heading level={2}>プロダクト一覧</Heading>
             <Text color="muted" size="lg">
               あなたが登録したプロダクトの一覧です。
             </Text>
