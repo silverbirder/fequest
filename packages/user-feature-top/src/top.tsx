@@ -40,20 +40,22 @@ export const Top = ({ adminDomain, products }: Props) => {
           につなげる、みんなでプロダクトを育てる場所です。
         </Text>
       </VStack>
-      <VStack align="start" gap="md" w="full">
-        <Heading level={2}>育成中のプロダクト</Heading>
-        <HStack gap="md" wrap="wrap">
-          {products.map((product) => (
-            <ProductCard
-              href={{ pathname: `/${product.id}` }}
-              key={product.id}
-              logoUrl={product.logoUrl}
-              name={product.name}
-              requestCount={product.featureCount}
-            />
-          ))}
-        </HStack>
-      </VStack>
+      {products.length > 0 && (
+        <VStack align="start" gap="md" w="full">
+          <Heading level={2}>育成中のプロダクト</Heading>
+          <HStack gap="md" wrap="wrap">
+            {products.map((product) => (
+              <ProductCard
+                href={{ pathname: `/${product.id}` }}
+                key={product.id}
+                logoUrl={product.logoUrl}
+                name={product.name}
+                requestCount={product.featureCount}
+              />
+            ))}
+          </HStack>
+        </VStack>
+      )}
       <VStack align="start" gap="md" w="full">
         <Heading level={2}>開発者の方へ</Heading>
         <VStack align="start" gap="sm">
