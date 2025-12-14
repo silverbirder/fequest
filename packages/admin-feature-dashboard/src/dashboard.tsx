@@ -101,7 +101,7 @@ export const Dashboard = ({ onCreateProduct, products }: Props) => {
   return (
     <VStack gap="2xl">
       <VStack align="center" gap="sm">
-        <Heading level={1}>あなたのプロダクト</Heading>
+        <Heading level={2}>あなたのプロダクト</Heading>
         <Text color="muted" size="lg">
           あなたが登録したプロダクトの一覧です。
         </Text>

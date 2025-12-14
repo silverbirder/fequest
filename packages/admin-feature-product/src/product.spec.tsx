@@ -8,6 +8,11 @@ import * as stories from "./product.stories";
 
 const Stories = composeStories(stories);
 
+const flushMicrotasks = async () =>
+  await new Promise<void>((resolve) => {
+    setTimeout(() => resolve(), 0);
+  });
+
 describe("Product", () => {
   it.each(Object.entries(Stories))("should %s snapshot", async (_, Story) => {
     const originalInnerHtml = document.body.innerHTML;
@@ -157,22 +162,35 @@ describe("Product", () => {
       />,
     );
 
-    const deleteForm = document.querySelector<HTMLFormElement>(
+    const deleteTrigger = Array.from(
+      document.querySelectorAll<HTMLButtonElement>("button"),
+    ).find((button) => button.textContent?.includes("プロダクトを削除"));
+
+    expect(deleteTrigger).toBeDefined();
+    expect(deleteTrigger?.className ?? "").toContain("destructive");
+
+    deleteTrigger?.click();
+    await flushMicrotasks();
+
+    const dialog = document.querySelector<HTMLDivElement>(
+      '[data-slot="alert-dialog-content"]',
+    );
+    expect(dialog?.textContent ?? "").toContain("プロダクトを削除");
+
+    const deleteForm = dialog?.querySelector<HTMLFormElement>(
       'form[data-slot="delete-form"]',
     );
-    expect(deleteForm?.textContent ?? "").toContain("プロダクトを削除");
+    expect(deleteForm).toBeTruthy();
 
     const hiddenId = deleteForm?.querySelector<HTMLInputElement>(
       'input[name="productId"]',
     );
     expect(hiddenId?.value).toBe("7");
 
-    const button = deleteForm?.querySelector<HTMLButtonElement>(
+    const confirmButton = deleteForm?.querySelector<HTMLButtonElement>(
       'button[type="submit"]',
     );
-    expect(button?.getAttribute("data-variant") ?? button?.className).toContain(
-      "destructive",
-    );
+    expect(confirmButton?.textContent ?? "").toContain("削除する");
   });
 
   it("renders a delete button for each feature request with identifiers", async () => {
@@ -194,20 +212,50 @@ describe("Product", () => {
       />,
     );
 
-    const forms = document.querySelectorAll<HTMLFormElement>(
-      'form[data-slot="feature-delete-form"]',
-    );
-    expect(forms).toHaveLength(2);
+    const deleteTriggers = Array.from(
+      document.querySelectorAll<HTMLButtonElement>("button"),
+    ).filter((button) => button.textContent?.trim() === "質問を削除");
 
-    const firstHidden = forms[0]?.querySelector<HTMLInputElement>(
+    expect(deleteTriggers).toHaveLength(2);
+
+    deleteTriggers[0]?.click();
+    await flushMicrotasks();
+
+    const firstDialogForm = document.querySelector<HTMLFormElement>(
+      'form[data-slot="feature-delete-form"][data-feature-id="1"]',
+    );
+    expect(firstDialogForm).toBeTruthy();
+    const firstHidden = firstDialogForm?.querySelector<HTMLInputElement>(
       'input[name="featureId"]',
     );
-    const firstProductId = forms[0]?.querySelector<HTMLInputElement>(
+    const firstProductId = firstDialogForm?.querySelector<HTMLInputElement>(
       'input[name="productId"]',
     );
 
     expect(firstHidden?.value).toBe("1");
     expect(firstProductId?.value).toBe("42");
-    expect(forms[0]?.textContent ?? "").toContain("質問を削除");
+
+    const cancelButton = Array.from(
+      document.querySelectorAll<HTMLButtonElement>("button"),
+    ).find((button) => button.textContent?.trim() === "キャンセル");
+    cancelButton?.click();
+    await flushMicrotasks();
+
+    deleteTriggers[1]?.click();
+    await flushMicrotasks();
+
+    const secondDialogForm = document.querySelector<HTMLFormElement>(
+      'form[data-slot="feature-delete-form"][data-feature-id="2"]',
+    );
+    expect(secondDialogForm).toBeTruthy();
+    const secondHidden = secondDialogForm?.querySelector<HTMLInputElement>(
+      'input[name="featureId"]',
+    );
+    const secondProductId = secondDialogForm?.querySelector<HTMLInputElement>(
+      'input[name="productId"]',
+    );
+
+    expect(secondHidden?.value).toBe("2");
+    expect(secondProductId?.value).toBe("42");
   });
 });

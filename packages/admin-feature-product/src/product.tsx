@@ -2,6 +2,15 @@
 
 import { type FeatureRequestCore, type FeatureRequestStatus } from "@repo/type";
 import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
   Box,
   Button,
   Heading,
@@ -66,6 +75,19 @@ export const Product = ({
     loading: "表示情報を保存中...",
     success: "表示情報を保存しました",
   });
+  const deleteProductAction = wrapActionWithToast(onDelete, {
+    error: "プロダクトの削除に失敗しました",
+    loading: "プロダクトを削除中...",
+    success: "プロダクトを削除しました",
+  });
+  const deleteFeatureRequestAction = wrapActionWithToast(
+    onDeleteFeatureRequest,
+    {
+      error: "質問の削除に失敗しました",
+      loading: "質問を削除中...",
+      success: "質問を削除しました",
+    },
+  );
 
   const featureRequests = product.featureRequests ?? [];
 
@@ -193,12 +215,37 @@ export const Product = ({
           <Text color="muted" size="sm">
             この操作は取り消せません。プロダクトと関連する質問がすべて削除されます。
           </Text>
-          <form action={onDelete} data-slot="delete-form">
-            <input name="productId" type="hidden" value={product.id} />
-            <Button size="sm" type="submit" variant="destructive">
-              プロダクトを削除
-            </Button>
-          </form>
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button size="sm" type="button" variant="destructive">
+                プロダクトを削除
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>プロダクトを削除</AlertDialogTitle>
+                <AlertDialogDescription>
+                  この操作は取り消せません。プロダクトと関連する質問がすべて削除されます。
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>キャンセル</AlertDialogCancel>
+                <form action={deleteProductAction} data-slot="delete-form">
+                  <input name="productId" type="hidden" value={product.id} />
+                  <AlertDialogAction asChild type="submit">
+                    <SubmitButton
+                      formAction={deleteProductAction}
+                      pendingLabel="削除中..."
+                      size="sm"
+                      variant="destructive"
+                    >
+                      削除する
+                    </SubmitButton>
+                  </AlertDialogAction>
+                </form>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </VStack>
       </Box>
 
@@ -288,25 +335,54 @@ export const Product = ({
                             {copy.actionLabel}
                           </SubmitButton>
                         </form>
-                        <form
-                          action={onDeleteFeatureRequest}
-                          data-feature-id={feature.id}
-                          data-slot="feature-delete-form"
-                        >
-                          <input
-                            name="productId"
-                            type="hidden"
-                            value={product.id}
-                          />
-                          <input
-                            name="featureId"
-                            type="hidden"
-                            value={feature.id}
-                          />
-                          <Button size="sm" type="submit" variant="destructive">
-                            質問を削除
-                          </Button>
-                        </form>
+                        <AlertDialog>
+                          <AlertDialogTrigger asChild>
+                            <Button
+                              size="sm"
+                              type="button"
+                              variant="destructive"
+                            >
+                              質問を削除
+                            </Button>
+                          </AlertDialogTrigger>
+                          <AlertDialogContent>
+                            <AlertDialogHeader>
+                              <AlertDialogTitle>質問を削除</AlertDialogTitle>
+                              <AlertDialogDescription>
+                                この操作は取り消せません。質問は完全に削除されます。
+                              </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                              <AlertDialogCancel>キャンセル</AlertDialogCancel>
+                              <form
+                                action={deleteFeatureRequestAction}
+                                data-feature-id={feature.id}
+                                data-slot="feature-delete-form"
+                              >
+                                <input
+                                  name="productId"
+                                  type="hidden"
+                                  value={product.id}
+                                />
+                                <input
+                                  name="featureId"
+                                  type="hidden"
+                                  value={feature.id}
+                                />
+                                <AlertDialogAction asChild type="submit">
+                                  <SubmitButton
+                                    formAction={deleteFeatureRequestAction}
+                                    pendingLabel="削除中..."
+                                    size="sm"
+                                    variant="destructive"
+                                  >
+                                    削除する
+                                  </SubmitButton>
+                                </AlertDialogAction>
+                              </form>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialog>
                       </HStack>
                     </HStack>
                     <HStack gap="md">
