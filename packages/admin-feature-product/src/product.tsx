@@ -58,10 +58,20 @@ const statusCopy = (status: FeatureRequestStatus) =>
     ? {
         actionLabel: "完了にする",
         nextStatus: "closed" as const,
+        toast: {
+          error: "完了への変更に失敗しました",
+          loading: "完了にしています",
+          success: "完了にしました",
+        },
       }
     : {
         actionLabel: "未完了に戻す",
         nextStatus: "open" as const,
+        toast: {
+          error: "未完了に戻すことに失敗しました",
+          loading: "未完了に戻しています",
+          success: "未完了に戻しました",
+        },
       };
 
 export const Product = ({
@@ -271,18 +281,10 @@ export const Product = ({
             {featureRequests.map((feature) => {
               const copy = statusCopy(feature.status);
               const title = feature.title?.trim() || "無題のリクエスト";
-              const formatSuccess = (label: string) =>
-                label.replace(/する$/, "しました").replace(/す$/, "しました");
-              const formatLoading = (label: string) =>
-                label
-                  .replace(/する$/, "しています")
-                  .replace(/す$/, "しています");
-              const statusSuccess = formatSuccess(copy.actionLabel);
-              const statusLoading = formatLoading(copy.actionLabel);
               const statusAction = wrapActionWithToast(onUpdateFeatureStatus, {
-                error: `${copy.actionLabel}に失敗しました`,
-                loading: statusLoading,
-                success: statusSuccess,
+                error: copy.toast.error,
+                loading: copy.toast.loading,
+                success: copy.toast.success,
               });
 
               return (
