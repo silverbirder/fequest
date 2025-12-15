@@ -19,6 +19,10 @@ const meta = {
           status: "open",
           title: "アルファ版での改善点",
           updatedAt: "2024-01-10T12:30:00.000Z",
+          user: {
+            image: "https://example.com/avatar/alice.png",
+            name: "Alice",
+          },
         },
         {
           content: "完了済みの質問。クローズ扱いです。",
@@ -27,6 +31,10 @@ const meta = {
           status: "closed",
           title: "通知機能はありますか？",
           updatedAt: "2024-02-08T15:45:00.000Z",
+          user: {
+            image: "https://example.com/avatar/bob.png",
+            name: "Bob",
+          },
         },
       ],
       homePageUrl: "https://example.com",

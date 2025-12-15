@@ -50,6 +50,15 @@ export const productRouter = createTRPCRouter({
               updatedAt: true,
             },
             orderBy: (feature, { desc }) => desc(feature.createdAt),
+            with: {
+              user: {
+                columns: {
+                  id: true,
+                  image: true,
+                  name: true,
+                },
+              },
+            },
           },
         },
       });

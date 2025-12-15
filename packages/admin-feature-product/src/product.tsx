@@ -1,6 +1,10 @@
 "use client";
 
-import { type FeatureRequestCore, type FeatureRequestStatus } from "@repo/type";
+import {
+  type FeatureRequestCore,
+  type FeatureRequestStatus,
+  type FeatureRequestUser,
+} from "@repo/type";
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -15,19 +19,22 @@ import {
   Heading,
   HStack,
   Input,
+  RequestCard,
   SubmitButton,
   Text,
   Textarea,
   VStack,
 } from "@repo/ui/components";
 import { wrapActionWithToast } from "@repo/ui/lib/wrap-action-with-toast";
-import { buildUserProductUrl, toIsoString } from "@repo/util";
+import { buildUserProductUrl } from "@repo/util";
 
-type FeatureRequest = FeatureRequestCore;
+type FeatureRequestWithUser = FeatureRequestCore & {
+  user?: FeatureRequestUser | null;
+};
 
 type ProductDetail = {
   description?: null | string;
-  featureRequests?: FeatureRequest[];
+  featureRequests?: FeatureRequestWithUser[];
   homePageUrl?: null | string;
   id: number;
   logoUrl?: null | string;
@@ -288,115 +295,102 @@ export const Product = ({
                   w="full"
                 >
                   <VStack gap="sm" w="full">
+                    <RequestCard
+                      avatar={feature.user ?? undefined}
+                      detail={{
+                        content: (
+                          <Box bg="muted" p="md" radius="sm" w="full">
+                            <Textarea
+                              aria-label="機能リクエストの内容"
+                              readOnly
+                              value={feature.content || "詳細はありません。"}
+                              variant="display"
+                            />
+                          </Box>
+                        ),
+                        createdAt: feature.createdAt,
+                        title,
+                        updatedAt: feature.updatedAt,
+                      }}
+                      idBase={`admin-feature-${feature.id}`}
+                      status={feature.status}
+                      text={title}
+                    />
                     <HStack
-                      align="start"
-                      gap="sm"
+                      borderTop="default"
+                      gap="md"
                       justify="between"
+                      pt="sm"
                       w="full"
-                      wrap="wrap"
                     >
-                      <VStack align="start" gap="xs" w="full">
-                        <Text size="lg" weight="bold">
-                          {title}
-                        </Text>
-                        <Text color="muted" size="sm">
-                          {feature.content}
-                        </Text>
-                      </VStack>
-                      <HStack align="center" gap="sm" justify="end">
-                        <Box
-                          bg={copy.nextStatus === "closed" ? "muted" : "card"}
-                          px="sm"
-                          py="xs"
-                          radius="full"
+                      <form
+                        action={statusAction}
+                        data-feature-id={feature.id}
+                        data-slot="feature-status-form"
+                      >
+                        <input
+                          name="featureId"
+                          type="hidden"
+                          value={feature.id}
+                        />
+                        <input
+                          name="status"
+                          type="hidden"
+                          value={copy.nextStatus}
+                        />
+                        <SubmitButton
+                          formAction={statusAction}
+                          pendingLabel="更新中..."
+                          size="sm"
+                          variant="outline"
                         >
-                          <Text size="xs" weight="bold">
-                            {copy.label}
-                          </Text>
-                        </Box>
-                        <form
-                          action={statusAction}
-                          data-feature-id={feature.id}
-                          data-slot="feature-status-form"
-                        >
-                          <input
-                            name="featureId"
-                            type="hidden"
-                            value={feature.id}
-                          />
-                          <input
-                            name="status"
-                            type="hidden"
-                            value={copy.nextStatus}
-                          />
-                          <SubmitButton
-                            formAction={statusAction}
-                            pendingLabel="更新中..."
-                            size="sm"
-                            variant="outline"
-                          >
-                            {copy.actionLabel}
-                          </SubmitButton>
-                        </form>
-                        <AlertDialog>
-                          <AlertDialogTrigger asChild>
-                            <Button
-                              size="sm"
-                              type="button"
-                              variant="destructive"
-                            >
+                          {copy.actionLabel}
+                        </SubmitButton>
+                      </form>
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          <Button size="sm" type="button" variant="destructive">
+                            リクエストを削除
+                          </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>
                               リクエストを削除
-                            </Button>
-                          </AlertDialogTrigger>
-                          <AlertDialogContent>
-                            <AlertDialogHeader>
-                              <AlertDialogTitle>
-                                リクエストを削除
-                              </AlertDialogTitle>
-                              <AlertDialogDescription>
-                                この操作は取り消せません。リクエストは完全に削除されます。
-                              </AlertDialogDescription>
-                            </AlertDialogHeader>
-                            <form
-                              action={deleteFeatureRequestAction}
-                              data-feature-id={feature.id}
-                              data-slot="feature-delete-form"
-                            >
-                              <input
-                                name="productId"
-                                type="hidden"
-                                value={product.id}
-                              />
-                              <input
-                                name="featureId"
-                                type="hidden"
-                                value={feature.id}
-                              />
-                              <AlertDialogFooter>
-                                <AlertDialogCancel>
-                                  キャンセル
-                                </AlertDialogCancel>
-                                <SubmitButton
-                                  formAction={deleteFeatureRequestAction}
-                                  pendingLabel="削除中..."
-                                  size="sm"
-                                  variant="destructive"
-                                >
-                                  削除する
-                                </SubmitButton>
-                              </AlertDialogFooter>
-                            </form>
-                          </AlertDialogContent>
-                        </AlertDialog>
-                      </HStack>
-                    </HStack>
-                    <HStack borderTop="default" gap="md" pt="sm" w="full">
-                      <Text color="subtle" size="xs">
-                        作成日: {toIsoString(feature.createdAt)}
-                      </Text>
-                      <Text color="subtle" size="xs">
-                        更新日: {toIsoString(feature.updatedAt)}
-                      </Text>
+                            </AlertDialogTitle>
+                            <AlertDialogDescription>
+                              この操作は取り消せません。リクエストは完全に削除されます。
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <form
+                            action={deleteFeatureRequestAction}
+                            data-feature-id={feature.id}
+                            data-slot="feature-delete-form"
+                          >
+                            <input
+                              name="productId"
+                              type="hidden"
+                              value={product.id}
+                            />
+                            <input
+                              name="featureId"
+                              type="hidden"
+                              value={feature.id}
+                            />
+                            <AlertDialogFooter>
+                              <AlertDialogCancel>キャンセル</AlertDialogCancel>
+                              <SubmitButton
+                                formAction={deleteFeatureRequestAction}
+                                pendingLabel="削除中..."
+                                size="sm"
+                                variant="destructive"
+                              >
+                                削除する
+                              </SubmitButton>
+                            </AlertDialogFooter>
+                          </form>
+                        </AlertDialogContent>
+                      </AlertDialog>
                     </HStack>
                   </VStack>
                 </Box>
