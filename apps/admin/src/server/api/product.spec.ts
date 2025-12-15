@@ -251,7 +251,12 @@ describe("productRouter.byId", () => {
 
     expect(result).toEqual({
       description: "Helpful product",
-      featureRequests: product.featureRequests,
+      featureRequests: [
+        {
+          ...product.featureRequests[0],
+          reactionSummaries: [],
+        },
+      ],
       homePageUrl: undefined,
       id: 5,
       logoUrl: "https://cdn.example.com/logo.png",

@@ -99,6 +99,37 @@ describe("RequestCard", () => {
     expect(trigger).not.toBeNull();
   });
 
+  it("renders reactions in read-only mode", async () => {
+    await render(
+      <RequestCard
+        detail={{
+          content: <div>内容</div>,
+          createdAt: "2024-01-01T00:00:00.000Z",
+          title: "タイトル",
+          updatedAt: "2024-01-02T00:00:00.000Z",
+        }}
+        reactions={[
+          { count: 3, emoji: "👍", reactedByViewer: false },
+          { count: 1, emoji: "🎉", reactedByViewer: true },
+        ]}
+        reactionsInteractive={false}
+        text="タイトル"
+      />,
+    );
+
+    const reactionButtons = Array.from(
+      document.querySelectorAll<HTMLButtonElement>("button"),
+    ).filter((button) => button.textContent?.includes("👍"));
+
+    expect(reactionButtons.length).toBeGreaterThan(0);
+    expect(reactionButtons[0]?.disabled).toBe(true);
+
+    const pickerTrigger = document.querySelector<HTMLButtonElement>(
+      "button[aria-label='リアクションを追加']",
+    );
+    expect(pickerTrigger).toBeNull();
+  });
+
   it("shows closed badge when status is closed", async () => {
     await render(
       <RequestCard

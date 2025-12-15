@@ -5,6 +5,7 @@ import {
   type FeatureRequestStatus,
   type FeatureRequestUser,
 } from "@repo/type";
+import { type ReactionSummary } from "@repo/type";
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -29,6 +30,7 @@ import { wrapActionWithToast } from "@repo/ui/lib/wrap-action-with-toast";
 import { buildUserProductUrl } from "@repo/util";
 
 type FeatureRequestWithUser = FeatureRequestCore & {
+  reactionSummaries?: null | ReactionSummary[];
   user?: FeatureRequestUser | null;
 };
 
@@ -286,14 +288,7 @@ export const Product = ({
               });
 
               return (
-                <Box
-                  bg="white"
-                  border="default"
-                  key={feature.id}
-                  p="md"
-                  radius="md"
-                  w="full"
-                >
+                <Box bg="white" key={feature.id} p="md" radius="md" w="full">
                   <VStack gap="sm" w="full">
                     <RequestCard
                       avatar={feature.user ?? undefined}
@@ -313,6 +308,8 @@ export const Product = ({
                         updatedAt: feature.updatedAt,
                       }}
                       idBase={`admin-feature-${feature.id}`}
+                      reactions={feature.reactionSummaries ?? []}
+                      reactionsInteractive={false}
                       status={feature.status}
                       text={title}
                     />

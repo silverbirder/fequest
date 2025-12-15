@@ -30,6 +30,7 @@ type Props = ComponentProps<typeof BubbleText> & {
     emoji: string;
     reactedByViewer?: boolean;
   }[];
+  reactionsInteractive?: boolean;
 };
 
 export const RequestCard = ({
@@ -41,6 +42,7 @@ export const RequestCard = ({
   onOpenChange,
   onReact,
   reactions,
+  reactionsInteractive = true,
   status,
   text,
 }: Props) => {
@@ -78,11 +80,16 @@ export const RequestCard = ({
               active={reaction.reactedByViewer}
               count={reaction.count}
               emoji={reaction.emoji}
+              interactive={reactionsInteractive && Boolean(onReact)}
               key={index}
-              onClick={onReact ? () => onReact(reaction.emoji) : undefined}
+              onClick={
+                reactionsInteractive && onReact
+                  ? () => onReact(reaction.emoji)
+                  : undefined
+              }
             />
           ))}
-          {enableEmojiPicker && onReact ? (
+          {enableEmojiPicker && reactionsInteractive && onReact ? (
             <EmojiPicker
               label="リアクションを追加"
               menuId={emojiMenuId}

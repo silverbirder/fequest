@@ -20,6 +20,7 @@
     "@repo/schema": "workspace:*",
     "@repo/type": "workspace:*",
     "@repo/ui": "workspace:*",
+    "@repo/util": "workspace:*",
     "@repo/user-cookie": "workspace:*",
     "@repo/user-feature-product": "workspace:*",
     "@repo/user-feature-request-edit": "workspace:*",

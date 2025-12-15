@@ -13,6 +13,7 @@ import {
   updateProductDetailsSchema,
 } from "@repo/schema";
 import { type ProductSummary } from "@repo/type";
+import { summarizeReactions } from "@repo/util/reactions";
 import { TRPCError } from "@trpc/server";
 import { and, eq } from "drizzle-orm";
 
@@ -51,6 +52,18 @@ export const productRouter = createTRPCRouter({
             },
             orderBy: (feature, { desc }) => desc(feature.createdAt),
             with: {
+              reactions: {
+                orderBy: (reaction, { asc }) => asc(reaction.id),
+                with: {
+                  user: {
+                    columns: {
+                      id: true,
+                      image: true,
+                      name: true,
+                    },
+                  },
+                },
+              },
               user: {
                 columns: {
                   id: true,
@@ -67,9 +80,21 @@ export const productRouter = createTRPCRouter({
         return null;
       }
 
+      const viewerUserId = ctx.session.user.id;
+
       return {
         description: product.description,
-        featureRequests: product.featureRequests ?? [],
+        featureRequests:
+          product.featureRequests?.map((feature) => {
+            const { reactions, ...rest } = feature;
+            return {
+              ...rest,
+              reactionSummaries: summarizeReactions(reactions, {
+                viewerAnonymousIdentifier: null,
+                viewerUserId,
+              }),
+            };
+          }) ?? [],
         homePageUrl: product.homePageUrl,
         id: product.id,
         logoUrl: product.logoUrl,

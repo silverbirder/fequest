@@ -16,6 +16,10 @@ const meta = {
           content: "ユーザーから寄せられた最初の質問です。",
           createdAt: "2024-01-01T00:00:00.000Z",
           id: 1,
+          reactionSummaries: [
+            { count: 10, emoji: "👍", reactedByViewer: false },
+            { count: 2, emoji: "🎉", reactedByViewer: true },
+          ],
           status: "open",
           title: "アルファ版での改善点",
           updatedAt: "2024-01-10T12:30:00.000Z",
@@ -28,6 +32,9 @@ const meta = {
           content: "完了済みの質問。クローズ扱いです。",
           createdAt: "2024-02-05T09:00:00.000Z",
           id: 2,
+          reactionSummaries: [
+            { count: 1, emoji: "❤️", reactedByViewer: false },
+          ],
           status: "closed",
           title: "通知機能はありますか？",
           updatedAt: "2024-02-08T15:45:00.000Z",

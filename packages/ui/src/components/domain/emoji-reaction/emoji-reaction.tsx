@@ -6,14 +6,22 @@ type Props = {
   active?: boolean;
   count?: number;
   emoji?: string;
+  interactive?: boolean;
   onClick?: () => void;
 };
 
-export const EmojiReaction = ({ active, count, emoji, onClick }: Props) => {
+export const EmojiReaction = ({
+  active,
+  count,
+  emoji,
+  interactive = true,
+  onClick,
+}: Props) => {
   return (
     <Button
       aria-pressed={active}
-      onClick={onClick}
+      disabled={!interactive}
+      onClick={interactive ? onClick : undefined}
       size="sm"
       variant={active ? "secondary" : "outline"}
     >

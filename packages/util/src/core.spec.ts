@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { buildUserProductUrl, formatCount, toIsoString } from "./index";
+import { buildUserProductUrl, formatCount, toIsoString } from "./core";
 
 describe("toIsoString", () => {
   it("returns Japanese formatted string when given a Date", () => {

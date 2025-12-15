@@ -27,6 +27,7 @@ const meta = {
       { count: 5, emoji: "❤️", reactedByViewer: false },
       { count: 3, emoji: "🎉", reactedByViewer: false },
     ],
+    reactionsInteractive: true,
     text: "コメント機能の追加",
   },
   component: RequestCard,
@@ -53,7 +54,20 @@ export const Closed: Story = {
     },
     enableEmojiPicker: false,
     reactions: [],
+    reactionsInteractive: false,
     status: "closed",
     text: "画像アップロードの改善",
+  },
+};
+
+export const ReadOnlyReactions: Story = {
+  args: {
+    enableEmojiPicker: false,
+    reactions: [
+      { count: 8, emoji: "👍", reactedByViewer: false },
+      { count: 2, emoji: "🎉", reactedByViewer: false },
+      { count: 1, emoji: "❤️", reactedByViewer: true },
+    ],
+    reactionsInteractive: false,
   },
 };

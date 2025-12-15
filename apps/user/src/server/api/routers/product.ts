@@ -1,7 +1,7 @@
 import { productIdSchema } from "@repo/schema";
 import { type ProductSummary } from "@repo/type";
 import { getAnonymousIdentifierFromHeaders } from "@repo/user-cookie";
-import { summarizeReactions } from "@repo/user-feature-product";
+import { summarizeReactions } from "@repo/util/reactions";
 
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 
