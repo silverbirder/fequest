@@ -16,7 +16,7 @@ export class UserProductPage {
   }
 
   async createFeatureRequest(title: string) {
-    const input = this.page.getByLabel("新しいフィーチャーリクエスト");
+    const input = this.page.getByLabel("新しいリクエスト");
     await input.fill(title);
     await input.press("Enter");
     await this.page.waitForLoadState("networkidle");

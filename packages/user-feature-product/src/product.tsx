@@ -133,8 +133,8 @@ export const Product = (props: Props) => {
       {openFeatureRequests.length === 0 ? (
         <Text>
           {closedFeatureRequests.length === 0
-            ? "フィーチャーはまだありません。"
-            : "オープンのフィーチャーはありません。"}
+            ? "リクエストはまだありません。"
+            : "未完了のリクエストはありません。"}
         </Text>
       ) : (
         <VStack align="start" gap="lg">
@@ -145,7 +145,7 @@ export const Product = (props: Props) => {
         <Box asChild w="full">
           <Form action={props.onCreateFeatureRequest}>
             <RequestInput
-              aria-label="新しいフィーチャーリクエスト"
+              aria-label="新しいリクエスト"
               autoComplete="off"
               avatar={currentUserAvatar ?? undefined}
               maxLength={255}
@@ -155,7 +155,7 @@ export const Product = (props: Props) => {
           </Form>
         </Box>
       ) : (
-        <Text>ログインするとフィーチャーを登録できます。</Text>
+        <Text>ログインするとリクエストを投稿できます。</Text>
       )}
       {closedFeatureRequests.length > 0 && (
         <VStack align="start" gap="lg">
