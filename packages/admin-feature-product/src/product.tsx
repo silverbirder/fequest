@@ -21,7 +21,7 @@ import {
   VStack,
 } from "@repo/ui/components";
 import { wrapActionWithToast } from "@repo/ui/lib/wrap-action-with-toast";
-import { toIsoString } from "@repo/util";
+import { buildUserProductUrl, toIsoString } from "@repo/util";
 
 type FeatureRequest = FeatureRequestCore;
 
@@ -41,6 +41,7 @@ type Props = {
   onUpdateFeatureStatus: (formData: FormData) => Promise<void>;
   onUpdateName: (formData: FormData) => Promise<void>;
   product: ProductDetail;
+  userDomainUrl: string;
 };
 
 const statusCopy = (status: FeatureRequestStatus) =>
@@ -63,6 +64,7 @@ export const Product = ({
   onUpdateFeatureStatus,
   onUpdateName,
   product,
+  userDomainUrl,
 }: Props) => {
   const updateNameAction = wrapActionWithToast(onUpdateName, {
     error: "名前の保存に失敗しました",
@@ -82,50 +84,73 @@ export const Product = ({
   const deleteFeatureRequestAction = wrapActionWithToast(
     onDeleteFeatureRequest,
     {
-      error: "質問の削除に失敗しました",
-      loading: "質問を削除中...",
-      success: "質問を削除しました",
+      error: "リクエストの削除に失敗しました",
+      loading: "リクエストを削除中...",
+      success: "リクエストを削除しました",
     },
   );
 
   const featureRequests = product.featureRequests ?? [];
+  const userProductUrl = buildUserProductUrl(userDomainUrl, product.id);
+
+  const productNameInputId = `product-name-${product.id}`;
+  const productLogoUrlInputId = `product-logo-url-${product.id}`;
+  const productHomePageUrlInputId = `product-homepage-url-${product.id}`;
+  const productDescriptionInputId = `product-description-${product.id}`;
 
   return (
     <VStack gap="xl" w="full">
-      <VStack gap="xs">
-        <Heading size="lg">プロダクトの管理</Heading>
+      <VStack gap="xs" w="full">
+        <HStack align="center" justify="between" w="full" wrap="wrap">
+          <Heading size="lg">プロダクトの管理</Heading>
+          <Button asChild size="sm" variant="outline">
+            <a
+              aria-label={`ユーザー側のプロダクトページ ${userProductUrl}`}
+              href={userProductUrl}
+              rel="noreferrer"
+              target="_blank"
+            >
+              ユーザー向けページ
+            </a>
+          </Button>
+        </HStack>
         <Text color="muted" size="sm">
-          プロダクト情報の更新と、質問のステータス管理を行えます。
+          プロダクト情報の更新と、リクエストのステータス管理を行えます。
         </Text>
       </VStack>
 
       <Box bg="white" p="lg" radius="lg" w="full">
         <VStack align="start" gap="sm" w="full">
-          <Text size="sm" weight="bold">
-            プロダクト名
+          <Text asChild size="sm" weight="bold">
+            <label htmlFor={productNameInputId}>プロダクト名</label>
           </Text>
-          <form action={updateNameAction} data-slot="rename-form">
-            <input name="productId" type="hidden" value={product.id} />
-            <HStack align="center" gap="sm" justify="start" wrap="wrap">
-              <Box>
-                <Input
-                  aria-label="プロダクト名"
-                  defaultValue={product.name}
-                  maxLength={256}
-                  name="name"
-                  required
-                />
-              </Box>
-              <SubmitButton
-                formAction={updateNameAction}
-                pendingLabel="保存中..."
-                size="sm"
-                variant="default"
-              >
-                名前を保存
-              </SubmitButton>
-            </HStack>
-          </form>
+          <Box asChild w="full">
+            <form action={updateNameAction} data-slot="rename-form">
+              <input name="productId" type="hidden" value={product.id} />
+              <VStack gap="sm" w="full">
+                <Box grow="1" minW="0" w="full">
+                  <Input
+                    aria-label="プロダクト名"
+                    defaultValue={product.name}
+                    id={productNameInputId}
+                    maxLength={256}
+                    name="name"
+                    required
+                  />
+                </Box>
+                <HStack justify="end" w="full">
+                  <SubmitButton
+                    formAction={updateNameAction}
+                    pendingLabel="保存中..."
+                    size="sm"
+                    variant="default"
+                  >
+                    名前を保存
+                  </SubmitButton>
+                </HStack>
+              </VStack>
+            </form>
+          </Box>
         </VStack>
       </Box>
 
@@ -133,96 +158,112 @@ export const Product = ({
         <VStack align="start" gap="md" w="full">
           <VStack align="start" gap="xs">
             <Text size="sm" weight="bold">
-              プロダクトの表示情報
+              プロダクトの補足情報
             </Text>
             <Text color="muted" size="sm">
-              ロゴと説明文を設定して、ユーザーにわかりやすく伝えましょう。
+              ロゴや説明文を設定して、ユーザーにわかりやすく伝えましょう。
             </Text>
           </VStack>
-          <form action={updateDetailsAction} data-slot="details-form">
-            <input name="productId" type="hidden" value={product.id} />
-            <VStack align="start" gap="md" w="full">
-              <VStack align="start" gap="xs" w="full">
-                <Text size="sm" weight="bold">
-                  ロゴURL (任意)
-                </Text>
-                <Input
-                  aria-label="プロダクトロゴURL"
-                  defaultValue={product.logoUrl ?? ""}
-                  maxLength={2048}
-                  name="logoUrl"
-                  placeholder="https://example.com/logo.png"
-                />
-                <Text color="muted" size="xs">
-                  画像のURLを入力すると、クライアント側で表示できます。
-                </Text>
-              </VStack>
+          <Box asChild w="full">
+            <form action={updateDetailsAction} data-slot="details-form">
+              <input name="productId" type="hidden" value={product.id} />
+              <VStack align="start" gap="md" w="full">
+                <VStack align="start" gap="xs" w="full">
+                  <Text asChild size="sm" weight="bold">
+                    <label htmlFor={productLogoUrlInputId}>
+                      ロゴURL (任意)
+                    </label>
+                  </Text>
+                  <Box w="full">
+                    <Input
+                      aria-label="プロダクトロゴURL"
+                      defaultValue={product.logoUrl ?? ""}
+                      id={productLogoUrlInputId}
+                      maxLength={2048}
+                      name="logoUrl"
+                      placeholder="https://example.com/logo.png"
+                    />
+                  </Box>
+                  <Text color="muted" size="xs">
+                    画像のURLを入力すると、ユーザーにプロダクトのロゴが表示されます。
+                  </Text>
+                </VStack>
 
-              <VStack align="start" gap="xs" w="full">
-                <Text size="sm" weight="bold">
-                  ホームページURL (任意)
-                </Text>
-                <Input
-                  aria-label="プロダクトホームページURL"
-                  defaultValue={product.homePageUrl ?? ""}
-                  maxLength={2048}
-                  name="homePageUrl"
-                  placeholder="https://example.com"
-                />
-                <Text color="muted" size="xs">
-                  プロダクトの公式サイトやLPへのリンクを登録できます。
-                </Text>
-              </VStack>
+                <VStack align="start" gap="xs" w="full">
+                  <Text asChild size="sm" weight="bold">
+                    <label htmlFor={productHomePageUrlInputId}>
+                      ホームページURL (任意)
+                    </label>
+                  </Text>
+                  <Box w="full">
+                    <Input
+                      aria-label="プロダクトホームページURL"
+                      defaultValue={product.homePageUrl ?? ""}
+                      id={productHomePageUrlInputId}
+                      maxLength={2048}
+                      name="homePageUrl"
+                      placeholder="https://example.com"
+                    />
+                  </Box>
+                  <Text color="muted" size="xs">
+                    プロダクトの公式サイトやLPへのリンクを登録できます。
+                  </Text>
+                </VStack>
 
-              <VStack align="start" gap="xs" w="full">
-                <Text size="sm" weight="bold">
-                  プロダクト説明文 (任意)
-                </Text>
-                <Textarea
-                  aria-label="プロダクト説明文"
-                  defaultValue={product.description ?? ""}
-                  maxLength={5000}
-                  name="description"
-                  placeholder="サービスの概要やサポートポリシーを記載してください"
-                  rows={4}
-                />
-                <Text color="muted" size="xs">
-                  5000文字まで登録できます。空欄にすると未設定になります。
-                </Text>
+                <VStack align="start" gap="xs" w="full">
+                  <Text asChild size="sm" weight="bold">
+                    <label htmlFor={productDescriptionInputId}>
+                      プロダクト説明文 (任意)
+                    </label>
+                  </Text>
+                  <Box w="full">
+                    <Textarea
+                      aria-label="プロダクト説明文"
+                      defaultValue={product.description ?? ""}
+                      id={productDescriptionInputId}
+                      maxLength={5000}
+                      name="description"
+                      placeholder="サービスの概要やサポートポリシーを記載してください"
+                      rows={4}
+                    />
+                  </Box>
+                  <Text color="muted" size="xs">
+                    5000文字まで登録できます。空欄にすると未設定になります。
+                  </Text>
+                </VStack>
+                <HStack justify="end" w="full">
+                  <SubmitButton
+                    formAction={updateDetailsAction}
+                    pendingLabel="保存中..."
+                    size="sm"
+                    variant="default"
+                  >
+                    表示情報を保存
+                  </SubmitButton>
+                </HStack>
               </VStack>
-
-              <HStack justify="end" w="full">
-                <SubmitButton
-                  formAction={updateDetailsAction}
-                  pendingLabel="保存中..."
-                  size="sm"
-                  variant="default"
-                >
-                  表示情報を保存
-                </SubmitButton>
-              </HStack>
-            </VStack>
-          </form>
+            </form>
+          </Box>
         </VStack>
       </Box>
 
-      <VStack gap="md" w="full">
+      <VStack borderTop="default" gap="md" pt="xl" w="full">
         <VStack gap="xs" w="full">
-          <Heading size="lg">質問一覧</Heading>
+          <Heading size="lg">リクエスト一覧</Heading>
           <Text color="muted" size="sm">
-            受け付けた質問の内容とステータスを確認できます。
+            受け付けたリクエストの内容とステータスを確認できます。
           </Text>
         </VStack>
 
         {featureRequests.length === 0 ? (
           <Box bg="white" p="md" radius="md" w="full">
-            <Text color="muted">まだ質問がありません。</Text>
+            <Text color="muted">まだリクエストがありません。</Text>
           </Box>
         ) : (
           <VStack gap="md" w="full">
             {featureRequests.map((feature) => {
               const copy = statusCopy(feature.status);
-              const title = feature.title?.trim() || "無題の質問";
+              const title = feature.title?.trim() || "無題のリクエスト";
               const formatSuccess = (label: string) =>
                 label.replace(/する$/, "しました").replace(/す$/, "しました");
               const formatLoading = (label: string) =>
@@ -263,7 +304,12 @@ export const Product = ({
                         </Text>
                       </VStack>
                       <HStack align="center" gap="sm" justify="end">
-                        <Box bg="muted" px="sm" py="xs" radius="full">
+                        <Box
+                          bg={copy.nextStatus === "closed" ? "muted" : "card"}
+                          px="sm"
+                          py="xs"
+                          radius="full"
+                        >
                           <Text size="xs" weight="bold">
                             {copy.label}
                           </Text>
@@ -299,14 +345,16 @@ export const Product = ({
                               type="button"
                               variant="destructive"
                             >
-                              質問を削除
+                              リクエストを削除
                             </Button>
                           </AlertDialogTrigger>
                           <AlertDialogContent>
                             <AlertDialogHeader>
-                              <AlertDialogTitle>質問を削除</AlertDialogTitle>
+                              <AlertDialogTitle>
+                                リクエストを削除
+                              </AlertDialogTitle>
                               <AlertDialogDescription>
-                                この操作は取り消せません。質問は完全に削除されます。
+                                この操作は取り消せません。リクエストは完全に削除されます。
                               </AlertDialogDescription>
                             </AlertDialogHeader>
                             <form
@@ -342,7 +390,7 @@ export const Product = ({
                         </AlertDialog>
                       </HStack>
                     </HStack>
-                    <HStack gap="md">
+                    <HStack borderTop="default" gap="md" pt="sm" w="full">
                       <Text color="subtle" size="xs">
                         作成日: {toIsoString(feature.createdAt)}
                       </Text>
@@ -363,20 +411,24 @@ export const Product = ({
           <Text size="sm" weight="bold">
             プロダクトを削除
           </Text>
-          <Text color="muted" size="sm">
-            この操作は取り消せません。プロダクトと関連する質問がすべて削除されます。
-          </Text>
           <AlertDialog>
-            <AlertDialogTrigger asChild>
-              <Button size="sm" type="button" variant="destructive">
-                プロダクトを削除
-              </Button>
-            </AlertDialogTrigger>
+            <VStack align="start" gap="sm" w="full">
+              <Text color="muted" size="sm">
+                この操作は取り消せません。プロダクトと関連するリクエストがすべて削除されます。
+              </Text>
+              <HStack justify="end" w="full">
+                <AlertDialogTrigger asChild>
+                  <Button size="sm" type="button" variant="destructive">
+                    プロダクトを削除
+                  </Button>
+                </AlertDialogTrigger>
+              </HStack>
+            </VStack>
             <AlertDialogContent>
               <AlertDialogHeader>
                 <AlertDialogTitle>プロダクトを削除</AlertDialogTitle>
                 <AlertDialogDescription>
-                  この操作は取り消せません。プロダクトと関連する質問がすべて削除されます。
+                  この操作は取り消せません。プロダクトと関連するリクエストがすべて削除されます。
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <form action={deleteProductAction} data-slot="delete-form">

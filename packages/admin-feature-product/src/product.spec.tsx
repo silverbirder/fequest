@@ -8,6 +8,8 @@ import * as stories from "./product.stories";
 
 const Stories = composeStories(stories);
 
+const userDomainUrl = "https://user.example.com";
+
 const flushMicrotasks = async () =>
   await new Promise<void>((resolve) => {
     setTimeout(() => resolve(), 0);
@@ -33,6 +35,7 @@ describe("Product", () => {
         onUpdateFeatureStatus={async () => {}}
         onUpdateName={async () => {}}
         product={{ featureRequests: [], id: 1, name: "Fequest" }}
+        userDomainUrl={userDomainUrl}
       />,
     );
 
@@ -44,6 +47,33 @@ describe("Product", () => {
       'form[data-slot="rename-form"]',
     );
     expect(renameForm?.textContent ?? "").toContain("名前を保存");
+  });
+
+  it("focuses the input when its label is clicked", async () => {
+    await render(
+      <Product
+        onDelete={async () => {}}
+        onDeleteFeatureRequest={async () => {}}
+        onUpdateDetails={async () => {}}
+        onUpdateFeatureStatus={async () => {}}
+        onUpdateName={async () => {}}
+        product={{ featureRequests: [], id: 123, name: "Label Focus" }}
+        userDomainUrl={userDomainUrl}
+      />,
+    );
+
+    const nameLabel = Array.from(
+      document.querySelectorAll<HTMLLabelElement>("label"),
+    ).find((label) => label.textContent?.trim() === "プロダクト名");
+    const nameInput =
+      document.querySelector<HTMLInputElement>('input[name="name"]');
+
+    expect(nameLabel).toBeDefined();
+    expect(nameInput).toBeDefined();
+
+    nameLabel?.click();
+
+    expect(document.activeElement).toBe(nameInput);
   });
 
   it("renders product detail form with defaults", async () => {
@@ -62,6 +92,7 @@ describe("Product", () => {
           logoUrl: "https://example.com/9.png",
           name: "Detailed",
         }}
+        userDomainUrl={userDomainUrl}
       />,
     );
 
@@ -84,6 +115,11 @@ describe("Product", () => {
       'form[data-slot="details-form"]',
     );
     expect(detailsForm?.textContent ?? "").toContain("表示情報を保存");
+
+    const userLink = document.querySelector<HTMLAnchorElement>(
+      `a[href="${userDomainUrl}/9"]`,
+    );
+    expect(userLink?.textContent ?? "").toContain("ユーザー向けページ");
   });
 
   it("renders feature requests with status toggles", async () => {
@@ -114,6 +150,7 @@ describe("Product", () => {
           id: 2,
           name: "Fequest",
         }}
+        userDomainUrl={userDomainUrl}
       />,
     );
 
@@ -143,11 +180,12 @@ describe("Product", () => {
         onUpdateFeatureStatus={async () => {}}
         onUpdateName={async () => {}}
         product={{ featureRequests: [], id: 3, name: "Empty Product" }}
+        userDomainUrl={userDomainUrl}
       />,
     );
 
     const html = document.body.textContent ?? "";
-    expect(html).toContain("まだ質問がありません。");
+    expect(html).toContain("まだリクエストがありません。");
   });
 
   it("renders a destructive delete action with the product id", async () => {
@@ -159,6 +197,7 @@ describe("Product", () => {
         onUpdateFeatureStatus={async () => {}}
         onUpdateName={async () => {}}
         product={{ featureRequests: [], id: 7, name: "Deletable" }}
+        userDomainUrl={userDomainUrl}
       />,
     );
 
@@ -209,12 +248,13 @@ describe("Product", () => {
           id: 42,
           name: "Fequest",
         }}
+        userDomainUrl={userDomainUrl}
       />,
     );
 
     const deleteTriggers = Array.from(
       document.querySelectorAll<HTMLButtonElement>("button"),
-    ).filter((button) => button.textContent?.trim() === "質問を削除");
+    ).filter((button) => button.textContent?.trim() === "リクエストを削除");
 
     expect(deleteTriggers).toHaveLength(2);
 

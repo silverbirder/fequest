@@ -34,6 +34,7 @@ const meta = {
       logoUrl: "https://example.com/logo.svg",
       name: "Fequest Admin",
     },
+    userDomainUrl: "https://user.fequest.dev",
   },
   component: Product,
   title: "Feature/Admin/Product",
@@ -50,5 +51,6 @@ export const EmptyFeatures: Story = {
     onDeleteFeatureRequest: async () => {},
     onUpdateDetails: async () => {},
     product: { featureRequests: [], id: 1, name: "Empty Product" },
+    userDomainUrl: "https://user.fequest.dev",
   },
 };

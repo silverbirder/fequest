@@ -36,3 +36,19 @@ export const toIsoString = (value?: IsoValue): null | string => {
 
 export const formatCount = (value: number, locale = "ja-JP") =>
   new Intl.NumberFormat(locale).format(value);
+
+export const buildUserProductUrl = (
+  baseUrl: string | undefined,
+  productId: number,
+) => {
+  if (!baseUrl) {
+    return `/${productId}`;
+  }
+
+  try {
+    const normalizedBase = baseUrl.endsWith("/") ? baseUrl : `${baseUrl}/`;
+    return new URL(String(productId), normalizedBase).toString();
+  } catch {
+    return `/${productId}`;
+  }
+};

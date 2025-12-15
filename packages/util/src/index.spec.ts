@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { formatCount, toIsoString } from "./index";
+import { buildUserProductUrl, formatCount, toIsoString } from "./index";
 
 describe("toIsoString", () => {
   it("returns Japanese formatted string when given a Date", () => {
@@ -27,5 +27,24 @@ describe("formatCount", () => {
 
   it("keeps zero formatted", () => {
     expect(formatCount(0)).toBe("0");
+  });
+});
+
+describe("buildUserProductUrl", () => {
+  it("appends the product id to the provided base url", () => {
+    expect(buildUserProductUrl("https://example.com/app", 42)).toBe(
+      "https://example.com/app/42",
+    );
+  });
+
+  it("handles bases that already include a trailing slash", () => {
+    expect(buildUserProductUrl("https://example.com/app/", 42)).toBe(
+      "https://example.com/app/42",
+    );
+  });
+
+  it("falls back to root-relative path when base is missing or invalid", () => {
+    expect(buildUserProductUrl(undefined, 42)).toBe("/42");
+    expect(buildUserProductUrl("not a url", 42)).toBe("/42");
   });
 });

@@ -3,6 +3,7 @@ import { idSchema } from "@repo/schema";
 import { notFound, redirect } from "next/navigation";
 import { object, safeParse } from "valibot";
 
+import { env } from "~/env";
 import { auth } from "~/server/auth";
 import { api } from "~/trpc/server";
 
@@ -47,6 +48,7 @@ export default async function Page({ params }: PageProps<"/products/[id]">) {
       onUpdateFeatureStatus={updateFeatureStatus}
       onUpdateName={renameProduct}
       product={product}
+      userDomainUrl={env.USER_DOMAIN_URL}
     />
   );
 }
