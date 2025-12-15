@@ -157,8 +157,8 @@ describe("Product", () => {
     const html = document.body.textContent ?? "";
     expect(html).toContain("Alpha");
     expect(html).toContain("Beta");
-    expect(html).toContain("オープン");
-    expect(html).toContain("クローズ");
+    expect(html).toContain("完了");
+    expect(html).toContain("未完了");
 
     const openToggle = document.querySelector<HTMLInputElement>(
       'form[data-feature-id="10"] input[name="status"]',

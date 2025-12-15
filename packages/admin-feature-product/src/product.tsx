@@ -56,13 +56,11 @@ type Props = {
 const statusCopy = (status: FeatureRequestStatus) =>
   status === "open"
     ? {
-        actionLabel: "クローズにする",
-        label: "オープン",
+        actionLabel: "完了にする",
         nextStatus: "closed" as const,
       }
     : {
-        actionLabel: "オープンに戻す",
-        label: "クローズ",
+        actionLabel: "未完了に戻す",
         nextStatus: "open" as const,
       };
 

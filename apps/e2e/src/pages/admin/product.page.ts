@@ -17,7 +17,7 @@ export class AdminProductPage {
 
     const closeButton = statusForms
       .nth(index)
-      .getByRole("button", { name: "クローズにする" });
+      .getByRole("button", { name: "完了にする" });
 
     await closeButton.click({ timeout: 30_000 });
     await this.page.waitForLoadState("networkidle");
