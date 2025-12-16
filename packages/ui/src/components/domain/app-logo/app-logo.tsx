@@ -25,7 +25,7 @@ export const AppLogo = ({
 
   const badgePresets = {
     default: {
-      bottom: "-2" as const,
+      bottom: "-3" as const,
       right: "-8" as const,
       size: "xl" as const,
     },

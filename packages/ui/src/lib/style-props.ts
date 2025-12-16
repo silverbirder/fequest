@@ -210,6 +210,7 @@ const layout = cva("", {
       full: "basis-full",
     },
     bottom: {
+      "-3": "-bottom-3",
       "-2": "-bottom-2",
       "0": "bottom-0",
     },
