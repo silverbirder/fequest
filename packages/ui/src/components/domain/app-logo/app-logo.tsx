@@ -24,8 +24,16 @@ export const AppLogo = ({
   const content = children ?? label;
 
   const badgePresets = {
-    default: { right: "-6" as const, size: "2xl" as const, top: "-2" as const },
-    spacious: { right: "-4" as const, size: "sm" as const, top: "-2" as const },
+    default: {
+      bottom: "-2" as const,
+      right: "-8" as const,
+      size: "xl" as const,
+    },
+    spacious: {
+      bottom: "-2" as const,
+      right: "-6" as const,
+      size: "xs" as const,
+    },
   };
 
   const badge = badgePresets[badgeVariant] ?? badgePresets.default;
@@ -33,15 +41,25 @@ export const AppLogo = ({
   return (
     <Box data-slot={dataSlot} position="relative">
       <LabelComponent data-slot={`${dataSlot}-label`}>{content}</LabelComponent>
-      <Text
-        display="inline-block"
+      <Box
+        bottom={badge.bottom}
+        data-slot={`${dataSlot}-emoji`}
+        display="flex"
+        gap="xs"
         position="absolute"
         right={badge.right}
-        size={badge.size}
-        top={badge.top}
       >
-        {emoji}
-      </Text>
+        {[0, 1, 2].map((index) => (
+          <Text
+            data-slot={`${dataSlot}-emoji-item`}
+            display="inline-block"
+            key={index}
+            size={badge.size}
+          >
+            {emoji}
+          </Text>
+        ))}
+      </Box>
     </Box>
   );
 };

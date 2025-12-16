@@ -26,7 +26,7 @@ describe("AppLogo", () => {
     );
 
     expect(container?.textContent).toContain("AppName");
-    expect(container?.textContent).toContain("✅");
+    expect(container?.textContent?.split("✅").length).toBe(4);
   });
 
   it("uses children when provided", async () => {

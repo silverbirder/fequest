@@ -55,6 +55,15 @@ const radius = cva("", {
 
 const spacing = cva("", {
   variants: {
+    gap: {
+      "0": "gap-0",
+      "2xl": "gap-8",
+      lg: "gap-4",
+      md: "gap-3",
+      sm: "gap-2",
+      xl: "gap-6",
+      xs: "gap-1",
+    },
     m: {
       "2xl": "m-8",
       lg: "m-4",
@@ -201,10 +210,12 @@ const layout = cva("", {
       full: "basis-full",
     },
     bottom: {
+      "-2": "-bottom-2",
       "0": "bottom-0",
     },
     display: {
       block: "block",
+      flex: "flex",
       inline: "inline",
       "inline-block": "inline-block",
       none: "hidden",
@@ -289,6 +300,7 @@ const layout = cva("", {
       sticky: "sticky",
     },
     right: {
+      "-8": "-right-8",
       "-6": "-right-6",
       "-4": "-right-4",
       "0": "right-0",
@@ -513,6 +525,7 @@ const stylePropKeys = [
   "mr",
   "mb",
   "ml",
+  "gap",
   "border",
   "borderBottom",
   "borderTop",

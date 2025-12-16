@@ -21,6 +21,12 @@ export const CustomEmoji: Story = {
   },
 };
 
+export const TripleEmoji: Story = {
+  args: {
+    emoji: "📮",
+  },
+};
+
 export const Admin: Story = {
   args: {
     label: "Fequest Admin",

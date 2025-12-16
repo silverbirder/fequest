@@ -47,6 +47,22 @@ describe("style-props", () => {
     expect(className).toContain("z-50");
   });
 
+  it("supports gap and negative positioning", () => {
+    const className = stylePropsClassNames({
+      bottom: "-2",
+      display: "flex",
+      gap: "2xl",
+      position: "absolute",
+      right: "-8",
+    });
+
+    expect(className).toContain("flex");
+    expect(className).toContain("gap-8");
+    expect(className).toContain("absolute");
+    expect(className).toContain("-bottom-2");
+    expect(className).toContain("-right-8");
+  });
+
   it("splits new style props from the rest", () => {
     const { restProps, styleProps } = splitStyleProps({
       backdrop: "lg",
