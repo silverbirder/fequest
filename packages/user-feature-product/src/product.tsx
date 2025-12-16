@@ -131,11 +131,7 @@ export const Product = (props: Props) => {
         </HStack>
       </VStack>
       {openFeatureRequests.length === 0 ? (
-        <Text>
-          {closedFeatureRequests.length === 0
-            ? "リクエストはまだありません。"
-            : "未完了のリクエストはありません。"}
-        </Text>
+        <Text>リクエストはまだありません。</Text>
       ) : (
         <VStack align="start" gap="lg">
           {openFeatureRequests.map(renderFeatureRequest)}

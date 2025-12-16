@@ -62,7 +62,12 @@ describe("RequestInput", () => {
     const input = document.querySelector("input[name='request']");
     expect(input).not.toBeNull();
 
-    const helper = document.querySelector("[data-slot='text']");
+    const helperNodes = Array.from(
+      document.querySelectorAll("[data-slot='text']"),
+    );
+    const helper = helperNodes.find((node) =>
+      node.textContent?.includes("入力してください"),
+    );
     expect(helper?.textContent).toContain("入力してください");
   });
 
@@ -80,7 +85,12 @@ describe("RequestInput", () => {
     const input = document.querySelector("input[name='request']");
     expect(input).toHaveAttribute("disabled");
 
-    const helper = document.querySelector("[data-slot='text']");
+    const helperNodes = Array.from(
+      document.querySelectorAll("[data-slot='text']"),
+    );
+    const helper = helperNodes.find((node) =>
+      node.textContent?.includes("送信中..."),
+    );
     expect(helper?.textContent).toContain("送信中...");
   });
 });

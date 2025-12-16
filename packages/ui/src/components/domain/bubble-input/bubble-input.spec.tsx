@@ -21,7 +21,12 @@ describe("BubbleInput", () => {
   it("accepts helper text and input props", async () => {
     await render(<BubbleInput helperText="送信準備" name="request" />);
 
-    const helper = document.querySelector('[data-slot="text"]');
+    const helperNodes = Array.from(
+      document.querySelectorAll('[data-slot="text"]'),
+    );
+    const helper = helperNodes.find((node) =>
+      node.textContent?.includes("送信準備"),
+    );
     expect(helper?.textContent).toBe("送信準備");
 
     const input = document.querySelector("input[name=request]");
@@ -31,7 +36,12 @@ describe("BubbleInput", () => {
   it("fades helper text in when the input is focused", async () => {
     await render(<BubbleInput helperText="フォーカス時のみ" />);
 
-    const helper = document.querySelector('[data-slot="text"]');
+    const helperNodes = Array.from(
+      document.querySelectorAll('[data-slot="text"]'),
+    );
+    const helper = helperNodes.find((node) =>
+      node.textContent?.includes("フォーカス時のみ"),
+    );
     const input = document.querySelector("input");
 
     expect(helper).not.toBeNull();

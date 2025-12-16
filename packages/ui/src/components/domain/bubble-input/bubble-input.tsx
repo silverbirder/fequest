@@ -38,6 +38,9 @@ export const BubbleInput = ({
             {...rest}
           />
         </Box>
+        <Text color="muted" size="xs">
+          ※ 投稿後も内容を編集・削除できます。
+        </Text>
       </Box>
       <Text
         color="muted"
@@ -46,7 +49,7 @@ export const BubbleInput = ({
         focusWithinTransition="opacity"
         focusWithinTransitionDuration="200"
         opacity="0"
-        size="sm"
+        size="md"
         transition="opacity"
         transitionDuration="200"
       >

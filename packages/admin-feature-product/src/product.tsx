@@ -240,7 +240,7 @@ export const Product = ({
                       id={productDescriptionInputId}
                       maxLength={5000}
                       name="description"
-                      placeholder="サービスの概要やサポートポリシーを記載してください"
+                      placeholder="サービスの概要などを記載してください"
                       rows={4}
                     />
                   </Box>
