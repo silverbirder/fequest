@@ -223,7 +223,7 @@ Given("admin アプリケーションのコンテナを起動している", () =
   expect(adminStartedContainer).toBeDefined();
 });
 
-When(/^\/\[id\] ページにアクセスしたとき$/, () => {
+When("プロダクトページを開いたとき", () => {
   expect(userUrl).toBeTruthy();
 });
 
@@ -232,7 +232,7 @@ Then("登録したフィーチャーを確認できる", () => {
 });
 
 Then(
-  /^Playwright で \/\[id\] ページにアクセスしてスクリーンショットを保存できる$/,
+  /^Playwright でプロダクトページにアクセスしてスクリーンショットを保存できる$/,
   async () => {
     if (!seededProduct || !userUrl) {
       throw new Error(
@@ -272,7 +272,7 @@ Given("認証済みのユーザーセッションが存在する", async () => {
 });
 
 When(
-  /^認証ユーザーとして \/\[id\] ページで "([^"]+)" を投稿する$/,
+  /^認証ユーザーとしてプロダクトページで "([^"]+)" を投稿する$/,
   async (titleBase: string) => {
     if (!seededProduct || !userUrl || !authenticatedSessionToken) {
       throw new Error(
