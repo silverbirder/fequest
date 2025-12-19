@@ -6,17 +6,17 @@ import {
   Then,
   When,
 } from "@cucumber/cucumber";
+import { expect } from "@playwright/test";
 import { migrateDatabase } from "@repo/db/migrate";
+import { ProductPage as UserProductPage } from "@repo/user-feature-product/e2e";
 import { stat } from "node:fs/promises";
 import { AddressInfo, createServer } from "node:net";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { Network, StartedNetwork, StartedTestContainer } from "testcontainers";
-import { expect } from "vitest";
 
 import { AdminDashboardPage } from "@/pages/admin/dashboard.page";
 import { AdminProductPage } from "@/pages/admin/product.page";
-import { UserProductPage } from "@/pages/user/product.page";
 import {
   type BrowserSession,
   createBrowserSession,
@@ -165,7 +165,10 @@ BeforeAll(async () => {
       value: sessionToken,
     },
   ]);
-  const userProductPage = new UserProductPage(userBrowser.page, userBaseUrl);
+  const userProductPage = new UserProductPage({
+    baseUrl: userBaseUrl,
+    page: userBrowser.page,
+  });
   await userProductPage.goto(productId);
   await userProductPage.createFeatureRequest(openFeatureTitle);
   await userProductPage.createFeatureRequest(closedFeatureTitle);
@@ -243,7 +246,10 @@ Then(
     const session = await createBrowserSession();
 
     try {
-      const productPage = new UserProductPage(session.page, userUrl);
+      const productPage = new UserProductPage({
+        baseUrl: userUrl,
+        page: session.page,
+      });
       await productPage.goto(seededProduct.productId);
       await productPage.waitForFeatureRequest(seededProduct.openFeatureTitle);
       const savedPath =
@@ -296,7 +302,10 @@ When(
         },
       ]);
 
-      const productPage = new UserProductPage(browserSession.page, userUrl);
+      const productPage = new UserProductPage({
+        baseUrl: userUrl,
+        page: browserSession.page,
+      });
       await productPage.goto(seededProduct.productId);
       await productPage.createFeatureRequest(createdFeatureTitle);
     } catch (error) {
@@ -315,7 +324,10 @@ Then("投稿したフィーチャーリクエストが一覧に表示される",
   }
 
   try {
-    const productPage = new UserProductPage(browserSession.page, userUrl);
+    const productPage = new UserProductPage({
+      baseUrl: userUrl,
+      page: browserSession.page,
+    });
     await productPage.waitForFeatureRequest(createdFeatureTitle);
     await productPage.captureFullPageScreenshot(authScreenshotPath);
   } finally {

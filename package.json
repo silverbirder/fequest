@@ -10,6 +10,7 @@
     "check-types": "turbo run check-types",
     "test": "turbo run test",
     "test:fix": "turbo run test -- --update",
+    "test:e2e": "turbo run test:e2e",
     "ci:fix": "pnpm lint:fix && pnpm format && pnpm check-types && pnpm test:fix",
     "storybook": "pnpm --filter @repo/storybook storybook",
     "build-storybook": "pnpm --filter @repo/storybook build-storybook",

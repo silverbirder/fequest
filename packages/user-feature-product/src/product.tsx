@@ -11,10 +11,9 @@ import {
 import { Home } from "lucide-react";
 import Form from "next/form";
 
-import type { ReactionSummary } from "./libs/reaction-summary";
+import type { ReactionSummary } from "./libs";
 
-import { FeatureRequestContent } from "./components/feature-request-content";
-import { FeatureRequestItem } from "./components/feature-request-item";
+import { FeatureRequestContent, FeatureRequestItem } from "./components";
 
 type FeatureRequest = FeatureRequestCore & {
   reactionSummaries?: null | ReactionSummary[];

@@ -5,10 +5,21 @@
   "type": "module",
   "main": "./src/index.ts",
   "types": "./src/index.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    },
+    "./e2e": {
+      "types": "./e2e/index.ts",
+      "default": "./e2e/index.ts"
+    }
+  },
   "scripts": {
     "lint": "eslint . --max-warnings 0",
     "test": "vitest --browser=chromium --run",
     "test:watch": "vitest --browser=chromium",
+    "test:e2e": "playwright test -c playwright.config.ts",
     "check-types": "tsc --noEmit"
   },
   "dependencies": {
@@ -23,6 +34,7 @@
     "react-dom": "^19.0.0"
   },
   "devDependencies": {
+    "@playwright/test": "~1.57.0",
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@repo/vitest-config": "workspace:*",
@@ -30,6 +42,7 @@
     "@types/react": "19.1.0",
     "@types/react-dom": "19.1.1",
     "eslint": "^9.38.0",
+    "playwright": "~1.57.0",
     "typescript": "5.9.2",
     "vitest": "^4.0.15",
     "vitest-browser-react": "^2.0.2"

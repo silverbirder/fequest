@@ -10,7 +10,7 @@ import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { type ComponentProps, useRef } from "react";
 
-import type { ReactionSummary } from "../libs/reaction-summary";
+import type { ReactionSummary } from "../libs";
 
 type Props = {
   avatar?: RequestCardAvatar;
