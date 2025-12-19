@@ -1,1 +1,1 @@
-export * from "./product.po";
+export * from "./product.page";

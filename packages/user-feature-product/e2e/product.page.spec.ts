@@ -1,6 +1,6 @@
 import { test } from "@playwright/test";
 
-import { ProductPage } from "./product.po";
+import { ProductPage } from "./product.page";
 
 test.describe("Product page", () => {
   test("shows default feature list", async ({ page }) => {
