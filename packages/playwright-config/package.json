@@ -1,0 +1,12 @@
+{
+  "name": "@repo/playwright-config",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./index.js"
+  },
+  "dependencies": {
+    "@playwright/test": "~1.57.0"
+  }
+}
