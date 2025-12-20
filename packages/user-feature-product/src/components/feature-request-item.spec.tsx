@@ -132,6 +132,13 @@ describe("FeatureRequestItem", () => {
     expect(badge).toBeDefined();
   });
 
+  it("sets data-feature-status on wrapper", async () => {
+    await renderItem({ status: "closed" });
+
+    const wrapper = document.querySelector('[data-feature-status="closed"]');
+    expect(wrapper).not.toBeNull();
+  });
+
   it("removes open param when dialog closes", async () => {
     navigationMocks.searchParams = new URLSearchParams("open=1");
 

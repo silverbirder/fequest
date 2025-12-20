@@ -46,6 +46,31 @@ export class AdminProductPage {
     await this.page.waitForLoadState("networkidle");
   }
 
+  async closeFeatureById(featureId: number) {
+    const statusForm = this.page.locator(
+      `[data-slot="feature-status-form"][data-feature-id="${featureId}"]`,
+    );
+    await statusForm.waitFor({ state: "visible", timeout: 30_000 });
+    await statusForm.getByRole("button").click({ timeout: 30_000 });
+    await this.page.waitForLoadState("networkidle");
+  }
+
+  async deleteProduct() {
+    await this.page
+      .getByRole("button", { name: "プロダクトを削除" })
+      .first()
+      .click();
+    const dialog = this.page.getByRole("alertdialog");
+    await dialog.waitFor({ state: "visible", timeout: 30_000 });
+    await dialog.getByRole("button", { name: "削除する" }).click();
+    await this.page.waitForLoadState("networkidle");
+    if (this.baseUrl) {
+      await this.page.waitForURL(`${this.baseUrl}/`, {
+        timeout: 30_000,
+      });
+    }
+  }
+
   async expectDefaultStory() {
     await expect(this.heading).toBeVisible();
     await expect(this.featureRequest("アルファ版での改善点")).toBeVisible();

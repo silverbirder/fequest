@@ -8,6 +8,8 @@ type ProductDetails = {
   name: string;
 };
 
+const detailLabelSuffix = "の詳細を表示";
+
 type Props = {
   baseUrl?: string;
   page: Page;
@@ -74,6 +76,26 @@ export class ProductPage {
     ).toBeVisible();
   }
 
+  async expectEditButtonHidden(title: string) {
+    await this.openFeatureDetail(title);
+    await expect(
+      this.page
+        .getByRole("dialog")
+        .getByRole("link", { name: "編集ページを開く" }),
+    ).toHaveCount(0);
+    await this.page.keyboard.press("Escape");
+  }
+
+  async expectEditButtonVisible(title: string) {
+    await this.openFeatureDetail(title);
+    await expect(
+      this.page
+        .getByRole("dialog")
+        .getByRole("link", { name: "編集ページを開く" }),
+    ).toBeVisible();
+    await this.page.keyboard.press("Escape");
+  }
+
   async expectProductDetails(details: ProductDetails) {
     await expect(
       this.page.getByRole("heading", { name: details.name }),
@@ -87,6 +109,19 @@ export class ProductPage {
 
   featureRequest(title: string): Locator {
     return this.page.getByText(title, { exact: true });
+  }
+
+  async getFeatureTitlesInDisplayOrder() {
+    const labels = await this.page
+      .locator('button[data-slot="dialog-trigger"]')
+      .evaluateAll((elements) =>
+        elements.map((element) => element.getAttribute("aria-label") ?? ""),
+      );
+
+    return labels.map((label) => {
+      if (!label.endsWith(detailLabelSuffix)) return label.trim();
+      return label.slice(0, -detailLabelSuffix.length).trim();
+    });
   }
 
   async goto(productId?: number) {
@@ -106,7 +141,65 @@ export class ProductPage {
     });
   }
 
+  async openEditPage(title: string) {
+    await this.openFeatureDetail(title);
+    await this.page
+      .getByRole("dialog")
+      .getByRole("link", { name: "編集ページを開く" })
+      .click();
+    await this.page.waitForLoadState("networkidle");
+  }
+
+  async openFeatureDetail(title: string) {
+    await this.page
+      .getByRole("button", { name: `${title}${detailLabelSuffix}` })
+      .click();
+    await this.page.getByRole("dialog").waitFor({ state: "visible" });
+  }
+
   async waitForFeatureRequest(title: string, timeoutMs = 60_000) {
     await this.page.waitForSelector(`text=${title}`, { timeout: timeoutMs });
+  }
+
+  async waitForFeatureRequestToDisappearWithReload(
+    title: string,
+    timeoutMs = 60_000,
+    reloadIntervalMs = 5_000,
+  ) {
+    const start = Date.now();
+    while (Date.now() - start < timeoutMs) {
+      const found = await this.page
+        .getByText(title, { exact: true })
+        .isVisible()
+        .catch(() => false);
+      if (!found) {
+        return;
+      }
+      await this.page.waitForTimeout(reloadIntervalMs);
+      await this.page.reload({ waitUntil: "networkidle" });
+    }
+
+    throw new Error(`Timed out waiting for feature to disappear: ${title}`);
+  }
+
+  async waitForFeatureRequestWithReload(
+    title: string,
+    timeoutMs = 60_000,
+    reloadIntervalMs = 5_000,
+  ) {
+    const start = Date.now();
+    while (Date.now() - start < timeoutMs) {
+      const found = await this.page
+        .getByText(title, { exact: true })
+        .isVisible()
+        .catch(() => false);
+      if (found) {
+        return;
+      }
+      await this.page.waitForTimeout(reloadIntervalMs);
+      await this.page.reload({ waitUntil: "networkidle" });
+    }
+
+    throw new Error(`Timed out waiting for feature: ${title}`);
   }
 }

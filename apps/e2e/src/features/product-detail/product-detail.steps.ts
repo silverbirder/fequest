@@ -9,6 +9,7 @@ import {
 import { expect } from "@playwright/test";
 import { AdminDashboardPage } from "@repo/admin-feature-dashboard/e2e";
 import { AdminProductPage } from "@repo/admin-feature-product/e2e";
+import { resetCachedConnection } from "@repo/db";
 import { migrateDatabase } from "@repo/db/migrate";
 import { ProductPage as UserProductPage } from "@repo/user-feature-product/e2e";
 import { stat } from "node:fs/promises";
@@ -147,6 +148,7 @@ BeforeAll(async () => {
     dbStartedContainer = startedDbContainer;
     databaseUrlForHost = hostConnectionString;
 
+    resetCachedConnection();
     await migrateDatabase(hostConnectionString);
 
     const [adminHostPort, userHostPort] = await Promise.all([

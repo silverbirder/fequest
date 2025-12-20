@@ -50,6 +50,12 @@ export class AdminDashboardPage {
     await expect(this.page.getByText("Beta", { exact: true })).toBeVisible();
   }
 
+  async expectProductListed(name: string) {
+    await expect(
+      this.page.getByRole("link", { name: `${name}のプロダクトページ` }),
+    ).toBeVisible();
+  }
+
   async goto() {
     if (this.baseUrl) {
       await this.page.goto(this.baseUrl, { waitUntil: "networkidle" });

@@ -111,7 +111,7 @@ export const FeatureRequestItem = ({
   };
 
   return (
-    <VStack gap="xs">
+    <VStack data-feature-status={status ?? "open"} gap="xs">
       <RequestCard
         avatar={avatar}
         defaultOpen={defaultOpen}

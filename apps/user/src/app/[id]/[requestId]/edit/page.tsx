@@ -1,6 +1,6 @@
 import { idSchema } from "@repo/schema";
 import { RequestEdit } from "@repo/user-feature-request-edit";
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import { object, safeParse } from "valibot";
 
 import { auth } from "~/server/auth";
@@ -35,7 +35,7 @@ export default async function Page({
   }
 
   if (!session?.user || featureRequest.user?.id !== session.user.id) {
-    redirect(`/${productId}`);
+    notFound();
   }
 
   const updateFeatureRequest = createUpdateFeatureRequest({ productId });
