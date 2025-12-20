@@ -1,5 +1,11 @@
 import { expect, type Locator, type Page } from "@playwright/test";
 
+type ProductDetails = {
+  description: string;
+  homePageUrl: string;
+  logoUrl: string;
+};
+
 type Props = {
   baseUrl?: string;
   page: Page;
@@ -65,5 +71,19 @@ export class AdminProductPage {
     await this.page.goto(`/iframe.html?id=${this.storyId}`, {
       waitUntil: "networkidle",
     });
+  }
+
+  async updateDetails(details: ProductDetails) {
+    const detailsForm = this.page.locator('[data-slot="details-form"]');
+    await detailsForm.waitFor({ state: "visible", timeout: 30_000 });
+
+    await this.page.getByLabel("プロダクトロゴURL").fill(details.logoUrl);
+    await this.page
+      .getByLabel("プロダクトホームページURL")
+      .fill(details.homePageUrl);
+    await this.page.getByLabel("プロダクト説明文").fill(details.description);
+
+    await detailsForm.getByRole("button", { name: "表示情報を保存" }).click();
+    await this.page.waitForLoadState("networkidle");
   }
 }

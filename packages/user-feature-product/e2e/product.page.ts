@@ -2,6 +2,12 @@ import { expect, type Locator, type Page } from "@playwright/test";
 import { mkdir } from "node:fs/promises";
 import { dirname } from "node:path";
 
+type ProductDetails = {
+  description: string;
+  homePageUrl: string;
+  name: string;
+};
+
 type Props = {
   baseUrl?: string;
   page: Page;
@@ -66,6 +72,17 @@ export class ProductPage {
     await expect(
       this.featureRequest("管理ダッシュボードのフィルター"),
     ).toBeVisible();
+  }
+
+  async expectProductDetails(details: ProductDetails) {
+    await expect(
+      this.page.getByRole("heading", { name: details.name }),
+    ).toBeVisible();
+    await expect(this.page.getByAltText(`${details.name}のロゴ`)).toBeVisible();
+    await expect(
+      this.page.getByRole("link", { name: "公式サイト" }),
+    ).toHaveAttribute("href", details.homePageUrl);
+    await expect(this.page.getByText(details.description)).toBeVisible();
   }
 
   featureRequest(title: string): Locator {

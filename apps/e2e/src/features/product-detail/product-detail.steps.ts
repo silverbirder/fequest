@@ -71,6 +71,9 @@ let userUrl: string | undefined;
 let seededProduct:
   | undefined
   | {
+      description: string;
+      homePageUrl: string;
+      logoUrl: string;
       openFeatureTitle: string;
       productId: number;
       productName: string;
@@ -177,6 +180,12 @@ BeforeAll(async () => {
 
     const openFeatureTitle = "E2E サンプル機能";
     const closedFeatureTitle = "E2E クローズ済み機能";
+    const productDetails = {
+      description: "E2E 用の説明文です。",
+      homePageUrl: "https://example.com/e2e",
+      logoUrl: "https://placehold.co/400x400",
+      name: "E2E Product",
+    };
 
     // Create product via admin UI
     const adminBrowser = await createBrowserSession();
@@ -196,8 +205,14 @@ BeforeAll(async () => {
       page: adminBrowser.page,
     });
     await adminDashboardPage.goto();
-    const { productId, productName } =
-      await adminDashboardPage.createProduct("E2E Product");
+    const { productId, productName } = await adminDashboardPage.createProduct(
+      productDetails.name,
+    );
+    const adminProductPage = new AdminProductPage({
+      baseUrl: adminBaseUrl,
+      page: adminBrowser.page,
+    });
+    await adminProductPage.updateDetails(productDetails);
 
     // Create features via user UI
     const userBrowser = await createBrowserSession();
@@ -222,10 +237,6 @@ BeforeAll(async () => {
     await userProductPage.waitForFeatureRequest(closedFeatureTitle);
 
     // Close one feature via admin UI
-    const adminProductPage = new AdminProductPage({
-      baseUrl: adminBaseUrl,
-      page: adminBrowser.page,
-    });
     await adminProductPage.goto(productId);
     // createFeatureRequest は2件追加しているので、2件目をクローズする
     await adminProductPage.closeFeatureAt(2);
@@ -234,6 +245,9 @@ BeforeAll(async () => {
     await userBrowser.close();
 
     seededProduct = {
+      description: productDetails.description,
+      homePageUrl: productDetails.homePageUrl,
+      logoUrl: productDetails.logoUrl,
       openFeatureTitle,
       productId,
       productName,
@@ -253,6 +267,16 @@ Given("データベースにサンプルのプロダクトが存在する", () =
   expect(seededProduct).toBeDefined();
 });
 
+Given(
+  "管理画面からサンプルのプロダクト名・ロゴ・公式サイト・説明文を保存している",
+  () => {
+    expect(seededProduct).toBeDefined();
+    expect(seededProduct?.logoUrl).toBeTruthy();
+    expect(seededProduct?.homePageUrl).toBeTruthy();
+    expect(seededProduct?.description).toBeTruthy();
+  },
+);
+
 Given("管理画面からサンプルのプロダクトが登録されている", () => {
   expect(seededProduct).toBeDefined();
 });
@@ -269,8 +293,27 @@ When("プロダクトページを開いたとき", () => {
   expect(userUrl).toBeTruthy();
 });
 
-Then("登録したフィーチャーを確認できる", () => {
-  expect(seededProduct?.openFeatureTitle).toBeTruthy();
+Then("登録したプロダクト名・ロゴ・公式サイト・説明文を確認できる", async () => {
+  if (!seededProduct || !userUrl) {
+    throw new Error("Seed data and app URL must be prepared before this step");
+  }
+
+  const session = await createBrowserSession();
+
+  try {
+    const productPage = new UserProductPage({
+      baseUrl: userUrl,
+      page: session.page,
+    });
+    await productPage.goto(seededProduct.productId);
+    await productPage.expectProductDetails({
+      description: seededProduct.description,
+      homePageUrl: seededProduct.homePageUrl,
+      name: seededProduct.productName,
+    });
+  } finally {
+    await session.close();
+  }
 });
 
 Then(
