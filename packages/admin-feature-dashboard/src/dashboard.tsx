@@ -24,6 +24,7 @@ import {
   VStack,
 } from "@repo/ui/components";
 import { wrapActionWithToast } from "@repo/ui/lib/wrap-action-with-toast";
+import { useTranslations } from "next-intl";
 import { type ReactNode, useId } from "react";
 
 type CreateProductDialogProps = {
@@ -40,11 +41,12 @@ const CreateProductDialog = ({
   onCreateProduct,
   trigger,
 }: CreateProductDialogProps) => {
+  const t = useTranslations("AdminDashboard");
   const inputId = useId();
   const actionWithToast = wrapActionWithToast(onCreateProduct, {
-    error: "作成に失敗しました",
-    loading: "作成中...",
-    success: "プロダクトを作成しました",
+    error: t("toast.create.error"),
+    loading: t("toast.create.loading"),
+    success: t("toast.create.success"),
   });
 
   return (
@@ -52,10 +54,10 @@ const CreateProductDialog = ({
       <DialogTrigger asChild>{trigger}</DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>新しいプロダクトを作成</DialogTitle>
+          <DialogTitle>{t("dialog.title")}</DialogTitle>
           <DialogDescription asChild>
             <Text color="muted" size="md">
-              名前を入力して作成すると、そのプロダクトの管理ページに移動します。
+              {t("dialog.description")}
             </Text>
           </DialogDescription>
         </DialogHeader>
@@ -64,33 +66,33 @@ const CreateProductDialog = ({
             <VStack align="start" gap="xs">
               <label htmlFor={inputId}>
                 <Text size="sm" weight="bold">
-                  プロダクト名
+                  {t("dialog.nameLabel")}
                 </Text>
               </label>
               <Input
-                aria-label="プロダクト名"
+                aria-label={t("dialog.nameAriaLabel")}
                 id={inputId}
                 maxLength={256}
                 name="name"
-                placeholder="例: Fequest"
+                placeholder={t("dialog.namePlaceholder")}
                 required
               />
               <Text color="muted" size="xs">
-                名前は後から変更できます。
+                {t("dialog.nameHelper")}
               </Text>
             </VStack>
             <DialogFooter>
               <DialogClose asChild>
                 <Button type="button" variant="ghost">
-                  キャンセル
+                  {t("buttons.cancel")}
                 </Button>
               </DialogClose>
               <SubmitButton
                 formAction={actionWithToast}
-                pendingLabel="作成中..."
+                pendingLabel={t("toast.create.loading")}
                 variant="default"
               >
-                作成する
+                {t("buttons.create")}
               </SubmitButton>
             </DialogFooter>
           </VStack>
@@ -101,24 +103,24 @@ const CreateProductDialog = ({
 };
 
 export const Dashboard = ({ onCreateProduct, products }: Props) => {
+  const t = useTranslations("AdminDashboard");
+
   return (
     <VStack gap="2xl">
       {products.length === 0 ? (
         <Empty>
           <EmptyHeader>
             <Text size="lg" weight="bold">
-              プロダクトが未登録のようです...。
+              {t("empty.title")}
             </Text>
-            <EmptyDescription>
-              新しいプロダクトを作成して、リクエストを集めましょう！
-            </EmptyDescription>
+            <EmptyDescription>{t("empty.description")}</EmptyDescription>
           </EmptyHeader>
           <EmptyContent>
             <CreateProductDialog
               onCreateProduct={onCreateProduct}
               trigger={
                 <Button type="button" variant="default">
-                  プロダクトを作成
+                  {t("buttons.createProduct")}
                 </Button>
               }
             />
@@ -127,9 +129,9 @@ export const Dashboard = ({ onCreateProduct, products }: Props) => {
       ) : (
         <>
           <VStack align="center" gap="sm">
-            <Heading level={2}>プロダクト一覧</Heading>
+            <Heading level={2}>{t("list.title")}</Heading>
             <Text color="muted" size="lg">
-              あなたが登録したプロダクトの一覧です。
+              {t("list.description")}
             </Text>
           </VStack>
           <HStack gap="md" w="full" wrap="wrap">
@@ -144,12 +146,12 @@ export const Dashboard = ({ onCreateProduct, products }: Props) => {
             ))}
           </HStack>
           <VStack align="start" borderTop="default" pt="2xl" w="full">
-            <Text>新しいプロダクトを作成して、リクエストを集めましょう。</Text>
+            <Text>{t("list.cta")}</Text>
             <CreateProductDialog
               onCreateProduct={onCreateProduct}
               trigger={
                 <Button type="button" variant="default">
-                  プロダクトを作成
+                  {t("buttons.createProduct")}
                 </Button>
               }
             />

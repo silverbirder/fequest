@@ -28,6 +28,7 @@ import {
 } from "@repo/ui/components";
 import { wrapActionWithToast } from "@repo/ui/lib/wrap-action-with-toast";
 import { buildUserProductUrl } from "@repo/util";
+import { useTranslations } from "next-intl";
 
 type FeatureRequestWithUser = FeatureRequestCore & {
   reactionSummaries?: null | ReactionSummary[];
@@ -88,24 +89,27 @@ const sortFeatureRequests = (features: FeatureRequestWithUser[]) =>
     return left.id - right.id;
   });
 
-const statusCopy = (status: FeatureRequestStatus) =>
+const createStatusCopy = (
+  t: ReturnType<typeof useTranslations>,
+  status: FeatureRequestStatus,
+) =>
   status === "open"
     ? {
-        actionLabel: "完了にする",
+        actionLabel: t("status.open.actionLabel"),
         nextStatus: "closed" as const,
         toast: {
-          error: "完了への変更に失敗しました",
-          loading: "完了にしています",
-          success: "完了にしました",
+          error: t("status.open.toast.error"),
+          loading: t("status.open.toast.loading"),
+          success: t("status.open.toast.success"),
         },
       }
     : {
-        actionLabel: "未完了に戻す",
+        actionLabel: t("status.closed.actionLabel"),
         nextStatus: "open" as const,
         toast: {
-          error: "未完了に戻すことに失敗しました",
-          loading: "未完了に戻しています",
-          success: "未完了に戻しました",
+          error: t("status.closed.toast.error"),
+          loading: t("status.closed.toast.loading"),
+          success: t("status.closed.toast.success"),
         },
       };
 
@@ -118,27 +122,28 @@ export const Product = ({
   product,
   userDomainUrl,
 }: Props) => {
+  const t = useTranslations("AdminProduct");
   const updateNameAction = wrapActionWithToast(onUpdateName, {
-    error: "名前の保存に失敗しました",
-    loading: "名前を保存中...",
-    success: "名前を保存しました",
+    error: t("toast.updateName.error"),
+    loading: t("toast.updateName.loading"),
+    success: t("toast.updateName.success"),
   });
   const updateDetailsAction = wrapActionWithToast(onUpdateDetails, {
-    error: "表示情報の保存に失敗しました",
-    loading: "表示情報を保存中...",
-    success: "表示情報を保存しました",
+    error: t("toast.updateDetails.error"),
+    loading: t("toast.updateDetails.loading"),
+    success: t("toast.updateDetails.success"),
   });
   const deleteProductAction = wrapActionWithToast(onDelete, {
-    error: "プロダクトの削除に失敗しました",
-    loading: "プロダクトを削除中...",
-    success: "プロダクトを削除しました",
+    error: t("toast.deleteProduct.error"),
+    loading: t("toast.deleteProduct.loading"),
+    success: t("toast.deleteProduct.success"),
   });
   const deleteFeatureRequestAction = wrapActionWithToast(
     onDeleteFeatureRequest,
     {
-      error: "リクエストの削除に失敗しました",
-      loading: "リクエストを削除中...",
-      success: "リクエストを削除しました",
+      error: t("toast.deleteRequest.error"),
+      loading: t("toast.deleteRequest.loading"),
+      success: t("toast.deleteRequest.success"),
     },
   );
 
@@ -154,27 +159,29 @@ export const Product = ({
     <VStack gap="xl" w="full">
       <VStack gap="xs" w="full">
         <HStack align="center" justify="between" w="full" wrap="wrap">
-          <Heading size="lg">プロダクトの管理</Heading>
+          <Heading size="lg">{t("header.title")}</Heading>
           <Button asChild size="sm" variant="outline">
             <a
-              aria-label={`ユーザー側のプロダクトページ ${userProductUrl}`}
+              aria-label={t("header.userPageAriaLabel", {
+                url: userProductUrl,
+              })}
               href={userProductUrl}
               rel="noreferrer"
               target="_blank"
             >
-              ユーザー向けページ
+              {t("header.userPageLabel")}
             </a>
           </Button>
         </HStack>
         <Text color="muted" size="sm">
-          プロダクト情報の更新と、リクエストのステータス管理を行えます。
+          {t("header.description")}
         </Text>
       </VStack>
 
       <Box bg="white" p="lg" radius="lg" w="full">
         <VStack align="start" gap="sm" w="full">
           <Text asChild size="sm" weight="bold">
-            <label htmlFor={productNameInputId}>プロダクト名</label>
+            <label htmlFor={productNameInputId}>{t("rename.label")}</label>
           </Text>
           <Box asChild w="full">
             <form action={updateNameAction} data-slot="rename-form">
@@ -182,7 +189,7 @@ export const Product = ({
               <VStack gap="sm" w="full">
                 <Box grow="1" minW="0" w="full">
                   <Input
-                    aria-label="プロダクト名"
+                    aria-label={t("rename.ariaLabel")}
                     defaultValue={product.name}
                     id={productNameInputId}
                     maxLength={256}
@@ -193,11 +200,11 @@ export const Product = ({
                 <HStack justify="end" w="full">
                   <SubmitButton
                     formAction={updateNameAction}
-                    pendingLabel="保存中..."
+                    pendingLabel={t("toast.updateName.loading")}
                     size="sm"
                     variant="default"
                   >
-                    名前を保存
+                    {t("rename.save")}
                   </SubmitButton>
                 </HStack>
               </VStack>
@@ -210,10 +217,10 @@ export const Product = ({
         <VStack align="start" gap="md" w="full">
           <VStack align="start" gap="xs">
             <Text size="sm" weight="bold">
-              プロダクトの補足情報
+              {t("details.title")}
             </Text>
             <Text color="muted" size="sm">
-              ロゴや説明文を設定して、ユーザーにわかりやすく伝えましょう。
+              {t("details.description")}
             </Text>
           </VStack>
           <Box asChild w="full">
@@ -223,12 +230,12 @@ export const Product = ({
                 <VStack align="start" gap="xs" w="full">
                   <Text asChild size="sm" weight="bold">
                     <label htmlFor={productLogoUrlInputId}>
-                      ロゴURL (任意)
+                      {t("details.logoLabel")}
                     </label>
                   </Text>
                   <Box w="full">
                     <Input
-                      aria-label="プロダクトロゴURL"
+                      aria-label={t("details.logoAriaLabel")}
                       defaultValue={product.logoUrl ?? ""}
                       id={productLogoUrlInputId}
                       maxLength={2048}
@@ -237,19 +244,19 @@ export const Product = ({
                     />
                   </Box>
                   <Text color="muted" size="xs">
-                    画像のURLを入力すると、ユーザーにプロダクトのロゴが表示されます。
+                    {t("details.logoHelper")}
                   </Text>
                 </VStack>
 
                 <VStack align="start" gap="xs" w="full">
                   <Text asChild size="sm" weight="bold">
                     <label htmlFor={productHomePageUrlInputId}>
-                      ホームページURL (任意)
+                      {t("details.homePageLabel")}
                     </label>
                   </Text>
                   <Box w="full">
                     <Input
-                      aria-label="プロダクトホームページURL"
+                      aria-label={t("details.homePageAriaLabel")}
                       defaultValue={product.homePageUrl ?? ""}
                       id={productHomePageUrlInputId}
                       maxLength={2048}
@@ -258,39 +265,39 @@ export const Product = ({
                     />
                   </Box>
                   <Text color="muted" size="xs">
-                    プロダクトの公式サイトやLPへのリンクを登録できます。
+                    {t("details.homePageHelper")}
                   </Text>
                 </VStack>
 
                 <VStack align="start" gap="xs" w="full">
                   <Text asChild size="sm" weight="bold">
                     <label htmlFor={productDescriptionInputId}>
-                      プロダクト説明文 (任意)
+                      {t("details.descriptionLabel")}
                     </label>
                   </Text>
                   <Box w="full">
                     <Textarea
-                      aria-label="プロダクト説明文"
+                      aria-label={t("details.descriptionAriaLabel")}
                       defaultValue={product.description ?? ""}
                       id={productDescriptionInputId}
                       maxLength={5000}
                       name="description"
-                      placeholder="サービスの概要などを記載してください"
+                      placeholder={t("details.descriptionPlaceholder")}
                       rows={4}
                     />
                   </Box>
                   <Text color="muted" size="xs">
-                    5000文字まで登録できます。空欄にすると未設定になります。
+                    {t("details.descriptionHelper")}
                   </Text>
                 </VStack>
                 <HStack justify="end" w="full">
                   <SubmitButton
                     formAction={updateDetailsAction}
-                    pendingLabel="保存中..."
+                    pendingLabel={t("toast.updateDetails.loading")}
                     size="sm"
                     variant="default"
                   >
-                    表示情報を保存
+                    {t("details.save")}
                   </SubmitButton>
                 </HStack>
               </VStack>
@@ -301,21 +308,22 @@ export const Product = ({
 
       <VStack borderTop="default" gap="md" pt="xl" w="full">
         <VStack gap="xs" w="full">
-          <Heading size="lg">リクエスト一覧</Heading>
+          <Heading size="lg">{t("requests.title")}</Heading>
           <Text color="muted" size="sm">
-            受け付けたリクエストの内容とステータスを確認できます。
+            {t("requests.description")}
           </Text>
         </VStack>
 
         {featureRequests.length === 0 ? (
           <Box bg="white" p="md" radius="md" w="full">
-            <Text color="muted">まだリクエストがありません。</Text>
+            <Text color="muted">{t("requests.empty")}</Text>
           </Box>
         ) : (
           <VStack gap="md" w="full">
             {featureRequests.map((feature) => {
-              const copy = statusCopy(feature.status);
-              const title = feature.title?.trim() || "無題のリクエスト";
+              const copy = createStatusCopy(t, feature.status);
+              const title =
+                feature.title?.trim() || t("requests.fallbackTitle");
               const statusAction = wrapActionWithToast(onUpdateFeatureStatus, {
                 error: copy.toast.error,
                 loading: copy.toast.loading,
@@ -331,9 +339,11 @@ export const Product = ({
                         content: (
                           <Box bg="muted" p="md" radius="sm" w="full">
                             <Textarea
-                              aria-label="機能リクエストの内容"
+                              aria-label={t("requests.contentAriaLabel")}
                               readOnly
-                              value={feature.content || "詳細はありません。"}
+                              value={
+                                feature.content || t("requests.contentFallback")
+                              }
                               variant="display"
                             />
                           </Box>
@@ -372,7 +382,7 @@ export const Product = ({
                         />
                         <SubmitButton
                           formAction={statusAction}
-                          pendingLabel="更新中..."
+                          pendingLabel={t("toast.updateStatus.loading")}
                           size="sm"
                           variant="outline"
                         >
@@ -382,16 +392,16 @@ export const Product = ({
                       <AlertDialog>
                         <AlertDialogTrigger asChild>
                           <Button size="sm" type="button" variant="destructive">
-                            リクエストを削除
+                            {t("requests.deleteLabel")}
                           </Button>
                         </AlertDialogTrigger>
                         <AlertDialogContent>
                           <AlertDialogHeader>
                             <AlertDialogTitle>
-                              リクエストを削除
+                              {t("requests.deleteTitle")}
                             </AlertDialogTitle>
                             <AlertDialogDescription>
-                              この操作は取り消せません。リクエストは完全に削除されます。
+                              {t("requests.deleteDescription")}
                             </AlertDialogDescription>
                           </AlertDialogHeader>
                           <form
@@ -410,14 +420,16 @@ export const Product = ({
                               value={feature.id}
                             />
                             <AlertDialogFooter>
-                              <AlertDialogCancel>キャンセル</AlertDialogCancel>
+                              <AlertDialogCancel>
+                                {t("requests.deleteCancel")}
+                              </AlertDialogCancel>
                               <SubmitButton
                                 formAction={deleteFeatureRequestAction}
-                                pendingLabel="削除中..."
+                                pendingLabel={t("toast.deleteRequest.loading")}
                                 size="sm"
                                 variant="destructive"
                               >
-                                削除する
+                                {t("requests.deleteConfirm")}
                               </SubmitButton>
                             </AlertDialogFooter>
                           </form>
@@ -435,39 +447,41 @@ export const Product = ({
       <Box bg="white" p="lg" radius="lg" w="full">
         <VStack align="start" gap="sm" w="full">
           <Text size="sm" weight="bold">
-            プロダクトを削除
+            {t("deleteProduct.title")}
           </Text>
           <AlertDialog>
             <VStack align="start" gap="sm" w="full">
               <Text color="muted" size="sm">
-                この操作は取り消せません。プロダクトと関連するリクエストがすべて削除されます。
+                {t("deleteProduct.description")}
               </Text>
               <HStack justify="end" w="full">
                 <AlertDialogTrigger asChild>
                   <Button size="sm" type="button" variant="destructive">
-                    プロダクトを削除
+                    {t("deleteProduct.title")}
                   </Button>
                 </AlertDialogTrigger>
               </HStack>
             </VStack>
             <AlertDialogContent>
               <AlertDialogHeader>
-                <AlertDialogTitle>プロダクトを削除</AlertDialogTitle>
+                <AlertDialogTitle>{t("deleteProduct.title")}</AlertDialogTitle>
                 <AlertDialogDescription>
-                  この操作は取り消せません。プロダクトと関連するリクエストがすべて削除されます。
+                  {t("deleteProduct.description")}
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <form action={deleteProductAction} data-slot="delete-form">
                 <input name="productId" type="hidden" value={product.id} />
                 <AlertDialogFooter>
-                  <AlertDialogCancel>キャンセル</AlertDialogCancel>
+                  <AlertDialogCancel>
+                    {t("deleteProduct.cancel")}
+                  </AlertDialogCancel>
                   <SubmitButton
                     formAction={deleteProductAction}
-                    pendingLabel="削除中..."
+                    pendingLabel={t("toast.deleteProduct.loading")}
                     size="sm"
                     variant="destructive"
                   >
-                    削除する
+                    {t("deleteProduct.confirm")}
                   </SubmitButton>
                 </AlertDialogFooter>
               </form>

@@ -1,4 +1,5 @@
 import { Center, Container, Header, VStack } from "@repo/ui/components";
+import { getTranslations } from "next-intl/server";
 import { redirect } from "next/navigation";
 import { type ReactNode } from "react";
 
@@ -11,6 +12,7 @@ type Props = Readonly<{
 
 const Layout = async ({ children }: Props) => {
   const session = await auth();
+  const t = await getTranslations("AdminApp");
 
   if (!session?.user) {
     redirect("/sign-in");
@@ -31,7 +33,7 @@ const Layout = async ({ children }: Props) => {
       <Header
         appendLink={{
           href: env.USER_DOMAIN_URL,
-          label: "ユーザーページへ",
+          label: t("userPageLinkLabel"),
         }}
         appName="Fequest Admin"
         loginAction={signInWithGoogle}

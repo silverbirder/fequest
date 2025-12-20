@@ -61,5 +61,135 @@
         "success": "削除しました"
       }
     }
+  },
+  "AdminApp": {
+    "userPageLinkLabel": "ユーザーページへ",
+    "notFoundDescription": "お探しのページは見つかりませんでした。"
+  },
+  "AdminDashboard": {
+    "toast": {
+      "create": {
+        "error": "作成に失敗しました",
+        "loading": "作成中...",
+        "success": "プロダクトを作成しました"
+      }
+    },
+    "dialog": {
+      "title": "新しいプロダクトを作成",
+      "description": "名前を入力して作成すると、そのプロダクトの管理ページに移動します。",
+      "nameLabel": "プロダクト名",
+      "nameAriaLabel": "プロダクト名",
+      "namePlaceholder": "例: Fequest",
+      "nameHelper": "名前は後から変更できます。"
+    },
+    "buttons": {
+      "cancel": "キャンセル",
+      "create": "作成する",
+      "createProduct": "プロダクトを作成"
+    },
+    "empty": {
+      "title": "プロダクトが未登録のようです...。",
+      "description": "新しいプロダクトを作成して、リクエストを集めましょう！"
+    },
+    "list": {
+      "title": "プロダクト一覧",
+      "description": "あなたが登録したプロダクトの一覧です。",
+      "cta": "新しいプロダクトを作成して、リクエストを集めましょう。"
+    }
+  },
+  "AdminProduct": {
+    "status": {
+      "open": {
+        "actionLabel": "完了にする",
+        "toast": {
+          "error": "完了への変更に失敗しました",
+          "loading": "完了にしています",
+          "success": "完了にしました"
+        }
+      },
+      "closed": {
+        "actionLabel": "未完了に戻す",
+        "toast": {
+          "error": "未完了に戻すことに失敗しました",
+          "loading": "未完了に戻しています",
+          "success": "未完了に戻しました"
+        }
+      }
+    },
+    "toast": {
+      "updateName": {
+        "error": "名前の保存に失敗しました",
+        "loading": "名前を保存中...",
+        "success": "名前を保存しました"
+      },
+      "updateDetails": {
+        "error": "表示情報の保存に失敗しました",
+        "loading": "表示情報を保存中...",
+        "success": "表示情報を保存しました"
+      },
+      "deleteProduct": {
+        "error": "プロダクトの削除に失敗しました",
+        "loading": "プロダクトを削除中...",
+        "success": "プロダクトを削除しました"
+      },
+      "deleteRequest": {
+        "error": "リクエストの削除に失敗しました",
+        "loading": "リクエストを削除中...",
+        "success": "リクエストを削除しました"
+      },
+      "updateStatus": {
+        "loading": "更新中..."
+      }
+    },
+    "header": {
+      "title": "プロダクトの管理",
+      "userPageLabel": "ユーザー向けページ",
+      "userPageAriaLabel": "ユーザー側のプロダクトページ {url}",
+      "description": "プロダクト情報の更新と、リクエストのステータス管理を行えます。"
+    },
+    "rename": {
+      "label": "プロダクト名",
+      "ariaLabel": "プロダクト名",
+      "save": "名前を保存"
+    },
+    "details": {
+      "title": "プロダクトの補足情報",
+      "description": "ロゴや説明文を設定して、ユーザーにわかりやすく伝えましょう。",
+      "logoLabel": "ロゴURL (任意)",
+      "logoAriaLabel": "プロダクトロゴURL",
+      "logoHelper": "画像のURLを入力すると、ユーザーにプロダクトのロゴが表示されます。",
+      "homePageLabel": "ホームページURL (任意)",
+      "homePageAriaLabel": "プロダクトホームページURL",
+      "homePageHelper": "プロダクトの公式サイトやLPへのリンクを登録できます。",
+      "descriptionLabel": "プロダクト説明文 (任意)",
+      "descriptionAriaLabel": "プロダクト説明文",
+      "descriptionPlaceholder": "サービスの概要などを記載してください",
+      "descriptionHelper": "5000文字まで登録できます。空欄にすると未設定になります。",
+      "save": "表示情報を保存"
+    },
+    "requests": {
+      "title": "リクエスト一覧",
+      "description": "受け付けたリクエストの内容とステータスを確認できます。",
+      "empty": "まだリクエストがありません。",
+      "fallbackTitle": "無題のリクエスト",
+      "contentAriaLabel": "機能リクエストの内容",
+      "contentFallback": "詳細はありません。",
+      "deleteLabel": "リクエストを削除",
+      "deleteTitle": "リクエストを削除",
+      "deleteDescription": "この操作は取り消せません。リクエストは完全に削除されます。",
+      "deleteCancel": "キャンセル",
+      "deleteConfirm": "削除する"
+    },
+    "deleteProduct": {
+      "title": "プロダクトを削除",
+      "description": "この操作は取り消せません。プロダクトと関連するリクエストがすべて削除されます。",
+      "confirm": "削除する",
+      "cancel": "キャンセル"
+    }
+  },
+  "AdminSignIn": {
+    "title": "管理画面",
+    "description": "管理画面を利用するには、Googleでログインしてください。",
+    "googleButton": "Googleでログイン"
   }
 }

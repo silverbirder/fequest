@@ -1,3 +1,5 @@
+"use client";
+
 import {
   AppLogo,
   Box,
@@ -7,12 +9,15 @@ import {
   Text,
   VStack,
 } from "@repo/ui/components";
+import { useTranslations } from "next-intl";
 
 type Props = {
   onGoogleSignIn: () => Promise<void>;
 };
 
 export const SignIn = ({ onGoogleSignIn }: Props) => {
+  const t = useTranslations("AdminSignIn");
+
   return (
     <Center minH="screen">
       <Box maxW="3xl" p="xl" w="full">
@@ -26,18 +31,16 @@ export const SignIn = ({ onGoogleSignIn }: Props) => {
                   </Heading>
                 </AppLogo>
                 <Text display="inline-block" size="2xl" weight="bold">
-                  管理画面
+                  {t("title")}
                 </Text>
               </VStack>
             </VStack>
           </VStack>
           <VStack align="center" gap="sm">
-            <Text color="subtle">
-              管理画面を利用するには、Googleでログインしてください。
-            </Text>
+            <Text color="subtle">{t("description")}</Text>
             <form action={onGoogleSignIn}>
               <Button data-slot="google-signin" size="lg" type="submit">
-                Googleでログイン
+                {t("googleButton")}
               </Button>
             </form>
           </VStack>

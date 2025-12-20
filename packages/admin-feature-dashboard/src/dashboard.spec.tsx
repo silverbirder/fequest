@@ -1,4 +1,6 @@
+import { jaMessages } from "@repo/messages";
 import { composeStories } from "@storybook/nextjs-vite";
+import { NextIntlClientProvider } from "next-intl";
 import React from "react";
 import { describe, expect, it, vi } from "vitest";
 import { render } from "vitest-browser-react";
@@ -7,6 +9,13 @@ import { Dashboard } from "./dashboard";
 import * as stories from "./dashboard.stories";
 
 const Stories = composeStories(stories);
+
+const renderWithIntl = (ui: React.ReactNode) =>
+  render(
+    <NextIntlClientProvider locale="ja" messages={jaMessages}>
+      {ui}
+    </NextIntlClientProvider>,
+  );
 
 vi.mock("next/link", () => {
   const Link = React.forwardRef<
@@ -39,7 +48,7 @@ describe("Dashboard", () => {
   });
 
   it("shows product cards with counts", async () => {
-    await render(
+    await renderWithIntl(
       <Dashboard
         onCreateProduct={vi.fn()}
         products={[
@@ -50,7 +59,7 @@ describe("Dashboard", () => {
     );
 
     const html = document.body.textContent ?? "";
-    expect(html).toContain("プロダクト一覧");
+    expect(html).toContain(jaMessages.AdminDashboard.list.title);
     expect(html).toContain("Alpha");
     expect(html).toContain("リクエスト 2件");
     expect(html).toContain("Beta");
@@ -58,18 +67,21 @@ describe("Dashboard", () => {
   });
 
   it("renders empty state when no products", async () => {
-    await render(<Dashboard onCreateProduct={vi.fn()} products={[]} />);
+    await renderWithIntl(<Dashboard onCreateProduct={vi.fn()} products={[]} />);
 
     const html = document.body.textContent ?? "";
-    expect(html).toContain("プロダクトが未登録のようです...。");
-    expect(html).toContain("プロダクトを作成");
+    expect(html).toContain(jaMessages.AdminDashboard.empty.title);
+    expect(html).toContain(jaMessages.AdminDashboard.buttons.createProduct);
   });
 
   it("opens the create product dialog when the trigger is clicked", async () => {
-    await render(<Dashboard onCreateProduct={vi.fn()} products={[]} />);
+    await renderWithIntl(<Dashboard onCreateProduct={vi.fn()} products={[]} />);
 
     const triggers = Array.from(document.querySelectorAll("button")).filter(
-      (button) => button.textContent?.includes("プロダクトを作成"),
+      (button) =>
+        button.textContent?.includes(
+          jaMessages.AdminDashboard.buttons.createProduct,
+        ),
     );
 
     expect(triggers.length).toBeGreaterThan(0);
@@ -80,6 +92,8 @@ describe("Dashboard", () => {
 
     const form = document.querySelector('[data-slot="create-product-form"]');
     expect(form).not.toBeNull();
-    expect(form?.textContent).toContain("プロダクト名");
+    expect(form?.textContent).toContain(
+      jaMessages.AdminDashboard.dialog.nameLabel,
+    );
   });
 });

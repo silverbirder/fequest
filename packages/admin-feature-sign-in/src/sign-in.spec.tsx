@@ -1,4 +1,6 @@
+import { jaMessages } from "@repo/messages";
 import { composeStories } from "@storybook/nextjs-vite";
+import { NextIntlClientProvider } from "next-intl";
 import { describe, expect, it, vi } from "vitest";
 import { render } from "vitest-browser-react";
 
@@ -20,9 +22,13 @@ describe("SignIn", () => {
 
   it("renders button and link", async () => {
     const action = vi.fn();
-    await render(<SignIn onGoogleSignIn={action} />);
+    await render(
+      <NextIntlClientProvider locale="ja" messages={jaMessages}>
+        <SignIn onGoogleSignIn={action} />
+      </NextIntlClientProvider>,
+    );
 
     const button = document.querySelector<HTMLButtonElement>("button");
-    expect(button?.textContent).toContain("Googleでログイン");
+    expect(button?.textContent).toContain(jaMessages.AdminSignIn.googleButton);
   });
 });

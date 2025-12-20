@@ -1,4 +1,6 @@
+import { jaMessages } from "@repo/messages";
 import { composeStories } from "@storybook/nextjs-vite";
+import { NextIntlClientProvider } from "next-intl";
 import React from "react";
 import { describe, expect, it } from "vitest";
 import { render } from "vitest-browser-react";
@@ -15,6 +17,13 @@ const flushMicrotasks = async () =>
     setTimeout(() => resolve(), 0);
   });
 
+const renderWithIntl = (ui: React.ReactNode) =>
+  render(
+    <NextIntlClientProvider locale="ja" messages={jaMessages}>
+      {ui}
+    </NextIntlClientProvider>,
+  );
+
 describe("Product", () => {
   it.each(Object.entries(Stories))("should %s snapshot", async (_, Story) => {
     const originalInnerHtml = document.body.innerHTML;
@@ -27,7 +36,7 @@ describe("Product", () => {
   });
 
   it("shows rename form with the current product name", async () => {
-    await render(
+    await renderWithIntl(
       <Product
         onDelete={async () => {}}
         onDeleteFeatureRequest={async () => {}}
@@ -46,11 +55,13 @@ describe("Product", () => {
     const renameForm = document.querySelector<HTMLFormElement>(
       'form[data-slot="rename-form"]',
     );
-    expect(renameForm?.textContent ?? "").toContain("名前を保存");
+    expect(renameForm?.textContent ?? "").toContain(
+      jaMessages.AdminProduct.rename.save,
+    );
   });
 
   it("focuses the input when its label is clicked", async () => {
-    await render(
+    await renderWithIntl(
       <Product
         onDelete={async () => {}}
         onDeleteFeatureRequest={async () => {}}
@@ -64,7 +75,10 @@ describe("Product", () => {
 
     const nameLabel = Array.from(
       document.querySelectorAll<HTMLLabelElement>("label"),
-    ).find((label) => label.textContent?.trim() === "プロダクト名");
+    ).find(
+      (label) =>
+        label.textContent?.trim() === jaMessages.AdminProduct.rename.label,
+    );
     const nameInput =
       document.querySelector<HTMLInputElement>('input[name="name"]');
 
@@ -77,7 +91,7 @@ describe("Product", () => {
   });
 
   it("renders product detail form with defaults", async () => {
-    await render(
+    await renderWithIntl(
       <Product
         onDelete={async () => {}}
         onDeleteFeatureRequest={async () => {}}
@@ -114,16 +128,20 @@ describe("Product", () => {
     const detailsForm = document.querySelector<HTMLFormElement>(
       'form[data-slot="details-form"]',
     );
-    expect(detailsForm?.textContent ?? "").toContain("表示情報を保存");
+    expect(detailsForm?.textContent ?? "").toContain(
+      jaMessages.AdminProduct.details.save,
+    );
 
     const userLink = document.querySelector<HTMLAnchorElement>(
       `a[href="${userDomainUrl}/9"]`,
     );
-    expect(userLink?.textContent ?? "").toContain("ユーザー向けページ");
+    expect(userLink?.textContent ?? "").toContain(
+      jaMessages.AdminProduct.header.userPageLabel,
+    );
   });
 
   it("renders feature requests with status toggles", async () => {
-    await render(
+    await renderWithIntl(
       <Product
         onDelete={async () => {}}
         onDeleteFeatureRequest={async () => {}}
@@ -157,8 +175,8 @@ describe("Product", () => {
     const html = document.body.textContent ?? "";
     expect(html).toContain("Alpha");
     expect(html).toContain("Beta");
-    expect(html).toContain("完了");
-    expect(html).toContain("未完了");
+    expect(html).toContain(jaMessages.AdminProduct.status.open.actionLabel);
+    expect(html).toContain(jaMessages.AdminProduct.status.closed.actionLabel);
 
     const openToggle = document.querySelector<HTMLInputElement>(
       'form[data-feature-id="10"] input[name="status"]',
@@ -172,7 +190,7 @@ describe("Product", () => {
   });
 
   it("orders feature requests by reactions then created date", async () => {
-    await render(
+    await renderWithIntl(
       <Product
         onDelete={async () => {}}
         onDeleteFeatureRequest={async () => {}}
@@ -232,7 +250,7 @@ describe("Product", () => {
   });
 
   it("shows empty state when there are no feature requests", async () => {
-    await render(
+    await renderWithIntl(
       <Product
         onDelete={async () => {}}
         onDeleteFeatureRequest={async () => {}}
@@ -245,11 +263,11 @@ describe("Product", () => {
     );
 
     const html = document.body.textContent ?? "";
-    expect(html).toContain("まだリクエストがありません。");
+    expect(html).toContain(jaMessages.AdminProduct.requests.empty);
   });
 
   it("renders a destructive delete action with the product id", async () => {
-    await render(
+    await renderWithIntl(
       <Product
         onDelete={async () => {}}
         onDeleteFeatureRequest={async () => {}}
@@ -263,7 +281,9 @@ describe("Product", () => {
 
     const deleteTrigger = Array.from(
       document.querySelectorAll<HTMLButtonElement>("button"),
-    ).find((button) => button.textContent?.includes("プロダクトを削除"));
+    ).find((button) =>
+      button.textContent?.includes(jaMessages.AdminProduct.deleteProduct.title),
+    );
 
     expect(deleteTrigger).toBeDefined();
     expect(deleteTrigger?.className ?? "").toContain("destructive");
@@ -274,7 +294,9 @@ describe("Product", () => {
     const dialog = document.querySelector<HTMLDivElement>(
       '[data-slot="alert-dialog-content"]',
     );
-    expect(dialog?.textContent ?? "").toContain("プロダクトを削除");
+    expect(dialog?.textContent ?? "").toContain(
+      jaMessages.AdminProduct.deleteProduct.title,
+    );
 
     const deleteForm = dialog?.querySelector<HTMLFormElement>(
       'form[data-slot="delete-form"]',
@@ -289,11 +311,13 @@ describe("Product", () => {
     const confirmButton = deleteForm?.querySelector<HTMLButtonElement>(
       'button[type="submit"]',
     );
-    expect(confirmButton?.textContent ?? "").toContain("削除する");
+    expect(confirmButton?.textContent ?? "").toContain(
+      jaMessages.AdminProduct.deleteProduct.confirm,
+    );
   });
 
   it("renders a delete button for each feature request with identifiers", async () => {
-    await render(
+    await renderWithIntl(
       <Product
         onDelete={async () => {}}
         onDeleteFeatureRequest={async () => {}}
@@ -314,7 +338,11 @@ describe("Product", () => {
 
     const deleteTriggers = Array.from(
       document.querySelectorAll<HTMLButtonElement>("button"),
-    ).filter((button) => button.textContent?.trim() === "リクエストを削除");
+    ).filter(
+      (button) =>
+        button.textContent?.trim() ===
+        jaMessages.AdminProduct.requests.deleteLabel,
+    );
 
     expect(deleteTriggers).toHaveLength(2);
 
@@ -337,7 +365,11 @@ describe("Product", () => {
 
     const cancelButton = Array.from(
       document.querySelectorAll<HTMLButtonElement>("button"),
-    ).find((button) => button.textContent?.trim() === "キャンセル");
+    ).find(
+      (button) =>
+        button.textContent?.trim() ===
+        jaMessages.AdminProduct.requests.deleteCancel,
+    );
     cancelButton?.click();
     await flushMicrotasks();
 

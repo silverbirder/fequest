@@ -2,6 +2,8 @@ import { Toaster } from "@repo/ui/components";
 import "@repo/ui/globals.css";
 import { Providers } from "@repo/ui/providers/theme-provider";
 import { type Metadata } from "next";
+import { NextIntlClientProvider } from "next-intl";
+import { getMessages } from "next-intl/server";
 import { Noto_Sans_JP } from "next/font/google";
 import { type ReactNode } from "react";
 
@@ -29,12 +31,16 @@ type Props = Readonly<{
   children: ReactNode;
 }>;
 
-export default function RootLayout({ children }: Props) {
+export default async function RootLayout({ children }: Props) {
+  const messages = await getMessages();
+
   return (
     <html lang="ja" suppressHydrationWarning>
       <body className={notoSansJP.className}>
         <TRPCReactProvider>
-          <Providers>{children}</Providers>
+          <NextIntlClientProvider messages={messages}>
+            <Providers>{children}</Providers>
+          </NextIntlClientProvider>
         </TRPCReactProvider>
         <Toaster />
       </body>
