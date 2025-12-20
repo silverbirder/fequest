@@ -1,6 +1,9 @@
+import type { ReactNode } from "react";
 import type { FormStatus } from "react-dom";
 
+import { jaMessages } from "@repo/messages";
 import { composeStories } from "@storybook/nextjs-vite";
+import { NextIntlClientProvider } from "next-intl";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { render } from "vitest-browser-react";
 
@@ -29,6 +32,13 @@ vi.mock("react-dom", async () => {
 
 const Stories = composeStories(stories);
 
+const renderWithIntl = (ui: ReactNode) =>
+  render(
+    <NextIntlClientProvider locale="ja" messages={jaMessages}>
+      {ui}
+    </NextIntlClientProvider>,
+  );
+
 describe("RequestInput", () => {
   afterEach(() => {
     useFormStatusMock.mockReset();
@@ -46,7 +56,7 @@ describe("RequestInput", () => {
   });
 
   it("renders avatar and input with helper text", async () => {
-    await render(
+    await renderWithIntl(
       <RequestInput
         avatar={{ fallbackText: "UI" }}
         helperText="入力してください"
@@ -80,7 +90,7 @@ describe("RequestInput", () => {
     };
     useFormStatusMock.mockImplementation(() => pendingStatus);
 
-    await render(<RequestInput name="request" />);
+    await renderWithIntl(<RequestInput name="request" />);
 
     const input = document.querySelector("input[name='request']");
     expect(input).toHaveAttribute("disabled");
@@ -89,8 +99,10 @@ describe("RequestInput", () => {
       document.querySelectorAll("[data-slot='text']"),
     );
     const helper = helperNodes.find((node) =>
-      node.textContent?.includes("送信中..."),
+      node.textContent?.includes(jaMessages.UI.requestInput.loadingHelper),
     );
-    expect(helper?.textContent).toContain("送信中...");
+    expect(helper?.textContent).toContain(
+      jaMessages.UI.requestInput.loadingHelper,
+    );
   });
 });

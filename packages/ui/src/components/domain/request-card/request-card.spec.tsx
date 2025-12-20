@@ -1,4 +1,8 @@
+import type { ReactNode } from "react";
+
+import { jaMessages } from "@repo/messages";
 import { composeStories } from "@storybook/nextjs-vite";
+import { NextIntlClientProvider } from "next-intl";
 import { describe, expect, it } from "vitest";
 import { render } from "vitest-browser-react";
 
@@ -6,6 +10,13 @@ import { RequestCard } from "./request-card";
 import * as stories from "./request-card.stories";
 
 const Stories = composeStories(stories);
+
+const renderWithIntl = (ui: ReactNode) =>
+  render(
+    <NextIntlClientProvider locale="ja" messages={jaMessages}>
+      {ui}
+    </NextIntlClientProvider>,
+  );
 
 const waitForDialog = (delay = 0) =>
   new Promise<void>((resolve) => {
@@ -32,7 +43,7 @@ describe("RequestCard", () => {
   });
 
   it("renders provided children", async () => {
-    await render(
+    await renderWithIntl(
       <RequestCard
         avatar={{ fallbackText: "CF" }}
         detail={{
@@ -70,7 +81,7 @@ describe("RequestCard", () => {
   });
 
   it("shows emoji picker trigger when enabled", async () => {
-    await render(
+    await renderWithIntl(
       <RequestCard
         avatar={{ fallbackText: "CF" }}
         detail={{
@@ -94,13 +105,13 @@ describe("RequestCard", () => {
     );
 
     const trigger = document.querySelector<HTMLButtonElement>(
-      "button[aria-label='リアクションを追加']",
+      `button[aria-label='${jaMessages.UI.requestCard.reactionAddLabel}']`,
     );
     expect(trigger).not.toBeNull();
   });
 
   it("renders reactions in read-only mode", async () => {
-    await render(
+    await renderWithIntl(
       <RequestCard
         detail={{
           content: <div>内容</div>,
@@ -125,13 +136,13 @@ describe("RequestCard", () => {
     expect(reactionButtons[0]?.disabled).toBe(true);
 
     const pickerTrigger = document.querySelector<HTMLButtonElement>(
-      "button[aria-label='リアクションを追加']",
+      `button[aria-label='${jaMessages.UI.requestCard.reactionAddLabel}']`,
     );
     expect(pickerTrigger).toBeNull();
   });
 
   it("shows closed badge when status is closed", async () => {
-    await render(
+    await renderWithIntl(
       <RequestCard
         avatar={{ fallbackText: "CF" }}
         detail={{
@@ -146,7 +157,7 @@ describe("RequestCard", () => {
     );
 
     const badge = Array.from(document.querySelectorAll("span")).find((node) =>
-      (node.textContent ?? "").includes("完了"),
+      (node.textContent ?? "").includes(jaMessages.UI.bubbleText.closedBadge),
     );
 
     expect(badge).not.toBeUndefined();

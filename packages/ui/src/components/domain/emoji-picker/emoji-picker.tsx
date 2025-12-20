@@ -1,6 +1,7 @@
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
 import { Plus } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import {
   Button,
@@ -16,12 +17,9 @@ type Props = {
   triggerId?: string;
 };
 
-export const EmojiPicker = ({
-  label = "リアクションを追加",
-  menuId,
-  onSelect,
-  triggerId,
-}: Props) => {
+export const EmojiPicker = ({ label, menuId, onSelect, triggerId }: Props) => {
+  const t = useTranslations("UI.emojiPicker");
+  const resolvedLabel = label ?? t("label");
   const handleSelect = (emoji: undefined | { native?: string }) => {
     const nativeEmoji = emoji?.native;
     if (!nativeEmoji) return;
@@ -33,7 +31,7 @@ export const EmojiPicker = ({
       <PopoverTrigger asChild>
         <Button
           aria-controls={menuId}
-          aria-label={label}
+          aria-label={resolvedLabel}
           id={triggerId}
           size="sm"
           type="button"

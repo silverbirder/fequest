@@ -2,6 +2,7 @@
 
 import type { ComponentProps } from "react";
 
+import { useTranslations } from "next-intl";
 import { useFormStatus } from "react-dom";
 
 import { Box, HStack } from "../../common/layout";
@@ -23,6 +24,7 @@ export const RequestInput = ({
   helperText: helperTextProp,
   ...inputProps
 }: Props) => {
+  const t = useTranslations("UI.requestInput");
   const avatarProps = {
     alt: avatar?.alt ?? undefined,
     fallbackText: avatar?.fallbackText ?? "YU",
@@ -32,7 +34,7 @@ export const RequestInput = ({
   const { pending: formPending } = useFormStatus();
   const isDisabled = disabledProp ?? formPending;
   const helperText = formPending
-    ? (helperTextProp ?? "送信中...")
+    ? (helperTextProp ?? t("loadingHelper"))
     : helperTextProp;
 
   return (

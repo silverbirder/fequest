@@ -1,4 +1,8 @@
+import type { ReactNode } from "react";
+
+import { jaMessages } from "@repo/messages";
 import { composeStories } from "@storybook/nextjs-vite";
+import { NextIntlClientProvider } from "next-intl";
 import { describe, expect, it } from "vitest";
 import { render } from "vitest-browser-react";
 
@@ -6,6 +10,13 @@ import { RequestDialog } from "./request-dialog";
 import * as stories from "./request-dialog.stories";
 
 const Stories = composeStories(stories);
+
+const renderWithIntl = (ui: ReactNode) =>
+  render(
+    <NextIntlClientProvider locale="ja" messages={jaMessages}>
+      {ui}
+    </NextIntlClientProvider>,
+  );
 
 const waitForDialog = (delay = 0) =>
   new Promise<void>((resolve) => {
@@ -32,7 +43,7 @@ describe("RequestDialog", () => {
   });
 
   it("renders provided detail content and metadata", async () => {
-    await render(
+    await renderWithIntl(
       <RequestDialog
         avatar={{ fallbackText: "CF" }}
         detail={{
@@ -59,7 +70,7 @@ describe("RequestDialog", () => {
     const bodyText = document.body.textContent ?? "";
     expect(bodyText).toContain("Child content");
     expect(bodyText).toContain(
-      "CFChild contentHeadingitem1item2投稿日: 2024年01月01日Close",
+      jaMessages.UI.requestDialog.postedAt.replace("{date}", "2024年01月01日"),
     );
     const headings = Array.from(document.querySelectorAll("h2"));
     const hasDetailHeading = headings.some((node) =>
@@ -69,7 +80,7 @@ describe("RequestDialog", () => {
   });
 
   it("opens by default when defaultOpen is true", async () => {
-    await render(
+    await renderWithIntl(
       <RequestDialog
         avatar={{ fallbackText: "CF" }}
         defaultOpen

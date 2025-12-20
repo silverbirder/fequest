@@ -1,4 +1,8 @@
+import type { ReactNode } from "react";
+
+import { jaMessages } from "@repo/messages";
 import { composeStories } from "@storybook/nextjs-vite";
+import { NextIntlClientProvider } from "next-intl";
 import { describe, expect, it } from "vitest";
 import { render } from "vitest-browser-react";
 
@@ -6,6 +10,13 @@ import { Header } from "./header";
 import * as stories from "./header.stories";
 
 const Stories = composeStories(stories);
+
+const renderWithIntl = (ui: ReactNode) =>
+  render(
+    <NextIntlClientProvider locale="ja" messages={jaMessages}>
+      {ui}
+    </NextIntlClientProvider>,
+  );
 
 describe("Header", () => {
   it.each(Object.entries(Stories))("should %s snapshot", async (_, Story) => {
@@ -19,7 +30,7 @@ describe("Header", () => {
   });
 
   it("shows login action when the user is not authenticated", async () => {
-    await render(
+    await renderWithIntl(
       <Header
         loginAction={async () => {}}
         logoutAction={async () => {}}
@@ -31,11 +42,11 @@ describe("Header", () => {
     const button = form?.querySelector<HTMLButtonElement>("button");
 
     expect(form).not.toBeNull();
-    expect(button?.textContent).toContain("ログイン");
+    expect(button?.textContent).toContain(jaMessages.UI.header.login);
   });
 
   it("keeps the header sticky at the top", async () => {
-    await render(
+    await renderWithIntl(
       <Header
         loginAction={async () => {}}
         logoutAction={async () => {}}
@@ -55,7 +66,7 @@ describe("Header", () => {
     const loginAction = async () => {};
     const logoutAction = async () => {};
 
-    await render(
+    await renderWithIntl(
       <Header
         loginAction={loginAction}
         logoutAction={logoutAction}
@@ -68,7 +79,7 @@ describe("Header", () => {
   });
 
   it("renders an avatar when the user is authenticated", async () => {
-    await render(
+    await renderWithIntl(
       <Header
         loginAction={async () => {}}
         logoutAction={async () => {}}
@@ -84,11 +95,11 @@ describe("Header", () => {
     );
 
     expect(avatarFallback?.textContent).toBe("田太");
-    expect(document.body.textContent).not.toContain("ログイン");
+    expect(document.body.textContent).not.toContain(jaMessages.UI.header.login);
   });
 
   it("opens dropdown menu on avatar click and shows logout", async () => {
-    await render(
+    await renderWithIntl(
       <Header
         appendLink={{
           href: "https://admin.fequest.local",
@@ -134,13 +145,13 @@ describe("Header", () => {
       "[data-slot='dropdown-menu-content']",
     );
 
-    expect(menu?.textContent ?? "").toContain("ログアウト");
+    expect(menu?.textContent ?? "").toContain(jaMessages.UI.header.logout);
   });
 
   it("shows a cross-portal link when provided", async () => {
     const href = "https://admin.fequest.local";
 
-    await render(
+    await renderWithIntl(
       <Header
         appendLink={{
           href,

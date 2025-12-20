@@ -1,6 +1,7 @@
 import type { UrlObject } from "url";
 
 import { formatCount } from "@repo/util";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 
 import { Box, HStack, Text, VStack } from "../../common";
@@ -14,11 +15,12 @@ type Props = {
 };
 
 export const ProductCard = ({ href, logoUrl, name, requestCount }: Props) => {
+  const t = useTranslations("UI.productCard");
   const requestLabel = formatCount(requestCount);
 
   return (
     <Box asChild bg="white" border="default" p="md" radius="lg">
-      <Link aria-label={`${name}のプロダクトページ`} href={href}>
+      <Link aria-label={t("ariaLabel", { name })} href={href}>
         <VStack align="start" gap="md" w="full">
           <ProductLogo
             dataSlot="product-card-logo"
@@ -37,11 +39,11 @@ export const ProductCard = ({ href, logoUrl, name, requestCount }: Props) => {
               {name}
             </Text>
             <Text color="muted" data-slot="product-card-count" size="sm">
-              リクエスト {requestLabel}件
+              {t("requestCount", { count: requestLabel })}
             </Text>
             <HStack align="center" gap="xs">
               <Text color="accent" size="sm" weight="bold">
-                プロダクトページへ
+                {t("linkLabel")}
               </Text>
               <Text aria-hidden color="accent" size="sm" weight="bold">
                 →

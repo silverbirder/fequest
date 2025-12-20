@@ -1,4 +1,8 @@
+import type { ReactNode } from "react";
+
+import { jaMessages } from "@repo/messages";
 import { composeStories } from "@storybook/nextjs-vite";
+import { NextIntlClientProvider } from "next-intl";
 import { describe, expect, it } from "vitest";
 import { render } from "vitest-browser-react";
 
@@ -6,6 +10,13 @@ import { ProductLogo } from "./product-logo";
 import * as stories from "./product-logo.stories";
 
 const Stories = composeStories(stories);
+
+const renderWithIntl = (ui: ReactNode) =>
+  render(
+    <NextIntlClientProvider locale="ja" messages={jaMessages}>
+      {ui}
+    </NextIntlClientProvider>,
+  );
 
 describe("ProductLogo", () => {
   it.each(Object.entries(Stories))("should %s snapshot", async (_, Story) => {
@@ -19,7 +30,7 @@ describe("ProductLogo", () => {
   });
 
   it("renders fallback initial when logo is missing", async () => {
-    await render(<ProductLogo logoUrl={null} name="Sample" />);
+    await renderWithIntl(<ProductLogo logoUrl={null} name="Sample" />);
 
     const fallback = document.querySelector<HTMLElement>(
       "[data-slot='product-logo-fallback']",
@@ -29,7 +40,7 @@ describe("ProductLogo", () => {
   });
 
   it("uses provided logo url", async () => {
-    await render(
+    await renderWithIntl(
       <ProductLogo logoUrl="https://placehold.co/120x120" name="Sample" />,
     );
 

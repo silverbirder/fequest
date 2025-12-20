@@ -1,5 +1,7 @@
 import type { ComponentPropsWithoutRef } from "react";
 
+import { useTranslations } from "next-intl";
+
 import { Box, VStack } from "../../common/layout";
 import { Input } from "../../common/shadcn";
 import { Text } from "../../common/typography";
@@ -9,11 +11,15 @@ type BubbleInputProps = ComponentPropsWithoutRef<typeof Input> & {
 };
 
 export const BubbleInput = ({
-  helperText = "Enterで送信",
-  placeholder = "新しいリクエストを入力...",
+  helperText,
+  placeholder,
   type = "text",
   ...rest
 }: BubbleInputProps) => {
+  const t = useTranslations("UI.bubbleInput");
+  const resolvedHelperText = helperText ?? t("helperText");
+  const resolvedPlaceholder = placeholder ?? t("placeholder");
+
   return (
     <VStack align="stretch" gap="xs" group>
       <Box position="relative" w="full">
@@ -33,13 +39,13 @@ export const BubbleInput = ({
         <Box bg="muted" p="md" radius="md" w="full">
           <Input
             appearance="bubble"
-            placeholder={placeholder}
+            placeholder={resolvedPlaceholder}
             type={type}
             {...rest}
           />
         </Box>
         <Text color="muted" size="xs">
-          ※ 投稿後も内容を編集・削除できます。
+          {t("note")}
         </Text>
       </Box>
       <Text
@@ -53,7 +59,7 @@ export const BubbleInput = ({
         transition="opacity"
         transitionDuration="200"
       >
-        {helperText}
+        {resolvedHelperText}
       </Text>
     </VStack>
   );

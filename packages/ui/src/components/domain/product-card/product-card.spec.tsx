@@ -1,4 +1,8 @@
+import type { ReactNode } from "react";
+
+import { jaMessages } from "@repo/messages";
 import { composeStories } from "@storybook/nextjs-vite";
+import { NextIntlClientProvider } from "next-intl";
 import { describe, expect, it } from "vitest";
 import { render } from "vitest-browser-react";
 
@@ -6,6 +10,13 @@ import { ProductCard } from "./product-card";
 import * as stories from "./product-card.stories";
 
 const Stories = composeStories(stories);
+
+const renderWithIntl = (ui: ReactNode) =>
+  render(
+    <NextIntlClientProvider locale="ja" messages={jaMessages}>
+      {ui}
+    </NextIntlClientProvider>,
+  );
 
 describe("ProductCard", () => {
   it.each(Object.entries(Stories))("should %s snapshot", async (_, Story) => {
@@ -19,7 +30,7 @@ describe("ProductCard", () => {
   });
 
   it("renders name, counts, and link", async () => {
-    await render(
+    await renderWithIntl(
       <ProductCard
         href={{ pathname: "/products/42" }}
         name="Fequest"
@@ -32,11 +43,13 @@ describe("ProductCard", () => {
 
     expect(link?.getAttribute("href")).toBe("/products/42");
     expect(text).toContain("Fequest");
-    expect(text).toContain("リクエスト 1,234件");
+    expect(text).toContain(
+      jaMessages.UI.productCard.requestCount.replace("{count}", "1,234"),
+    );
   });
 
   it("falls back to an initial when logo is missing", async () => {
-    await render(
+    await renderWithIntl(
       <ProductCard
         href={{ pathname: "/products/1" }}
         name="Sample"

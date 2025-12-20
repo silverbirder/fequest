@@ -1,3 +1,5 @@
+import { useTranslations } from "next-intl";
+
 import { AspectRatio, Box, Center, Image, Text } from "../../common";
 
 type Props = {
@@ -21,9 +23,10 @@ export const ProductLogo = ({
   name,
   sizes = "(max-width: 768px) 100vw, 320px",
 }: Props) => {
+  const t = useTranslations("UI.productLogo");
   const safeLogoUrl = logoUrl?.trim() || null;
   const initial = getInitial(name);
-  const alt = `${name}のロゴ`;
+  const alt = t("alt", { name });
 
   return (
     <AspectRatio data-slot={dataSlot} ratio={1}>

@@ -1,6 +1,7 @@
 import type { Route } from "next";
 import type { UrlObject } from "url";
 
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 
 import {
@@ -38,6 +39,7 @@ export const Header = ({
   logoutAction,
   user,
 }: Props) => {
+  const t = useTranslations("UI.header");
   const isAuthenticated = Boolean(user);
 
   return (
@@ -65,7 +67,11 @@ export const Header = ({
         {isAuthenticated ? (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button aria-label="ユーザーメニュー" size="icon" variant="ghost">
+              <Button
+                aria-label={t("userMenuAriaLabel")}
+                size="icon"
+                variant="ghost"
+              >
                 <Avatar alt={user?.name} name={user?.name} src={user?.image} />
               </Button>
             </DropdownMenuTrigger>
@@ -89,7 +95,7 @@ export const Header = ({
                 <Box w="full">
                   <form action={logoutAction}>
                     <Button size="sm" type="submit" variant="ghost">
-                      ログアウト
+                      {t("logout")}
                     </Button>
                   </form>
                 </Box>
@@ -99,7 +105,7 @@ export const Header = ({
         ) : (
           <form action={loginAction}>
             <Button size="sm" type="submit" variant="outline">
-              ログイン
+              {t("login")}
             </Button>
           </form>
         )}

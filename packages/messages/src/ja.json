@@ -191,5 +191,46 @@
     "title": "管理画面",
     "description": "管理画面を利用するには、Googleでログインしてください。",
     "googleButton": "Googleでログイン"
+  },
+  "UI": {
+    "header": {
+      "userMenuAriaLabel": "ユーザーメニュー",
+      "logout": "ログアウト",
+      "login": "ログイン"
+    },
+    "productCard": {
+      "ariaLabel": "{name}のプロダクトページ",
+      "requestCount": "リクエスト {count}件",
+      "linkLabel": "プロダクトページへ"
+    },
+    "bubbleInput": {
+      "helperText": "Enterで送信",
+      "placeholder": "新しいリクエストを入力...",
+      "note": "※ 投稿後も内容を編集・削除できます。"
+    },
+    "bubbleText": {
+      "closedAriaLabel": "完了したリクエスト",
+      "closedBadge": "完了"
+    },
+    "requestCard": {
+      "detailLabel": "{title}の詳細を表示",
+      "detailLabelDefault": "詳細を表示",
+      "reactionAddLabel": "リアクションを追加"
+    },
+    "emojiPicker": {
+      "label": "リアクションを追加"
+    },
+    "productLogo": {
+      "alt": "{name}のロゴ"
+    },
+    "requestDialog": {
+      "titleFallback": "詳細",
+      "detailLabel": "{title}の詳細を表示",
+      "detailLabelDefault": "詳細を表示",
+      "postedAt": "投稿日: {date}"
+    },
+    "requestInput": {
+      "loadingHelper": "送信中..."
+    }
   }
 }

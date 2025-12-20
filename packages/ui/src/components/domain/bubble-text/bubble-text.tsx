@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import { PropsWithChildren } from "react";
 
 import { Box, HStack } from "../../common/layout";
@@ -9,6 +10,7 @@ type Props = PropsWithChildren<{
 }>;
 
 export const BubbleText = ({ children, status = "open", text }: Props) => {
+  const t = useTranslations("UI.bubbleText");
   const isClosed = status === "closed";
 
   return (
@@ -30,7 +32,7 @@ export const BubbleText = ({ children, status = "open", text }: Props) => {
           zIndex="10"
         >
           <Box
-            aria-label="完了したリクエスト"
+            aria-label={t("closedAriaLabel")}
             bg="muted"
             px="sm"
             py="xs"
@@ -38,7 +40,7 @@ export const BubbleText = ({ children, status = "open", text }: Props) => {
             shadow="sm"
           >
             <Text color="subtle" size="sm" weight="bold">
-              完了
+              {t("closedBadge")}
             </Text>
           </Box>
         </HStack>

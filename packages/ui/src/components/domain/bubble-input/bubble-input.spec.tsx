@@ -1,4 +1,8 @@
+import type { ReactNode } from "react";
+
+import { jaMessages } from "@repo/messages";
 import { composeStories } from "@storybook/nextjs-vite";
+import { NextIntlClientProvider } from "next-intl";
 import { describe, expect, it } from "vitest";
 import { render } from "vitest-browser-react";
 
@@ -6,6 +10,13 @@ import { BubbleInput } from "./bubble-input";
 import * as stories from "./bubble-input.stories";
 
 const Stories = composeStories(stories);
+
+const renderWithIntl = (ui: ReactNode) =>
+  render(
+    <NextIntlClientProvider locale="ja" messages={jaMessages}>
+      {ui}
+    </NextIntlClientProvider>,
+  );
 
 describe("BubbleInput", () => {
   it.each(Object.entries(Stories))("should %s snapshot", async (_, Story) => {
@@ -19,7 +30,7 @@ describe("BubbleInput", () => {
   });
 
   it("accepts helper text and input props", async () => {
-    await render(<BubbleInput helperText="送信準備" name="request" />);
+    await renderWithIntl(<BubbleInput helperText="送信準備" name="request" />);
 
     const helperNodes = Array.from(
       document.querySelectorAll('[data-slot="text"]'),
@@ -34,7 +45,7 @@ describe("BubbleInput", () => {
   });
 
   it("fades helper text in when the input is focused", async () => {
-    await render(<BubbleInput helperText="フォーカス時のみ" />);
+    await renderWithIntl(<BubbleInput helperText="フォーカス時のみ" />);
 
     const helperNodes = Array.from(
       document.querySelectorAll('[data-slot="text"]'),

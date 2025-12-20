@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 
 import { toIsoString } from "@repo/util";
 import { ChevronRight } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { HStack, VStack } from "../../common/layout";
 import {
@@ -48,13 +49,17 @@ export const RequestDialog = ({
   idBase = "request-card",
   onOpenChange,
 }: Props) => {
+  const t = useTranslations("UI.requestDialog");
   const createdAtText = toIsoString(detail.createdAt);
   const dialogContentId = `${idBase}-dialog-content`;
   const dialogDescriptionId = `${idBase}-dialog-description`;
-  const titleText = dialogTitle?.trim() || detail.title?.trim() || "詳細";
+  const titleText =
+    dialogTitle?.trim() || detail.title?.trim() || t("titleFallback");
   const triggerLabel =
     dialogTriggerLabel?.trim() ||
-    (titleText ? `${titleText}の詳細を表示` : "詳細を表示");
+    (titleText
+      ? t("detailLabel", { title: titleText })
+      : t("detailLabelDefault"));
 
   return (
     <Dialog defaultOpen={defaultOpen} onOpenChange={onOpenChange}>
@@ -95,7 +100,7 @@ export const RequestDialog = ({
           </DialogHeader>
           <DialogFooter>
             <Text color="subtle" size="sm">
-              投稿日: {createdAtText}
+              {t("postedAt", { date: createdAtText ?? "" })}
             </Text>
           </DialogFooter>
         </VStack>

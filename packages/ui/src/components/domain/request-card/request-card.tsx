@@ -1,5 +1,7 @@
 import type { ComponentProps, ReactNode } from "react";
 
+import { useTranslations } from "next-intl";
+
 import { HStack, VStack } from "../../common/layout";
 import { Avatar } from "../../common/shadcn";
 import { BubbleText } from "../bubble-text";
@@ -46,10 +48,11 @@ export const RequestCard = ({
   status,
   text,
 }: Props) => {
+  const t = useTranslations("UI.requestCard");
   const dialogTitle = detail.title?.trim() || text;
   const dialogTriggerLabel = dialogTitle
-    ? `${dialogTitle}の詳細を表示`
-    : "詳細を表示";
+    ? t("detailLabel", { title: dialogTitle })
+    : t("detailLabelDefault");
   const emojiMenuId = `${idBase}-emoji-menu`;
 
   return (
@@ -91,7 +94,7 @@ export const RequestCard = ({
           ))}
           {enableEmojiPicker && reactionsInteractive && onReact ? (
             <EmojiPicker
-              label="リアクションを追加"
+              label={t("reactionAddLabel")}
               menuId={emojiMenuId}
               onSelect={onReact}
               triggerId={`${emojiMenuId}-trigger`}
