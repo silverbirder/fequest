@@ -7,6 +7,7 @@ import {
   When,
 } from "@cucumber/cucumber";
 import { expect } from "@playwright/test";
+import { AdminDashboardPage } from "@repo/admin-feature-dashboard/e2e";
 import { AdminProductPage } from "@repo/admin-feature-product/e2e";
 import { migrateDatabase } from "@repo/db/migrate";
 import { ProductPage as UserProductPage } from "@repo/user-feature-product/e2e";
@@ -16,7 +17,6 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { Network, StartedNetwork, StartedTestContainer } from "testcontainers";
 
-import { AdminDashboardPage } from "@/pages/admin/dashboard.page";
 import {
   type BrowserSession,
   createBrowserSession,
@@ -144,10 +144,10 @@ BeforeAll(async () => {
       value: sessionToken,
     },
   ]);
-  const adminDashboardPage = new AdminDashboardPage(
-    adminBrowser.page,
-    adminBaseUrl,
-  );
+  const adminDashboardPage = new AdminDashboardPage({
+    baseUrl: adminBaseUrl,
+    page: adminBrowser.page,
+  });
   await adminDashboardPage.goto();
   const { productId, productName } =
     await adminDashboardPage.createProduct("E2E Product");

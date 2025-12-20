@@ -12,6 +12,7 @@
   "devDependencies": {
     "@cucumber/cucumber": "^11.0.0",
     "@playwright/test": "~1.57.0",
+    "@repo/admin-feature-dashboard": "workspace:^",
     "@repo/admin-feature-product": "workspace:^",
     "@repo/db": "workspace:*",
     "@repo/eslint-config": "workspace:*",
