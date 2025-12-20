@@ -53,6 +53,41 @@ type Props = {
   userDomainUrl: string;
 };
 
+const toTimestamp = (value: FeatureRequestCore["createdAt"]) => {
+  if (!value) {
+    return Number.POSITIVE_INFINITY;
+  }
+
+  const date = value instanceof Date ? value : new Date(value);
+  const time = date.getTime();
+  return Number.isNaN(time) ? Number.POSITIVE_INFINITY : time;
+};
+
+const getReactionCount = (feature: FeatureRequestWithUser) =>
+  (feature.reactionSummaries ?? []).reduce(
+    (total, reaction) => total + reaction.count,
+    0,
+  );
+
+const sortFeatureRequests = (features: FeatureRequestWithUser[]) =>
+  [...features].sort((left, right) => {
+    const leftReactions = getReactionCount(left);
+    const rightReactions = getReactionCount(right);
+
+    if (leftReactions !== rightReactions) {
+      return rightReactions - leftReactions;
+    }
+
+    const leftCreatedAt = toTimestamp(left.createdAt);
+    const rightCreatedAt = toTimestamp(right.createdAt);
+
+    if (leftCreatedAt !== rightCreatedAt) {
+      return leftCreatedAt - rightCreatedAt;
+    }
+
+    return left.id - right.id;
+  });
+
 const statusCopy = (status: FeatureRequestStatus) =>
   status === "open"
     ? {
@@ -107,7 +142,7 @@ export const Product = ({
     },
   );
 
-  const featureRequests = product.featureRequests ?? [];
+  const featureRequests = sortFeatureRequests(product.featureRequests ?? []);
   const userProductUrl = buildUserProductUrl(userDomainUrl, product.id);
 
   const productNameInputId = `product-name-${product.id}`;

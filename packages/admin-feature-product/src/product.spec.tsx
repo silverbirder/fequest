@@ -171,6 +171,66 @@ describe("Product", () => {
     expect(closedToggle?.value).toBe("open");
   });
 
+  it("orders feature requests by reactions then created date", async () => {
+    await render(
+      <Product
+        onDelete={async () => {}}
+        onDeleteFeatureRequest={async () => {}}
+        onUpdateDetails={async () => {}}
+        onUpdateFeatureStatus={async () => {}}
+        onUpdateName={async () => {}}
+        product={{
+          featureRequests: [
+            {
+              content: "Newest with same reactions",
+              createdAt: "2024-02-01T00:00:00.000Z",
+              id: 30,
+              reactionSummaries: [
+                { count: 2, emoji: "👍", reactedByViewer: false },
+              ],
+              status: "open",
+              title: "反応2 新しい",
+            },
+            {
+              content: "Older with same reactions",
+              createdAt: "2024-01-01T00:00:00.000Z",
+              id: 31,
+              reactionSummaries: [
+                { count: 2, emoji: "👍", reactedByViewer: false },
+              ],
+              status: "open",
+              title: "反応2 古い",
+            },
+            {
+              content: "Most reactions",
+              createdAt: "2024-03-01T00:00:00.000Z",
+              id: 32,
+              reactionSummaries: [
+                { count: 5, emoji: "🔥", reactedByViewer: false },
+              ],
+              status: "open",
+              title: "反応5",
+            },
+          ],
+          id: 10,
+          name: "Sort Product",
+        }}
+        userDomainUrl={userDomainUrl}
+      />,
+    );
+
+    const html = document.body.textContent ?? "";
+    const topIndex = html.indexOf("反応5");
+    const middleIndex = html.indexOf("反応2 古い");
+    const bottomIndex = html.indexOf("反応2 新しい");
+
+    expect(topIndex).toBeGreaterThanOrEqual(0);
+    expect(middleIndex).toBeGreaterThanOrEqual(0);
+    expect(bottomIndex).toBeGreaterThanOrEqual(0);
+    expect(topIndex).toBeLessThan(middleIndex);
+    expect(middleIndex).toBeLessThan(bottomIndex);
+  });
+
   it("shows empty state when there are no feature requests", async () => {
     await render(
       <Product

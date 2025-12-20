@@ -40,13 +40,49 @@ type Props = {
   product: ProductData;
 };
 
+const toTimestamp = (value: FeatureRequestCore["createdAt"]) => {
+  if (!value) {
+    return Number.POSITIVE_INFINITY;
+  }
+
+  const date = value instanceof Date ? value : new Date(value);
+  const time = date.getTime();
+  return Number.isNaN(time) ? Number.POSITIVE_INFINITY : time;
+};
+
+const getReactionCount = (feature: FeatureRequest) =>
+  (feature.reactionSummaries ?? []).reduce(
+    (total, reaction) => total + reaction.count,
+    0,
+  );
+
+const sortFeatureRequests = (features: FeatureRequest[]) =>
+  [...features].sort((left, right) => {
+    const leftReactions = getReactionCount(left);
+    const rightReactions = getReactionCount(right);
+
+    if (leftReactions !== rightReactions) {
+      return rightReactions - leftReactions;
+    }
+
+    const leftCreatedAt = toTimestamp(left.createdAt);
+    const rightCreatedAt = toTimestamp(right.createdAt);
+
+    if (leftCreatedAt !== rightCreatedAt) {
+      return leftCreatedAt - rightCreatedAt;
+    }
+
+    return left.id - right.id;
+  });
+
 export const Product = (props: Props) => {
   const featureRequests: FeatureRequest[] = props.product.featureRequests ?? [];
   const currentUserId = props.currentUser?.id ?? null;
-  const openFeatureRequests = featureRequests.filter(
+  const sortedFeatureRequests = sortFeatureRequests(featureRequests);
+  const openFeatureRequests = sortedFeatureRequests.filter(
     (feature) => feature.status !== "closed",
   );
-  const closedFeatureRequests = featureRequests.filter(
+  const closedFeatureRequests = sortedFeatureRequests.filter(
     (feature) => feature.status === "closed",
   );
   const description = props.product.description?.trim() ?? "";

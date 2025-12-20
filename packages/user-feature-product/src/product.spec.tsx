@@ -190,6 +190,50 @@ describe("Product", () => {
     expect(document.body.textContent).toContain(FEATURE_CONTENT_FALLBACK);
   });
 
+  it("orders feature requests by reactions then created date", async () => {
+    const featureRequests = createProductFixture("user-owner", [
+      {
+        createdAt: "2024-02-01T00:00:00.000Z",
+        id: 1,
+        reactionSummaries: [{ count: 2, emoji: "👍", reactedByViewer: false }],
+        title: "反応2 新しい",
+      },
+      {
+        createdAt: "2024-01-01T00:00:00.000Z",
+        id: 2,
+        reactionSummaries: [{ count: 2, emoji: "👍", reactedByViewer: false }],
+        title: "反応2 古い",
+      },
+      {
+        createdAt: "2024-03-01T00:00:00.000Z",
+        id: 3,
+        reactionSummaries: [{ count: 5, emoji: "🔥", reactedByViewer: false }],
+        title: "反応5",
+      },
+    ]);
+
+    await render(
+      <Product
+        canCreateFeatureRequest
+        currentUser={{ id: "user-owner" }}
+        onCreateFeatureRequest={async () => {}}
+        onReactToFeature={async () => {}}
+        product={featureRequests}
+      />,
+    );
+
+    const html = document.body.textContent ?? "";
+    const topIndex = html.indexOf("反応5");
+    const middleIndex = html.indexOf("反応2 古い");
+    const bottomIndex = html.indexOf("反応2 新しい");
+
+    expect(topIndex).toBeGreaterThanOrEqual(0);
+    expect(middleIndex).toBeGreaterThanOrEqual(0);
+    expect(bottomIndex).toBeGreaterThanOrEqual(0);
+    expect(topIndex).toBeLessThan(middleIndex);
+    expect(middleIndex).toBeLessThan(bottomIndex);
+  });
+
   it("shows closed feature requests under the composer", async () => {
     await render(
       <Product
