@@ -1,4 +1,6 @@
+import { jaMessages } from "@repo/messages";
 import { composeStories } from "@storybook/nextjs-vite";
+import { NextIntlClientProvider } from "next-intl";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { render } from "vitest-browser-react";
 
@@ -51,15 +53,17 @@ const renderItem = (
   overrides: Partial<Parameters<typeof FeatureRequestItem>[0]> = {},
 ) =>
   render(
-    <FeatureRequestItem
-      avatar={{ fallbackText: "FR" }}
-      detail={baseDetail}
-      featureId={1}
-      onReactToFeature={async () => {}}
-      reactions={[]}
-      text="Child feature"
-      {...overrides}
-    />,
+    <NextIntlClientProvider locale="ja" messages={jaMessages}>
+      <FeatureRequestItem
+        avatar={{ fallbackText: "FR" }}
+        detail={baseDetail}
+        featureId={1}
+        onReactToFeature={async () => {}}
+        reactions={[]}
+        text="Child feature"
+        {...overrides}
+      />
+    </NextIntlClientProvider>,
   );
 
 beforeEach(() => {
@@ -86,7 +90,9 @@ describe("FeatureRequestItem", () => {
     await openDialog();
     await waitForDialog(50);
 
-    const link = document.querySelector("a[aria-label='編集ページを開く']");
+    const link = document.querySelector(
+      `a[aria-label='${jaMessages.UserFeatureProduct.editLinkAriaLabel}']`,
+    );
     expect(link).not.toBeNull();
   });
 

@@ -1,0 +1,65 @@
+{
+  "UserFeatureTop": {
+    "appName": "Fequest",
+    "hero": {
+      "tagline": "ほしいとつくるを共有するプラットフォーム",
+      "description": {
+        "prefix": "ユーザーが",
+        "want": "ほしい",
+        "middle": "機能をリクエストし、開発者がそれを",
+        "build": "つくる",
+        "suffix": "につなげる、みんなでプロダクトを育てる場所です。"
+      }
+    },
+    "sections": {
+      "productsTitle": "育成中のプロダクト",
+      "developerTitle": "開発者の方へ",
+      "developerDescription": "Fequestの管理ページはこちらからアクセスできます。プロダクトの登録やリクエストの管理が行えます。",
+      "adminLinkLabel": "管理ページへ"
+    }
+  },
+  "UserFeatureProduct": {
+    "officialSite": "公式サイト",
+    "noRequests": "リクエストはまだありません。",
+    "newRequestAriaLabel": "新しいリクエスト",
+    "loginToPost": "ログインするとリクエストを投稿できます。",
+    "featureContentFallback": "詳細はありません。",
+    "requestContentAriaLabel": "機能リクエストの内容",
+    "editLinkAriaLabel": "編集ページを開く",
+    "editLinkText": "編集する"
+  },
+  "UserFeatureRequestEdit": {
+    "title": "リクエストの編集",
+    "description": "{productName} へのリクエスト「{requestTitle}」を更新します。",
+    "labels": {
+      "title": "タイトル",
+      "content": "内容"
+    },
+    "placeholders": {
+      "content": "改善内容や背景を入力してください"
+    },
+    "buttons": {
+      "save": "保存する",
+      "delete": "リクエストを削除",
+      "cancel": "キャンセル",
+      "confirmDelete": "削除する",
+      "back": "戻る"
+    },
+    "deleteDialog": {
+      "title": "リクエストを削除しますか？",
+      "description": "この操作は取り消せません。削除するとリクエストの内容は復元できません。"
+    },
+    "toast": {
+      "save": {
+        "error": "保存に失敗しました",
+        "loading": "保存中...",
+        "success": "保存しました"
+      },
+      "delete": {
+        "error": "削除に失敗しました",
+        "loading": "削除中...",
+        "success": "削除しました"
+      }
+    }
+  }
+}

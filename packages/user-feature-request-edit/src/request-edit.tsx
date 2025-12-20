@@ -23,6 +23,7 @@ import {
 } from "@repo/ui/components";
 import { wrapActionWithToast } from "@repo/ui/lib/wrap-action-with-toast";
 import { ArrowLeft } from "lucide-react";
+import { useTranslations } from "next-intl";
 import Form from "next/form";
 import Link from "next/link";
 import { useId } from "react";
@@ -50,28 +51,31 @@ export const RequestEdit = ({
   requestTitle,
 }: Props) => {
   const submitFormId = useId();
+  const t = useTranslations("UserFeatureRequestEdit");
 
   const submitAction = wrapActionWithToast(onSubmit, {
-    error: "保存に失敗しました",
-    loading: "保存中...",
-    success: "保存しました",
+    error: t("toast.save.error"),
+    loading: t("toast.save.loading"),
+    success: t("toast.save.success"),
   });
 
   const deleteAction =
     onDelete &&
     wrapActionWithToast(onDelete, {
-      error: "削除に失敗しました",
-      loading: "削除中...",
-      success: "削除しました",
+      error: t("toast.delete.error"),
+      loading: t("toast.delete.loading"),
+      success: t("toast.delete.success"),
     });
 
   return (
     <VStack gap="xl" w="full">
       <VStack align="start" gap="md" w="full">
-        <Heading size="lg">リクエストの編集</Heading>
+        <Heading size="lg">{t("title")}</Heading>
         <Text color="muted">
-          {productName} へのリクエスト「{requestTitle ?? defaultValues.title}
-          」を更新します。
+          {t("description", {
+            productName,
+            requestTitle: requestTitle ?? defaultValues.title,
+          })}
         </Text>
       </VStack>
       <Box asChild bg="white" p="lg" radius="md" w="full">
@@ -80,7 +84,7 @@ export const RequestEdit = ({
             <Box asChild w="full">
               <VStack align="start" gap="xs" w="full">
                 <Text asChild color="subtle" size="sm">
-                  <label htmlFor="title">タイトル</label>
+                  <label htmlFor="title">{t("labels.title")}</label>
                 </Text>
                 <Input
                   defaultValue={defaultValues.title}
@@ -95,14 +99,14 @@ export const RequestEdit = ({
             <Box asChild w="full">
               <VStack align="start" gap="xs" w="full">
                 <Text asChild color="subtle" size="sm">
-                  <label htmlFor="content">内容</label>
+                  <label htmlFor="content">{t("labels.content")}</label>
                 </Text>
                 <Textarea
                   defaultValue={defaultValues.content}
                   form={submitFormId}
                   id="content"
                   name="content"
-                  placeholder="改善内容や背景を入力してください"
+                  placeholder={t("placeholders.content")}
                   rows={6}
                 />
               </VStack>
@@ -116,23 +120,23 @@ export const RequestEdit = ({
                 />
                 <SubmitButton
                   formAction={submitAction}
-                  pendingLabel="保存中..."
+                  pendingLabel={t("toast.save.loading")}
                 >
-                  保存する
+                  {t("buttons.save")}
                 </SubmitButton>
               </Form>
               {deleteAction ? (
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
-                    <Button variant="destructive">リクエストを削除</Button>
+                    <Button variant="destructive">{t("buttons.delete")}</Button>
                   </AlertDialogTrigger>
                   <AlertDialogContent>
                     <AlertDialogHeader>
                       <AlertDialogTitle>
-                        リクエストを削除しますか？
+                        {t("deleteDialog.title")}
                       </AlertDialogTitle>
                       <AlertDialogDescription>
-                        この操作は取り消せません。削除するとリクエストの内容は復元できません。
+                        {t("deleteDialog.description")}
                       </AlertDialogDescription>
                     </AlertDialogHeader>
                     <Form action={deleteAction}>
@@ -142,13 +146,15 @@ export const RequestEdit = ({
                         value={String(featureId)}
                       />
                       <AlertDialogFooter>
-                        <AlertDialogCancel>キャンセル</AlertDialogCancel>
+                        <AlertDialogCancel>
+                          {t("buttons.cancel")}
+                        </AlertDialogCancel>
                         <SubmitButton
                           formAction={deleteAction}
-                          pendingLabel="削除中..."
+                          pendingLabel={t("toast.delete.loading")}
                           variant="destructive"
                         >
-                          削除する
+                          {t("buttons.confirmDelete")}
                         </SubmitButton>
                       </AlertDialogFooter>
                     </Form>
@@ -162,7 +168,7 @@ export const RequestEdit = ({
       <Button asChild variant="link">
         <Link href={backHref} prefetch={false}>
           <ArrowLeft />
-          戻る
+          {t("buttons.back")}
         </Link>
       </Button>
     </VStack>

@@ -23,10 +23,12 @@
     "check-types": "tsc --noEmit"
   },
   "dependencies": {
+    "@repo/messages": "workspace:*",
     "@repo/type": "workspace:*",
     "@repo/ui": "workspace:*",
     "@repo/util": "workspace:*",
     "lucide-react": "^0.475.0",
+    "next-intl": "^4.6.1",
     "next": "16.0.10"
   },
   "peerDependencies": {

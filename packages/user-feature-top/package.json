@@ -12,9 +12,11 @@
     "check-types": "tsc --noEmit"
   },
   "dependencies": {
+    "@repo/messages": "workspace:*",
     "@repo/type": "workspace:*",
     "@repo/util": "workspace:*",
     "@repo/ui": "workspace:*",
+    "next-intl": "^4.6.1",
     "next": "16.0.10"
   },
   "peerDependencies": {

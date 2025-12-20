@@ -31,6 +31,7 @@
     "vitest": "^4.0.15"
   },
   "dependencies": {
+    "@repo/messages": "workspace:*",
     "@repo/ui": "workspace:*",
     "next": "16.0.10"
   }

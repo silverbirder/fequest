@@ -1,4 +1,6 @@
+import { jaMessages } from "@repo/messages";
 import { composeStories } from "@storybook/nextjs-vite";
+import { NextIntlClientProvider } from "next-intl";
 import { describe, expect, it } from "vitest";
 import { render } from "vitest-browser-react";
 
@@ -22,22 +24,30 @@ describe("Top", () => {
     const adminDomain = "https://admin.example.com";
 
     await render(
-      <Top
-        adminDomain={adminDomain}
-        products={[
-          { featureCount: 2, id: 1, name: "First", reactionCount: 3 },
-          { featureCount: 0, id: 2, name: "Second", reactionCount: 0 },
-        ]}
-      />,
+      <NextIntlClientProvider locale="ja" messages={jaMessages}>
+        <Top
+          adminDomain={adminDomain}
+          products={[
+            { featureCount: 2, id: 1, name: "First", reactionCount: 3 },
+            { featureCount: 0, id: 2, name: "Second", reactionCount: 0 },
+          ]}
+        />
+      </NextIntlClientProvider>,
     );
 
     const text = document.body.textContent ?? "";
-    expect(text).toContain("Fequest");
-    expect(text).toContain("ほしいとつくるを共有するプラットフォーム");
+    expect(text).toContain(jaMessages.UserFeatureTop.appName);
+    expect(text).toContain(jaMessages.UserFeatureTop.hero.tagline);
     expect(text).toContain(
-      "ユーザーがほしい機能をリクエストし、開発者がそれをつくるにつなげる、みんなでプロダクトを育てる場所です。",
+      [
+        jaMessages.UserFeatureTop.hero.description.prefix,
+        jaMessages.UserFeatureTop.hero.description.want,
+        jaMessages.UserFeatureTop.hero.description.middle,
+        jaMessages.UserFeatureTop.hero.description.build,
+        jaMessages.UserFeatureTop.hero.description.suffix,
+      ].join(""),
     );
-    expect(text).toContain("管理ページへ");
+    expect(text).toContain(jaMessages.UserFeatureTop.sections.adminLinkLabel);
     expect(text).toContain("First");
     expect(text).toContain("リクエスト 2件");
     expect(text).toContain("Second");

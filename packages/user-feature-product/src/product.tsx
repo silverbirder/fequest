@@ -9,6 +9,7 @@ import {
   VStack,
 } from "@repo/ui/components";
 import { Home } from "lucide-react";
+import { useTranslations } from "next-intl";
 import Form from "next/form";
 
 import type { ReactionSummary } from "./libs";
@@ -19,8 +20,6 @@ type FeatureRequest = FeatureRequestCore & {
   reactionSummaries?: null | ReactionSummary[];
   user?: FeatureRequestUser | null;
 };
-
-export const FEATURE_CONTENT_FALLBACK = "詳細はありません。";
 
 type ProductData = {
   description?: null | string;
@@ -76,6 +75,7 @@ const sortFeatureRequests = (features: FeatureRequest[]) =>
   });
 
 export const Product = (props: Props) => {
+  const t = useTranslations("UserFeatureProduct");
   const featureRequests: FeatureRequest[] = props.product.featureRequests ?? [];
   const currentUserId = props.currentUser?.id ?? null;
   const sortedFeatureRequests = sortFeatureRequests(featureRequests);
@@ -97,7 +97,7 @@ export const Product = (props: Props) => {
       feature.user?.id === currentUserId;
     const text = feature.title?.trim() ?? "";
     const content = feature.content?.trim() ?? "";
-    const detailContent = content || FEATURE_CONTENT_FALLBACK;
+    const detailContent = content || t("featureContentFallback");
     const isOpenTarget =
       typeof props.openFeatureRequestId === "number" &&
       props.openFeatureRequestId === feature.id;
@@ -155,7 +155,7 @@ export const Product = (props: Props) => {
                   >
                     <HStack align="center" gap="xs" inline>
                       <Home size={16} />
-                      <span>公式サイト</span>
+                      <span>{t("officialSite")}</span>
                     </HStack>
                   </a>
                 </Text>
@@ -166,7 +166,7 @@ export const Product = (props: Props) => {
         </HStack>
       </VStack>
       {openFeatureRequests.length === 0 ? (
-        <Text>リクエストはまだありません。</Text>
+        <Text>{t("noRequests")}</Text>
       ) : (
         <VStack align="start" gap="lg">
           {openFeatureRequests.map(renderFeatureRequest)}
@@ -176,7 +176,7 @@ export const Product = (props: Props) => {
         <Box asChild w="full">
           <Form action={props.onCreateFeatureRequest}>
             <RequestInput
-              aria-label="新しいリクエスト"
+              aria-label={t("newRequestAriaLabel")}
               autoComplete="off"
               avatar={currentUserAvatar ?? undefined}
               maxLength={255}
@@ -186,7 +186,7 @@ export const Product = (props: Props) => {
           </Form>
         </Box>
       ) : (
-        <Text>ログインするとリクエストを投稿できます。</Text>
+        <Text>{t("loginToPost")}</Text>
       )}
       {closedFeatureRequests.length > 0 && (
         <VStack align="start" gap="lg">

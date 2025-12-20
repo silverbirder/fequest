@@ -8,6 +8,7 @@ import {
   Text,
   VStack,
 } from "@repo/ui/components";
+import { useTranslations } from "next-intl";
 
 type Props = {
   adminDomain: string;
@@ -16,33 +17,34 @@ type Props = {
 
 export const Top = ({ adminDomain, products }: Props) => {
   const adminHref = adminDomain.trim();
+  const t = useTranslations("UserFeatureTop");
 
   return (
     <VStack gap="2xl" w="full">
       <VStack align="center" gap="md">
         <VStack align="center" gap="sm">
           <AppLogo asChild>
-            <Heading level={1}>Fequest</Heading>
+            <Heading level={1}>{t("appName")}</Heading>
           </AppLogo>
           <Text color="muted" size="lg">
-            ほしいとつくるを共有するプラットフォーム
+            {t("hero.tagline")}
           </Text>
         </VStack>
         <Text color="subtle">
-          ユーザーが
+          {t("hero.description.prefix")}
           <Text asChild color="accent" display="inline" weight="bold">
-            <span>ほしい</span>
+            <span>{t("hero.description.want")}</span>
           </Text>
-          機能をリクエストし、開発者がそれを
+          {t("hero.description.middle")}
           <Text asChild color="accent" display="inline" weight="bold">
-            <span>つくる</span>
+            <span>{t("hero.description.build")}</span>
           </Text>
-          につなげる、みんなでプロダクトを育てる場所です。
+          {t("hero.description.suffix")}
         </Text>
       </VStack>
       {products.length > 0 && (
         <VStack align="start" gap="md" w="full">
-          <Heading level={2}>育成中のプロダクト</Heading>
+          <Heading level={2}>{t("sections.productsTitle")}</Heading>
           <HStack gap="md" wrap="wrap">
             {products.map((product) => (
               <ProductCard
@@ -57,14 +59,12 @@ export const Top = ({ adminDomain, products }: Props) => {
         </VStack>
       )}
       <VStack align="start" gap="md" w="full">
-        <Heading level={2}>開発者の方へ</Heading>
+        <Heading level={2}>{t("sections.developerTitle")}</Heading>
         <VStack align="start" gap="sm">
-          <Text color="subtle">
-            Fequestの管理ページはこちらからアクセスできます。プロダクトの登録やリクエストの管理が行えます。
-          </Text>
+          <Text color="subtle">{t("sections.developerDescription")}</Text>
           <Button asChild variant="outline">
             <a href={adminHref} rel="noreferrer" target="_blank">
-              管理ページへ
+              {t("sections.adminLinkLabel")}
             </a>
           </Button>
         </VStack>

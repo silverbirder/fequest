@@ -5,6 +5,7 @@ import type { UrlObject } from "url";
 
 import { Button, HStack, RequestCard, VStack } from "@repo/ui/components";
 import { Pencil } from "lucide-react";
+import { useTranslations } from "next-intl";
 import Form from "next/form";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -45,6 +46,7 @@ export const FeatureRequestItem = ({
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const t = useTranslations("UserFeatureProduct");
 
   const handleReact = (emoji: string) => {
     const clickedReaction = reactionMap.get(emoji);
@@ -73,14 +75,14 @@ export const FeatureRequestItem = ({
       {editHref && (
         <HStack justify="end" w="full">
           <Button
-            aria-label="編集ページを開く"
+            aria-label={t("editLinkAriaLabel")}
             asChild
             size="sm"
             variant="ghost"
           >
             <Link href={editHref} prefetch={false}>
               <Pencil />
-              編集する
+              {t("editLinkText")}
             </Link>
           </Button>
         </HStack>

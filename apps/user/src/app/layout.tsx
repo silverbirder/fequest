@@ -8,6 +8,8 @@ import {
 } from "@repo/ui/components";
 import { Providers } from "@repo/ui/providers/theme-provider";
 import { type Metadata } from "next";
+import { NextIntlClientProvider } from "next-intl";
+import { getMessages } from "next-intl/server";
 import { Noto_Sans_JP } from "next/font/google";
 
 import { env } from "~/env";
@@ -36,6 +38,7 @@ export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   const session = await auth();
+  const messages = await getMessages();
 
   const signInWithGoogle = async () => {
     "use server";
@@ -51,22 +54,24 @@ export default async function RootLayout({
     <html lang="ja" suppressHydrationWarning>
       <body className={notoSansJP.className}>
         <TRPCReactProvider>
-          <Providers>
-            <VStack gap="lg" pb="2xl">
-              <Header
-                appendLink={{
-                  href: env.ADMIN_DOMAIN_URL,
-                  label: "管理ページへ",
-                }}
-                loginAction={signInWithGoogle}
-                logoutAction={signOutUser}
-                user={session?.user}
-              />
-              <Container size="lg">
-                <Center>{children}</Center>
-              </Container>
-            </VStack>
-          </Providers>
+          <NextIntlClientProvider messages={messages}>
+            <Providers>
+              <VStack gap="lg" pb="2xl">
+                <Header
+                  appendLink={{
+                    href: env.ADMIN_DOMAIN_URL,
+                    label: "管理ページへ",
+                  }}
+                  loginAction={signInWithGoogle}
+                  logoutAction={signOutUser}
+                  user={session?.user}
+                />
+                <Container size="lg">
+                  <Center>{children}</Center>
+                </Container>
+              </VStack>
+            </Providers>
+          </NextIntlClientProvider>
         </TRPCReactProvider>
         <Toaster />
       </body>

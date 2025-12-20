@@ -1,9 +1,11 @@
+import { jaMessages } from "@repo/messages";
 import { composeStories } from "@storybook/nextjs-vite";
+import { NextIntlClientProvider } from "next-intl";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { render } from "vitest-browser-react";
 
 import { type ReactionSummary } from "./libs/reaction-summary";
-import { FEATURE_CONTENT_FALLBACK, Product } from "./product";
+import { Product } from "./product";
 import * as stories from "./product.stories";
 
 const Stories = composeStories(stories);
@@ -81,19 +83,21 @@ describe("Product", () => {
 
   it("renders provided props", async () => {
     const { asFragment, baseElement } = await render(
-      <Product
-        canCreateFeatureRequest
-        onCreateFeatureRequest={async () => {}}
-        onReactToFeature={async () => {}}
-        product={{
-          description: "サンプルの説明文です。",
-          featureRequests: [],
-          homePageUrl: "https://example.com",
-          id: 1,
-          logoUrl: "https://placehold.co/120x120",
-          name: "Sample Product",
-        }}
-      />,
+      <NextIntlClientProvider locale="ja" messages={jaMessages}>
+        <Product
+          canCreateFeatureRequest
+          onCreateFeatureRequest={async () => {}}
+          onReactToFeature={async () => {}}
+          product={{
+            description: "サンプルの説明文です。",
+            featureRequests: [],
+            homePageUrl: "https://example.com",
+            id: 1,
+            logoUrl: "https://placehold.co/120x120",
+            name: "Sample Product",
+          }}
+        />
+      </NextIntlClientProvider>,
     );
 
     expect(asFragment()).toMatchSnapshot();
@@ -102,12 +106,14 @@ describe("Product", () => {
 
   it("shows external link when homePageUrl is provided", async () => {
     await render(
-      <Product
-        canCreateFeatureRequest
-        onCreateFeatureRequest={async () => {}}
-        onReactToFeature={async () => {}}
-        product={createProductFixture("user-owner")}
-      />,
+      <NextIntlClientProvider locale="ja" messages={jaMessages}>
+        <Product
+          canCreateFeatureRequest
+          onCreateFeatureRequest={async () => {}}
+          onReactToFeature={async () => {}}
+          product={createProductFixture("user-owner")}
+        />
+      </NextIntlClientProvider>,
     );
 
     const link = document.querySelector<HTMLAnchorElement>(
@@ -115,7 +121,9 @@ describe("Product", () => {
     );
 
     expect(link).toBeDefined();
-    expect(link?.textContent).toContain("公式サイト");
+    expect(link?.textContent).toContain(
+      jaMessages.UserFeatureProduct.officialSite,
+    );
     expect(link?.target).toBe("_blank");
     expect(link?.rel).toContain("noreferrer");
 
@@ -138,35 +146,43 @@ describe("Product", () => {
 
   it("shows edit link for the owner", async () => {
     await render(
-      <Product
-        canCreateFeatureRequest
-        currentUser={{ id: "user-owner" }}
-        onCreateFeatureRequest={async () => {}}
-        onReactToFeature={async () => {}}
-        product={createProductFixture("user-owner")}
-      />,
+      <NextIntlClientProvider locale="ja" messages={jaMessages}>
+        <Product
+          canCreateFeatureRequest
+          currentUser={{ id: "user-owner" }}
+          onCreateFeatureRequest={async () => {}}
+          onReactToFeature={async () => {}}
+          product={createProductFixture("user-owner")}
+        />
+      </NextIntlClientProvider>,
     );
 
     await openDialog();
 
     const editLinks = Array.from(
-      document.querySelectorAll("a[aria-label='編集ページを開く']"),
+      document.querySelectorAll(
+        `a[aria-label='${jaMessages.UserFeatureProduct.editLinkAriaLabel}']`,
+      ),
     );
     expect(editLinks).toHaveLength(1);
   });
 
   it("omits edit link when the viewer is not the creator", async () => {
     await render(
-      <Product
-        canCreateFeatureRequest
-        currentUser={{ id: "other-user" }}
-        onCreateFeatureRequest={async () => {}}
-        onReactToFeature={async () => {}}
-        product={createProductFixture("user-owner")}
-      />,
+      <NextIntlClientProvider locale="ja" messages={jaMessages}>
+        <Product
+          canCreateFeatureRequest
+          currentUser={{ id: "other-user" }}
+          onCreateFeatureRequest={async () => {}}
+          onReactToFeature={async () => {}}
+          product={createProductFixture("user-owner")}
+        />
+      </NextIntlClientProvider>,
     );
 
-    expect(document.body.textContent).not.toContain("編集ページを開く");
+    expect(document.body.textContent).not.toContain(
+      jaMessages.UserFeatureProduct.editLinkAriaLabel,
+    );
   });
 
   it("shows fallback content when the feature body is empty", async () => {
@@ -177,17 +193,21 @@ describe("Product", () => {
     });
 
     await render(
-      <Product
-        canCreateFeatureRequest
-        currentUser={{ id: "user-owner" }}
-        onCreateFeatureRequest={async () => {}}
-        onReactToFeature={async () => {}}
-        openFeatureRequestId={1}
-        product={createProductFixture("user-owner", [feature])}
-      />,
+      <NextIntlClientProvider locale="ja" messages={jaMessages}>
+        <Product
+          canCreateFeatureRequest
+          currentUser={{ id: "user-owner" }}
+          onCreateFeatureRequest={async () => {}}
+          onReactToFeature={async () => {}}
+          openFeatureRequestId={1}
+          product={createProductFixture("user-owner", [feature])}
+        />
+      </NextIntlClientProvider>,
     );
 
-    expect(document.body.textContent).toContain(FEATURE_CONTENT_FALLBACK);
+    expect(document.body.textContent).toContain(
+      jaMessages.UserFeatureProduct.featureContentFallback,
+    );
   });
 
   it("orders feature requests by reactions then created date", async () => {
@@ -213,13 +233,15 @@ describe("Product", () => {
     ]);
 
     await render(
-      <Product
-        canCreateFeatureRequest
-        currentUser={{ id: "user-owner" }}
-        onCreateFeatureRequest={async () => {}}
-        onReactToFeature={async () => {}}
-        product={featureRequests}
-      />,
+      <NextIntlClientProvider locale="ja" messages={jaMessages}>
+        <Product
+          canCreateFeatureRequest
+          currentUser={{ id: "user-owner" }}
+          onCreateFeatureRequest={async () => {}}
+          onReactToFeature={async () => {}}
+          product={featureRequests}
+        />
+      </NextIntlClientProvider>,
     );
 
     const html = document.body.textContent ?? "";
@@ -236,28 +258,30 @@ describe("Product", () => {
 
   it("shows closed feature requests under the composer", async () => {
     await render(
-      <Product
-        canCreateFeatureRequest
-        currentUser={{ id: "user-owner" }}
-        onCreateFeatureRequest={async () => {}}
-        onReactToFeature={async () => {}}
-        product={createProductFixture("user-owner", [
-          {
-            content: "まだ未対応のリクエスト",
-            id: 1,
-            reactionSummaries: [],
-            status: "open",
-            title: "公開中のリクエスト",
-          },
-          {
-            content: "完了した対応",
-            id: 2,
-            reactionSummaries: [],
-            status: "closed",
-            title: "クローズ済みリクエスト",
-          },
-        ])}
-      />,
+      <NextIntlClientProvider locale="ja" messages={jaMessages}>
+        <Product
+          canCreateFeatureRequest
+          currentUser={{ id: "user-owner" }}
+          onCreateFeatureRequest={async () => {}}
+          onReactToFeature={async () => {}}
+          product={createProductFixture("user-owner", [
+            {
+              content: "まだ未対応のリクエスト",
+              id: 1,
+              reactionSummaries: [],
+              status: "open",
+              title: "公開中のリクエスト",
+            },
+            {
+              content: "完了した対応",
+              id: 2,
+              reactionSummaries: [],
+              status: "closed",
+              title: "クローズ済みリクエスト",
+            },
+          ])}
+        />
+      </NextIntlClientProvider>,
     );
 
     const closedRequest = Array.from(document.querySelectorAll("*"))

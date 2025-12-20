@@ -1,4 +1,6 @@
+import { jaMessages } from "@repo/messages";
 import { composeStories } from "@storybook/nextjs-vite";
+import { NextIntlClientProvider } from "next-intl";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { render } from "vitest-browser-react";
 
@@ -50,13 +52,15 @@ describe("RequestEdit", () => {
 
   it("renders form fields with defaults", async () => {
     await render(
-      <RequestEdit
-        backHref={{ pathname: "/products/1" }}
-        defaultValues={{ content: "内容", title: "タイトル" }}
-        featureId={12}
-        onSubmit={async () => {}}
-        productName="Fequest"
-      />,
+      <NextIntlClientProvider locale="ja" messages={jaMessages}>
+        <RequestEdit
+          backHref={{ pathname: "/products/1" }}
+          defaultValues={{ content: "内容", title: "タイトル" }}
+          featureId={12}
+          onSubmit={async () => {}}
+          productName="Fequest"
+        />
+      </NextIntlClientProvider>,
     );
 
     const titleInput = document.querySelector<HTMLInputElement>(
@@ -79,19 +83,25 @@ describe("RequestEdit", () => {
     const onDelete = vi.fn(async () => {});
 
     await render(
-      <RequestEdit
-        backHref={{ pathname: "/products/1" }}
-        defaultValues={{ content: "内容", title: "タイトル" }}
-        featureId={34}
-        onDelete={onDelete}
-        onSubmit={async () => {}}
-        productName="Fequest"
-      />,
+      <NextIntlClientProvider locale="ja" messages={jaMessages}>
+        <RequestEdit
+          backHref={{ pathname: "/products/1" }}
+          defaultValues={{ content: "内容", title: "タイトル" }}
+          featureId={34}
+          onDelete={onDelete}
+          onSubmit={async () => {}}
+          productName="Fequest"
+        />
+      </NextIntlClientProvider>,
     );
 
     const deleteTrigger = Array.from(
       document.querySelectorAll<HTMLButtonElement>("button"),
-    ).find((button) => button.textContent?.includes("リクエストを削除"));
+    ).find((button) =>
+      button.textContent?.includes(
+        jaMessages.UserFeatureRequestEdit.buttons.delete,
+      ),
+    );
 
     expect(deleteTrigger).toBeDefined();
 
@@ -101,7 +111,9 @@ describe("RequestEdit", () => {
     const dialogContent = document.querySelector(
       "[data-slot='alert-dialog-content']",
     );
-    expect(dialogContent?.textContent).toContain("リクエストを削除しますか？");
+    expect(dialogContent?.textContent).toContain(
+      jaMessages.UserFeatureRequestEdit.deleteDialog.title,
+    );
 
     const form = document.querySelector<HTMLFormElement>(
       "[data-slot='alert-dialog-content'] form",
@@ -112,7 +124,9 @@ describe("RequestEdit", () => {
     form?.requestSubmit();
     await waitForDialog();
 
-    expect(toastModule.toast.loading).toHaveBeenCalledWith("削除中...");
+    expect(toastModule.toast.loading).toHaveBeenCalledWith(
+      jaMessages.UserFeatureRequestEdit.toast.delete.loading,
+    );
     expect(onDelete).toHaveBeenCalledOnce();
   });
 });
