@@ -7,6 +7,7 @@ import {
   When,
 } from "@cucumber/cucumber";
 import { expect } from "@playwright/test";
+import { AdminProductPage } from "@repo/admin-feature-product/e2e";
 import { migrateDatabase } from "@repo/db/migrate";
 import { ProductPage as UserProductPage } from "@repo/user-feature-product/e2e";
 import { stat } from "node:fs/promises";
@@ -16,7 +17,6 @@ import { fileURLToPath } from "node:url";
 import { Network, StartedNetwork, StartedTestContainer } from "testcontainers";
 
 import { AdminDashboardPage } from "@/pages/admin/dashboard.page";
-import { AdminProductPage } from "@/pages/admin/product.page";
 import {
   type BrowserSession,
   createBrowserSession,
@@ -175,10 +175,10 @@ BeforeAll(async () => {
   await userProductPage.waitForFeatureRequest(closedFeatureTitle);
 
   // Close one feature via admin UI
-  const adminProductPage = new AdminProductPage(
-    adminBrowser.page,
-    adminBaseUrl,
-  );
+  const adminProductPage = new AdminProductPage({
+    baseUrl: adminBaseUrl,
+    page: adminBrowser.page,
+  });
   await adminProductPage.goto(productId);
   // createFeatureRequest は2件追加しているので、2件目をクローズする
   await adminProductPage.closeFeatureAt(2);
