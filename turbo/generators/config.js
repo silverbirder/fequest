@@ -9,6 +9,9 @@ module.exports = function generator(plop) {
       ? trimmed.replace(/^\/*/, "")
       : trimmed;
   });
+  plop.setHelper("lowerCase", (input) =>
+    typeof input === "string" ? input.toLowerCase() : ""
+  );
 
   plop.setGenerator("feature", {
     description: "Create a shareable feature package under packages/",
@@ -65,6 +68,12 @@ module.exports = function generator(plop) {
         },
         {
           type: "add",
+          path: plop.renderString(`${packageDir}/playwright.config.ts`, answers),
+          templateFile: "templates/feature/playwright.config.ts.hbs",
+          skipIfExists: true,
+        },
+        {
+          type: "add",
           path: plop.renderString(`${packageDir}/vitest.setup.ts`, answers),
           templateFile: "templates/feature/vitest.setup.ts.hbs",
           skipIfExists: true,
@@ -106,6 +115,30 @@ module.exports = function generator(plop) {
           type: "add",
           path: plop.renderString(indexPath, answers),
           templateFile: "templates/feature/index.ts.hbs",
+          skipIfExists: true,
+        },
+        {
+          type: "add",
+          path: plop.renderString(`${packageDir}/e2e/index.ts`, answers),
+          templateFile: "templates/feature/e2e/index.ts.hbs",
+          skipIfExists: true,
+        },
+        {
+          type: "add",
+          path: plop.renderString(
+            `${packageDir}/e2e/{{kebabCase name}}.page.ts`,
+            answers
+          ),
+          templateFile: "templates/feature/e2e/page.ts.hbs",
+          skipIfExists: true,
+        },
+        {
+          type: "add",
+          path: plop.renderString(
+            `${packageDir}/e2e/{{kebabCase name}}.page.spec.ts`,
+            answers
+          ),
+          templateFile: "templates/feature/e2e/page.spec.ts.hbs",
           skipIfExists: true,
         },
         {

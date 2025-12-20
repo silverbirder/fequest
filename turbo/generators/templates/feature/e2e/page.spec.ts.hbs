@@ -1,0 +1,12 @@
+import { test } from "@playwright/test";
+
+import { {{pascalCase name}}Page } from "./{{kebabCase name}}.page";
+
+test.describe("{{pascalCase name}} page", () => {
+  test("shows default story", async ({ page }) => {
+    const featurePage = new {{pascalCase name}}Page({ page });
+
+    await featurePage.goto();
+    await featurePage.expectDefaultStory();
+  });
+});

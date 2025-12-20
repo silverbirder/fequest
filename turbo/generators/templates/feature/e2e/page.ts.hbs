@@ -1,0 +1,42 @@
+import { expect, type Locator, type Page } from "@playwright/test";
+
+type Props = {
+  baseUrl?: string;
+  page: Page;
+  storyId?: string;
+};
+
+export class {{pascalCase name}}Page {
+  get root(): Locator {
+    return this.page.getByText("{{pascalCase name}}", { exact: false });
+  }
+
+  private readonly baseUrl?: string;
+
+  private readonly page: Page;
+
+  private readonly storyId: string;
+
+  constructor(props: Props) {
+    this.page = props.page;
+    this.baseUrl = props.baseUrl;
+    this.storyId =
+      props.storyId ??
+      "feature-{{dashCase app}}-{{lowerCase (pascalCase name)}}--default";
+  }
+
+  async expectDefaultStory() {
+    await expect(this.root).toBeVisible();
+  }
+
+  async goto() {
+    if (this.baseUrl) {
+      await this.page.goto(this.baseUrl, { waitUntil: "networkidle" });
+      return;
+    }
+
+    await this.page.goto(`/iframe.html?id=${this.storyId}`, {
+      waitUntil: "networkidle",
+    });
+  }
+}
