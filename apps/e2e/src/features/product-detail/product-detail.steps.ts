@@ -80,134 +80,173 @@ let databaseUrlForHost: string | undefined;
 let authenticatedSessionToken: string | undefined;
 let browserSession: BrowserSession | undefined;
 let createdFeatureTitle: string | undefined;
+let cleanupStarted = false;
+
+const cleanup = async () => {
+  if (cleanupStarted) {
+    return;
+  }
+  cleanupStarted = true;
+
+  if (browserSession) {
+    await browserSession.close();
+    browserSession = undefined;
+  }
+
+  await Promise.allSettled([
+    stopUser(userStartedContainer).then(() => {
+      userStartedContainer = undefined;
+    }),
+    stopAdmin(adminStartedContainer).then(() => {
+      adminStartedContainer = undefined;
+    }),
+    stopDatabase(dbStartedContainer).then(() => {
+      dbStartedContainer = undefined;
+    }),
+  ]);
+
+  if (network) {
+    await network.stop();
+    network = undefined;
+  }
+};
+
+const registerCleanupHandlers = () => {
+  const handleSignal = async (signal: NodeJS.Signals) => {
+    try {
+      await cleanup();
+    } finally {
+      process.removeListener(signal, handleSignal);
+      process.kill(process.pid, signal);
+    }
+  };
+
+  process.once("SIGINT", handleSignal);
+  process.once("SIGTERM", handleSignal);
+};
+
+registerCleanupHandlers();
 
 BeforeAll(async () => {
   if (network) {
     return;
   }
 
-  const startedNetwork = await new Network().start();
-  network = startedNetwork;
+  try {
+    const startedNetwork = await new Network().start();
+    network = startedNetwork;
 
-  const {
-    connectionString,
-    container: startedDbContainer,
-    hostConnectionString,
-  } = await startDatabase(startedNetwork);
-  dbStartedContainer = startedDbContainer;
-  databaseUrlForHost = hostConnectionString;
+    const {
+      connectionString,
+      container: startedDbContainer,
+      hostConnectionString,
+    } = await startDatabase(startedNetwork);
+    dbStartedContainer = startedDbContainer;
+    databaseUrlForHost = hostConnectionString;
 
-  await migrateDatabase(hostConnectionString);
+    await migrateDatabase(hostConnectionString);
 
-  const [adminHostPort, userHostPort] = await Promise.all([
-    reservePort(3001),
-    reservePort(3000),
-  ]);
+    const [adminHostPort, userHostPort] = await Promise.all([
+      reservePort(3001),
+      reservePort(3000),
+    ]);
 
-  const adminDomainUrl = `http://127.0.0.1:${adminHostPort}`;
-  const userDomainUrl = `http://127.0.0.1:${userHostPort}`;
+    const adminDomainUrl = `http://127.0.0.1:${adminHostPort}`;
+    const userDomainUrl = `http://127.0.0.1:${userHostPort}`;
 
-  const [
-    { container: startedAdminContainer, url: adminBaseUrl },
-    { container: startedUserContainer, url: userBaseUrl },
-  ] = await Promise.all([
-    startAdmin(startedNetwork, connectionString, {
-      hostPort: adminHostPort,
-      userDomainUrl,
-    }),
-    startUser(startedNetwork, connectionString, {
-      adminDomainUrl,
-      hostPort: userHostPort,
-    }),
-  ]);
+    const [
+      { container: startedAdminContainer, url: adminBaseUrl },
+      { container: startedUserContainer, url: userBaseUrl },
+    ] = await Promise.all([
+      startAdmin(startedNetwork, connectionString, {
+        hostPort: adminHostPort,
+        userDomainUrl,
+      }),
+      startUser(startedNetwork, connectionString, {
+        adminDomainUrl,
+        hostPort: userHostPort,
+      }),
+    ]);
 
-  adminStartedContainer = startedAdminContainer;
-  userStartedContainer = startedUserContainer;
-  userUrl = userBaseUrl;
+    adminStartedContainer = startedAdminContainer;
+    userStartedContainer = startedUserContainer;
+    userUrl = userBaseUrl;
 
-  const { sessionToken, userId } =
-    await createSeedSession(hostConnectionString);
+    const { sessionToken, userId } =
+      await createSeedSession(hostConnectionString);
 
-  const openFeatureTitle = "E2E サンプル機能";
-  const closedFeatureTitle = "E2E クローズ済み機能";
+    const openFeatureTitle = "E2E サンプル機能";
+    const closedFeatureTitle = "E2E クローズ済み機能";
 
-  // Create product via admin UI
-  const adminBrowser = await createBrowserSession();
-  await adminBrowser.context.addCookies([
-    {
-      domain: new URL(adminBaseUrl).hostname,
-      httpOnly: true,
-      name: "authjs.session-token",
-      path: "/",
-      sameSite: "Lax",
-      secure: false,
-      value: sessionToken,
-    },
-  ]);
-  const adminDashboardPage = new AdminDashboardPage({
-    baseUrl: adminBaseUrl,
-    page: adminBrowser.page,
-  });
-  await adminDashboardPage.goto();
-  const { productId, productName } =
-    await adminDashboardPage.createProduct("E2E Product");
+    // Create product via admin UI
+    const adminBrowser = await createBrowserSession();
+    await adminBrowser.context.addCookies([
+      {
+        domain: new URL(adminBaseUrl).hostname,
+        httpOnly: true,
+        name: "authjs.session-token",
+        path: "/",
+        sameSite: "Lax",
+        secure: false,
+        value: sessionToken,
+      },
+    ]);
+    const adminDashboardPage = new AdminDashboardPage({
+      baseUrl: adminBaseUrl,
+      page: adminBrowser.page,
+    });
+    await adminDashboardPage.goto();
+    const { productId, productName } =
+      await adminDashboardPage.createProduct("E2E Product");
 
-  // Create features via user UI
-  const userBrowser = await createBrowserSession();
-  await userBrowser.context.addCookies([
-    {
-      domain: new URL(userBaseUrl).hostname,
-      httpOnly: true,
-      name: "authjs.session-token",
-      path: "/",
-      sameSite: "Lax",
-      secure: false,
-      value: sessionToken,
-    },
-  ]);
-  const userProductPage = new UserProductPage({
-    baseUrl: userBaseUrl,
-    page: userBrowser.page,
-  });
-  await userProductPage.goto(productId);
-  await userProductPage.createFeatureRequest(openFeatureTitle);
-  await userProductPage.createFeatureRequest(closedFeatureTitle);
-  await userProductPage.waitForFeatureRequest(closedFeatureTitle);
+    // Create features via user UI
+    const userBrowser = await createBrowserSession();
+    await userBrowser.context.addCookies([
+      {
+        domain: new URL(userBaseUrl).hostname,
+        httpOnly: true,
+        name: "authjs.session-token",
+        path: "/",
+        sameSite: "Lax",
+        secure: false,
+        value: sessionToken,
+      },
+    ]);
+    const userProductPage = new UserProductPage({
+      baseUrl: userBaseUrl,
+      page: userBrowser.page,
+    });
+    await userProductPage.goto(productId);
+    await userProductPage.createFeatureRequest(openFeatureTitle);
+    await userProductPage.createFeatureRequest(closedFeatureTitle);
+    await userProductPage.waitForFeatureRequest(closedFeatureTitle);
 
-  // Close one feature via admin UI
-  const adminProductPage = new AdminProductPage({
-    baseUrl: adminBaseUrl,
-    page: adminBrowser.page,
-  });
-  await adminProductPage.goto(productId);
-  // createFeatureRequest は2件追加しているので、2件目をクローズする
-  await adminProductPage.closeFeatureAt(2);
+    // Close one feature via admin UI
+    const adminProductPage = new AdminProductPage({
+      baseUrl: adminBaseUrl,
+      page: adminBrowser.page,
+    });
+    await adminProductPage.goto(productId);
+    // createFeatureRequest は2件追加しているので、2件目をクローズする
+    await adminProductPage.closeFeatureAt(2);
 
-  await adminBrowser.close();
-  await userBrowser.close();
+    await adminBrowser.close();
+    await userBrowser.close();
 
-  seededProduct = {
-    openFeatureTitle,
-    productId,
-    productName,
-    userId,
-  };
+    seededProduct = {
+      openFeatureTitle,
+      productId,
+      productName,
+      userId,
+    };
+  } catch (error) {
+    await cleanup();
+    throw error;
+  }
 });
 
 AfterAll(async () => {
-  if (browserSession) {
-    await browserSession.close();
-    browserSession = undefined;
-  }
-
-  await stopUser(userStartedContainer);
-  await stopAdmin(adminStartedContainer);
-  await stopDatabase(dbStartedContainer);
-
-  if (network) {
-    await network.stop();
-    network = undefined;
-  }
+  await cleanup();
 });
 
 Given("データベースにサンプルのプロダクトが存在する", () => {
