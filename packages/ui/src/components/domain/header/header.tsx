@@ -1,8 +1,8 @@
 import type { Route } from "next";
-import type { UrlObject } from "url";
 
 import { useTranslations } from "next-intl";
 import Link from "next/link";
+import { type UrlObject } from "url";
 
 import {
   Avatar,
@@ -17,13 +17,18 @@ import {
 } from "../../common";
 import { AppLogo } from "../app-logo";
 
+type LinkItem = {
+  external?: boolean;
+  href: Route | UrlObject;
+  label: string;
+};
+
 type Props = {
-  appendLink?: { href: string; label: string };
   appName?: string;
   homeHref?: Route | UrlObject;
+  links?: LinkItem[];
   loginAction: () => Promise<void>;
   logoutAction: () => Promise<void>;
-  menuLinks?: { href: Route | UrlObject; label: string }[];
   user?: null | User;
 };
 
@@ -33,16 +38,15 @@ type User = {
 };
 
 export const Header = ({
-  appendLink,
   appName = "Fequest",
   homeHref = "/",
+  links,
   loginAction,
   logoutAction,
-  menuLinks,
   user,
 }: Props) => {
   const t = useTranslations("UI.header");
-  const isAuthenticated = Boolean(user);
+  const isUserAuthenticated = Boolean(user);
 
   return (
     <HStack
@@ -66,7 +70,7 @@ export const Header = ({
             </Text>
           </AppLogo>
         </Link>
-        {isAuthenticated ? (
+        {isUserAuthenticated ? (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
@@ -78,34 +82,35 @@ export const Header = ({
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" sideOffset={8}>
-              {menuLinks?.map((link) => (
-                <DropdownMenuItem asChild key={link.label}>
-                  <Box w="full">
-                    <Button asChild size="sm" variant="ghost">
-                      <Link href={link.href}>{link.label}</Link>
-                    </Button>
-                  </Box>
+              {links?.map((link) => (
+                <DropdownMenuItem key={link.label}>
+                  <Button
+                    asChild
+                    justify="start"
+                    size="sm"
+                    variant="ghost"
+                    w="full"
+                  >
+                    <Link
+                      href={link.href}
+                      rel={link.external ? "noreferrer" : undefined}
+                      target={link.external ? "_blank" : undefined}
+                    >
+                      {link.label}
+                    </Link>
+                  </Button>
                 </DropdownMenuItem>
               ))}
-              {appendLink && (
-                <DropdownMenuItem asChild>
-                  <Box w="full">
-                    <Button asChild size="sm" variant="ghost">
-                      <a
-                        href={appendLink.href}
-                        rel="noreferrer"
-                        target="_blank"
-                      >
-                        {appendLink.label}
-                      </a>
-                    </Button>
-                  </Box>
-                </DropdownMenuItem>
-              )}
-              <DropdownMenuItem asChild>
-                <Box w="full">
+              <DropdownMenuItem>
+                <Box asChild w="full">
                   <form action={logoutAction}>
-                    <Button size="sm" type="submit" variant="ghost">
+                    <Button
+                      justify="start"
+                      size="sm"
+                      type="submit"
+                      variant="ghost"
+                      w="full"
+                    >
                       {t("logout")}
                     </Button>
                   </form>

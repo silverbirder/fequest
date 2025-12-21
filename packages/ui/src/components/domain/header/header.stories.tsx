@@ -20,18 +20,19 @@ export const LoggedOut: Story = {
 
 export const LoggedIn: Story = {
   args: {
-    appendLink: {
-      href: "https://admin.fequest.local",
-      label: "管理ページへ",
-    },
-    loginAction: async () => {},
-    logoutAction: async () => {},
-    menuLinks: [
+    links: [
+      {
+        external: true,
+        href: { href: "https://admin.fequest.local" },
+        label: "管理ページ",
+      },
       {
         href: "/setting",
         label: "設定",
       },
     ],
+    loginAction: async () => {},
+    logoutAction: async () => {},
     user: {
       image: "https://github.com/shadcn.png",
       name: "田中 花子",

@@ -1,6 +1,11 @@
 import type { ReactNode } from "react";
 
 import { Slot } from "@radix-ui/react-slot";
+import {
+  splitStyleProps,
+  type StyleProps,
+  stylePropsClassNames,
+} from "@repo/ui/lib/style-props";
 import { cn } from "@repo/ui/lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
 
@@ -14,7 +19,7 @@ const buttonVariants = cva(
     variants: {
       size: {
         default: "h-9 px-4 py-2 has-[>svg]:px-3",
-        icon: "size-9",
+        icon: "size-9 rounded-full",
         lg: "h-10 rounded-md px-6 has-[>svg]:px-4",
         sm: "h-8 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5",
       },
@@ -33,7 +38,11 @@ const buttonVariants = cva(
   },
 );
 
-export type ButtonProps = React.ComponentProps<"button"> &
+export type ButtonProps = Omit<
+  React.ComponentPropsWithoutRef<"button">,
+  keyof StyleProps
+> &
+  StyleProps &
   VariantProps<typeof buttonVariants> & {
     asChild?: boolean;
     pending?: boolean;
@@ -53,17 +62,19 @@ const Button = ({
 }: ButtonProps) => {
   const Comp = asChild ? Slot : "button";
   const isDisabled = disabled ?? pending;
+  const { restProps, styleProps } = splitStyleProps(props);
 
   return (
     <Comp
       aria-busy={pending || undefined}
       className={cn(
         buttonVariants({ className, size, variant }),
+        stylePropsClassNames(styleProps),
         pending && "cursor-wait",
       )}
       data-slot="button"
       disabled={isDisabled}
-      {...props}
+      {...restProps}
     >
       {pending ? (pendingLabel ?? children) : children}
     </Comp>

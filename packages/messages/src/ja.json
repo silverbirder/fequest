@@ -82,7 +82,8 @@
     }
   },
   "AdminApp": {
-    "userPageLinkLabel": "ユーザーページへ",
+    "userPageLinkLabel": "ユーザーページ",
+    "settingLinkLabel": "設定",
     "notFoundTitle": "404 - Not Found",
     "notFoundDescription": "お探しのページは見つかりませんでした。"
   },
@@ -234,6 +235,8 @@
     "googleButton": "Googleでログイン"
   },
   "UserApp": {
+    "adminPageLinkLabel": "管理ページ",
+    "settingLinkLabel": "設定",
     "notFoundTitle": "404 - Not Found",
     "notFoundDescription": "お探しのページは見つかりませんでした。"
   },

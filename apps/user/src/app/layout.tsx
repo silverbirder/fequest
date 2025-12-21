@@ -9,7 +9,7 @@ import {
 import { Providers } from "@repo/ui/providers/theme-provider";
 import { type Metadata } from "next";
 import { NextIntlClientProvider } from "next-intl";
-import { getMessages } from "next-intl/server";
+import { getMessages, getTranslations } from "next-intl/server";
 import { Noto_Sans_JP } from "next/font/google";
 
 import { env } from "~/env";
@@ -39,6 +39,7 @@ export default async function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   const session = await auth();
   const messages = await getMessages();
+  const t = await getTranslations("UserApp");
 
   const signInWithGoogle = async () => {
     "use server";
@@ -58,18 +59,19 @@ export default async function RootLayout({
             <Providers>
               <VStack gap="lg" pb="2xl">
                 <Header
-                  appendLink={{
-                    href: env.ADMIN_DOMAIN_URL,
-                    label: "管理ページへ",
-                  }}
-                  loginAction={signInWithGoogle}
-                  logoutAction={signOutUser}
-                  menuLinks={[
+                  links={[
+                    {
+                      external: true,
+                      href: { href: env.ADMIN_DOMAIN_URL },
+                      label: t("adminPageLinkLabel"),
+                    },
                     {
                       href: "/setting",
-                      label: "設定",
+                      label: t("settingLinkLabel"),
                     },
                   ]}
+                  loginAction={signInWithGoogle}
+                  logoutAction={signOutUser}
                   user={session?.user}
                 />
                 <Container size="lg">

@@ -61,4 +61,21 @@ describe("Button", () => {
     expect(buttonEl?.disabled).toBe(true);
     expect(buttonEl?.textContent).toBe("Loading");
   });
+
+  it("accepts style props for layout and radius", async () => {
+    await render(
+      <Button justify="start" radius="full" w="full">
+        Full
+      </Button>,
+    );
+
+    const buttonEl = document.querySelector<HTMLButtonElement>(
+      'button[data-slot="button"]',
+    );
+    const className = buttonEl?.getAttribute("class") ?? "";
+
+    expect(className).toContain("w-full");
+    expect(className).toContain("rounded-full");
+    expect(className).toContain("justify-start");
+  });
 });

@@ -240,6 +240,14 @@ const layout = cva("", {
       max: "h-max",
       min: "h-min",
     },
+    justify: {
+      around: "justify-around",
+      between: "justify-between",
+      center: "justify-center",
+      end: "justify-end",
+      evenly: "justify-evenly",
+      start: "justify-start",
+    },
     left: {
       "-1": "-left-1",
       "-1/2": "-left-1/2",
@@ -537,6 +545,7 @@ const stylePropKeys = [
   "radius",
   "opacity",
   "position",
+  "justify",
   "w",
   "h",
   "maxW",

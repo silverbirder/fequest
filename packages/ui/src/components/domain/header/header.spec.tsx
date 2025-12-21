@@ -101,10 +101,13 @@ describe("Header", () => {
   it("opens dropdown menu on avatar click and shows logout", async () => {
     await renderWithIntl(
       <Header
-        appendLink={{
-          href: "https://admin.fequest.local",
-          label: "管理ページへ",
-        }}
+        links={[
+          {
+            external: true,
+            href: "https://admin.fequest.local",
+            label: "管理ページ",
+          },
+        ]}
         loginAction={async () => {}}
         logoutAction={async () => {}}
         user={{
@@ -144,8 +147,12 @@ describe("Header", () => {
     const menu = document.querySelector<HTMLElement>(
       "[data-slot='dropdown-menu-content']",
     );
+    const logoutForm = menu?.querySelector<HTMLFormElement>("form");
+    const logoutButton = logoutForm?.querySelector<HTMLButtonElement>("button");
 
     expect(menu?.textContent ?? "").toContain(jaMessages.UI.header.logout);
+    expect(logoutForm?.className).toContain("w-full");
+    expect(logoutButton?.className ?? "").toContain("w-full");
   });
 
   it("shows a cross-portal link when provided", async () => {
@@ -153,10 +160,18 @@ describe("Header", () => {
 
     await renderWithIntl(
       <Header
-        appendLink={{
-          href,
-          label: "管理ページへ",
-        }}
+        links={[
+          {
+            external: true,
+            href,
+            label: "管理ページ",
+          },
+          {
+            external: true,
+            href: "https://user.fequest.local",
+            label: "ユーザーページへ",
+          },
+        ]}
         loginAction={async () => {}}
         logoutAction={async () => {}}
         user={{
@@ -200,7 +215,7 @@ describe("Header", () => {
       `a[href='${href}']`,
     );
 
-    expect(menu?.textContent ?? "").toContain("管理ページへ");
+    expect(menu?.textContent ?? "").toContain("管理ページ");
     expect(switchAnchor).not.toBeNull();
   });
 
@@ -209,14 +224,14 @@ describe("Header", () => {
 
     await renderWithIntl(
       <Header
-        loginAction={async () => {}}
-        logoutAction={async () => {}}
-        menuLinks={[
+        links={[
           {
             href: withdrawHref,
             label: "設定",
           },
         ]}
+        loginAction={async () => {}}
+        logoutAction={async () => {}}
         user={{
           image: null,
           name: "Fequest User",

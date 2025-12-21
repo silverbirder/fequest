@@ -31,19 +31,20 @@ const Layout = async ({ children }: Props) => {
   return (
     <VStack gap="lg" pb="2xl">
       <Header
-        appendLink={{
-          href: env.USER_DOMAIN_URL,
-          label: t("userPageLinkLabel"),
-        }}
         appName="Fequest Admin"
-        loginAction={signInWithGoogle}
-        logoutAction={signOutUser}
-        menuLinks={[
+        links={[
+          {
+            external: true,
+            href: { href: env.USER_DOMAIN_URL },
+            label: t("userPageLinkLabel"),
+          },
           {
             href: "/setting",
-            label: "設定",
+            label: t("settingLinkLabel"),
           },
         ]}
+        loginAction={signInWithGoogle}
+        logoutAction={signOutUser}
         user={session?.user}
       />
       <Container size="lg">

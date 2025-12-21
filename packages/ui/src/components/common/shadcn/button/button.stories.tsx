@@ -42,3 +42,10 @@ export const Secondary: Story = {
     variant: "secondary",
   },
 };
+
+export const StyleProps: Story = {
+  args: {
+    radius: "full",
+    w: "full",
+  },
+};
