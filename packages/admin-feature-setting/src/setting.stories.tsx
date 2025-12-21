@@ -4,7 +4,7 @@ import { Setting } from "./setting";
 
 const meta = {
   args: {
-    children: "Setting",
+    onWithdraw: async () => {},
   },
   component: Setting,
   title: "Feature/Admin/Setting",

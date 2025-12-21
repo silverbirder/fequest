@@ -32,4 +32,13 @@ describe("authConfig", () => {
       verificationTokensTable: adminVerificationTokens,
     });
   });
+
+  it("uses admin-scoped cookie names", () => {
+    expect(authConfig.cookies?.sessionToken?.name).toBe(
+      "fequest-admin-authjs.session-token",
+    );
+    expect(authConfig.cookies?.csrfToken?.name).toBe(
+      "fequest-admin-authjs.csrf-token",
+    );
+  });
 });

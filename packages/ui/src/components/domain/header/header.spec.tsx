@@ -203,4 +203,62 @@ describe("Header", () => {
     expect(menu?.textContent ?? "").toContain("管理ページへ");
     expect(switchAnchor).not.toBeNull();
   });
+
+  it("shows menu links when provided", async () => {
+    const withdrawHref = "/setting";
+
+    await renderWithIntl(
+      <Header
+        loginAction={async () => {}}
+        logoutAction={async () => {}}
+        menuLinks={[
+          {
+            href: withdrawHref,
+            label: "設定",
+          },
+        ]}
+        user={{
+          image: null,
+          name: "Fequest User",
+        }}
+      />,
+    );
+
+    const trigger = document.querySelector<HTMLElement>(
+      "[data-slot='dropdown-menu-trigger']",
+    );
+
+    trigger?.dispatchEvent(
+      new PointerEvent("pointerdown", {
+        bubbles: true,
+        button: 0,
+        pointerId: 1,
+        pointerType: "mouse",
+      }),
+    );
+    trigger?.dispatchEvent(
+      new PointerEvent("pointerup", {
+        bubbles: true,
+        button: 0,
+        pointerId: 1,
+        pointerType: "mouse",
+      }),
+    );
+    trigger?.dispatchEvent(
+      new MouseEvent("click", { bubbles: true, button: 0 }),
+    );
+
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    const menu = document.querySelector<HTMLElement>(
+      "[data-slot='dropdown-menu-content']",
+    );
+    const withdrawAnchor = menu?.querySelector<HTMLAnchorElement>(
+      `a[href='${withdrawHref}']`,
+    );
+
+    expect(menu?.textContent ?? "").toContain("設定");
+    expect(withdrawAnchor).not.toBeNull();
+  });
 });

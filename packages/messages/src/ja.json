@@ -62,6 +62,25 @@
       }
     }
   },
+  "UserSetting": {
+    "title": "退会",
+    "description": "退会すると、以下のデータが削除されます。",
+    "items": {
+      "featureRequests": "・投稿したフィーチャー",
+      "reactions": "・リアクション"
+    },
+    "action": "退会する",
+    "dialog": {
+      "title": "退会しますか？",
+      "description": "投稿したフィーチャーとリアクションが削除されます。",
+      "cancel": "キャンセル"
+    },
+    "toast": {
+      "error": "退会に失敗しました",
+      "loading": "退会処理中...",
+      "success": "退会しました"
+    }
+  },
   "AdminApp": {
     "userPageLinkLabel": "ユーザーページへ",
     "notFoundDescription": "お探しのページは見つかりませんでした。"
@@ -185,6 +204,26 @@
       "description": "この操作は取り消せません。プロダクトと関連するリクエストがすべて削除されます。",
       "confirm": "削除する",
       "cancel": "キャンセル"
+    }
+  },
+  "AdminSetting": {
+    "title": "退会",
+    "description": "退会すると、以下のデータが削除されます。",
+    "items": {
+      "products": "・作成したプロダクト",
+      "featureRequests": "・紐づくフィーチャーリクエスト",
+      "reactions": "・紐づくリアクション"
+    },
+    "action": "退会する",
+    "dialog": {
+      "title": "退会しますか？",
+      "description": "作成したプロダクトと紐づくフィーチャーリクエスト、リアクションが削除されます。",
+      "cancel": "キャンセル"
+    },
+    "toast": {
+      "error": "退会に失敗しました",
+      "loading": "退会処理中...",
+      "success": "退会しました"
     }
   },
   "AdminSignIn": {

@@ -64,6 +64,12 @@ export default async function RootLayout({
                   }}
                   loginAction={signInWithGoogle}
                   logoutAction={signOutUser}
+                  menuLinks={[
+                    {
+                      href: "/setting",
+                      label: "設定",
+                    },
+                  ]}
                   user={session?.user}
                 />
                 <Container size="lg">

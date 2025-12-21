@@ -23,6 +23,7 @@ type Props = {
   homeHref?: Route | UrlObject;
   loginAction: () => Promise<void>;
   logoutAction: () => Promise<void>;
+  menuLinks?: { href: Route | UrlObject; label: string }[];
   user?: null | User;
 };
 
@@ -37,6 +38,7 @@ export const Header = ({
   homeHref = "/",
   loginAction,
   logoutAction,
+  menuLinks,
   user,
 }: Props) => {
   const t = useTranslations("UI.header");
@@ -76,6 +78,15 @@ export const Header = ({
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" sideOffset={8}>
+              {menuLinks?.map((link) => (
+                <DropdownMenuItem asChild key={link.label}>
+                  <Box w="full">
+                    <Button asChild size="sm" variant="ghost">
+                      <Link href={link.href}>{link.label}</Link>
+                    </Button>
+                  </Box>
+                </DropdownMenuItem>
+              ))}
               {appendLink && (
                 <DropdownMenuItem asChild>
                   <Box w="full">

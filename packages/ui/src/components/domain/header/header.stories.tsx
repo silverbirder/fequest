@@ -26,6 +26,12 @@ export const LoggedIn: Story = {
     },
     loginAction: async () => {},
     logoutAction: async () => {},
+    menuLinks: [
+      {
+        href: "/setting",
+        label: "設定",
+      },
+    ],
     user: {
       image: "https://github.com/shadcn.png",
       name: "田中 花子",

@@ -8,7 +8,7 @@ type Props = {
 
 export class SettingPage {
   get root(): Locator {
-    return this.page.getByText("Setting", { exact: false });
+    return this.page.getByText("退会", { exact: false });
   }
 
   private readonly baseUrl?: string;

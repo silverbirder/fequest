@@ -52,5 +52,22 @@ export const authConfig: NextAuthConfig = {
       },
     }),
   },
+  cookies: {
+    callbackUrl: {
+      name: "fequest-admin-authjs.callback-url",
+    },
+    csrfToken: {
+      name: "fequest-admin-authjs.csrf-token",
+    },
+    pkceCodeVerifier: {
+      name: "fequest-admin-authjs.pkce.code-verifier",
+    },
+    sessionToken: {
+      name: "fequest-admin-authjs.session-token",
+    },
+    state: {
+      name: "fequest-admin-authjs.state",
+    },
+  },
   providers: [GoogleProvider],
 };
