@@ -36,6 +36,23 @@ export const users = createTable("user", (d) => ({
   image: d.varchar({ length: 255 }),
 }));
 
+export const adminUsers = createTable("admin_user", (d) => ({
+  id: d
+    .varchar({ length: 255 })
+    .notNull()
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  name: d.varchar({ length: 255 }),
+  email: d.varchar({ length: 255 }).notNull(),
+  emailVerified: d
+    .timestamp({
+      mode: "date",
+      withTimezone: true,
+    })
+    .default(sql`CURRENT_TIMESTAMP`),
+  image: d.varchar({ length: 255 }),
+}));
+
 export const products = createTable(
   "product",
   (d) => ({
@@ -47,7 +64,7 @@ export const products = createTable(
     userId: d
       .varchar({ length: 255 })
       .notNull()
-      .references(() => users.id),
+      .references(() => adminUsers.id),
     createdAt: d
       .timestamp({ withTimezone: true })
       .default(sql`CURRENT_TIMESTAMP`)
@@ -135,13 +152,15 @@ export const featureRequestReactions = createTable(
 
 export const usersRelations = relations(users, ({ many }) => ({
   accounts: many(accounts),
-  products: many(products),
   featureRequests: many(featureRequests),
   featureRequestReactions: many(featureRequestReactions),
 }));
 
 export const productsRelations = relations(products, ({ one, many }) => ({
-  user: one(users, { fields: [products.userId], references: [users.id] }),
+  user: one(adminUsers, {
+    fields: [products.userId],
+    references: [adminUsers.id],
+  }),
   featureRequests: many(featureRequests),
 }));
 
@@ -202,6 +221,37 @@ export const accountsRelations = relations(accounts, ({ one }) => ({
   user: one(users, { fields: [accounts.userId], references: [users.id] }),
 }));
 
+export const adminAccounts = createTable(
+  "admin_account",
+  (d) => ({
+    userId: d
+      .varchar({ length: 255 })
+      .notNull()
+      .references(() => adminUsers.id),
+    type: d.varchar({ length: 255 }).$type<AdapterAccount["type"]>().notNull(),
+    provider: d.varchar({ length: 255 }).notNull(),
+    providerAccountId: d.varchar({ length: 255 }).notNull(),
+    refresh_token: d.text(),
+    access_token: d.text(),
+    expires_at: d.integer(),
+    token_type: d.varchar({ length: 255 }),
+    scope: d.varchar({ length: 255 }),
+    id_token: d.text(),
+    session_state: d.varchar({ length: 255 }),
+  }),
+  (t) => [
+    primaryKey({ columns: [t.provider, t.providerAccountId] }),
+    index("fe_admin_account_user_id_idx").on(t.userId),
+  ],
+);
+
+export const adminAccountsRelations = relations(adminAccounts, ({ one }) => ({
+  user: one(adminUsers, {
+    fields: [adminAccounts.userId],
+    references: [adminUsers.id],
+  }),
+}));
+
 export const sessions = createTable(
   "session",
   (d) => ({
@@ -219,8 +269,44 @@ export const sessionsRelations = relations(sessions, ({ one }) => ({
   user: one(users, { fields: [sessions.userId], references: [users.id] }),
 }));
 
+export const adminSessions = createTable(
+  "admin_session",
+  (d) => ({
+    sessionToken: d.varchar({ length: 255 }).notNull().primaryKey(),
+    userId: d
+      .varchar({ length: 255 })
+      .notNull()
+      .references(() => adminUsers.id),
+    expires: d.timestamp({ mode: "date", withTimezone: true }).notNull(),
+  }),
+  (t) => [index("fe_admin_session_user_id_idx").on(t.userId)],
+);
+
+export const adminSessionsRelations = relations(adminSessions, ({ one }) => ({
+  user: one(adminUsers, {
+    fields: [adminSessions.userId],
+    references: [adminUsers.id],
+  }),
+}));
+
+export const adminUsersRelations = relations(adminUsers, ({ many }) => ({
+  accounts: many(adminAccounts),
+  products: many(products),
+  sessions: many(adminSessions),
+}));
+
 export const verificationTokens = createTable(
   "verification_token",
+  (d) => ({
+    identifier: d.varchar({ length: 255 }).notNull(),
+    token: d.varchar({ length: 255 }).notNull(),
+    expires: d.timestamp({ mode: "date", withTimezone: true }).notNull(),
+  }),
+  (t) => [primaryKey({ columns: [t.identifier, t.token] })],
+);
+
+export const adminVerificationTokens = createTable(
+  "admin_verification_token",
   (d) => ({
     identifier: d.varchar({ length: 255 }).notNull(),
     token: d.varchar({ length: 255 }).notNull(),

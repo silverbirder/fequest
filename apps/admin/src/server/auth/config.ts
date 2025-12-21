@@ -1,5 +1,10 @@
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
-import { accounts, sessions, users, verificationTokens } from "@repo/db";
+import {
+  adminAccounts,
+  adminSessions,
+  adminUsers,
+  adminVerificationTokens,
+} from "@repo/db";
 import { type DefaultSession, type NextAuthConfig } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 
@@ -33,10 +38,10 @@ declare module "next-auth" {
  */
 export const authConfig: NextAuthConfig = {
   adapter: DrizzleAdapter(db, {
-    accountsTable: accounts,
-    sessionsTable: sessions,
-    usersTable: users,
-    verificationTokensTable: verificationTokens,
+    accountsTable: adminAccounts,
+    sessionsTable: adminSessions,
+    usersTable: adminUsers,
+    verificationTokensTable: adminVerificationTokens,
   }),
   callbacks: {
     session: ({ session, user }) => ({
