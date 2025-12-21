@@ -23,6 +23,24 @@ const baseConfig = {
       provider: playwright(),
       headless: true,
       instances: [{ browser: "chromium" }],
+      expect: {
+        toMatchScreenshot: {
+          comparatorName: "pixelmatch",
+          comparatorOptions: {
+            threshold: 0.25,
+            allowedMismatchedPixels: 150,
+          },
+          resolveDiffPath: ({ arg, ext, root, testFileDirectory, testFileName }) =>
+            [
+              root,
+              testFileDirectory,
+              "__screenshots__",
+              "__diffs__",
+              testFileName,
+              `${arg}${ext}`,
+            ].join("/"),
+        },
+      },
     },
   },
 };
