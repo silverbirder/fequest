@@ -63,22 +63,37 @@
     }
   },
   "UserSetting": {
-    "title": "退会",
-    "description": "退会すると、以下のデータが削除されます。",
-    "items": {
-      "featureRequests": "・投稿したフィーチャー",
-      "reactions": "・リアクション"
+    "title": "設定",
+    "avatar": {
+      "title": "アバター画像",
+      "description": "ログイン中のアバター画像URLを設定できます。",
+      "label": "アバター画像URL",
+      "placeholder": "https://example.com/avatar.png",
+      "action": "更新する",
+      "toast": {
+        "error": "更新に失敗しました",
+        "loading": "更新中...",
+        "success": "更新しました"
+      }
     },
-    "action": "退会する",
-    "dialog": {
-      "title": "退会しますか？",
-      "description": "投稿したフィーチャーとリアクションが削除されます。",
-      "cancel": "キャンセル"
-    },
-    "toast": {
-      "error": "退会に失敗しました",
-      "loading": "退会処理中...",
-      "success": "退会しました"
+    "withdraw": {
+      "title": "退会",
+      "description": "退会すると、以下のデータが削除されます。",
+      "items": {
+        "featureRequests": "・投稿したフィーチャー",
+        "reactions": "・リアクション"
+      },
+      "action": "退会する",
+      "dialog": {
+        "title": "退会しますか？",
+        "description": "投稿したフィーチャーとリアクションが削除されます。",
+        "cancel": "キャンセル"
+      },
+      "toast": {
+        "error": "退会に失敗しました",
+        "loading": "退会処理中...",
+        "success": "退会しました"
+      }
     }
   },
   "AdminApp": {
@@ -209,23 +224,38 @@
     }
   },
   "AdminSetting": {
-    "title": "退会",
-    "description": "退会すると、以下のデータが削除されます。",
-    "items": {
-      "products": "・作成したプロダクト",
-      "featureRequests": "・紐づくフィーチャーリクエスト",
-      "reactions": "・紐づくリアクション"
+    "title": "設定",
+    "avatar": {
+      "title": "アバター画像",
+      "description": "ログイン中のアバター画像URLを設定できます。",
+      "label": "アバター画像URL",
+      "placeholder": "https://example.com/avatar.png",
+      "action": "更新する",
+      "toast": {
+        "error": "更新に失敗しました",
+        "loading": "更新中...",
+        "success": "更新しました"
+      }
     },
-    "action": "退会する",
-    "dialog": {
-      "title": "退会しますか？",
-      "description": "作成したプロダクトと紐づくフィーチャーリクエスト、リアクションが削除されます。",
-      "cancel": "キャンセル"
-    },
-    "toast": {
-      "error": "退会に失敗しました",
-      "loading": "退会処理中...",
-      "success": "退会しました"
+    "withdraw": {
+      "title": "退会",
+      "description": "退会すると、以下のデータが削除されます。",
+      "items": {
+        "products": "・作成したプロダクト",
+        "featureRequests": "・紐づくフィーチャーリクエスト",
+        "reactions": "・紐づくリアクション"
+      },
+      "action": "退会する",
+      "dialog": {
+        "title": "退会しますか？",
+        "description": "作成したプロダクトと紐づくフィーチャーリクエスト、リアクションが削除されます。",
+        "cancel": "キャンセル"
+      },
+      "toast": {
+        "error": "退会に失敗しました",
+        "loading": "退会処理中...",
+        "success": "退会しました"
+      }
     }
   },
   "AdminSignIn": {

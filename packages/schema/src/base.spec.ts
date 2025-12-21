@@ -2,6 +2,7 @@ import { safeParse } from "valibot";
 import { describe, expect, it } from "vitest";
 
 import {
+  avatarImageUrlSchema,
   createFeatureRequestSchema,
   featureRequestTitleSchema,
   idSchema,
@@ -118,6 +119,23 @@ describe("productDescriptionSchema", () => {
   it("rejects values beyond max length", () => {
     const overLimit = "d".repeat(6000);
     expect(safeParse(productDescriptionSchema, overLimit).success).toBe(false);
+  });
+});
+
+describe("avatarImageUrlSchema", () => {
+  it("trims whitespace and allows empty values", () => {
+    const result = safeParse(avatarImageUrlSchema, "  https://example.com  ");
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.output).toBe("https://example.com");
+    }
+
+    expect(safeParse(avatarImageUrlSchema, "   ").success).toBe(true);
+  });
+
+  it("rejects overly long values", () => {
+    const longValue = "h".repeat(300);
+    expect(safeParse(avatarImageUrlSchema, longValue).success).toBe(false);
   });
 });
 

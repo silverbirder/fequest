@@ -1,5 +1,6 @@
 import { featureRequestsRouter } from "~/server/api/routers/feature-request";
 import { productRouter } from "~/server/api/routers/product";
+import { settingRouter } from "~/server/api/routers/setting";
 import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
 
 /**
@@ -10,6 +11,7 @@ import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
 export const appRouter = createTRPCRouter({
   featureRequests: featureRequestsRouter,
   product: productRouter,
+  setting: settingRouter,
 });
 
 // export type definition of API

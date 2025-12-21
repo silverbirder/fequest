@@ -50,6 +50,8 @@ export const productHomePageUrlSchema = pipe(string(), trim(), maxLength(2048));
 
 export const productDescriptionSchema = pipe(string(), trim(), maxLength(5000));
 
+export const avatarImageUrlSchema = pipe(string(), trim(), maxLength(255));
+
 export const createProductSchema = object({ name: productNameSchema });
 export const renameProductSchema = object({
   id: positiveIntSchema,

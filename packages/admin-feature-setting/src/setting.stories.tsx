@@ -4,6 +4,8 @@ import { Setting } from "./setting";
 
 const meta = {
   args: {
+    avatarUrl: "https://example.com/avatar.png",
+    onUpdateAvatar: async () => {},
     onWithdraw: async () => {},
   },
   component: Setting,

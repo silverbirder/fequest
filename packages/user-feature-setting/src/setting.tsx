@@ -9,9 +9,11 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
+  Avatar,
   Box,
   Button,
   Heading,
+  Input,
   SubmitButton,
   Text,
   VStack,
@@ -19,17 +21,26 @@ import {
 import { wrapActionWithToast } from "@repo/ui/lib/wrap-action-with-toast";
 import { useTranslations } from "next-intl";
 import Form from "next/form";
+import { useState } from "react";
 
 type Props = {
+  avatarUrl?: null | string;
+  onUpdateAvatar: (formData: FormData) => Promise<void> | void;
   onWithdraw: (formData: FormData) => Promise<void> | void;
 };
 
-export const Setting = ({ onWithdraw }: Props) => {
+export const Setting = ({ avatarUrl, onUpdateAvatar, onWithdraw }: Props) => {
   const t = useTranslations("UserSetting");
+  const [avatarInput, setAvatarInput] = useState(avatarUrl ?? "");
   const submitAction = wrapActionWithToast(onWithdraw, {
-    error: t("toast.error"),
-    loading: t("toast.loading"),
-    success: t("toast.success"),
+    error: t("withdraw.toast.error"),
+    loading: t("withdraw.toast.loading"),
+    success: t("withdraw.toast.success"),
+  });
+  const updateAvatarAction = wrapActionWithToast(onUpdateAvatar, {
+    error: t("avatar.toast.error"),
+    loading: t("avatar.toast.loading"),
+    success: t("avatar.toast.success"),
   });
 
   return (
@@ -37,37 +48,79 @@ export const Setting = ({ onWithdraw }: Props) => {
       <Heading size="lg">{t("title")}</Heading>
       <Box bg="white" p="lg" radius="md" w="full">
         <VStack align="start" gap="md" w="full">
-          <Text color="muted">{t("description")}</Text>
+          <Heading level={3} size="lg">
+            {t("avatar.title")}
+          </Heading>
+          <Text color="muted">{t("avatar.description")}</Text>
+          <Avatar
+            alt={t("avatar.title")}
+            src={avatarInput.trim() || undefined}
+          />
+          <Box asChild w="full">
+            <Form action={updateAvatarAction}>
+              <VStack align="start" gap="sm" w="full">
+                <Text asChild color="subtle" size="sm">
+                  <label htmlFor="avatar-url">{t("avatar.label")}</label>
+                </Text>
+                <Input
+                  id="avatar-url"
+                  name="avatarUrl"
+                  onChange={(event) => setAvatarInput(event.target.value)}
+                  placeholder={t("avatar.placeholder")}
+                  type="url"
+                  value={avatarInput}
+                />
+                <SubmitButton
+                  pendingLabel={t("avatar.toast.loading")}
+                  size="sm"
+                >
+                  {t("avatar.action")}
+                </SubmitButton>
+              </VStack>
+            </Form>
+          </Box>
+        </VStack>
+      </Box>
+      <Box bg="white" p="lg" radius="md" w="full">
+        <VStack align="start" gap="md" w="full">
+          <Heading level={3} size="lg">
+            {t("withdraw.title")}
+          </Heading>
+          <Text color="muted">{t("withdraw.description")}</Text>
           <VStack align="start" gap="xs" w="full">
             <Text color="subtle" size="sm">
-              {t("items.featureRequests")}
+              {t("withdraw.items.featureRequests")}
             </Text>
             <Text color="subtle" size="sm">
-              {t("items.reactions")}
+              {t("withdraw.items.reactions")}
             </Text>
           </VStack>
           <AlertDialog>
             <AlertDialogTrigger asChild>
               <Button size="sm" type="button" variant="destructive">
-                {t("action")}
+                {t("withdraw.action")}
               </Button>
             </AlertDialogTrigger>
             <AlertDialogContent>
               <AlertDialogHeader>
-                <AlertDialogTitle>{t("dialog.title")}</AlertDialogTitle>
+                <AlertDialogTitle>
+                  {t("withdraw.dialog.title")}
+                </AlertDialogTitle>
                 <AlertDialogDescription>
-                  {t("dialog.description")}
+                  {t("withdraw.dialog.description")}
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <Form action={submitAction}>
                 <AlertDialogFooter>
-                  <AlertDialogCancel>{t("dialog.cancel")}</AlertDialogCancel>
+                  <AlertDialogCancel>
+                    {t("withdraw.dialog.cancel")}
+                  </AlertDialogCancel>
                   <SubmitButton
-                    pendingLabel={t("toast.loading")}
+                    pendingLabel={t("withdraw.toast.loading")}
                     size="sm"
                     variant="destructive"
                   >
-                    {t("action")}
+                    {t("withdraw.action")}
                   </SubmitButton>
                 </AlertDialogFooter>
               </Form>

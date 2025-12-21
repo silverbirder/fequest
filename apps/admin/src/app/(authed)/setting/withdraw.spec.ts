@@ -1,17 +1,10 @@
-import {
-  adminAccounts,
-  adminSessions,
-  adminUsers,
-  featureRequests,
-  products,
-} from "@repo/db";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 const mocks = vi.hoisted(() => ({
   auth: vi.fn(),
   redirect: vi.fn(),
   signOut: vi.fn(),
-  transaction: vi.fn(),
+  withdraw: vi.fn(),
 }));
 
 vi.mock("~/server/auth", () => ({
@@ -19,9 +12,11 @@ vi.mock("~/server/auth", () => ({
   signOut: mocks.signOut,
 }));
 
-vi.mock("~/server/db", () => ({
-  db: {
-    transaction: mocks.transaction,
+vi.mock("~/trpc/server", () => ({
+  api: {
+    setting: {
+      withdraw: mocks.withdraw,
+    },
   },
 }));
 
@@ -36,7 +31,7 @@ afterEach(() => {
   mocks.auth.mockReset();
   mocks.redirect.mockReset();
   mocks.signOut.mockReset();
-  mocks.transaction.mockReset();
+  mocks.withdraw.mockReset();
 });
 
 describe("createWithdraw", () => {
@@ -47,40 +42,30 @@ describe("createWithdraw", () => {
     await action();
 
     expect(mocks.redirect).toHaveBeenCalledWith("/sign-in");
-    expect(mocks.transaction).not.toHaveBeenCalled();
+    expect(mocks.withdraw).not.toHaveBeenCalled();
     expect(mocks.signOut).not.toHaveBeenCalled();
   });
 
-  it("deletes user data and signs out", async () => {
+  it("requests withdraw and signs out", async () => {
     mocks.auth.mockResolvedValueOnce({ user: { id: "admin-1" } });
-
-    const deleteWhere = vi.fn();
-    const txDelete = vi.fn(() => ({
-      where: deleteWhere,
-    }));
-    const findMany = vi.fn().mockResolvedValue([{ id: 4 }]);
-
-    mocks.transaction.mockImplementation(async (callback) => {
-      await callback({
-        delete: txDelete,
-        query: {
-          products: {
-            findMany,
-          },
-        },
-      });
-    });
 
     const action = createWithdraw();
 
     await action();
 
-    expect(findMany).toHaveBeenCalled();
-    expect(txDelete).toHaveBeenCalledWith(featureRequests);
-    expect(txDelete).toHaveBeenCalledWith(products);
-    expect(txDelete).toHaveBeenCalledWith(adminAccounts);
-    expect(txDelete).toHaveBeenCalledWith(adminSessions);
-    expect(txDelete).toHaveBeenCalledWith(adminUsers);
+    expect(mocks.withdraw).toHaveBeenCalled();
     expect(mocks.signOut).toHaveBeenCalledWith({ redirectTo: "/sign-in" });
+  });
+
+  it("does not sign out when the withdraw request fails", async () => {
+    mocks.auth.mockResolvedValueOnce({ user: { id: "admin-1" } });
+    mocks.withdraw.mockRejectedValueOnce(new Error("fail"));
+
+    const action = createWithdraw();
+
+    await action();
+
+    expect(mocks.withdraw).toHaveBeenCalled();
+    expect(mocks.signOut).not.toHaveBeenCalled();
   });
 });

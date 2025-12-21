@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 
 import { auth } from "~/server/auth";
 
+import { createUpdateAvatar } from "./update-avatar";
 import { createWithdraw } from "./withdraw";
 
 export default async function Page() {
@@ -13,6 +14,13 @@ export default async function Page() {
   }
 
   const withdraw = createWithdraw();
+  const updateAvatar = createUpdateAvatar();
 
-  return <Setting onWithdraw={withdraw} />;
+  return (
+    <Setting
+      avatarUrl={session.user.image ?? null}
+      onUpdateAvatar={updateAvatar}
+      onWithdraw={withdraw}
+    />
+  );
 }

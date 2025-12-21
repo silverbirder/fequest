@@ -33,10 +33,16 @@ describe("Setting", () => {
   it("renders withdrawal content", async () => {
     await render(
       <NextIntlClientProvider locale="ja" messages={jaMessages}>
-        <Setting onWithdraw={async () => {}} />
+        <Setting
+          avatarUrl="https://example.com/avatar.png"
+          onUpdateAvatar={async () => {}}
+          onWithdraw={async () => {}}
+        />
       </NextIntlClientProvider>,
     );
 
+    expect(document.body.textContent).toContain("設定");
+    expect(document.body.textContent).toContain("アバター画像URL");
     expect(document.body.textContent).toContain("退会");
     expect(document.body.textContent).toContain("退会する");
   });
