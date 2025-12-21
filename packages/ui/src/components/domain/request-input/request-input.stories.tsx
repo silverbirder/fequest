@@ -5,8 +5,7 @@ import { RequestInput } from "./request-input";
 const meta = {
   args: {
     avatar: {
-      image: "https://placehold.co/48x48",
-      name: "田中 花子",
+      fallbackText: "NR",
     },
     helperText: "Enterで送信",
     name: "feature-request",

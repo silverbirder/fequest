@@ -11,6 +11,8 @@ import { expect } from "@playwright/test";
 import { AdminDashboardPage } from "@repo/admin-feature-dashboard/e2e";
 import { AdminProductPage } from "@repo/admin-feature-product/e2e";
 import {
+  adminSessions,
+  adminUsers,
   createDbClient,
   featureRequestReactions,
   featureRequests,
@@ -19,6 +21,7 @@ import {
 import { migrateDatabase } from "@repo/db/migrate";
 import { ProductPage as UserProductPage } from "@repo/user-feature-product/e2e";
 import { RequestEditPage } from "@repo/user-feature-request-edit/e2e";
+import { randomUUID } from "node:crypto";
 import { mkdir, stat } from "node:fs/promises";
 import { AddressInfo, createServer } from "node:net";
 import { dirname, resolve } from "node:path";
@@ -64,6 +67,29 @@ setDefaultTimeout(600_000);
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+
+const createAdminSeedSession = async (databaseUrlForHost: string) => {
+  const db = createDbClient({
+    databaseUrl: databaseUrlForHost,
+    nodeEnv: "test",
+  });
+  const userId = `e2e-admin-${randomUUID()}`;
+  const sessionToken = `e2e-admin-session-${randomUUID()}`;
+
+  await db.insert(adminUsers).values({
+    email: `${userId}@example.com`,
+    id: userId,
+    name: "E2E Admin",
+  });
+
+  await db.insert(adminSessions).values({
+    expires: new Date(Date.now() + 1000 * 60 * 60),
+    sessionToken,
+    userId,
+  });
+
+  return { sessionToken, userId };
+};
 
 type SeededFeature = {
   content: string;
@@ -153,11 +179,21 @@ const createAuthenticatedBrowser = async (sessionToken: string) => {
   }
 
   const session = await createBrowserSession();
+  const domain = new URL(userUrl).hostname;
   await session.context.addCookies([
     {
-      domain: new URL(userUrl).hostname,
+      domain,
       httpOnly: true,
       name: "authjs.session-token",
+      path: "/",
+      sameSite: "Lax",
+      secure: false,
+      value: sessionToken,
+    },
+    {
+      domain,
+      httpOnly: true,
+      name: "fequest-user-authjs.session-token",
       path: "/",
       sameSite: "Lax",
       secure: false,
@@ -222,16 +258,28 @@ BeforeAll(async () => {
       await createSeedSession(hostConnectionString);
     otherSessionToken = otherToken;
 
+    const { sessionToken: adminSessionToken } =
+      await createAdminSeedSession(hostConnectionString);
     const adminBrowser = await createBrowserSession();
+    const adminDomain = new URL(adminBaseUrl).hostname;
     await adminBrowser.context.addCookies([
       {
-        domain: new URL(adminBaseUrl).hostname,
+        domain: adminDomain,
         httpOnly: true,
         name: "authjs.session-token",
         path: "/",
         sameSite: "Lax",
         secure: false,
-        value: sessionToken,
+        value: adminSessionToken,
+      },
+      {
+        domain: adminDomain,
+        httpOnly: true,
+        name: "fequest-admin-authjs.session-token",
+        path: "/",
+        sameSite: "Lax",
+        secure: false,
+        value: adminSessionToken,
       },
     ]);
     const adminDashboardPage = new AdminDashboardPage({

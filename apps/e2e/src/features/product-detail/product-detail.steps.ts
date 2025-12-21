@@ -9,9 +9,15 @@ import {
 import { expect } from "@playwright/test";
 import { AdminDashboardPage } from "@repo/admin-feature-dashboard/e2e";
 import { AdminProductPage } from "@repo/admin-feature-product/e2e";
-import { resetCachedConnection } from "@repo/db";
+import {
+  adminSessions,
+  adminUsers,
+  createDbClient,
+  resetCachedConnection,
+} from "@repo/db";
 import { migrateDatabase } from "@repo/db/migrate";
 import { ProductPage as UserProductPage } from "@repo/user-feature-product/e2e";
+import { randomUUID } from "node:crypto";
 import { stat } from "node:fs/promises";
 import { AddressInfo, createServer } from "node:net";
 import { dirname, resolve } from "node:path";
@@ -23,7 +29,6 @@ import {
   createBrowserSession,
 } from "@/playwright/session";
 import { startAdmin, stopAdmin } from "@/setup/admin";
-import { createUserSession } from "@/setup/auth";
 import { startDatabase, stopDatabase } from "@/setup/database";
 import { createSeedSession } from "@/setup/seed";
 import { startUser, stopUser } from "@/setup/user";
@@ -35,6 +40,29 @@ const authScreenshotPath = resolve(
   __dirname,
   "product-detail-auth-screenshot.png",
 );
+
+const createAdminSeedSession = async (databaseUrlForHost: string) => {
+  const db = createDbClient({
+    databaseUrl: databaseUrlForHost,
+    nodeEnv: "test",
+  });
+  const userId = `e2e-admin-${randomUUID()}`;
+  const sessionToken = `e2e-admin-session-${randomUUID()}`;
+
+  await db.insert(adminUsers).values({
+    email: `${userId}@example.com`,
+    id: userId,
+    name: "E2E Admin",
+  });
+
+  await db.insert(adminSessions).values({
+    expires: new Date(Date.now() + 1000 * 60 * 60),
+    sessionToken,
+    userId,
+  });
+
+  return { sessionToken, userId };
+};
 
 const reservePort = (preferredPort: number) =>
   new Promise<number>((resolve, reject) => {
@@ -69,6 +97,7 @@ let adminStartedContainer: StartedTestContainer | undefined;
 let dbStartedContainer: StartedTestContainer | undefined;
 let network: StartedNetwork | undefined;
 let userUrl: string | undefined;
+let seededUserSessionToken: string | undefined;
 let seededProduct:
   | undefined
   | {
@@ -80,7 +109,6 @@ let seededProduct:
       productName: string;
       userId: string;
     };
-let databaseUrlForHost: string | undefined;
 let authenticatedSessionToken: string | undefined;
 let browserSession: BrowserSession | undefined;
 let createdFeatureTitle: string | undefined;
@@ -146,7 +174,6 @@ BeforeAll(async () => {
       hostConnectionString,
     } = await startDatabase(startedNetwork);
     dbStartedContainer = startedDbContainer;
-    databaseUrlForHost = hostConnectionString;
 
     resetCachedConnection();
     await migrateDatabase(hostConnectionString);
@@ -179,6 +206,9 @@ BeforeAll(async () => {
 
     const { sessionToken, userId } =
       await createSeedSession(hostConnectionString);
+    seededUserSessionToken = sessionToken;
+    const { sessionToken: adminSessionToken } =
+      await createAdminSeedSession(hostConnectionString);
 
     const openFeatureTitle = "E2E サンプル機能";
     const closedFeatureTitle = "E2E クローズ済み機能";
@@ -191,15 +221,25 @@ BeforeAll(async () => {
 
     // Create product via admin UI
     const adminBrowser = await createBrowserSession();
+    const adminDomain = new URL(adminBaseUrl).hostname;
     await adminBrowser.context.addCookies([
       {
-        domain: new URL(adminBaseUrl).hostname,
+        domain: adminDomain,
         httpOnly: true,
         name: "authjs.session-token",
         path: "/",
         sameSite: "Lax",
         secure: false,
-        value: sessionToken,
+        value: adminSessionToken,
+      },
+      {
+        domain: adminDomain,
+        httpOnly: true,
+        name: "fequest-admin-authjs.session-token",
+        path: "/",
+        sameSite: "Lax",
+        secure: false,
+        value: adminSessionToken,
       },
     ]);
     const adminDashboardPage = new AdminDashboardPage({
@@ -218,11 +258,21 @@ BeforeAll(async () => {
 
     // Create features via user UI
     const userBrowser = await createBrowserSession();
+    const userDomain = new URL(userBaseUrl).hostname;
     await userBrowser.context.addCookies([
       {
-        domain: new URL(userBaseUrl).hostname,
+        domain: userDomain,
         httpOnly: true,
         name: "authjs.session-token",
+        path: "/",
+        sameSite: "Lax",
+        secure: false,
+        value: sessionToken,
+      },
+      {
+        domain: userDomain,
+        httpOnly: true,
+        name: "fequest-user-authjs.session-token",
         path: "/",
         sameSite: "Lax",
         secure: false,
@@ -347,16 +397,11 @@ Then(
 );
 
 Given("認証済みのユーザーセッションが存在する", async () => {
-  if (!databaseUrlForHost || !seededProduct) {
-    throw new Error(
-      "Database and seed data must be prepared before creating a session",
-    );
+  if (!seededUserSessionToken) {
+    throw new Error("Seeded user session must be prepared before this step");
   }
 
-  authenticatedSessionToken = await createUserSession(
-    databaseUrlForHost,
-    seededProduct.userId,
-  );
+  authenticatedSessionToken = seededUserSessionToken;
 
   expect(authenticatedSessionToken).toBeTruthy();
 });
@@ -374,11 +419,21 @@ When(
     browserSession = await createBrowserSession();
 
     try {
+      const domain = new URL(userUrl).hostname;
       await browserSession.context.addCookies([
         {
-          domain: new URL(userUrl).hostname,
+          domain,
           httpOnly: true,
           name: "authjs.session-token",
+          path: "/",
+          sameSite: "Lax",
+          secure: false,
+          value: authenticatedSessionToken,
+        },
+        {
+          domain,
+          httpOnly: true,
+          name: "fequest-user-authjs.session-token",
           path: "/",
           sameSite: "Lax",
           secure: false,

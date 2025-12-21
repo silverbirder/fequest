@@ -6,7 +6,7 @@ import { FeatureRequestItem } from "./feature-request-item";
 const meta = {
   args: {
     avatar: {
-      fallbackText: "FR",
+      fallbackText: "NR",
     },
     detail: {
       content: (
@@ -43,8 +43,7 @@ export const Default: Story = {};
 export const OwnedByAuthor: Story = {
   args: {
     avatar: {
-      fallbackText: "ME",
-      image: "https://api.dicebear.com/7.x/initials/svg?seed=ME",
+      fallbackText: "NR",
     },
     detail: {
       content: (
