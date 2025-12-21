@@ -1,6 +1,7 @@
 "use client";
 
 import * as DialogPrimitive from "@radix-ui/react-dialog";
+import { jaMessages } from "@repo/messages";
 import { cn } from "@repo/ui/lib/utils";
 import { XIcon } from "lucide-react";
 import React from "react";
@@ -43,7 +44,7 @@ function DialogContent({
             data-slot="dialog-close"
           >
             <XIcon />
-            <span className="sr-only">Close</span>
+            <span className="sr-only">{jaMessages.UI.dialog.closeLabel}</span>
           </DialogPrimitive.Close>
         )}
       </DialogPrimitive.Content>

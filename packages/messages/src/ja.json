@@ -83,6 +83,7 @@
   },
   "AdminApp": {
     "userPageLinkLabel": "ユーザーページへ",
+    "notFoundTitle": "404 - Not Found",
     "notFoundDescription": "お探しのページは見つかりませんでした。"
   },
   "AdminDashboard": {
@@ -227,18 +228,30 @@
     }
   },
   "AdminSignIn": {
+    "appName": "Fequest",
     "title": "管理画面",
     "description": "管理画面を利用するには、Googleでログインしてください。",
     "googleButton": "Googleでログイン"
   },
+  "UserApp": {
+    "notFoundTitle": "404 - Not Found",
+    "notFoundDescription": "お探しのページは見つかりませんでした。"
+  },
   "UI": {
+    "dialog": {
+      "closeLabel": "Close"
+    },
     "header": {
       "userMenuAriaLabel": "ユーザーメニュー",
       "logout": "ログアウト",
       "login": "ログイン"
     },
+    "icons": {
+      "ballotEmoji": "🗳️"
+    },
     "productCard": {
       "ariaLabel": "{name}のプロダクトページ",
+      "arrow": "→",
       "requestCount": "リクエスト {count}件",
       "linkLabel": "プロダクトページへ"
     },

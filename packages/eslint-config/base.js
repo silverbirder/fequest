@@ -55,6 +55,7 @@ export const config = [
     rules: {
       "react/forbid-dom-props": "off",
       "react/forbid-component-props": "off",
+      "react/jsx-no-literals": "off",
     },
   },
 ];

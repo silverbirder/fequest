@@ -46,7 +46,7 @@ export const ProductCard = ({ href, logoUrl, name, requestCount }: Props) => {
                 {t("linkLabel")}
               </Text>
               <Text aria-hidden color="accent" size="sm" weight="bold">
-                →
+                {t("arrow")}
               </Text>
             </HStack>
           </VStack>

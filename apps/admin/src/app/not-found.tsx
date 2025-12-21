@@ -6,7 +6,7 @@ export default async function NotFound() {
 
   return (
     <Empty>
-      <EmptyTitle>404 - Not Found</EmptyTitle>
+      <EmptyTitle>{t("notFoundTitle")}</EmptyTitle>
       <EmptyDescription>{t("notFoundDescription")}</EmptyDescription>
     </Empty>
   );

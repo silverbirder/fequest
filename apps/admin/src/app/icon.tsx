@@ -1,3 +1,4 @@
+import { jaMessages } from "@repo/messages";
 import { ImageResponse } from "next/og";
 
 export const iconSizes = [48, 72, 96, 144, 192, 512];
@@ -26,7 +27,7 @@ export default async function Icon({ id }: { id: Promise<number> }) {
           width: "100%",
         }}
       >
-        🗳️
+        {jaMessages.UI.icons.ballotEmoji}
       </div>
     ),
     {

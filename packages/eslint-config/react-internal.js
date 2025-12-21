@@ -34,6 +34,13 @@ export const config = [
       ...pluginReactHooks.configs.recommended.rules,
       // React scope no longer necessary with new JSX transform.
       "react/react-in-jsx-scope": "off",
+      "react/jsx-no-literals": ["error", { ignoreProps: true, noStrings: true }],
+    },
+  },
+  {
+    files: ["**/*.spec.tsx", "**/*.stories.tsx"],
+    rules: {
+      "react/jsx-no-literals": "off",
     },
   },
 ];

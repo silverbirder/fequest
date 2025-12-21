@@ -1,3 +1,4 @@
+import { jaMessages } from "@repo/messages";
 import { ImageResponse } from "next/og";
 
 export const size = {
@@ -17,7 +18,7 @@ export default function Icon() {
           width: "100%",
         }}
       >
-        🗳️
+        {jaMessages.UI.icons.ballotEmoji}
       </div>
     ),
     {

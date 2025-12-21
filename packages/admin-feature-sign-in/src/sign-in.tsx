@@ -27,7 +27,7 @@ export const SignIn = ({ onGoogleSignIn }: Props) => {
               <VStack align="center" justify="center">
                 <AppLogo asChild>
                   <Heading display="inline-block" level={1}>
-                    Fequest
+                    {t("appName")}
                   </Heading>
                 </AppLogo>
                 <Text display="inline-block" size="2xl" weight="bold">
