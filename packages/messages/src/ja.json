@@ -69,7 +69,7 @@
       "title": "アバター画像",
       "description": "ログイン中のアバター画像URLを設定できます。",
       "label": "アバター画像URL",
-      "placeholder": "https://api.dicebear.com/9.x/glass/svg?seed=silverbirder",
+      "placeholder": "https://api.dicebear.com/9.x/notionists-neutral/svg?seed=silverbirder",
       "action": "更新する",
       "toast": {
         "error": "更新に失敗しました",
@@ -231,7 +231,7 @@
       "title": "アバター画像",
       "description": "ログイン中のアバター画像URLを設定できます。",
       "label": "アバター画像URL",
-      "placeholder": "https://api.dicebear.com/9.x/glass/svg?seed=silverbirder",
+      "placeholder": "https://api.dicebear.com/9.x/notionists-neutral/svg?seed=silverbirder",
       "action": "更新する",
       "toast": {
         "error": "更新に失敗しました",
