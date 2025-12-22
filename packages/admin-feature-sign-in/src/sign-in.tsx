@@ -43,6 +43,9 @@ export const SignIn = ({ onGoogleSignIn }: Props) => {
                 {t("googleButton")}
               </Button>
             </form>
+            <Text color="muted" size="xs">
+              {t("note")}
+            </Text>
           </VStack>
         </VStack>
       </Box>

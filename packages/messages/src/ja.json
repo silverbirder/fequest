@@ -23,6 +23,7 @@
     "noRequests": "リクエストはまだありません。",
     "newRequestAriaLabel": "新しいリクエスト",
     "loginToPost": "ログインするとリクエストを投稿できます。",
+    "loginToPostDescription": "※ 設定ページから簡単に退会できます。",
     "featureContentFallback": "詳細はありません。",
     "requestContentAriaLabel": "機能リクエストの内容",
     "editLinkAriaLabel": "編集ページを開く",
@@ -264,7 +265,8 @@
     "appName": "Fequest",
     "title": "管理画面",
     "description": "管理画面を利用するには、Googleでログインしてください。",
-    "googleButton": "Googleでログイン"
+    "googleButton": "Googleでログイン",
+    "note": "※ 設定ページから簡単に退会できます。"
   },
   "UserApp": {
     "adminPageLinkLabel": "管理ページ",

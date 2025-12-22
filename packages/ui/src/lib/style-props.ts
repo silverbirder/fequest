@@ -56,10 +56,10 @@ const radius = cva("", {
 const spacing = cva("", {
   variants: {
     gap: {
-      "0": "gap-0",
       "2xl": "gap-8",
       lg: "gap-4",
       md: "gap-3",
+      none: "gap-0",
       sm: "gap-2",
       xl: "gap-6",
       xs: "gap-1",

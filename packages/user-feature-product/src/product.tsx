@@ -186,7 +186,12 @@ export const Product = (props: Props) => {
           </Form>
         </Box>
       ) : (
-        <Text>{t("loginToPost")}</Text>
+        <VStack gap="none">
+          <Text>{t("loginToPost")}</Text>
+          <Text color="muted" size="xs">
+            {t("loginToPostDescription")}
+          </Text>
+        </VStack>
       )}
       {closedFeatureRequests.length > 0 && (
         <VStack align="start" gap="lg">
