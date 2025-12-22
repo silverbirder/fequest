@@ -84,6 +84,7 @@ export class ProductPage {
         .getByRole("link", { name: "編集ページを開く" }),
     ).toHaveCount(0);
     await this.page.keyboard.press("Escape");
+    await this.page.getByRole("dialog").waitFor({ state: "hidden" });
   }
 
   async expectEditButtonVisible(title: string) {
@@ -93,7 +94,6 @@ export class ProductPage {
         .getByRole("dialog")
         .getByRole("link", { name: "編集ページを開く" }),
     ).toBeVisible();
-    await this.page.keyboard.press("Escape");
   }
 
   async expectProductDetails(details: ProductDetails) {
@@ -155,6 +155,7 @@ export class ProductPage {
       .getByRole("button", { name: `${title}${detailLabelSuffix}` })
       .click();
     await this.page.getByRole("dialog").waitFor({ state: "visible" });
+    await this.waitForDialogAnimation();
   }
 
   async waitForFeatureRequest(title: string, timeoutMs = 60_000) {
@@ -201,5 +202,30 @@ export class ProductPage {
     }
 
     throw new Error(`Timed out waiting for feature: ${title}`);
+  }
+
+  private async waitForDialogAnimation() {
+    await this.page.waitForFunction(
+      () => {
+        const elements = Array.from(
+          document.querySelectorAll(
+            "[data-slot='dialog-content'], [data-slot='dialog-overlay']",
+          ),
+        );
+        if (elements.length === 0) {
+          return true;
+        }
+        return elements.every((element) => {
+          const animations = element.getAnimations?.() ?? [];
+          if (animations.length === 0) {
+            return true;
+          }
+          return animations.every(
+            (animation) => animation.playState === "finished",
+          );
+        });
+      },
+      { timeout: 2_000 },
+    );
   }
 }
