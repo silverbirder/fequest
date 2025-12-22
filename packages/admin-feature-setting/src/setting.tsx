@@ -13,6 +13,7 @@ import {
   Box,
   Button,
   Heading,
+  HStack,
   Input,
   SubmitButton,
   Text,
@@ -44,32 +45,47 @@ export const Setting = ({ avatarUrl, onUpdateAvatar, onWithdraw }: Props) => {
   });
 
   return (
-    <VStack align="start" gap="lg" w="full">
-      <Heading size="lg">{t("title")}</Heading>
+    <VStack gap="xl" w="full">
+      <VStack align="start" gap="sm" w="full">
+        <Heading level={1} size="lg">
+          {t("title")}
+        </Heading>
+        <Text color="muted" size="sm">
+          {t("description")}
+        </Text>
+      </VStack>
       <Box bg="white" p="lg" radius="md" w="full">
         <VStack align="start" gap="md" w="full">
-          <Heading level={3} size="lg">
-            {t("avatar.title")}
-          </Heading>
-          <Text color="muted">{t("avatar.description")}</Text>
-          <Avatar
-            alt={t("avatar.title")}
-            src={avatarInput.trim() || undefined}
-          />
+          <VStack align="start" gap="sm" w="full">
+            <Heading level={2} size="lg">
+              {t("avatar.title")}
+            </Heading>
+            <Text color="muted" size="sm">
+              {t("avatar.description")}
+            </Text>
+          </VStack>
           <Box asChild w="full">
             <Form action={updateAvatarAction}>
-              <VStack align="start" gap="sm" w="full">
-                <Text asChild color="subtle" size="sm">
-                  <label htmlFor="avatar-url">{t("avatar.label")}</label>
-                </Text>
-                <Input
-                  id="avatar-url"
-                  name="avatarUrl"
-                  onChange={(event) => setAvatarInput(event.target.value)}
-                  placeholder={t("avatar.placeholder")}
-                  type="url"
-                  value={avatarInput}
-                />
+              <VStack align="end" gap="md" w="full">
+                <HStack w="full">
+                  <Avatar
+                    alt={t("avatar.title")}
+                    src={avatarInput.trim() || undefined}
+                  />
+                  <VStack gap="xs" w="full">
+                    <Text asChild color="subtle" size="sm">
+                      <label htmlFor="avatar-url">{t("avatar.label")}</label>
+                    </Text>
+                    <Input
+                      id="avatar-url"
+                      name="avatarUrl"
+                      onChange={(event) => setAvatarInput(event.target.value)}
+                      placeholder={t("avatar.placeholder")}
+                      type="url"
+                      value={avatarInput}
+                    />
+                  </VStack>
+                </HStack>
                 <SubmitButton
                   pendingLabel={t("avatar.toast.loading")}
                   size="sm"
@@ -83,10 +99,14 @@ export const Setting = ({ avatarUrl, onUpdateAvatar, onWithdraw }: Props) => {
       </Box>
       <Box bg="white" p="lg" radius="md" w="full">
         <VStack align="start" gap="md" w="full">
-          <Heading level={3} size="lg">
-            {t("withdraw.title")}
-          </Heading>
-          <Text color="muted">{t("withdraw.description")}</Text>
+          <VStack align="start" gap="sm" w="full">
+            <Heading level={2} size="lg">
+              {t("withdraw.title")}
+            </Heading>
+            <Text color="muted" size="sm">
+              {t("withdraw.description")}
+            </Text>
+          </VStack>
           <VStack align="start" gap="xs" w="full">
             <Text color="subtle" size="sm">
               {t("withdraw.items.products")}
@@ -100,7 +120,7 @@ export const Setting = ({ avatarUrl, onUpdateAvatar, onWithdraw }: Props) => {
           </VStack>
           <AlertDialog>
             <AlertDialogTrigger asChild>
-              <Button size="sm" type="button" variant="destructive">
+              <Button self="end" size="sm" type="button" variant="destructive">
                 {t("withdraw.action")}
               </Button>
             </AlertDialogTrigger>

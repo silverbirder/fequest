@@ -64,11 +64,12 @@
   },
   "UserSetting": {
     "title": "設定",
+    "description": "アカウント設定を管理します。",
     "avatar": {
       "title": "アバター画像",
       "description": "ログイン中のアバター画像URLを設定できます。",
       "label": "アバター画像URL",
-      "placeholder": "https://example.com/avatar.png",
+      "placeholder": "https://api.dicebear.com/9.x/glass/svg?seed=silverbirder",
       "action": "更新する",
       "toast": {
         "error": "更新に失敗しました",
@@ -78,15 +79,15 @@
     },
     "withdraw": {
       "title": "退会",
-      "description": "退会すると、以下のデータが削除されます。",
+      "description": "退会すると、以下のデータが削除されます。削除されたデータは復元できません。",
       "items": {
-        "featureRequests": "・投稿したフィーチャー",
-        "reactions": "・リアクション"
+        "featureRequests": "・投稿したリクエスト",
+        "reactions": "・リクエストに付けたリアクション"
       },
       "action": "退会する",
       "dialog": {
         "title": "退会しますか？",
-        "description": "投稿したフィーチャーとリアクションが削除されます。",
+        "description": "投稿したリクエストとリアクションが削除されます。",
         "cancel": "キャンセル"
       },
       "toast": {
@@ -225,11 +226,12 @@
   },
   "AdminSetting": {
     "title": "設定",
+    "description": "アカウント設定を管理します。",
     "avatar": {
       "title": "アバター画像",
       "description": "ログイン中のアバター画像URLを設定できます。",
       "label": "アバター画像URL",
-      "placeholder": "https://example.com/avatar.png",
+      "placeholder": "https://api.dicebear.com/9.x/glass/svg?seed=silverbirder",
       "action": "更新する",
       "toast": {
         "error": "更新に失敗しました",
@@ -239,16 +241,16 @@
     },
     "withdraw": {
       "title": "退会",
-      "description": "退会すると、以下のデータが削除されます。",
+      "description": "退会すると、以下のデータが削除されます。削除されたデータは復元できません。",
       "items": {
         "products": "・作成したプロダクト",
-        "featureRequests": "・紐づくフィーチャーリクエスト",
-        "reactions": "・紐づくリアクション"
+        "featureRequests": "・作成したプロダクトに紐づくリクエスト",
+        "reactions": "・作成したプロダクトに紐づくリアクション"
       },
       "action": "退会する",
       "dialog": {
         "title": "退会しますか？",
-        "description": "作成したプロダクトと紐づくフィーチャーリクエスト、リアクションが削除されます。",
+        "description": "作成したプロダクトと紐づくリクエスト、リアクションが削除されます。",
         "cancel": "キャンセル"
       },
       "toast": {

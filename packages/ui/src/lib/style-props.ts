@@ -318,6 +318,12 @@ const layout = cva("", {
       "15": "rotate-15",
       "45": "rotate-45",
     },
+    self: {
+      center: "self-center",
+      end: "self-end",
+      start: "self-start",
+      stretch: "self-stretch",
+    },
     shrink: {
       "0": "shrink-0",
       "1": "shrink",
@@ -546,6 +552,7 @@ const stylePropKeys = [
   "opacity",
   "position",
   "justify",
+  "self",
   "w",
   "h",
   "maxW",
