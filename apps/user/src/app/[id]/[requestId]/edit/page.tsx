@@ -1,5 +1,7 @@
+import { jaMessages } from "@repo/messages";
 import { idSchema } from "@repo/schema";
 import { RequestEdit } from "@repo/user-feature-request-edit";
+import { type Metadata } from "next";
 import { notFound } from "next/navigation";
 import { object, safeParse } from "valibot";
 
@@ -14,10 +16,27 @@ const paramsSchema = object({
   requestId: idSchema,
 });
 
-export default async function Page({
-  params,
-}: PageProps<"/[id]/[requestId]/edit">) {
-  const resolvedParams = await params;
+const appName = jaMessages.UserFeatureTop.appName;
+const editTitle = jaMessages.UserFeatureRequestEdit.title;
+
+const normalizeText = (value: null | string | undefined) => value?.trim() ?? "";
+
+const buildEditDescription = (productName: string, requestTitle?: string) => {
+  const name = normalizeText(productName) || appName;
+  const title = normalizeText(requestTitle);
+  if (!title) {
+    return `${name} へのリクエストを更新します。`;
+  }
+
+  return jaMessages.UserFeatureRequestEdit.description
+    .replace("{productName}", name)
+    .replace("{requestTitle}", title);
+};
+
+const resolveFeatureRequest = async (
+  paramsPromise: PageProps<"/[id]/[requestId]/edit">["params"],
+) => {
+  const resolvedParams = await paramsPromise;
   const parsedParams = safeParse(paramsSchema, resolvedParams);
 
   if (!parsedParams.success) {
@@ -25,14 +44,43 @@ export default async function Page({
   }
 
   const { id: productId, requestId } = parsedParams.output;
-  const [session, featureRequest] = await Promise.all([
-    auth(),
-    api.featureRequests.byId({ id: requestId, productId }),
-  ]);
+  const featureRequest = await api.featureRequests.byId({
+    id: requestId,
+    productId,
+  });
 
   if (!featureRequest) {
     notFound();
   }
+
+  return { featureRequest, productId };
+};
+
+export async function generateMetadata({
+  params,
+}: PageProps<"/[id]/[requestId]/edit">): Promise<Metadata> {
+  const { featureRequest } = await resolveFeatureRequest(params);
+  const productName = featureRequest.product?.name ?? "";
+  const description = buildEditDescription(productName, featureRequest.title);
+
+  return {
+    description,
+    openGraph: {
+      description,
+      title: `${editTitle} | ${appName}`,
+    },
+    title: `${editTitle} | ${appName}`,
+  };
+}
+
+export default async function Page({
+  params,
+}: PageProps<"/[id]/[requestId]/edit">) {
+  const resolvedParams = await params;
+  const [{ featureRequest, productId }, session] = await Promise.all([
+    resolveFeatureRequest(Promise.resolve(resolvedParams)),
+    auth(),
+  ]);
 
   if (!session?.user || featureRequest.user?.id !== session.user.id) {
     notFound();

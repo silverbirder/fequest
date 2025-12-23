@@ -16,7 +16,11 @@ import { env } from "~/env";
 import { auth, signIn, signOut } from "~/server/auth";
 import { TRPCReactProvider } from "~/trpc/react";
 
-const baseUrl = process.env.BASE_URL ?? "https://fequest.vercel.app";
+const baseUrl =
+  process.env.BASE_URL ??
+  (env.NODE_ENV === "production"
+    ? "https://fequest.vercel.app"
+    : "http://localhost:3000");
 
 export const metadata: Metadata = {
   description: "機能リクエスト・共有プラットフォーム",

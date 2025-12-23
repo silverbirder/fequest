@@ -1,5 +1,7 @@
+import { jaMessages } from "@repo/messages";
 import { idSchema } from "@repo/schema";
 import { Product } from "@repo/user-feature-product";
+import { type Metadata } from "next";
 import { notFound } from "next/navigation";
 import { object, safeParse } from "valibot";
 
@@ -14,25 +16,65 @@ const paramsSchema = object({
   id: idSchema,
 });
 
+const appDescription = "機能リクエスト・共有プラットフォーム";
+
+const resolveProduct = async (paramsPromise: PageProps<"/[id]">["params"]) => {
+  const resolvedParams = await paramsPromise;
+  const parsedParams = safeParse(paramsSchema, resolvedParams);
+  if (!parsedParams.success) {
+    notFound();
+  }
+
+  const product = await api.product.byId({ id: parsedParams.output.id });
+
+  if (!product) {
+    notFound();
+  }
+
+  return {
+    product,
+    productId: parsedParams.output.id,
+  };
+};
+
+const normalizeText = (value: null | string | undefined) => value?.trim() ?? "";
+
+const buildMetadata = (
+  product: NonNullable<Awaited<ReturnType<typeof api.product.byId>>>,
+): Metadata => {
+  const appName = jaMessages.UserFeatureTop.appName;
+  const name = normalizeText(product.name);
+  const description = normalizeText(product.description) || appDescription;
+  const title = name ? `${name} | ${appName}` : appName;
+
+  return {
+    description,
+    openGraph: {
+      description,
+      images: [{ url: `/${product.id}/opengraph-image` }],
+      title,
+    },
+    title,
+  };
+};
+
+export async function generateMetadata({
+  params,
+}: PageProps<"/[id]">): Promise<Metadata> {
+  const { product } = await resolveProduct(params);
+  return buildMetadata(product);
+}
+
 export default async function Page({
   params,
   searchParams,
 }: PageProps<"/[id]">) {
   const resolvedParams = await params;
   const resolvedSearchParams = await searchParams;
-  const parsedParams = safeParse(paramsSchema, resolvedParams);
-  if (!parsedParams.success) {
-    notFound();
-  }
-  const productId = parsedParams.output.id;
-  const [product, session] = await Promise.all([
-    api.product.byId({ id: productId }),
+  const [{ product, productId }, session] = await Promise.all([
+    resolveProduct(Promise.resolve(resolvedParams)),
     auth(),
   ]);
-
-  if (!product) {
-    notFound();
-  }
 
   const createFeatureRequest = createCreateFeatureRequest({ productId });
   const reactToFeature = createReactToFeature({ productId });
