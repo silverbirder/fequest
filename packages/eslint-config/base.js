@@ -51,6 +51,7 @@ export const config = [
       "**/src/app/layout.tsx",
       "**/src/app/apple-icon.tsx",
       "**/src/app/icon.tsx",
+      "**/src/app/**/opengraph-image.tsx",
     ],
     rules: {
       "react/forbid-dom-props": "off",

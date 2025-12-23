@@ -61,4 +61,10 @@ export const nextJsConfig = [
       "react/jsx-no-literals": "off",
     },
   },
+  {
+    files: ["**/src/**/opengraph-image.tsx"],
+    rules: {
+      "react/no-unknown-property": "off",
+    },
+  },
 ];

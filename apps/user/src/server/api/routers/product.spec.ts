@@ -130,6 +130,12 @@ describe("productRouter.byId", () => {
           },
         },
       },
+      user: {
+        columns: {
+          image: true,
+          name: true,
+        },
+      },
     });
 
     const eq = vi.fn();

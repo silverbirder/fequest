@@ -49,6 +49,12 @@ export const productRouter = createTRPCRouter({
             },
           },
         },
+        user: {
+          columns: {
+            image: true,
+            name: true,
+          },
+        },
       },
     });
     if (!product) {

@@ -4,7 +4,7 @@ Mandatory rules for any AI coding assistant working in this repository. Do not p
 
 ## Core Principles
 
-- **Use `repo/ui` for all UI**: Layout, typography, and components must come from `repo/ui`. Do not add Tailwind `className` outside `repo/ui`.
+- **Use `repo/ui` for all UI**: Layout, typography, and components must come from `repo/ui`. Do not add Tailwind `className` outside `repo/ui`. but opengraph-image.tsx is an exception.
 - **Component typing style**: Declare `type Props = { ... }` and write `export const Xxx = (props: Props) => { ... }`. Do not use `React.FC`.
 - **Tests and stories are required**: Every change needs a spec. Components must also have Storybook stories.
 - **Vitest browser tests may need elevation**: When running `pnpm test:fix` (or any task that spins up Vitest browser mode), be prepared to rerun with elevated permissions if port binding is blocked; prefer `pnpm test:fix` and request elevation when necessary.
