@@ -2,6 +2,7 @@ import "@repo/ui/globals.css";
 import {
   Center,
   Container,
+  Footer,
   Header,
   Toaster,
   VStack,
@@ -87,6 +88,7 @@ export default async function RootLayout({
                 <Container size="lg">
                   <Center>{children}</Center>
                 </Container>
+                <Footer />
               </VStack>
             </Providers>
           </NextIntlClientProvider>

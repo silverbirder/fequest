@@ -321,6 +321,12 @@
       "logout": "ログアウト",
       "login": "ログイン"
     },
+    "footer": {
+      "inquiry": "お問い合わせ",
+      "services": "その他のサービス",
+      "featureRequest": "機能リクエスト",
+      "credit": "© 2025 silverbirder. All rights reserved."
+    },
     "icons": {
       "ballotEmoji": "🗳️"
     },

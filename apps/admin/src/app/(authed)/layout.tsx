@@ -1,4 +1,4 @@
-import { Center, Container, Header, VStack } from "@repo/ui/components";
+import { Center, Container, Footer, Header, VStack } from "@repo/ui/components";
 import { getTranslations } from "next-intl/server";
 import { redirect } from "next/navigation";
 import { type ReactNode } from "react";
@@ -50,6 +50,7 @@ const Layout = async ({ children }: Props) => {
       <Container size="lg">
         <Center>{children}</Center>
       </Container>
+      <Footer />
     </VStack>
   );
 };
