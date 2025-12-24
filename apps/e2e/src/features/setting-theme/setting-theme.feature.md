@@ -2,6 +2,7 @@
 
 ## シナリオ: 管理者がテーマカラーを適用・リセットできる
 
+![setting theme admin applied](./setting-theme-admin-applied.png)
 ![setting theme admin](./setting-theme-admin.png)
 
 - 前提 テーマカラー用に管理者とユーザーのアプリのコンテナを起動している
@@ -15,6 +16,7 @@
 
 ## シナリオ: ユーザーがテーマカラーを適用・リセットできる
 
+![setting theme user applied](./setting-theme-user-applied.png)
 ![setting theme user](./setting-theme-user.png)
 
 - 前提 テーマカラー用に管理者とユーザーのアプリのコンテナを起動している
