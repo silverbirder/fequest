@@ -105,42 +105,44 @@ export default async function Image({ params }: PageProps<"/[id]">) {
     (
       <div
         style={{ fontFamily: '"Noto Sans JP", sans-serif' }}
-        tw={`flex h-full w-full flex-col items-center justify-between p-6 bg-[${bgColor}]`}
+        tw={`flex h-full w-full flex-col items-center p-6 bg-[${bgColor}]`}
       >
-        <div tw="flex flex-col items-center">
-          <div tw="relative flex flex-col">
-            {logoUrl ? (
-              <img
-                alt=""
-                height={180}
-                src={logoUrl}
-                style={{ objectFit: "contain" }}
-                width={180}
-              />
-            ) : (
-              <div
-                tw={`h-[180px] w-[180px] overflow-hidden rounded-md bg-[${bgMuteColor}] flex items-center justify-center`}
-              >
-                <span tw="text-[64px] font-bold">{productInitial}</span>
-              </div>
-            )}
-            <div
-              tw={`absolute -bottom-12 -right-12 flex h-[84px] w-[84px] items-center justify-center overflow-hidden rounded-full border-4 border-[${bgColor}] bg-white`}
-            >
-              {creatorAvatarUrl ? (
+        <div tw="flex flex-1 flex-col items-center justify-center">
+          <div tw="flex flex-col items-center">
+            <div tw="relative flex flex-col">
+              {logoUrl ? (
                 <img
                   alt=""
-                  height={84}
-                  src={creatorAvatarUrl}
-                  style={{ objectFit: "cover" }}
-                  width={84}
+                  height={180}
+                  src={logoUrl}
+                  style={{ objectFit: "contain" }}
+                  width={180}
                 />
               ) : (
-                <span tw="text-[28px] font-bold">{creatorInitial}</span>
+                <div
+                  tw={`h-[180px] w-[180px] overflow-hidden rounded-md bg-[${bgMuteColor}] flex items-center justify-center`}
+                >
+                  <span tw="text-[64px] font-bold">{productInitial}</span>
+                </div>
               )}
+              <div
+                tw={`absolute -bottom-12 -right-12 flex h-[84px] w-[84px] items-center justify-center overflow-hidden rounded-full border-4 border-[${bgColor}] bg-white`}
+              >
+                {creatorAvatarUrl ? (
+                  <img
+                    alt=""
+                    height={84}
+                    src={creatorAvatarUrl}
+                    style={{ objectFit: "cover" }}
+                    width={84}
+                  />
+                ) : (
+                  <span tw="text-[28px] font-bold">{creatorInitial}</span>
+                )}
+              </div>
             </div>
+            <span tw="mt-10 text-6xl font-bold">{productName}</span>
           </div>
-          <span tw="mt-10 text-6xl font-bold">{productName}</span>
         </div>
         <div tw="flex items-center justify-center">
           <span tw="text-3xl font-bold uppercase tracking-[0.18em] text-slate-700">
