@@ -38,6 +38,9 @@ importers:
       '@libsql/client':
         specifier: ^0.14.0
         version: 0.14.0
+      '@repo/admin-cookie':
+        specifier: workspace:*
+        version: link:../../packages/admin-cookie
       '@repo/admin-feature-dashboard':
         specifier: workspace:*
         version: link:../../packages/admin-feature-dashboard
@@ -304,6 +307,27 @@ importers:
       babel-plugin-react-compiler:
         specifier: ^1.0.0
         version: 1.0.0
+      eslint:
+        specifier: ^9.38.0
+        version: 9.39.0(jiti@2.6.1)
+      typescript:
+        specifier: 5.9.2
+        version: 5.9.2
+      vitest:
+        specifier: ^4.0.15
+        version: 4.0.15(@types/node@22.19.1)(@vitest/browser-playwright@4.0.15)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.44.0)(tsx@4.20.6)(yaml@2.8.1)
+
+  packages/admin-cookie:
+    devDependencies:
+      '@repo/eslint-config':
+        specifier: workspace:*
+        version: link:../eslint-config
+      '@repo/typescript-config':
+        specifier: workspace:*
+        version: link:../typescript-config
+      '@types/node':
+        specifier: ^22.15.3
+        version: 22.19.1
       eslint:
         specifier: ^9.38.0
         version: 9.39.0(jiti@2.6.1)

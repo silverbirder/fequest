@@ -7,15 +7,16 @@ import {
   VStack,
 } from "@repo/ui/components";
 import { Providers } from "@repo/ui/providers/theme-provider";
+import { getHueBaseFromCookieStore, toHueBaseCss } from "@repo/user-cookie";
 import { type Metadata } from "next";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations } from "next-intl/server";
 import { Noto_Sans_JP } from "next/font/google";
+import { cookies } from "next/headers";
 
 import { env } from "~/env";
 import { auth, signIn, signOut } from "~/server/auth";
 import { TRPCReactProvider } from "~/trpc/react";
-
 const baseUrl =
   process.env.BASE_URL ??
   (env.NODE_ENV === "production"
@@ -44,6 +45,11 @@ export default async function RootLayout({
   const session = await auth();
   const messages = await getMessages();
   const t = await getTranslations("UserApp");
+  const cookieStore = await cookies();
+  const hueBase = getHueBaseFromCookieStore(cookieStore);
+  const rootStyle = {
+    "--hue-base": toHueBaseCss(hueBase),
+  } as React.CSSProperties;
 
   const signInWithGoogle = async () => {
     "use server";
@@ -56,7 +62,7 @@ export default async function RootLayout({
   };
 
   return (
-    <html lang="ja" suppressHydrationWarning>
+    <html lang="ja" style={rootStyle} suppressHydrationWarning>
       <body className={notoSansJP.className}>
         <TRPCReactProvider>
           <NextIntlClientProvider messages={messages}>

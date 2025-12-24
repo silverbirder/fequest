@@ -20,6 +20,7 @@
     "@repo/admin-feature-product": "workspace:*",
     "@repo/admin-feature-setting": "workspace:*",
     "@repo/admin-feature-sign-in": "workspace:*",
+    "@repo/admin-cookie": "workspace:*",
     "@repo/db": "workspace:*",
     "@repo/messages": "workspace:*",
     "@repo/schema": "workspace:*",

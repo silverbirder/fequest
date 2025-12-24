@@ -1,3 +1,4 @@
+import { getHueBaseFromCookieStore, toHueBaseCss } from "@repo/admin-cookie";
 import { Toaster } from "@repo/ui/components";
 import "@repo/ui/globals.css";
 import { Providers } from "@repo/ui/providers/theme-provider";
@@ -5,6 +6,7 @@ import { type Metadata } from "next";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { Noto_Sans_JP } from "next/font/google";
+import { cookies } from "next/headers";
 import { type ReactNode } from "react";
 
 import { TRPCReactProvider } from "~/trpc/react";
@@ -33,9 +35,14 @@ type Props = Readonly<{
 
 export default async function RootLayout({ children }: Props) {
   const messages = await getMessages();
+  const cookieStore = await cookies();
+  const hueBase = getHueBaseFromCookieStore(cookieStore);
+  const rootStyle = {
+    "--hue-base": toHueBaseCss(hueBase),
+  } as React.CSSProperties;
 
   return (
-    <html lang="ja" suppressHydrationWarning>
+    <html lang="ja" style={rootStyle} suppressHydrationWarning>
       <body className={notoSansJP.className}>
         <TRPCReactProvider>
           <NextIntlClientProvider messages={messages}>

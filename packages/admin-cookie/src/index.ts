@@ -1,3 +1,2 @@
-export * from "./anonymous-identifier";
 export * from "./cookie-store";
 export * from "./hue-base";

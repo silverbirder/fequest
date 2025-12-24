@@ -35,7 +35,10 @@ describe("Setting", () => {
       <NextIntlClientProvider locale="ja" messages={jaMessages}>
         <Setting
           avatarUrl="https://example.com/avatar.png"
+          hueBase={238}
+          onResetHueBase={async () => {}}
           onUpdateAvatar={async () => {}}
+          onUpdateHueBase={async () => {}}
           onWithdraw={async () => {}}
         />
       </NextIntlClientProvider>,
@@ -43,6 +46,7 @@ describe("Setting", () => {
 
     expect(document.body.textContent).toContain("設定");
     expect(document.body.textContent).toContain("アバター画像URL");
+    expect(document.body.textContent).toContain("テーマカラー");
     expect(document.body.textContent).toContain("退会");
     expect(document.body.textContent).toContain("退会する");
   });

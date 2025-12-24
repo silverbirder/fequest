@@ -5,7 +5,10 @@ import { Setting } from "./setting";
 const meta = {
   args: {
     avatarUrl: "https://example.com/avatar.png",
+    hueBase: 238,
+    onResetHueBase: async () => {},
     onUpdateAvatar: async () => {},
+    onUpdateHueBase: async () => {},
     onWithdraw: async () => {},
   },
   component: Setting,

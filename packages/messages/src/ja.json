@@ -78,6 +78,25 @@
         "success": "更新しました"
       }
     },
+    "theme": {
+      "title": "テーマカラー",
+      "description": "画面のテーマカラーを 0〜360 の範囲で調整できます。",
+      "label": "Hue（0〜360）",
+      "presets": "プリセット",
+      "placeholder": "238",
+      "action": "適用する",
+      "resetAction": "リセットする",
+      "toast": {
+        "error": "更新に失敗しました",
+        "loading": "更新中...",
+        "success": "更新しました"
+      },
+      "resetToast": {
+        "error": "リセットに失敗しました",
+        "loading": "リセット中...",
+        "success": "リセットしました"
+      }
+    },
     "withdraw": {
       "title": "退会",
       "description": "退会すると、以下のデータが削除されます。削除されたデータは復元できません。",
@@ -238,6 +257,25 @@
         "error": "更新に失敗しました",
         "loading": "更新中...",
         "success": "更新しました"
+      }
+    },
+    "theme": {
+      "title": "テーマカラー",
+      "description": "画面のテーマカラーを 0〜360 の範囲で調整できます。",
+      "label": "Hue（0〜360）",
+      "presets": "プリセット",
+      "placeholder": "238",
+      "action": "適用する",
+      "resetAction": "リセットする",
+      "toast": {
+        "error": "更新に失敗しました",
+        "loading": "更新中...",
+        "success": "更新しました"
+      },
+      "resetToast": {
+        "error": "リセットに失敗しました",
+        "loading": "リセット中...",
+        "success": "リセットしました"
       }
     },
     "withdraw": {
