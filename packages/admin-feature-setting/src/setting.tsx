@@ -165,6 +165,7 @@ export const Setting = ({
                     </Grid>
                   </VStack>
                   <Input
+                    data-testid="hue-base-input"
                     id="hue-base"
                     inputMode="numeric"
                     max={360}

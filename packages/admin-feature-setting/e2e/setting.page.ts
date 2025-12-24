@@ -9,6 +9,18 @@ type Props = {
 };
 
 export class SettingPage {
+  get applyHueBaseButton(): Locator {
+    return this.page.getByRole("button", { name: "適用する" });
+  }
+
+  get hueBaseInput(): Locator {
+    return this.page.getByTestId("hue-base-input");
+  }
+
+  get resetHueBaseButton(): Locator {
+    return this.page.getByRole("button", { name: "リセットする" });
+  }
+
   get root(): Locator {
     return this.page.getByRole("heading", { name: "退会" });
   }
@@ -35,6 +47,11 @@ export class SettingPage {
     this.page = props.page;
     this.baseUrl = props.baseUrl;
     this.storyId = props.storyId ?? "feature-admin-setting--default";
+  }
+
+  async applyHueBase(value: number) {
+    await this.hueBaseInput.fill(String(value));
+    await this.applyHueBaseButton.click();
   }
 
   async captureFullPageScreenshot(screenshotPath: string) {
@@ -70,5 +87,9 @@ export class SettingPage {
   async openWithdrawDialog() {
     await this.withdrawButton.click();
     await this.expectWithdrawDialogVisible();
+  }
+
+  async resetHueBase() {
+    await this.resetHueBaseButton.click();
   }
 }
