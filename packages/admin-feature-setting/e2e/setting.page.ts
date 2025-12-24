@@ -13,6 +13,18 @@ export class SettingPage {
     return this.page.getByRole("button", { name: "適用する" });
   }
 
+  get avatarForm(): Locator {
+    return this.page.locator("form").filter({ has: this.avatarUrlInput });
+  }
+
+  get avatarImage(): Locator {
+    return this.page.getByRole("img", { name: "アバター画像" });
+  }
+
+  get avatarUrlInput(): Locator {
+    return this.page.getByLabel("アバター画像URL");
+  }
+
   get hueBaseInput(): Locator {
     return this.page.getByTestId("hue-base-input");
   }
@@ -21,8 +33,8 @@ export class SettingPage {
     return this.page.getByRole("button", { name: "リセットする" });
   }
 
-  get root(): Locator {
-    return this.page.getByRole("heading", { name: "退会" });
+  get updateAvatarButton(): Locator {
+    return this.page.getByRole("button", { name: "更新する" });
   }
 
   get withdrawButton(): Locator {
@@ -66,11 +78,15 @@ export class SettingPage {
   }
 
   async expectDefaultStory() {
-    await expect(this.root).toBeVisible();
+    await this.page.waitForLoadState("domcontentloaded");
   }
 
   async expectWithdrawDialogVisible() {
     await expect(this.withdrawDialog).toBeVisible();
+  }
+
+  async fillAvatarUrl(value: string) {
+    await this.avatarUrlInput.fill(value);
   }
 
   async goto() {
@@ -80,7 +96,7 @@ export class SettingPage {
     }
 
     await this.page.goto(`/iframe.html?id=${this.storyId}`, {
-      waitUntil: "networkidle",
+      waitUntil: "load",
     });
   }
 
@@ -91,5 +107,12 @@ export class SettingPage {
 
   async resetHueBase() {
     await this.resetHueBaseButton.click();
+  }
+
+  async updateAvatar(value: string) {
+    await this.fillAvatarUrl(value);
+    await this.avatarForm.evaluate((form) => {
+      (form as HTMLFormElement).requestSubmit();
+    });
   }
 }
