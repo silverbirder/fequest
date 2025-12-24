@@ -111,66 +111,72 @@ export const RequestEdit = ({
                 />
               </VStack>
             </Box>
-            <HStack borderTop="default" justify="between" pt="lg" w="full">
-              <Form action={submitAction} id={submitFormId}>
-                <input
-                  name="featureId"
-                  type="hidden"
-                  value={String(featureId)}
-                />
-                <SubmitButton
-                  formAction={submitAction}
-                  pendingLabel={t("toast.save.loading")}
-                >
-                  {t("buttons.save")}
-                </SubmitButton>
-              </Form>
-              {deleteAction ? (
-                <AlertDialog>
-                  <AlertDialogTrigger asChild>
-                    <Button variant="destructive">{t("buttons.delete")}</Button>
-                  </AlertDialogTrigger>
-                  <AlertDialogContent>
-                    <AlertDialogHeader>
-                      <AlertDialogTitle>
-                        {t("deleteDialog.title")}
-                      </AlertDialogTitle>
-                      <AlertDialogDescription>
-                        {t("deleteDialog.description")}
-                      </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <Form action={deleteAction}>
-                      <input
-                        name="featureId"
-                        type="hidden"
-                        value={String(featureId)}
-                      />
-                      <AlertDialogFooter>
-                        <AlertDialogCancel>
-                          {t("buttons.cancel")}
-                        </AlertDialogCancel>
-                        <SubmitButton
-                          formAction={deleteAction}
-                          pendingLabel={t("toast.delete.loading")}
-                          variant="destructive"
-                        >
-                          {t("buttons.confirmDelete")}
-                        </SubmitButton>
-                      </AlertDialogFooter>
-                    </Form>
-                  </AlertDialogContent>
-                </AlertDialog>
-              ) : null}
+            <HStack borderTop="default" justify="end" pt="lg" w="full">
+              <HStack gap="md">
+                {deleteAction ? (
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button variant="destructive">
+                        {t("buttons.delete")}
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>
+                          {t("deleteDialog.title")}
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                          {t("deleteDialog.description")}
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <Form action={deleteAction}>
+                        <input
+                          name="featureId"
+                          type="hidden"
+                          value={String(featureId)}
+                        />
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>
+                            {t("buttons.cancel")}
+                          </AlertDialogCancel>
+                          <SubmitButton
+                            formAction={deleteAction}
+                            pendingLabel={t("toast.delete.loading")}
+                            variant="destructive"
+                          >
+                            {t("buttons.confirmDelete")}
+                          </SubmitButton>
+                        </AlertDialogFooter>
+                      </Form>
+                    </AlertDialogContent>
+                  </AlertDialog>
+                ) : null}
+                <Form action={submitAction} id={submitFormId}>
+                  <input
+                    name="featureId"
+                    type="hidden"
+                    value={String(featureId)}
+                  />
+                  <SubmitButton
+                    formAction={submitAction}
+                    pendingLabel={t("toast.save.loading")}
+                  >
+                    {t("buttons.save")}
+                  </SubmitButton>
+                </Form>
+              </HStack>
             </HStack>
           </VStack>
         </VStack>
       </Box>
-      <Button asChild variant="link">
-        <Link href={backHref} prefetch={false}>
-          <ArrowLeft />
-          {t("buttons.back")}
-        </Link>
-      </Button>
+      <HStack justify="end" w="full">
+        <Button asChild variant="link">
+          <Link href={backHref} prefetch={false}>
+            <ArrowLeft />
+            {t("buttons.back")}
+          </Link>
+        </Button>
+      </HStack>
     </VStack>
   );
 };

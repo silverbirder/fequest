@@ -41,7 +41,7 @@
     },
     "buttons": {
       "save": "保存する",
-      "delete": "リクエストを削除",
+      "delete": "リクエストを削除する",
       "cancel": "キャンセル",
       "confirmDelete": "削除する",
       "back": "戻る"
@@ -207,7 +207,7 @@
     "rename": {
       "label": "プロダクト名",
       "ariaLabel": "プロダクト名",
-      "save": "名前を保存"
+      "save": "名前を保存する"
     },
     "details": {
       "title": "プロダクトの補足情報",
@@ -222,7 +222,7 @@
       "descriptionAriaLabel": "プロダクト説明文",
       "descriptionPlaceholder": "サービスの概要などを記載してください",
       "descriptionHelper": "5000文字まで登録できます。空欄にすると未設定になります。",
-      "save": "表示情報を保存"
+      "save": "表示情報を保存する"
     },
     "requests": {
       "title": "リクエスト一覧",
@@ -231,14 +231,14 @@
       "fallbackTitle": "無題のリクエスト",
       "contentAriaLabel": "機能リクエストの内容",
       "contentFallback": "詳細はありません。",
-      "deleteLabel": "リクエストを削除",
+      "deleteLabel": "リクエストを削除する",
       "deleteTitle": "リクエストを削除",
       "deleteDescription": "この操作は取り消せません。リクエストは完全に削除されます。",
       "deleteCancel": "キャンセル",
       "deleteConfirm": "削除する"
     },
     "deleteProduct": {
-      "title": "プロダクトを削除",
+      "title": "プロダクトを削除する",
       "description": "この操作は取り消せません。プロダクトと関連するリクエストがすべて削除されます。",
       "confirm": "削除する",
       "cancel": "キャンセル"

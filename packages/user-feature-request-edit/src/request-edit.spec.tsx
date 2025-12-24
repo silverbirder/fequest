@@ -37,6 +37,7 @@ const waitForDialog = () =>
 
 beforeEach(() => {
   Object.values(toastModule.toast).forEach((fn) => fn.mockClear());
+  document.body.innerHTML = "";
 });
 
 describe("RequestEdit", () => {
