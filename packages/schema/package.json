@@ -19,6 +19,7 @@
     "@repo/typescript-config": "workspace:*",
     "@types/node": "^22.15.3",
     "eslint": "^9.38.0",
+    "fast-check": "^4.4.0",
     "typescript": "5.9.2",
     "vitest": "^4.0.15"
   }
