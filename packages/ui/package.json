@@ -16,7 +16,6 @@
     "@repo/vitest-config": "workspace:*",
     "@storybook/nextjs-vite": "^10.1.10",
     "@tailwindcss/postcss": "^4.1.11",
-    "@tailwindcss/typography": "^0.5.19",
     "@types/node": "^22.15.3",
     "@types/react": "19.1.0",
     "@types/react-dom": "19.1.1",
