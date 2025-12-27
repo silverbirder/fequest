@@ -19,7 +19,7 @@
     "lint": "eslint . --max-warnings 0",
     "test": "vitest --browser=chromium --run",
     "test:watch": "vitest --browser=chromium",
-    "test:e2e": "STORYBOOK_PORT=6010 playwright test -c playwright.config.ts",
+    "test:e2e": "playwright test -c playwright.config.ts",
     "check-types": "tsc --noEmit"
   },
   "dependencies": {
