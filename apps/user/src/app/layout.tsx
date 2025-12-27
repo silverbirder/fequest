@@ -1,4 +1,5 @@
 import "@repo/ui/globals.css";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import {
   Center,
   Container,
@@ -18,6 +19,7 @@ import { cookies } from "next/headers";
 import { env } from "~/env";
 import { auth, signIn, signOut } from "~/server/auth";
 import { TRPCReactProvider } from "~/trpc/react";
+
 const baseUrl =
   process.env.BASE_URL ??
   (env.NODE_ENV === "production"
@@ -94,6 +96,7 @@ export default async function RootLayout({
           </NextIntlClientProvider>
         </TRPCReactProvider>
         <Toaster />
+        {process.env.GA_ID && <GoogleAnalytics gaId={process.env.GA_ID} />}
       </body>
     </html>
   );

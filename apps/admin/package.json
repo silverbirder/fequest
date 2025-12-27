@@ -16,11 +16,12 @@
   "dependencies": {
     "@auth/drizzle-adapter": "^1.7.2",
     "@libsql/client": "^0.14.0",
+    "@next/third-parties": "^16.1.1",
+    "@repo/admin-cookie": "workspace:*",
     "@repo/admin-feature-dashboard": "workspace:*",
     "@repo/admin-feature-product": "workspace:*",
     "@repo/admin-feature-setting": "workspace:*",
     "@repo/admin-feature-sign-in": "workspace:*",
-    "@repo/admin-cookie": "workspace:*",
     "@repo/db": "workspace:*",
     "@repo/messages": "workspace:*",
     "@repo/schema": "workspace:*",

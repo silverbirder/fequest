@@ -1,6 +1,7 @@
+import { GoogleAnalytics } from "@next/third-parties/google";
 import { getHueBaseFromCookieStore, toHueBaseCss } from "@repo/admin-cookie";
-import { Toaster } from "@repo/ui/components";
 import "@repo/ui/globals.css";
+import { Toaster } from "@repo/ui/components";
 import { Providers } from "@repo/ui/providers/theme-provider";
 import { type Metadata } from "next";
 import { NextIntlClientProvider } from "next-intl";
@@ -50,6 +51,7 @@ export default async function RootLayout({ children }: Props) {
           </NextIntlClientProvider>
         </TRPCReactProvider>
         <Toaster />
+        {process.env.GA_ID && <GoogleAnalytics gaId={process.env.GA_ID} />}
       </body>
     </html>
   );

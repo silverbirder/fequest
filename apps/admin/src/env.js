@@ -28,6 +28,7 @@ export const env = createEnv({
     AUTH_GOOGLE_SECRET: process.env.AUTH_GOOGLE_SECRET,
     AUTH_SECRET: process.env.AUTH_SECRET,
     DATABASE_URL: process.env.DATABASE_URL,
+    GA_ID: process.env.GA_ID,
     NODE_ENV: process.env.NODE_ENV,
     USER_DOMAIN_URL: process.env.USER_DOMAIN_URL,
   },
@@ -41,6 +42,7 @@ export const env = createEnv({
     AUTH_SECRET:
       process.env.NODE_ENV === "production" ? string() : optional(string()),
     DATABASE_URL: pipe(string(), url()),
+    GA_ID: optional(string()),
     NODE_ENV: fallback(
       picklist(["development", "test", "production"]),
       "development"

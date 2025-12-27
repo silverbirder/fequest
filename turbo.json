@@ -12,7 +12,8 @@
     "PORT",
     "BASE_URL",
     "ADMIN_DOMAIN_URL",
-    "USER_DOMAIN_URL"
+    "USER_DOMAIN_URL",
+    "GA_ID"
   ],
   "tasks": {
     "build": {
