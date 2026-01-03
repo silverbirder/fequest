@@ -2,22 +2,22 @@
   --hue-base: 238deg;
   --hue-destructive: calc(var(--hue-base) + 120deg);
 
-  --tone-100: 1;
-  --tone-95: 0.95;
-  --tone-92: 0.92;
-  --tone-90: 0.9;
-  --tone-85: 0.85;
-  --tone-80: 0.8;
-  --tone-70: 0.7;
-  --tone-60: 0.6;
-  --tone-50: 0.5;
-  --tone-40: 0.4;
-  --tone-30: 0.3;
-  --tone-20: 0.2;
-  --tone-15: 0.15;
-  --tone-12: 0.12;
-  --tone-10: 0.1;
-  --tone-0: 0;
+  --lightness-100: 1;
+  --lightness-95: 0.95;
+  --lightness-92: 0.92;
+  --lightness-90: 0.9;
+  --lightness-85: 0.85;
+  --lightness-80: 0.8;
+  --lightness-70: 0.7;
+  --lightness-60: 0.6;
+  --lightness-50: 0.5;
+  --lightness-40: 0.4;
+  --lightness-30: 0.3;
+  --lightness-20: 0.2;
+  --lightness-15: 0.15;
+  --lightness-12: 0.12;
+  --lightness-10: 0.1;
+  --lightness-0: 0;
 
   --chroma-100: 1;
   --chroma-90: 0.6;

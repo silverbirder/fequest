@@ -153,7 +153,7 @@ export const Setting = ({
                               // eslint-disable-next-line react/forbid-component-props
                               style={
                                 {
-                                  backgroundColor: `oklch(var(--tone-40) var(--chroma-90) ${preset}deg)`,
+                                  backgroundColor: `oklch(var(--lightness-40) var(--chroma-90) ${preset}deg)`,
                                 } as CSSProperties
                               }
                               w="3"
