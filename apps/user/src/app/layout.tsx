@@ -74,11 +74,6 @@ export default async function RootLayout({
                 <Header
                   links={[
                     {
-                      external: true,
-                      href: { href: env.ADMIN_DOMAIN_URL },
-                      label: t("adminPageLinkLabel"),
-                    },
-                    {
                       href: "/setting",
                       label: t("settingLinkLabel"),
                     },

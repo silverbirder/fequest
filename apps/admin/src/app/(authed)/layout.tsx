@@ -3,7 +3,6 @@ import { getTranslations } from "next-intl/server";
 import { redirect } from "next/navigation";
 import { type ReactNode } from "react";
 
-import { env } from "~/env";
 import { auth, signIn, signOut } from "~/server/auth";
 
 type Props = Readonly<{
@@ -33,11 +32,6 @@ const Layout = async ({ children }: Props) => {
       <Header
         appName="Fequest Admin"
         links={[
-          {
-            external: true,
-            href: { href: env.USER_DOMAIN_URL },
-            label: t("userPageLinkLabel"),
-          },
           {
             href: "/setting",
             label: t("settingLinkLabel"),

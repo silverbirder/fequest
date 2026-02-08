@@ -118,7 +118,6 @@
     }
   },
   "AdminApp": {
-    "userPageLinkLabel": "ユーザーページ",
     "settingLinkLabel": "設定",
     "notFoundTitle": "404 - Not Found",
     "notFoundDescription": "お探しのページは見つかりませんでした。"
@@ -307,7 +306,6 @@
     "note": "※ 設定ページから簡単に退会できます。"
   },
   "UserApp": {
-    "adminPageLinkLabel": "管理ページ",
     "settingLinkLabel": "設定",
     "notFoundTitle": "404 - Not Found",
     "notFoundDescription": "お探しのページは見つかりませんでした。"
