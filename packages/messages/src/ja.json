@@ -24,6 +24,20 @@
     "newRequestAriaLabel": "新しいリクエスト",
     "loginToPost": "ログインするとリクエストを投稿できます。",
     "loginToPostDescription": "※ 設定ページから簡単に退会できます。",
+    "watchAction": "更新通知を受け取る",
+    "unwatchAction": "更新通知を停止する",
+    "watchToast": {
+      "watch": {
+        "error": "ウォッチ登録に失敗しました",
+        "loading": "ウォッチ登録中...",
+        "success": "ウォッチ登録しました"
+      },
+      "unwatch": {
+        "error": "ウォッチ解除に失敗しました",
+        "loading": "ウォッチ解除中...",
+        "success": "ウォッチ解除しました"
+      }
+    },
     "featureContentFallback": "詳細はありません。",
     "requestContentAriaLabel": "機能リクエストの内容",
     "editLinkAriaLabel": "編集ページを開く",
@@ -95,6 +109,19 @@
         "error": "リセットに失敗しました",
         "loading": "リセット中...",
         "success": "リセットしました"
+      }
+    },
+    "webhook": {
+      "title": "Webhook通知",
+      "description": "Slack Incoming Webhook URL を登録すると通知を受け取れます。",
+      "label": "Webhook URL",
+      "placeholder": "https://hooks.slack.com/services/...",
+      "action": "保存する",
+      "watchRequiredToast": "ウォッチするにはWebhook URLの登録が必要です。先に設定してください。",
+      "toast": {
+        "error": "Webhookの更新に失敗しました",
+        "loading": "Webhookを更新中...",
+        "success": "Webhookを更新しました"
       }
     },
     "withdraw": {
@@ -275,6 +302,18 @@
         "error": "リセットに失敗しました",
         "loading": "リセット中...",
         "success": "リセットしました"
+      }
+    },
+    "webhook": {
+      "title": "Webhook通知",
+      "description": "Slack Incoming Webhook URL を登録すると通知を受け取れます。",
+      "label": "Webhook URL",
+      "placeholder": "https://hooks.slack.com/services/...",
+      "action": "保存する",
+      "toast": {
+        "error": "Webhookの更新に失敗しました",
+        "loading": "Webhookを更新中...",
+        "success": "Webhookを更新しました"
       }
     },
     "withdraw": {

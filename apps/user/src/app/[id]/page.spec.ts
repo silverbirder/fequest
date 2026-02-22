@@ -41,6 +41,7 @@ const buildProduct = (overrides: Partial<ProductById>): ProductById => ({
     image: null,
     name: null,
   },
+  viewerIsWatching: false,
   ...overrides,
 });
 

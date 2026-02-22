@@ -11,6 +11,7 @@ import { api } from "~/trpc/server";
 import { createCreateFeatureRequest } from "./create-feature-request";
 import { getOpenFeatureRequestId } from "./get-open-feature-request-id";
 import { createReactToFeature } from "./react-to-feature";
+import { createToggleWatchProduct } from "./toggle-watch-product";
 
 const paramsSchema = object({
   id: idSchema,
@@ -78,6 +79,7 @@ export default async function Page({
 
   const createFeatureRequest = createCreateFeatureRequest({ productId });
   const reactToFeature = createReactToFeature({ productId });
+  const toggleWatchProduct = createToggleWatchProduct({ productId });
 
   const canCreateFeatureRequest = Boolean(session?.user);
   const openFeatureRequestId = getOpenFeatureRequestId(resolvedSearchParams);
@@ -95,8 +97,10 @@ export default async function Page({
       currentUser={currentUser}
       onCreateFeatureRequest={createFeatureRequest}
       onReactToFeature={reactToFeature}
+      onToggleWatchProduct={toggleWatchProduct}
       openFeatureRequestId={openFeatureRequestId}
       product={product}
+      viewerIsWatching={product.viewerIsWatching}
     />
   );
 }

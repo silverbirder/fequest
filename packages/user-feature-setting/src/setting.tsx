@@ -20,10 +20,11 @@ import {
   Text,
   VStack,
 } from "@repo/ui/components";
+import { showInfoToast } from "@repo/ui/lib/show-info-toast";
 import { wrapActionWithToast } from "@repo/ui/lib/wrap-action-with-toast";
 import { useTranslations } from "next-intl";
 import Form from "next/form";
-import { type CSSProperties, useState } from "react";
+import { type CSSProperties, useEffect, useRef, useState } from "react";
 
 type Props = {
   avatarUrl?: null | string;
@@ -31,7 +32,10 @@ type Props = {
   onResetHueBase: (formData: FormData) => Promise<void> | void;
   onUpdateAvatar: (formData: FormData) => Promise<void> | void;
   onUpdateHueBase: (formData: FormData) => Promise<void> | void;
+  onUpdateWebhookUrl: (formData: FormData) => Promise<void> | void;
   onWithdraw: (formData: FormData) => Promise<void> | void;
+  showWebhookRequiredToast?: boolean;
+  webhookUrl?: null | string;
 };
 
 export const Setting = ({
@@ -40,10 +44,15 @@ export const Setting = ({
   onResetHueBase,
   onUpdateAvatar,
   onUpdateHueBase,
+  onUpdateWebhookUrl,
   onWithdraw,
+  showWebhookRequiredToast = false,
+  webhookUrl,
 }: Props) => {
   const t = useTranslations("UserSetting");
+  const hasShownWatchRequiredToastRef = useRef(false);
   const [avatarInput, setAvatarInput] = useState(avatarUrl ?? "");
+  const [webhookUrlInput, setWebhookUrlInput] = useState(webhookUrl ?? "");
   const [hueBaseInput, setHueBaseInput] = useState(String(hueBase));
   const huePresets = Array.from({ length: 19 }, (_, index) => index * 20);
   const submitAction = wrapActionWithToast(onWithdraw, {
@@ -56,6 +65,11 @@ export const Setting = ({
     loading: t("avatar.toast.loading"),
     success: t("avatar.toast.success"),
   });
+  const updateWebhookUrlAction = wrapActionWithToast(onUpdateWebhookUrl, {
+    error: t("webhook.toast.error"),
+    loading: t("webhook.toast.loading"),
+    success: t("webhook.toast.success"),
+  });
   const updateHueBaseAction = wrapActionWithToast(onUpdateHueBase, {
     error: t("theme.toast.error"),
     loading: t("theme.toast.loading"),
@@ -67,6 +81,15 @@ export const Setting = ({
     success: t("theme.resetToast.success"),
   });
 
+  useEffect(() => {
+    if (!showWebhookRequiredToast || hasShownWatchRequiredToastRef.current) {
+      return;
+    }
+
+    hasShownWatchRequiredToastRef.current = true;
+    showInfoToast(t("webhook.watchRequiredToast"));
+  }, [showWebhookRequiredToast, t]);
+
   return (
     <VStack gap="xl" w="full">
       <VStack align="start" gap="sm" w="full">
@@ -77,6 +100,43 @@ export const Setting = ({
           {t("description")}
         </Text>
       </VStack>
+      <Box bg="white" p="lg" radius="md" w="full">
+        <VStack align="start" gap="md" w="full">
+          <VStack align="start" gap="sm" w="full">
+            <Heading level={2} size="lg">
+              {t("webhook.title")}
+            </Heading>
+            <Text color="muted" size="sm">
+              {t("webhook.description")}
+            </Text>
+          </VStack>
+          <Box asChild w="full">
+            <Form action={updateWebhookUrlAction}>
+              <VStack align="end" gap="md" w="full">
+                <VStack gap="xs" w="full">
+                  <Text asChild color="subtle" size="sm">
+                    <label htmlFor="webhook-url">{t("webhook.label")}</label>
+                  </Text>
+                  <Input
+                    id="webhook-url"
+                    name="webhookUrl"
+                    onChange={(event) => setWebhookUrlInput(event.target.value)}
+                    placeholder={t("webhook.placeholder")}
+                    type="url"
+                    value={webhookUrlInput}
+                  />
+                </VStack>
+                <SubmitButton
+                  pendingLabel={t("webhook.toast.loading")}
+                  size="sm"
+                >
+                  {t("webhook.action")}
+                </SubmitButton>
+              </VStack>
+            </Form>
+          </Box>
+        </VStack>
+      </Box>
       <Box bg="white" p="lg" radius="md" w="full">
         <VStack align="start" gap="md" w="full">
           <VStack align="start" gap="sm" w="full">

@@ -1,9 +1,16 @@
+import { productWatchers } from "@repo/db";
 import { productIdSchema } from "@repo/schema";
 import { type ProductSummary } from "@repo/type";
 import { getAnonymousIdentifierFromHeaders } from "@repo/user-cookie";
 import { summarizeReactions } from "@repo/util/reactions";
+import { TRPCError } from "@trpc/server";
+import { and, eq } from "drizzle-orm";
 
-import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
+import {
+  createTRPCRouter,
+  protectedProcedure,
+  publicProcedure,
+} from "~/server/api/trpc";
 
 export const productRouter = createTRPCRouter({
   byId: publicProcedure.input(productIdSchema).query(async ({ ctx, input }) => {
@@ -65,6 +72,18 @@ export const productRouter = createTRPCRouter({
     const viewerAnonymousIdentifier = viewerUserId
       ? null
       : getAnonymousIdentifierFromHeaders(ctx.headers);
+    const watchedProduct = viewerUserId
+      ? await ctx.db.query.productWatchers.findFirst({
+          columns: {
+            productId: true,
+          },
+          where: (watcher, { and, eq }) =>
+            and(
+              eq(watcher.productId, product.id),
+              eq(watcher.userId, viewerUserId),
+            ),
+        })
+      : null;
 
     return {
       ...product,
@@ -78,6 +97,7 @@ export const productRouter = createTRPCRouter({
           }),
         };
       }),
+      viewerIsWatching: Boolean(watchedProduct),
     };
   }),
 
@@ -122,4 +142,56 @@ export const productRouter = createTRPCRouter({
       } satisfies ProductSummary;
     });
   }),
+
+  unwatch: protectedProcedure
+    .input(productIdSchema)
+    .mutation(async ({ ctx, input }) => {
+      await ctx.db
+        .delete(productWatchers)
+        .where(
+          and(
+            eq(productWatchers.productId, input.id),
+            eq(productWatchers.userId, ctx.session.user.id),
+          ),
+        );
+
+      return { id: input.id };
+    }),
+
+  watch: protectedProcedure
+    .input(productIdSchema)
+    .mutation(async ({ ctx, input }) => {
+      const currentUser = await ctx.db.query.users.findFirst({
+        columns: {
+          webhookUrl: true,
+        },
+        where: (user, { eq }) => eq(user.id, ctx.session.user.id),
+      });
+
+      if (!currentUser?.webhookUrl?.trim()) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "WEBHOOK_REQUIRED",
+        });
+      }
+
+      const product = await ctx.db.query.products.findFirst({
+        columns: { id: true },
+        where: (product, { eq }) => eq(product.id, input.id),
+      });
+
+      if (!product) {
+        return null;
+      }
+
+      await ctx.db
+        .insert(productWatchers)
+        .values({
+          productId: product.id,
+          userId: ctx.session.user.id,
+        })
+        .onConflictDoNothing();
+
+      return { id: product.id };
+    }),
 });

@@ -8,7 +8,9 @@
   "exports": {
     ".": "./src/core.ts",
     "./core": "./src/core.ts",
-    "./reactions": "./src/reactions.ts"
+    "./reactions": "./src/reactions.ts",
+    "./webhook-payload": "./src/webhook-payload.ts",
+    "./webhook": "./src/webhook.ts"
   },
   "scripts": {
     "lint": "eslint . --max-warnings 0",

@@ -2,6 +2,7 @@ import type { Database } from "@repo/db";
 import type { Session } from "next-auth";
 
 import { featureRequestReactions, featureRequests } from "@repo/db";
+import { notifyWebhook } from "@repo/util/webhook";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("~/server/auth", () => ({
@@ -10,6 +11,10 @@ vi.mock("~/server/auth", () => ({
 
 vi.mock("~/server/db", () => ({
   db: {},
+}));
+
+vi.mock("@repo/util/webhook", () => ({
+  notifyWebhook: vi.fn().mockResolvedValue(false),
 }));
 
 const [{ createCallerFactory }, { featureRequestsRouter }] = await Promise.all([
@@ -95,14 +100,22 @@ type CreateHarnessOptions = {
     status: string;
     title: string;
   };
-  product?: null | { id: number };
+  product?: null | {
+    id: number;
+    name: string;
+    user?: null | { webhookUrl?: null | string };
+    watchers?: Array<{
+      user?: null | { webhookUrl?: null | string };
+      userId: string;
+    }>;
+  };
   session?: null | Pick<Session, "expires" | "user">;
 };
 
 const createCreateHarness = (options: CreateHarnessOptions = {}) => {
   const product = Object.hasOwn(options, "product")
     ? options.product
-    : { id: 1 };
+    : { id: 1, name: "Product", user: null, watchers: [] };
 
   const insertResult = options.insertedFeatureRequest ?? {
     content: "",
@@ -154,16 +167,29 @@ const createCreateHarness = (options: CreateHarnessOptions = {}) => {
 };
 
 type DeleteHarnessOptions = {
-  featureRequest?: null | { id: number; userId: null | string };
+  featureRequest?: null | {
+    id: number;
+    product?: null | { name?: null | string };
+    productId: number;
+    title: string;
+    userId: null | string;
+  };
   session?: null | Pick<Session, "expires" | "user">;
 };
 
 const createDeleteHarness = (options: DeleteHarnessOptions = {}) => {
   const featureRequest = Object.hasOwn(options, "featureRequest")
     ? options.featureRequest
-    : { id: 5, userId: "owner-user" };
+    : {
+        id: 5,
+        product: { name: "Product" },
+        productId: 1,
+        title: "Title",
+        userId: "owner-user",
+      };
 
   const findFirst = vi.fn().mockResolvedValue(featureRequest);
+  const findManyWatchers = vi.fn().mockResolvedValue([]);
   const deleteWhere = vi.fn();
   const deleteMock = vi.fn(() => ({
     where: deleteWhere,
@@ -174,6 +200,9 @@ const createDeleteHarness = (options: DeleteHarnessOptions = {}) => {
     query: {
       featureRequests: {
         findFirst,
+      },
+      productWatchers: {
+        findMany: findManyWatchers,
       },
     },
   } as unknown as Database;
@@ -335,8 +364,9 @@ describe("featureRequestsRouter.create", () => {
     });
 
     expect(harness.findProduct).toHaveBeenCalledWith({
-      columns: { id: true },
+      columns: { id: true, name: true },
       where: expect.any(Function),
+      with: expect.any(Object),
     });
     expect(harness.insertMock).toHaveBeenCalledWith(featureRequests);
     expect(harness.values).toHaveBeenCalledWith({
@@ -391,6 +421,58 @@ describe("featureRequestsRouter.create", () => {
       }),
     ).rejects.toMatchObject({ code: "BAD_REQUEST" });
   });
+
+  it("notifies watcher even when watcher is the request creator", async () => {
+    const harness = createCreateHarness({
+      product: {
+        id: 1,
+        name: "AProduct",
+        user: null,
+        watchers: [
+          {
+            user: { webhookUrl: "https://hooks.slack.com/services/T/B/C" },
+            userId: "user-abc",
+          },
+        ],
+      },
+    });
+
+    await harness.caller.create({
+      productId: 1,
+      title: "Watch notification",
+    });
+
+    expect(vi.mocked(notifyWebhook)).toHaveBeenCalledWith(
+      expect.objectContaining({
+        webhookUrl: "https://hooks.slack.com/services/T/B/C",
+      }),
+    );
+  });
+
+  it("sends notifications per watcher even when webhook urls are the same", async () => {
+    const webhookUrl = "https://hooks.slack.com/services/T/B/C";
+    const harness = createCreateHarness({
+      product: {
+        id: 1,
+        name: "AProduct",
+        user: null,
+        watchers: [
+          { user: { webhookUrl }, userId: "user-b" },
+          { user: { webhookUrl }, userId: "user-c" },
+        ],
+      },
+    });
+
+    await harness.caller.create({
+      productId: 1,
+      title: "Same webhook",
+    });
+
+    const webhookCalls = vi
+      .mocked(notifyWebhook)
+      .mock.calls.filter(([arg]) => arg.webhookUrl === webhookUrl);
+    expect(webhookCalls).toHaveLength(3);
+  });
 });
 
 describe("featureRequestsRouter.delete", () => {
@@ -400,8 +482,9 @@ describe("featureRequestsRouter.delete", () => {
     const result = await harness.caller.delete({ id: 5 });
 
     expect(harness.findFirst).toHaveBeenCalledWith({
-      columns: { id: true, userId: true },
+      columns: { id: true, productId: true, title: true, userId: true },
       where: expect.any(Function),
+      with: expect.any(Object),
     });
     expect(harness.deleteMock).toHaveBeenCalledWith(featureRequests);
     expect(harness.deleteWhere).toHaveBeenCalled();
@@ -445,6 +528,7 @@ describe("featureRequestsRouter.update", () => {
     options: {
       featureRequest?: null | {
         id: number;
+        product?: null | { name?: null | string };
         productId?: number;
         userId?: null | string;
       };
@@ -459,7 +543,12 @@ describe("featureRequestsRouter.update", () => {
   ) => {
     const featureRequest = Object.hasOwn(options, "featureRequest")
       ? options.featureRequest
-      : { id: 9, productId: 2, userId: "owner-user" };
+      : {
+          id: 9,
+          product: { name: "Product" },
+          productId: 2,
+          userId: "owner-user",
+        };
 
     const findFirst = vi.fn().mockResolvedValue(featureRequest);
 
@@ -478,6 +567,9 @@ describe("featureRequestsRouter.update", () => {
       query: {
         featureRequests: {
           findFirst,
+        },
+        productWatchers: {
+          findMany: vi.fn().mockResolvedValue([]),
         },
       },
       update: updateMock,
@@ -517,6 +609,7 @@ describe("featureRequestsRouter.update", () => {
     expect(harness.findFirst).toHaveBeenCalledWith({
       columns: { id: true, productId: true, userId: true },
       where: expect.any(Function),
+      with: expect.any(Object),
     });
     expect(harness.updateMock).toHaveBeenCalledWith(featureRequests);
     expect(harness.set).toHaveBeenCalledWith({

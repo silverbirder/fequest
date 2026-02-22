@@ -5,6 +5,7 @@ import {
   HStack,
   ProductLogo,
   RequestInput,
+  SubmitButton,
   Text,
   VStack,
 } from "@repo/ui/components";
@@ -35,8 +36,10 @@ type Props = {
   currentUser?: FeatureRequestUser | null;
   onCreateFeatureRequest: (formData: FormData) => Promise<void>;
   onReactToFeature: (formData: FormData) => Promise<void>;
+  onToggleWatchProduct: (formData: FormData) => Promise<void>;
   openFeatureRequestId?: null | number;
   product: ProductData;
+  viewerIsWatching?: boolean;
 };
 
 const toTimestamp = (value: FeatureRequestCore["createdAt"]) => {
@@ -138,8 +141,8 @@ export const Product = (props: Props) => {
         </Box>
         <HStack align="start" gap="md" w="full">
           <VStack align="start" gap="xs" w="full">
-            <HStack align="end" gap="md" wrap="wrap">
-              <Heading size="lg">{props.product.name}</Heading>
+            <Heading size="lg">{props.product.name}</Heading>
+            <HStack align="center" gap="md">
               {homePageUrl && (
                 <Text
                   asChild
@@ -159,6 +162,22 @@ export const Product = (props: Props) => {
                     </HStack>
                   </a>
                 </Text>
+              )}
+              {props.canCreateFeatureRequest && (
+                <Box asChild>
+                  <Form action={props.onToggleWatchProduct}>
+                    <input
+                      name="target"
+                      type="hidden"
+                      value={props.viewerIsWatching ? "unwatch" : "watch"}
+                    />
+                    <SubmitButton size="sm" variant="outline">
+                      {props.viewerIsWatching
+                        ? t("unwatchAction")
+                        : t("watchAction")}
+                    </SubmitButton>
+                  </Form>
+                </Box>
               )}
             </HStack>
             {description ? <Text color="muted">{description}</Text> : null}

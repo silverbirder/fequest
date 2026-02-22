@@ -39,7 +39,9 @@ describe("Setting", () => {
           onResetHueBase={async () => {}}
           onUpdateAvatar={async () => {}}
           onUpdateHueBase={async () => {}}
+          onUpdateWebhookUrl={async () => {}}
           onWithdraw={async () => {}}
+          webhookUrl="https://hooks.slack.com/services/T/B/C"
         />
       </NextIntlClientProvider>,
     );
@@ -47,6 +49,7 @@ describe("Setting", () => {
     expect(document.body.textContent).toContain("設定");
     expect(document.body.textContent).toContain("アバター画像URL");
     expect(document.body.textContent).toContain("テーマカラー");
+    expect(document.body.textContent).toContain("Webhook通知");
     expect(document.body.textContent).toContain("退会");
     expect(document.body.textContent).toContain("退会する");
   });

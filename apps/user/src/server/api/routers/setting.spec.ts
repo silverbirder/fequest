@@ -29,6 +29,7 @@ const [{ createCallerFactory }, { settingRouter }] = await Promise.all([
 const createCaller = createCallerFactory(settingRouter);
 
 type HarnessOptions = {
+  currentUser?: { webhookUrl: null | string };
   session?: null | Session;
 };
 
@@ -55,7 +56,16 @@ const createTestHarness = (options: HarnessOptions = {}) => {
     });
   });
 
+  const findCurrentUser = vi
+    .fn()
+    .mockResolvedValue(options.currentUser ?? null);
+
   const db = {
+    query: {
+      users: {
+        findFirst: findCurrentUser,
+      },
+    },
     transaction,
     update,
   } as unknown as Database;
@@ -68,6 +78,7 @@ const createTestHarness = (options: HarnessOptions = {}) => {
   return {
     caller,
     deleteWhere,
+    findCurrentUser,
     transaction,
     txDelete,
     update,
@@ -109,6 +120,60 @@ describe("settingRouter.updateAvatar", () => {
     await expect(
       caller.updateAvatar("https://example.com/avatar.png"),
     ).rejects.toMatchObject({ code: "UNAUTHORIZED" });
+  });
+});
+
+describe("settingRouter.current", () => {
+  it("returns webhook url for current user", async () => {
+    const { caller } = createTestHarness({
+      currentUser: { webhookUrl: "https://hooks.slack.com/services/T/B/C" },
+      session: {
+        expires: "",
+        user: { id: "user-1", name: "User" },
+      },
+    });
+
+    await expect(caller.current()).resolves.toEqual({
+      webhookUrl: "https://hooks.slack.com/services/T/B/C",
+    });
+  });
+});
+
+describe("settingRouter.updateWebhookUrl", () => {
+  it("updates webhook for the signed-in user", async () => {
+    const { caller, updateSet } = createTestHarness({
+      session: {
+        expires: "",
+        user: { id: "user-1", name: "User" },
+      },
+    });
+
+    await expect(
+      caller.updateWebhookUrl("  https://hooks.slack.com/services/T/B/C  "),
+    ).resolves.toEqual({
+      webhookUrl: "https://hooks.slack.com/services/T/B/C",
+    });
+
+    expect(updateSet).toHaveBeenCalledWith({
+      webhookUrl: "https://hooks.slack.com/services/T/B/C",
+    });
+  });
+
+  it("clears webhook when input is blank", async () => {
+    const { caller, updateSet } = createTestHarness({
+      session: {
+        expires: "",
+        user: { id: "user-1", name: "User" },
+      },
+    });
+
+    await expect(caller.updateWebhookUrl("   ")).resolves.toEqual({
+      webhookUrl: null,
+    });
+
+    expect(updateSet).toHaveBeenCalledWith({
+      webhookUrl: null,
+    });
   });
 });
 

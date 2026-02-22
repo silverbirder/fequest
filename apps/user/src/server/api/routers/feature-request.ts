@@ -6,6 +6,8 @@ import {
   reactToFeatureRequestSchema,
   updateFeatureRequestSchema,
 } from "@repo/schema";
+import { notifyWebhook } from "@repo/util/webhook";
+import { buildFeatureRequestWebhookPayload } from "@repo/util/webhook-payload";
 import { TRPCError } from "@trpc/server";
 import { and, eq, isNull, sql } from "drizzle-orm";
 
@@ -45,8 +47,27 @@ export const featureRequestsRouter = createTRPCRouter({
     .input(createFeatureRequestSchema)
     .mutation(async ({ ctx, input }) => {
       const product = await ctx.db.query.products.findFirst({
-        columns: { id: true },
+        columns: { id: true, name: true },
         where: (product, { eq }) => eq(product.id, input.productId),
+        with: {
+          user: {
+            columns: {
+              webhookUrl: true,
+            },
+          },
+          watchers: {
+            columns: {
+              userId: true,
+            },
+            with: {
+              user: {
+                columns: {
+                  webhookUrl: true,
+                },
+              },
+            },
+          },
+        },
       });
 
       if (!product) {
@@ -68,14 +89,52 @@ export const featureRequestsRouter = createTRPCRouter({
           title: featureRequests.title,
         });
 
+      const payload = buildFeatureRequestWebhookPayload({
+        event: "created",
+        productName: product.name,
+        requestTitle: input.title,
+      });
+      const watcherTargets = (product.watchers ?? [])
+        .map((watcher) => watcher.user?.webhookUrl)
+        .filter((webhookUrl): webhookUrl is string =>
+          Boolean(webhookUrl?.trim()),
+        );
+
+      await Promise.all([
+        notifyWebhook({
+          payload,
+          webhookUrl: product.user?.webhookUrl,
+        }),
+        ...watcherTargets.map((webhookUrl) =>
+          notifyWebhook({
+            payload,
+            webhookUrl,
+          }),
+        ),
+      ]);
+
       return featureRequest;
     }),
   delete: protectedProcedure
     .input(deleteFeatureRequestSchema)
     .mutation(async ({ ctx, input }) => {
       const featureRequest = await ctx.db.query.featureRequests.findFirst({
-        columns: { id: true, userId: true },
+        columns: { id: true, productId: true, title: true, userId: true },
         where: (fr, { eq }) => eq(fr.id, input.id),
+        with: {
+          product: {
+            columns: {
+              name: true,
+            },
+            with: {
+              user: {
+                columns: {
+                  webhookUrl: true,
+                },
+              },
+            },
+          },
+        },
       });
 
       if (!featureRequest) {
@@ -89,6 +148,45 @@ export const featureRequestsRouter = createTRPCRouter({
       await ctx.db
         .delete(featureRequests)
         .where(eq(featureRequests.id, featureRequest.id));
+
+      const watcherRows = await ctx.db.query.productWatchers.findMany({
+        columns: {
+          userId: true,
+        },
+        where: (watcher, { eq }) =>
+          eq(watcher.productId, featureRequest.productId),
+        with: {
+          user: {
+            columns: {
+              webhookUrl: true,
+            },
+          },
+        },
+      });
+
+      const watcherTargets = watcherRows
+        .map((watcher) => watcher.user?.webhookUrl)
+        .filter((webhookUrl): webhookUrl is string =>
+          Boolean(webhookUrl?.trim()),
+        );
+      const payload = buildFeatureRequestWebhookPayload({
+        event: "deleted",
+        productName: featureRequest.product?.name ?? "Product",
+        requestTitle: featureRequest.title,
+      });
+
+      await Promise.all([
+        notifyWebhook({
+          payload,
+          webhookUrl: featureRequest.product?.user?.webhookUrl,
+        }),
+        ...watcherTargets.map((webhookUrl) =>
+          notifyWebhook({
+            payload,
+            webhookUrl,
+          }),
+        ),
+      ]);
 
       return { id: featureRequest.id };
     }),
@@ -171,6 +269,20 @@ export const featureRequestsRouter = createTRPCRouter({
       const featureRequest = await ctx.db.query.featureRequests.findFirst({
         columns: { id: true, productId: true, userId: true },
         where: (fr, { eq }) => eq(fr.id, input.id),
+        with: {
+          product: {
+            columns: {
+              name: true,
+            },
+            with: {
+              user: {
+                columns: {
+                  webhookUrl: true,
+                },
+              },
+            },
+          },
+        },
       });
 
       if (!featureRequest) {
@@ -191,6 +303,45 @@ export const featureRequestsRouter = createTRPCRouter({
           title: featureRequests.title,
           updatedAt: featureRequests.updatedAt,
         });
+
+      const watcherRows = await ctx.db.query.productWatchers.findMany({
+        columns: {
+          userId: true,
+        },
+        where: (watcher, { eq }) =>
+          eq(watcher.productId, featureRequest.productId),
+        with: {
+          user: {
+            columns: {
+              webhookUrl: true,
+            },
+          },
+        },
+      });
+
+      const watcherTargets = watcherRows
+        .map((watcher) => watcher.user?.webhookUrl)
+        .filter((webhookUrl): webhookUrl is string =>
+          Boolean(webhookUrl?.trim()),
+        );
+      const payload = buildFeatureRequestWebhookPayload({
+        event: "updated",
+        productName: featureRequest.product?.name ?? "Product",
+        requestTitle: input.title,
+      });
+
+      await Promise.all([
+        notifyWebhook({
+          payload,
+          webhookUrl: featureRequest.product?.user?.webhookUrl,
+        }),
+        ...watcherTargets.map((webhookUrl) =>
+          notifyWebhook({
+            payload,
+            webhookUrl,
+          }),
+        ),
+      ]);
 
       return updated ?? null;
     }),

@@ -1,7 +1,9 @@
 import type { Database } from "@repo/db";
 import type { Session } from "next-auth";
 
+import { productWatchers } from "@repo/db";
 import { ANONYMOUS_IDENTIFIER_COOKIE_NAME } from "@repo/user-cookie";
+import { TRPCError } from "@trpc/server";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("~/server/auth", () => ({
@@ -21,6 +23,8 @@ const createCaller = createCallerFactory(productRouter);
 
 type HarnessOptions = {
   cookies?: Record<string, string>;
+  currentUser?: null | { webhookUrl: null | string };
+  foundWatcher?: unknown;
   product?: unknown;
   products?: unknown[];
   session?: null | Session;
@@ -29,11 +33,41 @@ type HarnessOptions = {
 const createTestHarness = (options: HarnessOptions = {}) => {
   const findFirst = vi.fn().mockResolvedValue(options.product);
   const findMany = vi.fn().mockResolvedValue(options.products ?? []);
+  const findFirstWatcher = vi
+    .fn()
+    .mockResolvedValue(options.foundWatcher ?? null);
+  const findFirstUser = vi.fn().mockResolvedValue(
+    options.currentUser ?? {
+      webhookUrl: "https://hooks.slack.com/services/T/B/C",
+    },
+  );
+  const insertValues = vi.fn(() => ({ onConflictDoNothing: vi.fn() }));
+  const insert = vi.fn((table) => {
+    if (table === productWatchers) {
+      return { values: insertValues };
+    }
+    throw new Error("Unexpected table");
+  });
+  const deleteWhere = vi.fn();
+  const deleteFn = vi.fn((table) => {
+    if (table === productWatchers) {
+      return { where: deleteWhere };
+    }
+    throw new Error("Unexpected table");
+  });
   const db = {
+    delete: deleteFn,
+    insert,
     query: {
       products: {
         findFirst,
         findMany,
+      },
+      productWatchers: {
+        findFirst: findFirstWatcher,
+      },
+      users: {
+        findFirst: findFirstUser,
       },
     },
   } as unknown as Database;
@@ -52,7 +86,15 @@ const createTestHarness = (options: HarnessOptions = {}) => {
     session: options.session ?? null,
   });
 
-  return { caller, findFirst, findMany };
+  return {
+    caller,
+    deleteWhere,
+    findFirst,
+    findFirstUser,
+    findFirstWatcher,
+    findMany,
+    insertValues,
+  };
 };
 
 afterEach(() => {
@@ -160,6 +202,7 @@ describe("productRouter.byId", () => {
           ],
         },
       ],
+      viewerIsWatching: false,
     });
   });
 
@@ -190,6 +233,7 @@ describe("productRouter.byId", () => {
     expect(result?.featureRequests[0]?.reactionSummaries).toEqual([
       { count: 1, emoji: "👍", reactedByViewer: true },
     ]);
+    expect(result?.viewerIsWatching).toBe(false);
   });
 
   it("returns reaction summaries ordered by reaction id", async () => {
@@ -246,12 +290,86 @@ describe("productRouter.byId", () => {
       { count: 2, emoji: "👍", reactedByViewer: false },
       { count: 2, emoji: "🎉", reactedByViewer: false },
     ]);
+    expect(result?.viewerIsWatching).toBe(false);
+  });
+
+  it("marks current viewer as watching when watcher exists", async () => {
+    const { caller } = createTestHarness({
+      foundWatcher: { productId: 42 },
+      product: {
+        featureRequests: [],
+        id: 42,
+        name: "Demo Product",
+      },
+      session: {
+        expires: "",
+        user: {
+          id: "viewer",
+          name: "Test",
+        },
+      },
+    });
+
+    await expect(caller.byId({ id: 42 })).resolves.toMatchObject({
+      id: 42,
+      viewerIsWatching: true,
+    });
   });
 
   it("returns null when no product matches the supplied id", async () => {
     const { caller } = createTestHarness({ product: undefined });
 
     await expect(caller.byId({ id: 999 })).resolves.toBeNull();
+  });
+});
+
+describe("productRouter.watch", () => {
+  it("creates a watcher row for signed-in user", async () => {
+    const { caller, insertValues } = createTestHarness({
+      product: { id: 3 },
+      session: {
+        expires: "",
+        user: { id: "user-1", name: "User" },
+      },
+    });
+
+    await expect(caller.watch({ id: 3 })).resolves.toEqual({ id: 3 });
+
+    expect(insertValues).toHaveBeenCalledWith({
+      productId: 3,
+      userId: "user-1",
+    });
+  });
+
+  it("throws BAD_REQUEST when webhook is not configured", async () => {
+    const { caller } = createTestHarness({
+      currentUser: { webhookUrl: null },
+      product: { id: 3 },
+      session: {
+        expires: "",
+        user: { id: "user-1", name: "User" },
+      },
+    });
+
+    await expect(caller.watch({ id: 3 })).rejects.toBeInstanceOf(TRPCError);
+    await expect(caller.watch({ id: 3 })).rejects.toMatchObject({
+      code: "BAD_REQUEST",
+      message: "WEBHOOK_REQUIRED",
+    });
+  });
+});
+
+describe("productRouter.unwatch", () => {
+  it("deletes watcher row for signed-in user", async () => {
+    const { caller, deleteWhere } = createTestHarness({
+      session: {
+        expires: "",
+        user: { id: "user-1", name: "User" },
+      },
+    });
+
+    await expect(caller.unwatch({ id: 3 })).resolves.toEqual({ id: 3 });
+    expect(deleteWhere).toHaveBeenCalled();
   });
 });
 

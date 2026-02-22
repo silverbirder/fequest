@@ -13,6 +13,7 @@ import {
   reactionActionSchema,
   setFeatureStatusSchema,
   updateProductDetailsSchema,
+  webhookUrlSchema,
 } from "./base";
 
 const invalidMessage = "Invalid ID";
@@ -136,6 +137,28 @@ describe("avatarImageUrlSchema", () => {
   it("rejects overly long values", () => {
     const longValue = "h".repeat(300);
     expect(safeParse(avatarImageUrlSchema, longValue).success).toBe(false);
+  });
+});
+
+describe("webhookUrlSchema", () => {
+  it("trims whitespace and allows empty values", () => {
+    const result = safeParse(
+      webhookUrlSchema,
+      "  https://hooks.slack.com/services/T000/B000/XXXX  ",
+    );
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.output).toBe(
+        "https://hooks.slack.com/services/T000/B000/XXXX",
+      );
+    }
+
+    expect(safeParse(webhookUrlSchema, "   ").success).toBe(true);
+  });
+
+  it("rejects overly long values", () => {
+    const longValue = "h".repeat(3000);
+    expect(safeParse(webhookUrlSchema, longValue).success).toBe(false);
   });
 });
 

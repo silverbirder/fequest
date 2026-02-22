@@ -88,6 +88,7 @@ describe("Product", () => {
           canCreateFeatureRequest
           onCreateFeatureRequest={async () => {}}
           onReactToFeature={async () => {}}
+          onToggleWatchProduct={async () => {}}
           product={{
             description: "サンプルの説明文です。",
             featureRequests: [],
@@ -111,6 +112,7 @@ describe("Product", () => {
           canCreateFeatureRequest
           onCreateFeatureRequest={async () => {}}
           onReactToFeature={async () => {}}
+          onToggleWatchProduct={async () => {}}
           product={createProductFixture("user-owner")}
         />
       </NextIntlClientProvider>,
@@ -129,6 +131,26 @@ describe("Product", () => {
 
     const icon = link?.querySelector("svg");
     expect(icon).toBeDefined();
+  });
+
+  it("shows watch action for signed-in users", async () => {
+    await render(
+      <NextIntlClientProvider locale="ja" messages={jaMessages}>
+        <Product
+          canCreateFeatureRequest
+          currentUser={{ id: "user-owner" }}
+          onCreateFeatureRequest={async () => {}}
+          onReactToFeature={async () => {}}
+          onToggleWatchProduct={async () => {}}
+          product={createProductFixture("user-owner")}
+          viewerIsWatching={false}
+        />
+      </NextIntlClientProvider>,
+    );
+
+    expect(document.body.textContent).toContain(
+      jaMessages.UserFeatureProduct.watchAction,
+    );
   });
 
   const waitForDialog = () =>
@@ -152,6 +174,7 @@ describe("Product", () => {
           currentUser={{ id: "user-owner" }}
           onCreateFeatureRequest={async () => {}}
           onReactToFeature={async () => {}}
+          onToggleWatchProduct={async () => {}}
           product={createProductFixture("user-owner")}
         />
       </NextIntlClientProvider>,
@@ -175,6 +198,7 @@ describe("Product", () => {
           currentUser={{ id: "other-user" }}
           onCreateFeatureRequest={async () => {}}
           onReactToFeature={async () => {}}
+          onToggleWatchProduct={async () => {}}
           product={createProductFixture("user-owner")}
         />
       </NextIntlClientProvider>,
@@ -199,6 +223,7 @@ describe("Product", () => {
           currentUser={{ id: "user-owner" }}
           onCreateFeatureRequest={async () => {}}
           onReactToFeature={async () => {}}
+          onToggleWatchProduct={async () => {}}
           openFeatureRequestId={1}
           product={createProductFixture("user-owner", [feature])}
         />
@@ -239,6 +264,7 @@ describe("Product", () => {
           currentUser={{ id: "user-owner" }}
           onCreateFeatureRequest={async () => {}}
           onReactToFeature={async () => {}}
+          onToggleWatchProduct={async () => {}}
           product={featureRequests}
         />
       </NextIntlClientProvider>,
@@ -264,6 +290,7 @@ describe("Product", () => {
           currentUser={{ id: "user-owner" }}
           onCreateFeatureRequest={async () => {}}
           onReactToFeature={async () => {}}
+          onToggleWatchProduct={async () => {}}
           product={createProductFixture("user-owner", [
             {
               content: "まだ未対応のリクエスト",

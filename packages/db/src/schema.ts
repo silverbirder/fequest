@@ -34,6 +34,7 @@ export const users = createTable("user", (d) => ({
     })
     .default(sql`CURRENT_TIMESTAMP`),
   image: d.varchar({ length: 255 }),
+  webhookUrl: d.varchar({ length: 2048 }),
 }));
 
 export const adminUsers = createTable("admin_user", (d) => ({
@@ -51,6 +52,7 @@ export const adminUsers = createTable("admin_user", (d) => ({
     })
     .default(sql`CURRENT_TIMESTAMP`),
   image: d.varchar({ length: 255 }),
+  webhookUrl: d.varchar({ length: 2048 }),
 }));
 
 export const products = createTable(
@@ -107,6 +109,29 @@ export const featureRequests = createTable(
   ],
 );
 
+export const productWatchers = createTable(
+  "product_watcher",
+  (d) => ({
+    createdAt: d
+      .timestamp({ withTimezone: true })
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
+    productId: d
+      .integer()
+      .notNull()
+      .references(() => products.id, { onDelete: "cascade" }),
+    userId: d
+      .varchar({ length: 255 })
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+  }),
+  (t) => [
+    primaryKey({ columns: [t.productId, t.userId] }),
+    index("fe_product_watcher_product_id_idx").on(t.productId),
+    index("fe_product_watcher_user_id_idx").on(t.userId),
+  ],
+);
+
 export const featureRequestReactions = createTable(
   "feature_request_reaction",
   (d) => ({
@@ -154,6 +179,7 @@ export const usersRelations = relations(users, ({ many }) => ({
   accounts: many(accounts),
   featureRequests: many(featureRequests),
   featureRequestReactions: many(featureRequestReactions),
+  productWatchers: many(productWatchers),
 }));
 
 export const productsRelations = relations(products, ({ one, many }) => ({
@@ -162,6 +188,7 @@ export const productsRelations = relations(products, ({ one, many }) => ({
     references: [adminUsers.id],
   }),
   featureRequests: many(featureRequests),
+  watchers: many(productWatchers),
 }));
 
 export const featureRequestsRelations = relations(
@@ -188,6 +215,20 @@ export const featureRequestReactionsRelations = relations(
     }),
     user: one(users, {
       fields: [featureRequestReactions.userId],
+      references: [users.id],
+    }),
+  }),
+);
+
+export const productWatchersRelations = relations(
+  productWatchers,
+  ({ one }) => ({
+    product: one(products, {
+      fields: [productWatchers.productId],
+      references: [products.id],
+    }),
+    user: one(users, {
+      fields: [productWatchers.userId],
       references: [users.id],
     }),
   }),

@@ -52,18 +52,18 @@ exports[`Product > renders provided props 1`] = `
           data-orientation="column"
           data-slot="stack"
         >
+          <h2
+            class="text-foreground tracking-tight text-left text-lg leading-snug font-bold"
+            data-level="2"
+            data-slot="heading"
+          >
+            Sample Product
+          </h2>
           <div
-            class="flex items-end flex-row gap-4 justify-start self-stretch flex-wrap"
+            class="flex items-center flex-row gap-4 justify-start self-stretch flex-nowrap"
             data-orientation="row"
             data-slot="stack"
           >
-            <h2
-              class="text-foreground tracking-tight text-left text-lg leading-snug font-bold"
-              data-level="2"
-              data-slot="heading"
-            >
-              Sample Product
-            </h2>
             <a
               class="text-left text-accent inline text-sm font-bold"
               data-slot="text"
@@ -100,6 +100,24 @@ exports[`Product > renders provided props 1`] = `
                 </span>
               </div>
             </a>
+            <form
+              action="javascript:throw new Error('A React form was unexpectedly submitted. If you called form.submit() manually, consider using form.requestSubmit() instead. If you\\'re trying to use event.stopPropagation() in a submit event handler, consider also calling event.preventDefault().')"
+              class=""
+              data-slot="box"
+            >
+              <input
+                name="target"
+                type="hidden"
+                value="watch"
+              />
+              <button
+                class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-all cursor-pointer disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 aria-invalid:border-destructive h-8 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5 border bg-background shadow-xs"
+                data-slot="button"
+                type="submit"
+              >
+                更新通知を受け取る
+              </button>
+            </form>
           </div>
           <span
             class="text-left text-muted-foreground block text-base font-normal"

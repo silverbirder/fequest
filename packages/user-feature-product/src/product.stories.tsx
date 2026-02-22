@@ -22,6 +22,11 @@ const meta = {
         id: formData.get("featureId"),
       });
     },
+    onToggleWatchProduct: async (formData: FormData) => {
+      console.log("Toggled product watch", {
+        target: formData.get("target"),
+      });
+    },
     product: {
       description: "ユーザーからのアイデアや改善要望を集めるプロダクトです。",
       featureRequests: [
@@ -60,6 +65,7 @@ const meta = {
       logoUrl: "https://placehold.co/120x120",
       name: "サンプルプロダクト",
     },
+    viewerIsWatching: false,
   },
   component: Product,
   title: "Feature/User/Product",

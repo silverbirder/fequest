@@ -14,6 +14,8 @@ import {
 } from "@repo/schema";
 import { type ProductSummary } from "@repo/type";
 import { summarizeReactions } from "@repo/util/reactions";
+import { notifyWebhook } from "@repo/util/webhook";
+import { buildFeatureRequestWebhookPayload } from "@repo/util/webhook-payload";
 import { TRPCError } from "@trpc/server";
 import { and, eq } from "drizzle-orm";
 
@@ -155,12 +157,32 @@ export const productRouter = createTRPCRouter({
     .input(deleteProductFeatureRequestSchema)
     .mutation(async ({ ctx, input }) => {
       const feature = await ctx.db.query.featureRequests.findFirst({
-        columns: { id: true, productId: true },
+        columns: { id: true, productId: true, title: true },
         where: (feature, { eq }) => eq(feature.id, input.featureId),
         with: {
           product: {
             columns: {
+              name: true,
               userId: true,
+            },
+            with: {
+              watchers: {
+                columns: {
+                  userId: true,
+                },
+                with: {
+                  user: {
+                    columns: {
+                      webhookUrl: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
+          user: {
+            columns: {
+              webhookUrl: true,
             },
           },
         },
@@ -176,6 +198,28 @@ export const productRouter = createTRPCRouter({
       await ctx.db
         .delete(featureRequests)
         .where(eq(featureRequests.id, input.featureId));
+
+      const watcherTargets = (feature.product?.watchers ?? [])
+        .map((watcher) => watcher.user?.webhookUrl)
+        .filter((webhookUrl): webhookUrl is string =>
+          Boolean(webhookUrl?.trim()),
+        );
+      const creatorTarget = feature.user?.webhookUrl?.trim() || null;
+      const targets = [creatorTarget, ...watcherTargets].filter(Boolean);
+      const payload = buildFeatureRequestWebhookPayload({
+        event: "deleted",
+        productName: feature.product?.name ?? "Product",
+        requestTitle: feature.title,
+      });
+
+      await Promise.all(
+        targets.map((webhookUrl) =>
+          notifyWebhook({
+            payload,
+            webhookUrl,
+          }),
+        ),
+      );
 
       return { id: feature.id, productId: feature.productId };
     }),
@@ -258,12 +302,33 @@ export const productRouter = createTRPCRouter({
           id: true,
           productId: true,
           status: true,
+          title: true,
         },
         where: (feature, { eq }) => eq(feature.id, input.featureId),
         with: {
           product: {
             columns: {
+              name: true,
               userId: true,
+            },
+            with: {
+              watchers: {
+                columns: {
+                  userId: true,
+                },
+                with: {
+                  user: {
+                    columns: {
+                      webhookUrl: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
+          user: {
+            columns: {
+              webhookUrl: true,
             },
           },
         },
@@ -285,6 +350,29 @@ export const productRouter = createTRPCRouter({
           productId: featureRequests.productId,
           status: featureRequests.status,
         });
+
+      const watcherTargets = (feature.product?.watchers ?? [])
+        .map((watcher) => watcher.user?.webhookUrl)
+        .filter((webhookUrl): webhookUrl is string =>
+          Boolean(webhookUrl?.trim()),
+        );
+      const creatorTarget = feature.user?.webhookUrl?.trim() || null;
+      const targets = [creatorTarget, ...watcherTargets].filter(Boolean);
+      const payload = buildFeatureRequestWebhookPayload({
+        event: "status_changed",
+        productName: feature.product?.name ?? "Product",
+        requestTitle: feature.title,
+        status: input.status,
+      });
+
+      await Promise.all(
+        targets.map((webhookUrl) =>
+          notifyWebhook({
+            payload,
+            webhookUrl,
+          }),
+        ),
+      );
 
       return updated ?? null;
     }),
