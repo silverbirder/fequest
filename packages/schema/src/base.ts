@@ -83,6 +83,12 @@ export const featureRequestContentSchema = pipe(
   maxLength(10000),
 );
 
+export const featureRequestAdminCommentSchema = pipe(
+  string(),
+  transform((value) => value.trim()),
+  maxLength(5000),
+);
+
 export const createFeatureRequestSchema = object({
   productId: positiveIntSchema,
   title: featureRequestTitleSchema,
@@ -92,6 +98,11 @@ export const updateFeatureRequestSchema = object({
   content: featureRequestContentSchema,
   id: positiveIntSchema,
   title: featureRequestTitleSchema,
+});
+
+export const updateFeatureAdminCommentSchema = object({
+  comment: featureRequestAdminCommentSchema,
+  featureId: positiveIntSchema,
 });
 
 export const deleteFeatureRequestSchema = featureRequestIdSchema;

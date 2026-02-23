@@ -7,12 +7,15 @@ const meta = {
     onDelete: async () => {},
     onDeleteFeatureRequest: async () => {},
     onUpdateDetails: async () => {},
+    onUpdateFeatureComment: async () => {},
     onUpdateFeatureStatus: async () => {},
     onUpdateName: async () => {},
     product: {
       description: "フィーチャー要望をまとめる管理画面です。",
       featureRequests: [
         {
+          adminComment:
+            "ご要望ありがとうございます。次のスプリントで調査します。",
           content: "ユーザーから寄せられた最初の質問です。",
           createdAt: "2024-01-01T00:00:00.000Z",
           id: 1,
@@ -29,6 +32,7 @@ const meta = {
           },
         },
         {
+          adminComment: "",
           content: "完了済みの質問。クローズ扱いです。",
           createdAt: "2024-02-05T09:00:00.000Z",
           id: 2,
@@ -65,6 +69,7 @@ export const EmptyFeatures: Story = {
     onDelete: async () => {},
     onDeleteFeatureRequest: async () => {},
     onUpdateDetails: async () => {},
+    onUpdateFeatureComment: async () => {},
     product: { featureRequests: [], id: 1, name: "Empty Product" },
     userDomainUrl: "https://user.fequest.dev",
   },

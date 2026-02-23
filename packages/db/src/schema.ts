@@ -109,6 +109,29 @@ export const featureRequests = createTable(
   ],
 );
 
+export const featureRequestAdminComments = createTable(
+  "feature_request_admin_comment",
+  (d) => ({
+    featureRequestId: d
+      .integer()
+      .notNull()
+      .references(() => featureRequests.id, { onDelete: "cascade" })
+      .primaryKey(),
+    adminUserId: d
+      .varchar({ length: 255 })
+      .references(() => adminUsers.id, { onDelete: "set null" }),
+    content: d.text().notNull(),
+    createdAt: d
+      .timestamp({ withTimezone: true })
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
+    updatedAt: d.timestamp({ withTimezone: true }).$onUpdate(() => new Date()),
+  }),
+  (t) => [
+    index("fe_feature_request_admin_comment_user_id_idx").on(t.adminUserId),
+  ],
+);
+
 export const productWatchers = createTable(
   "product_watcher",
   (d) => ({
@@ -194,6 +217,10 @@ export const productsRelations = relations(products, ({ one, many }) => ({
 export const featureRequestsRelations = relations(
   featureRequests,
   ({ one, many }) => ({
+    adminComment: one(featureRequestAdminComments, {
+      fields: [featureRequests.id],
+      references: [featureRequestAdminComments.featureRequestId],
+    }),
     product: one(products, {
       fields: [featureRequests.productId],
       references: [products.id],

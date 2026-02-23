@@ -41,6 +41,7 @@ describe("Product", () => {
         onDelete={async () => {}}
         onDeleteFeatureRequest={async () => {}}
         onUpdateDetails={async () => {}}
+        onUpdateFeatureComment={async () => {}}
         onUpdateFeatureStatus={async () => {}}
         onUpdateName={async () => {}}
         product={{ featureRequests: [], id: 1, name: "Fequest" }}
@@ -66,6 +67,7 @@ describe("Product", () => {
         onDelete={async () => {}}
         onDeleteFeatureRequest={async () => {}}
         onUpdateDetails={async () => {}}
+        onUpdateFeatureComment={async () => {}}
         onUpdateFeatureStatus={async () => {}}
         onUpdateName={async () => {}}
         product={{ featureRequests: [], id: 123, name: "Label Focus" }}
@@ -96,6 +98,7 @@ describe("Product", () => {
         onDelete={async () => {}}
         onDeleteFeatureRequest={async () => {}}
         onUpdateDetails={async () => {}}
+        onUpdateFeatureComment={async () => {}}
         onUpdateFeatureStatus={async () => {}}
         onUpdateName={async () => {}}
         product={{
@@ -146,11 +149,13 @@ describe("Product", () => {
         onDelete={async () => {}}
         onDeleteFeatureRequest={async () => {}}
         onUpdateDetails={async () => {}}
+        onUpdateFeatureComment={async () => {}}
         onUpdateFeatureStatus={async () => {}}
         onUpdateName={async () => {}}
         product={{
           featureRequests: [
             {
+              adminComment: "管理者コメント A",
               content: "First question",
               createdAt: null,
               id: 10,
@@ -159,6 +164,7 @@ describe("Product", () => {
               updatedAt: null,
             },
             {
+              adminComment: "",
               content: "Second question",
               id: 11,
               status: "closed",
@@ -187,6 +193,21 @@ describe("Product", () => {
       'form[data-feature-id="11"] input[name="status"]',
     );
     expect(closedToggle?.value).toBe("open");
+
+    const firstCommentInput = document.querySelector<HTMLTextAreaElement>(
+      'form[data-slot="feature-comment-form"][data-feature-id="10"] textarea[name="comment"]',
+    );
+    expect(firstCommentInput?.value).toBe("管理者コメント A");
+
+    const secondCommentInput = document.querySelector<HTMLTextAreaElement>(
+      'form[data-slot="feature-comment-form"][data-feature-id="11"] textarea[name="comment"]',
+    );
+    expect(secondCommentInput?.value).toBe("");
+
+    const hiddenFeatureId = document.querySelector<HTMLInputElement>(
+      'form[data-slot="feature-comment-form"][data-feature-id="10"] input[name="featureId"]',
+    );
+    expect(hiddenFeatureId?.value).toBe("10");
   });
 
   it("orders feature requests by reactions then created date", async () => {
@@ -195,6 +216,7 @@ describe("Product", () => {
         onDelete={async () => {}}
         onDeleteFeatureRequest={async () => {}}
         onUpdateDetails={async () => {}}
+        onUpdateFeatureComment={async () => {}}
         onUpdateFeatureStatus={async () => {}}
         onUpdateName={async () => {}}
         product={{
@@ -255,6 +277,7 @@ describe("Product", () => {
         onDelete={async () => {}}
         onDeleteFeatureRequest={async () => {}}
         onUpdateDetails={async () => {}}
+        onUpdateFeatureComment={async () => {}}
         onUpdateFeatureStatus={async () => {}}
         onUpdateName={async () => {}}
         product={{ featureRequests: [], id: 3, name: "Empty Product" }}
@@ -272,6 +295,7 @@ describe("Product", () => {
         onDelete={async () => {}}
         onDeleteFeatureRequest={async () => {}}
         onUpdateDetails={async () => {}}
+        onUpdateFeatureComment={async () => {}}
         onUpdateFeatureStatus={async () => {}}
         onUpdateName={async () => {}}
         product={{ featureRequests: [], id: 7, name: "Deletable" }}
@@ -322,6 +346,7 @@ describe("Product", () => {
         onDelete={async () => {}}
         onDeleteFeatureRequest={async () => {}}
         onUpdateDetails={async () => {}}
+        onUpdateFeatureComment={async () => {}}
         onUpdateFeatureStatus={async () => {}}
         onUpdateName={async () => {}}
         product={{

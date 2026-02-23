@@ -10,6 +10,7 @@ import { api } from "~/trpc/server";
 import { createDeleteFeatureRequest } from "./delete-feature-request";
 import { createDeleteProduct } from "./delete-product";
 import { createRenameProduct } from "./rename-product";
+import { createUpdateFeatureComment } from "./update-feature-comment";
 import { createUpdateFeatureStatus } from "./update-feature-status";
 import { createUpdateProductDetails } from "./update-product-details";
 
@@ -38,6 +39,7 @@ export default async function Page({ params }: PageProps<"/products/[id]">) {
   const deleteFeatureRequest = createDeleteFeatureRequest({ productId });
   const updateProductDetails = createUpdateProductDetails({ productId });
   const renameProduct = createRenameProduct({ productId });
+  const updateFeatureComment = createUpdateFeatureComment({ productId });
   const updateFeatureStatus = createUpdateFeatureStatus({ productId });
 
   return (
@@ -45,6 +47,7 @@ export default async function Page({ params }: PageProps<"/products/[id]">) {
       onDelete={deleteProduct}
       onDeleteFeatureRequest={deleteFeatureRequest}
       onUpdateDetails={updateProductDetails}
+      onUpdateFeatureComment={updateFeatureComment}
       onUpdateFeatureStatus={updateFeatureStatus}
       onUpdateName={renameProduct}
       product={product}

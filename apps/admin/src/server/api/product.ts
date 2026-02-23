@@ -1,4 +1,5 @@
 import {
+  featureRequestAdminComments,
   featureRequests,
   featureRequestStatuses,
   products,
@@ -10,6 +11,7 @@ import {
   productIdSchema,
   renameProductSchema,
   setFeatureStatusSchema,
+  updateFeatureAdminCommentSchema,
   updateProductDetailsSchema,
 } from "@repo/schema";
 import { type ProductSummary } from "@repo/type";
@@ -54,6 +56,11 @@ export const productRouter = createTRPCRouter({
             },
             orderBy: (feature, { desc }) => desc(feature.createdAt),
             with: {
+              adminComment: {
+                columns: {
+                  content: true,
+                },
+              },
               reactions: {
                 orderBy: (reaction, { asc }) => asc(reaction.id),
                 with: {
@@ -88,8 +95,9 @@ export const productRouter = createTRPCRouter({
         description: product.description,
         featureRequests:
           product.featureRequests?.map((feature) => {
-            const { reactions, ...rest } = feature;
+            const { adminComment, reactions, ...rest } = feature;
             return {
+              adminComment: adminComment?.content ?? null,
               ...rest,
               reactionSummaries: summarizeReactions(reactions, {
                 viewerAnonymousIdentifier: null,
@@ -440,5 +448,52 @@ export const productRouter = createTRPCRouter({
         });
 
       return updated ?? product;
+    }),
+
+  updateFeatureComment: protectedProcedure
+    .input(updateFeatureAdminCommentSchema)
+    .mutation(async ({ ctx, input }) => {
+      const feature = await ctx.db.query.featureRequests.findFirst({
+        columns: {
+          id: true,
+          productId: true,
+        },
+        where: (feature, { eq }) => eq(feature.id, input.featureId),
+        with: {
+          product: {
+            columns: {
+              userId: true,
+            },
+          },
+        },
+      });
+
+      if (!feature || feature.product?.userId !== ctx.session.user.id) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Feature request not found",
+        });
+      }
+
+      await ctx.db
+        .delete(featureRequestAdminComments)
+        .where(
+          eq(featureRequestAdminComments.featureRequestId, input.featureId),
+        );
+
+      const comment = input.comment.trim();
+      if (comment.length > 0) {
+        await ctx.db.insert(featureRequestAdminComments).values({
+          adminUserId: ctx.session.user.id,
+          content: comment,
+          featureRequestId: input.featureId,
+        });
+      }
+
+      return {
+        comment: comment.length > 0 ? comment : null,
+        featureId: input.featureId,
+        productId: feature.productId,
+      };
     }),
 });

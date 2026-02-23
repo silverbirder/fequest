@@ -220,6 +220,11 @@
         "loading": "リクエストを削除中...",
         "success": "リクエストを削除しました"
       },
+      "updateComment": {
+        "error": "管理者コメントの保存に失敗しました",
+        "loading": "管理者コメントを保存中...",
+        "success": "管理者コメントを保存しました"
+      },
       "updateStatus": {
         "loading": "更新中..."
       }
@@ -255,6 +260,10 @@
       "description": "受け付けたリクエストの内容とステータスを確認できます。",
       "empty": "まだリクエストがありません。",
       "fallbackTitle": "無題のリクエスト",
+      "commentLabel": "管理者コメント",
+      "commentAriaLabel": "管理者コメント",
+      "commentPlaceholder": "このリクエストに対する管理者コメントを入力",
+      "commentSave": "コメントを保存する",
       "contentAriaLabel": "機能リクエストの内容",
       "contentFallback": "詳細はありません。",
       "deleteLabel": "リクエストを削除する",

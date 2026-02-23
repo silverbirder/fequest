@@ -1,4 +1,5 @@
 export type FeatureRequestCore = {
+  adminComment?: null | string;
   content: string;
   createdAt?: Date | null | string;
   id: number;

@@ -48,6 +48,7 @@ type Props = {
   onDelete: (formData: FormData) => Promise<void>;
   onDeleteFeatureRequest: (formData: FormData) => Promise<void>;
   onUpdateDetails: (formData: FormData) => Promise<void>;
+  onUpdateFeatureComment: (formData: FormData) => Promise<void>;
   onUpdateFeatureStatus: (formData: FormData) => Promise<void>;
   onUpdateName: (formData: FormData) => Promise<void>;
   product: ProductDetail;
@@ -117,6 +118,7 @@ export const Product = ({
   onDelete,
   onDeleteFeatureRequest,
   onUpdateDetails,
+  onUpdateFeatureComment,
   onUpdateFeatureStatus,
   onUpdateName,
   product,
@@ -144,6 +146,14 @@ export const Product = ({
       error: t("toast.deleteRequest.error"),
       loading: t("toast.deleteRequest.loading"),
       success: t("toast.deleteRequest.success"),
+    },
+  );
+  const updateFeatureCommentAction = wrapActionWithToast(
+    onUpdateFeatureComment,
+    {
+      error: t("toast.updateComment.error"),
+      loading: t("toast.updateComment.loading"),
+      success: t("toast.updateComment.success"),
     },
   );
 
@@ -358,6 +368,47 @@ export const Product = ({
                       status={feature.status}
                       text={title}
                     />
+                    <Box asChild w="full">
+                      <form
+                        action={updateFeatureCommentAction}
+                        data-feature-id={feature.id}
+                        data-slot="feature-comment-form"
+                      >
+                        <VStack align="start" gap="xs" w="full">
+                          <Text asChild size="sm" weight="bold">
+                            <label htmlFor={`feature-comment-${feature.id}`}>
+                              {t("requests.commentLabel")}
+                            </label>
+                          </Text>
+                          <Box w="full">
+                            <Textarea
+                              aria-label={t("requests.commentAriaLabel")}
+                              defaultValue={feature.adminComment ?? ""}
+                              id={`feature-comment-${feature.id}`}
+                              maxLength={5000}
+                              name="comment"
+                              placeholder={t("requests.commentPlaceholder")}
+                              rows={4}
+                            />
+                          </Box>
+                          <input
+                            name="featureId"
+                            type="hidden"
+                            value={feature.id}
+                          />
+                          <HStack justify="end" w="full">
+                            <SubmitButton
+                              formAction={updateFeatureCommentAction}
+                              pendingLabel={t("toast.updateComment.loading")}
+                              size="sm"
+                              variant="default"
+                            >
+                              {t("requests.commentSave")}
+                            </SubmitButton>
+                          </HStack>
+                        </VStack>
+                      </form>
+                    </Box>
                     <HStack
                       borderTop="default"
                       gap="md"

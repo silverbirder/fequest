@@ -1,7 +1,11 @@
 import type { Database } from "@repo/db";
 import type { Session } from "next-auth";
 
-import { featureRequests, products } from "@repo/db/schema";
+import {
+  featureRequestAdminComments,
+  featureRequests,
+  products,
+} from "@repo/db/schema";
 import { TRPCError } from "@trpc/server";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
@@ -64,6 +68,7 @@ const createTestHarness = (options: HarnessOptions = {}) => {
   }));
 
   const featureDeleteWhere = vi.fn();
+  const featureCommentDeleteWhere = vi.fn();
 
   const update = vi.fn((table) => {
     if (table === products) {
@@ -79,16 +84,23 @@ const createTestHarness = (options: HarnessOptions = {}) => {
     if (table === featureRequests) {
       return { where: featureDeleteWhere };
     }
+    if (table === featureRequestAdminComments) {
+      return { where: featureCommentDeleteWhere };
+    }
     throw new Error("Unexpected table");
   });
 
   const insertValues = vi.fn(() => ({
     returning: insertProductsReturning,
   }));
+  const insertFeatureCommentValues = vi.fn();
 
   const insert = vi.fn((table) => {
     if (table === products) {
       return { values: insertValues };
+    }
+    if (table === featureRequestAdminComments) {
+      return { values: insertFeatureCommentValues };
     }
     throw new Error("Unexpected table");
   });
@@ -116,12 +128,14 @@ const createTestHarness = (options: HarnessOptions = {}) => {
 
   return {
     caller,
+    featureCommentDeleteWhere,
     featureDeleteWhere,
     featureUpdateWhere,
     findFirstFeatureRequest,
     findFirstProduct,
     findMany,
     insert,
+    insertFeatureCommentValues,
     insertProductsReturning,
     insertValues,
     productUpdateSet,
@@ -253,6 +267,7 @@ describe("productRouter.byId", () => {
       description: "Helpful product",
       featureRequests: [
         {
+          adminComment: null,
           ...product.featureRequests[0],
           reactionSummaries: [],
         },
@@ -280,6 +295,96 @@ describe("productRouter.byId", () => {
     const { caller } = createTestHarness({ session: null });
 
     await expect(caller.byId({ id: 1 })).rejects.toBeInstanceOf(TRPCError);
+  });
+});
+
+describe("productRouter.updateFeatureComment", () => {
+  it("stores a comment when feature belongs to the product owner", async () => {
+    const { caller, featureCommentDeleteWhere, insertFeatureCommentValues } =
+      createTestHarness({
+        featureRequest: {
+          id: 11,
+          product: { userId: "user-1" },
+          productId: 2,
+        },
+        session: {
+          expires: "",
+          user: { id: "user-1", name: "Owner" },
+        },
+      });
+
+    const result = await caller.updateFeatureComment({
+      comment: "  対応予定です  ",
+      featureId: 11,
+    });
+
+    expect(featureCommentDeleteWhere).toHaveBeenCalled();
+    expect(insertFeatureCommentValues).toHaveBeenCalledWith({
+      adminUserId: "user-1",
+      content: "対応予定です",
+      featureRequestId: 11,
+    });
+    expect(result).toEqual({
+      comment: "対応予定です",
+      featureId: 11,
+      productId: 2,
+    });
+  });
+
+  it("clears a comment when empty string is submitted", async () => {
+    const { caller, featureCommentDeleteWhere, insertFeatureCommentValues } =
+      createTestHarness({
+        featureRequest: {
+          id: 12,
+          product: { userId: "user-1" },
+          productId: 5,
+        },
+        session: {
+          expires: "",
+          user: { id: "user-1", name: "Owner" },
+        },
+      });
+
+    const result = await caller.updateFeatureComment({
+      comment: "   ",
+      featureId: 12,
+    });
+
+    expect(featureCommentDeleteWhere).toHaveBeenCalled();
+    expect(insertFeatureCommentValues).not.toHaveBeenCalled();
+    expect(result).toEqual({
+      comment: null,
+      featureId: 12,
+      productId: 5,
+    });
+  });
+
+  it("throws NOT_FOUND when feature is missing or not owned", async () => {
+    const { caller } = createTestHarness({
+      featureRequest: null,
+      session: {
+        expires: "",
+        user: { id: "user-1", name: "Owner" },
+      },
+    });
+
+    await expect(
+      caller.updateFeatureComment({
+        comment: "test",
+        featureId: 3,
+      }),
+    ).rejects.toMatchObject({ code: "NOT_FOUND" });
+  });
+
+  it("rejects when no session is present", async () => {
+    const { caller } = createTestHarness({ session: null });
+
+    await expect(
+      caller.updateFeatureComment({
+        comment: "test",
+        featureId: 3,
+      }),
+    ).rejects.toBeInstanceOf(TRPCError);
   });
 });
 

@@ -4,6 +4,7 @@ import { describe, expect, it } from "vitest";
 import {
   avatarImageUrlSchema,
   createFeatureRequestSchema,
+  featureRequestAdminCommentSchema,
   featureRequestTitleSchema,
   idSchema,
   positiveIntSchema,
@@ -12,6 +13,7 @@ import {
   productNameSchema,
   reactionActionSchema,
   setFeatureStatusSchema,
+  updateFeatureAdminCommentSchema,
   updateProductDetailsSchema,
   webhookUrlSchema,
 } from "./base";
@@ -195,6 +197,30 @@ describe("featureRequestTitleSchema", () => {
   });
 });
 
+describe("featureRequestAdminCommentSchema", () => {
+  it("trims and allows empty string", () => {
+    const result = safeParse(
+      featureRequestAdminCommentSchema,
+      "  対応予定です  ",
+    );
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.output).toBe("対応予定です");
+    }
+
+    expect(safeParse(featureRequestAdminCommentSchema, "   ").success).toBe(
+      true,
+    );
+  });
+
+  it("rejects values beyond max length", () => {
+    const overLimit = "c".repeat(6000);
+    expect(safeParse(featureRequestAdminCommentSchema, overLimit).success).toBe(
+      false,
+    );
+  });
+});
+
 describe("createFeatureRequestSchema", () => {
   it("validates shape", () => {
     const result = safeParse(createFeatureRequestSchema, {
@@ -226,5 +252,19 @@ describe("setFeatureStatusSchema", () => {
     expect(
       safeParse(schema, { featureId: 10, status: "pending" }).success,
     ).toBe(false);
+  });
+});
+
+describe("updateFeatureAdminCommentSchema", () => {
+  it("accepts comment and feature id", () => {
+    const result = safeParse(updateFeatureAdminCommentSchema, {
+      comment: "  対応します  ",
+      featureId: 5,
+    });
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.output.comment).toBe("対応します");
+      expect(result.output.featureId).toBe(5);
+    }
   });
 });
