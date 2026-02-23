@@ -39,6 +39,10 @@
       }
     },
     "featureContentFallback": "詳細はありません。",
+    "adminCommentAriaLabel": "管理者コメント",
+    "adminCommentAuthorFallback": "管理者",
+    "adminCommentNotice": "管理者からコメントあり",
+    "adminCommentUpdatedAt": "更新日: {date}",
     "requestContentAriaLabel": "機能リクエストの内容",
     "editLinkAriaLabel": "編集ページを開く",
     "editLinkText": "編集する"

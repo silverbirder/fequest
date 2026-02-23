@@ -132,6 +132,51 @@ describe("FeatureRequestItem", () => {
     expect(badge).toBeDefined();
   });
 
+  it("shows admin comment notice when provided", async () => {
+    await renderItem({
+      adminCommentDetail: {
+        content: "対応します",
+      },
+    });
+
+    expect(document.body.textContent).toContain("管理者からコメントあり");
+  });
+
+  it("opens dialog when admin comment notice is clicked", async () => {
+    await renderItem({
+      adminCommentDetail: {
+        content: "対応します",
+      },
+    });
+
+    document
+      .querySelector<HTMLButtonElement>(
+        "[data-slot='admin-comment-notice-trigger']",
+      )
+      ?.click();
+    await waitForDialog(50);
+
+    const dialog = document.querySelector("[role='dialog']");
+    expect(dialog?.textContent ?? "").toContain("Child feature");
+  });
+
+  it("shows admin comment details in dialog when provided", async () => {
+    await renderItem({
+      adminCommentDetail: {
+        content: "実装を開始しました。まずは通知部分から対応します。",
+        updatedAt: "2025-11-06T09:15:00.000Z",
+      },
+    });
+
+    await openDialog();
+    await waitForDialog(50);
+
+    expect(document.body.textContent).toContain(
+      "実装を開始しました。まずは通知部分から対応します。",
+    );
+    expect(document.body.textContent).toContain("更新日: 2025年11月06日");
+  });
+
   it("sets data-feature-status on wrapper", async () => {
     await renderItem({ status: "closed" });
 

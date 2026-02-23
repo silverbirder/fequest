@@ -1,10 +1,22 @@
 "use client";
 
+import type { FeatureRequestAdminComment } from "@repo/type";
 import type { Route } from "next";
 import type { UrlObject } from "url";
 
-import { Button, HStack, RequestCard, VStack } from "@repo/ui/components";
-import { Pencil } from "lucide-react";
+import {
+  Avatar,
+  Box,
+  Button,
+  DialogTrigger,
+  HStack,
+  RequestCard,
+  Text,
+  Textarea,
+  VStack,
+} from "@repo/ui/components";
+import { toIsoString } from "@repo/util";
+import { MessageCircle, Pencil } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Form from "next/form";
 import Link from "next/link";
@@ -14,6 +26,7 @@ import { type ComponentProps, useRef } from "react";
 import type { ReactionSummary } from "../libs";
 
 type Props = {
+  adminCommentDetail?: FeatureRequestAdminComment | null;
   avatar?: RequestCardAvatar;
   defaultOpen?: boolean;
   detail: RequestCardDetail;
@@ -29,6 +42,7 @@ type RequestCardAvatar = ComponentProps<typeof RequestCard>["avatar"];
 type RequestCardDetail = ComponentProps<typeof RequestCard>["detail"];
 
 export const FeatureRequestItem = ({
+  adminCommentDetail,
   avatar,
   defaultOpen,
   detail,
@@ -68,6 +82,34 @@ export const FeatureRequestItem = ({
     reactions.map((reaction) => [reaction.emoji, reaction]),
   );
   const reactionOptions = reactions;
+  const adminCommentContent = adminCommentDetail?.content?.trim() ?? "";
+  const hasAdminComment = adminCommentContent.length > 0;
+  const adminName =
+    adminCommentDetail?.adminUser?.name?.trim() ||
+    t("adminCommentAuthorFallback");
+  const adminUpdatedAt = toIsoString(adminCommentDetail?.updatedAt);
+  const adminCommentNoticeSlot = hasAdminComment ? (
+    <DialogTrigger asChild>
+      <Button
+        aria-label={t("adminCommentNotice")}
+        border="none"
+        data-slot="admin-comment-notice-trigger"
+        shadow="none"
+        size="sm"
+        type="button"
+        variant="outline"
+      >
+        <HStack align="center" bg="background" gap="xs" p="xs" radius="sm">
+          <Text color="accent" size="sm">
+            <MessageCircle size={14} />
+          </Text>
+          <Text color="accent" size="sm">
+            {t("adminCommentNotice")}
+          </Text>
+        </HStack>
+      </Button>
+    </DialogTrigger>
+  ) : undefined;
 
   const detailContent = (
     <VStack gap="xs">
@@ -87,6 +129,32 @@ export const FeatureRequestItem = ({
           </Button>
         </HStack>
       )}
+      {hasAdminComment ? (
+        <VStack align="start" gap="xs" w="full">
+          <HStack align="start" gap="sm" w="full">
+            <Avatar
+              fallbackText={adminName}
+              name={adminName}
+              src={adminCommentDetail?.adminUser?.image ?? undefined}
+            />
+            <VStack align="start" gap="xs" w="full">
+              <Box bg="muted" p="md" radius="sm" w="full">
+                <Textarea
+                  aria-label={t("adminCommentAriaLabel")}
+                  readOnly
+                  value={adminCommentContent}
+                  variant="display"
+                />
+              </Box>
+              {adminUpdatedAt ? (
+                <Text color="subtle" size="sm">
+                  {t("adminCommentUpdatedAt", { date: adminUpdatedAt })}
+                </Text>
+              ) : null}
+            </VStack>
+          </HStack>
+        </VStack>
+      ) : null}
     </VStack>
   );
 
@@ -113,6 +181,7 @@ export const FeatureRequestItem = ({
   return (
     <VStack data-feature-status={status ?? "open"} gap="xs">
       <RequestCard
+        adminCommentNoticeSlot={adminCommentNoticeSlot}
         avatar={avatar}
         defaultOpen={defaultOpen}
         detail={{

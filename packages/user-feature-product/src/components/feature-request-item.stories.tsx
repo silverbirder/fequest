@@ -84,3 +84,18 @@ export const Closed: Story = {
     text: "ダウンロード機能の改善",
   },
 };
+
+export const WithAdminComment: Story = {
+  args: {
+    adminCommentDetail: {
+      adminUser: {
+        id: "admin-1",
+        image: "https://placehold.co/48x48",
+        name: "管理者",
+      },
+      content:
+        "ご要望ありがとうございます。現在、機能追加に向けた仕様検討を進めています。",
+      updatedAt: "2025-11-06T09:15:00.000Z",
+    },
+  },
+};

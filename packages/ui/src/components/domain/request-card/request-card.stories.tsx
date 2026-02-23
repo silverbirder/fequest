@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 
+import { DialogTrigger } from "../../common/shadcn";
 import { RequestCard } from "./request-card";
 
 const meta = {
@@ -69,5 +70,17 @@ export const ReadOnlyReactions: Story = {
       { count: 1, emoji: "❤️", reactedByViewer: true },
     ],
     reactionsInteractive: false,
+  },
+};
+
+export const WithAdminCommentNotice: Story = {
+  args: {
+    adminCommentNoticeSlot: (
+      <DialogTrigger asChild>
+        <button data-slot="admin-comment-notice-trigger" type="button">
+          管理者からコメントあり
+        </button>
+      </DialogTrigger>
+    ),
   },
 };

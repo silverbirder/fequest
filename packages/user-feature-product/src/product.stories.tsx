@@ -31,6 +31,17 @@ const meta = {
       description: "ユーザーからのアイデアや改善要望を集めるプロダクトです。",
       featureRequests: [
         {
+          adminComment: "管理者からコメントあり",
+          adminCommentDetail: {
+            adminUser: {
+              id: "admin-1",
+              image: "https://placehold.co/48x48",
+              name: "管理者",
+            },
+            content:
+              "現在、優先度を上げて対応中です。進捗があり次第ここで共有します。",
+            updatedAt: "2025-11-06T09:15:00.000Z",
+          },
           content: "ユーザーがプロフィール画像をアップロードできるようにする",
           id: 1,
           reactionSummaries: [

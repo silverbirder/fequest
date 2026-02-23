@@ -1,15 +1,23 @@
+import type { ReactNode } from "react";
+
 import { useTranslations } from "next-intl";
 import { PropsWithChildren } from "react";
 
-import { Box, HStack } from "../../common/layout";
+import { Box, HStack, VStack } from "../../common/layout";
 import { Text } from "../../common/typography";
 
 type Props = PropsWithChildren<{
+  adminCommentNoticeSlot?: ReactNode;
   status?: "closed" | "open";
   text: string;
 }>;
 
-export const BubbleText = ({ children, status = "open", text }: Props) => {
+export const BubbleText = ({
+  adminCommentNoticeSlot,
+  children,
+  status = "open",
+  text,
+}: Props) => {
   const t = useTranslations("UI.bubbleText");
   const isClosed = status === "closed";
 
@@ -58,12 +66,20 @@ export const BubbleText = ({ children, status = "open", text }: Props) => {
         translateY="-1/2"
         w="3"
       />
-      <HStack justify="between" self="stretch">
-        <Text color="subtle" size="md">
-          {text}
-        </Text>
-        <Box shrink="0">{children}</Box>
-      </HStack>
+      <VStack align="start" gap="xs">
+        <HStack justify="between" self="stretch">
+          <Text color="subtle" size="md">
+            {text}
+          </Text>
+          <Box shrink="0">{children}</Box>
+        </HStack>
+        {adminCommentNoticeSlot && (
+          <VStack align="start" gap="sm" w="full">
+            <Box borderTop="default" w="full" />
+            {adminCommentNoticeSlot}
+          </VStack>
+        )}
+      </VStack>
     </Box>
   );
 };

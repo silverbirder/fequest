@@ -106,6 +106,7 @@ export const Product = (props: Props) => {
       props.openFeatureRequestId === feature.id;
     return (
       <FeatureRequestItem
+        adminCommentDetail={feature.adminCommentDetail ?? null}
         avatar={feature.user}
         defaultOpen={isOpenTarget}
         detail={{

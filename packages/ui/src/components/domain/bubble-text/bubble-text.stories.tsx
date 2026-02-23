@@ -14,3 +14,13 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
+
+export const WithAdminCommentNotice: Story = {
+  args: {
+    adminCommentNoticeSlot: (
+      <button data-slot="admin-comment-notice-trigger" type="button">
+        管理者からコメントあり
+      </button>
+    ),
+  },
+};

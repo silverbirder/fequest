@@ -36,4 +36,25 @@ describe("BubbleText", () => {
     expect(element).not.toBeNull();
     expect(element?.textContent ?? "").toContain("Child content");
   });
+
+  it("does not render admin comment notice when slot is missing", async () => {
+    await renderWithIntl(<BubbleText text="Child content" />);
+
+    expect(document.body.textContent).not.toContain("管理者からコメントあり");
+  });
+
+  it("renders custom admin comment notice slot when provided", async () => {
+    await renderWithIntl(
+      <BubbleText
+        adminCommentNoticeSlot={
+          <button data-slot="admin-comment-notice-trigger" type="button">
+            管理者からコメントあり
+          </button>
+        }
+        text="Child content"
+      />,
+    );
+
+    expect(document.body.textContent).toContain("管理者からコメントあり");
+  });
 });

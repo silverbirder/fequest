@@ -19,6 +19,16 @@ describe("type contracts", () => {
 
   it("FeatureRequestCore keeps the base feature fields", () => {
     expectTypeOf<FeatureRequestCore>().toMatchTypeOf<{
+      adminComment?: null | string;
+      adminCommentDetail?: null | {
+        adminUser?: null | {
+          id?: null | string;
+          image?: null | string;
+          name?: null | string;
+        };
+        content: string;
+        updatedAt?: Date | null | string;
+      };
       content: string;
       createdAt?: Date | null | string;
       id: number;

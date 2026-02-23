@@ -1,5 +1,16 @@
+export type FeatureRequestAdminComment = {
+  adminUser?: null | {
+    id?: null | string;
+    image?: null | string;
+    name?: null | string;
+  };
+  content: string;
+  updatedAt?: Date | null | string;
+};
+
 export type FeatureRequestCore = {
   adminComment?: null | string;
+  adminCommentDetail?: FeatureRequestAdminComment | null;
   content: string;
   createdAt?: Date | null | string;
   id: number;

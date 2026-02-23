@@ -235,6 +235,64 @@ describe("Product", () => {
     );
   });
 
+  it("shows admin comment notice in the request list when provided", async () => {
+    const feature = createFeatureFixture("user-owner", {
+      adminComment: "管理者からコメントあり",
+      adminCommentDetail: {
+        content: "対応します。",
+      },
+      id: 1,
+      title: "コメント付きリクエスト",
+    });
+
+    await render(
+      <NextIntlClientProvider locale="ja" messages={jaMessages}>
+        <Product
+          canCreateFeatureRequest
+          currentUser={{ id: "user-owner" }}
+          onCreateFeatureRequest={async () => {}}
+          onReactToFeature={async () => {}}
+          onToggleWatchProduct={async () => {}}
+          product={createProductFixture("user-owner", [feature])}
+        />
+      </NextIntlClientProvider>,
+    );
+
+    expect(document.body.textContent).toContain("管理者からコメントあり");
+  });
+
+  it("shows admin comment details in modal when provided", async () => {
+    const feature = createFeatureFixture("user-owner", {
+      adminComment: "管理者からコメントあり",
+      adminCommentDetail: {
+        content: "この機能を優先対応として進めています。",
+        updatedAt: "2025-11-06T09:15:00.000Z",
+      },
+      id: 1,
+      title: "コメント付きリクエスト",
+    });
+
+    await render(
+      <NextIntlClientProvider locale="ja" messages={jaMessages}>
+        <Product
+          canCreateFeatureRequest
+          currentUser={{ id: "user-owner" }}
+          onCreateFeatureRequest={async () => {}}
+          onReactToFeature={async () => {}}
+          onToggleWatchProduct={async () => {}}
+          product={createProductFixture("user-owner", [feature])}
+        />
+      </NextIntlClientProvider>,
+    );
+
+    await openDialog();
+
+    expect(document.body.textContent).toContain(
+      "この機能を優先対応として進めています。",
+    );
+    expect(document.body.textContent).toContain("更新日: 2025年11月06日");
+  });
+
   it("orders feature requests by reactions then created date", async () => {
     const featureRequests = createProductFixture("user-owner", [
       {

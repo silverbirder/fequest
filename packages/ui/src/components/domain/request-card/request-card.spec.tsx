@@ -6,6 +6,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { describe, expect, it } from "vitest";
 import { render } from "vitest-browser-react";
 
+import { DialogTrigger } from "../../common/shadcn";
 import { RequestCard } from "./request-card";
 import * as stories from "./request-card.stories";
 
@@ -161,5 +162,57 @@ describe("RequestCard", () => {
     );
 
     expect(badge).not.toBeUndefined();
+  });
+
+  it("passes admin comment notice to bubble text", async () => {
+    await renderWithIntl(
+      <RequestCard
+        adminCommentNoticeSlot={
+          <button data-slot="admin-comment-notice-trigger" type="button">
+            管理者からコメントあり
+          </button>
+        }
+        detail={{
+          content: <div>内容</div>,
+          createdAt: "2024-01-01T00:00:00.000Z",
+          title: "タイトル",
+          updatedAt: "2024-01-02T00:00:00.000Z",
+        }}
+        text="タイトル"
+      />,
+    );
+
+    expect(document.body.textContent).toContain("管理者からコメントあり");
+  });
+
+  it("opens dialog when admin comment notice is clicked", async () => {
+    await renderWithIntl(
+      <RequestCard
+        adminCommentNoticeSlot={
+          <DialogTrigger asChild>
+            <button data-slot="admin-comment-notice-trigger" type="button">
+              管理者からコメントあり
+            </button>
+          </DialogTrigger>
+        }
+        detail={{
+          content: <div>通知内容</div>,
+          createdAt: "2024-01-01T00:00:00.000Z",
+          title: "タイトル",
+          updatedAt: "2024-01-02T00:00:00.000Z",
+        }}
+        text="タイトル"
+      />,
+    );
+
+    document
+      .querySelector<HTMLButtonElement>(
+        "[data-slot='admin-comment-notice-trigger']",
+      )
+      ?.click();
+    await waitForDialog(25);
+
+    const dialog = document.querySelector("[role='dialog']");
+    expect(dialog?.textContent ?? "").toContain("通知内容");
   });
 });

@@ -106,6 +106,15 @@ describe("productRouter.byId", () => {
     const productRecord = {
       featureRequests: [
         {
+          adminComment: {
+            adminUser: {
+              id: "admin-1",
+              image: "https://cdn.example.com/admin.png",
+              name: "管理者 太郎",
+            },
+            content: "検討します",
+            updatedAt: "2025-11-06T09:15:00.000Z",
+          },
           id: 1,
           reactions: [
             {
@@ -151,6 +160,21 @@ describe("productRouter.byId", () => {
         },
         orderBy: expect.any(Function),
         with: {
+          adminComment: {
+            columns: {
+              content: true,
+              updatedAt: true,
+            },
+            with: {
+              adminUser: {
+                columns: {
+                  id: true,
+                  image: true,
+                  name: true,
+                },
+              },
+            },
+          },
           reactions: {
             orderBy: expect.any(Function),
             with: {
@@ -196,6 +220,16 @@ describe("productRouter.byId", () => {
       featureRequests: [
         {
           ...featureWithoutReactions,
+          adminComment: "管理者からコメントあり",
+          adminCommentDetail: {
+            adminUser: {
+              id: "admin-1",
+              image: "https://cdn.example.com/admin.png",
+              name: "管理者 太郎",
+            },
+            content: "検討します",
+            updatedAt: "2025-11-06T09:15:00.000Z",
+          },
           reactionSummaries: [
             { count: 1, emoji: "👍", reactedByViewer: true },
             { count: 1, emoji: "🎉", reactedByViewer: false },

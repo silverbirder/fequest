@@ -35,6 +35,21 @@ export const productRouter = createTRPCRouter({
           },
           orderBy: (feature, { desc }) => desc(feature.createdAt),
           with: {
+            adminComment: {
+              columns: {
+                content: true,
+                updatedAt: true,
+              },
+              with: {
+                adminUser: {
+                  columns: {
+                    id: true,
+                    image: true,
+                    name: true,
+                  },
+                },
+              },
+            },
             reactions: {
               orderBy: (reaction, { asc }) => asc(reaction.id),
               with: {
@@ -88,8 +103,16 @@ export const productRouter = createTRPCRouter({
     return {
       ...product,
       featureRequests: product.featureRequests.map((feature) => {
-        const { reactions, ...rest } = feature;
+        const { adminComment, reactions, ...rest } = feature;
         return {
+          adminComment: adminComment ? "管理者からコメントあり" : null,
+          adminCommentDetail: adminComment
+            ? {
+                adminUser: adminComment.adminUser ?? null,
+                content: adminComment.content,
+                updatedAt: adminComment.updatedAt ?? null,
+              }
+            : null,
           ...rest,
           reactionSummaries: summarizeReactions(reactions, {
             viewerAnonymousIdentifier,

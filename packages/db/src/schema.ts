@@ -233,6 +233,16 @@ export const featureRequestsRelations = relations(
   }),
 );
 
+export const featureRequestAdminCommentsRelations = relations(
+  featureRequestAdminComments,
+  ({ one }) => ({
+    adminUser: one(adminUsers, {
+      fields: [featureRequestAdminComments.adminUserId],
+      references: [adminUsers.id],
+    }),
+  }),
+);
+
 export const featureRequestReactionsRelations = relations(
   featureRequestReactions,
   ({ one }) => ({
