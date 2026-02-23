@@ -75,7 +75,12 @@ export const BubbleText = ({
         </HStack>
         {adminCommentNoticeSlot && (
           <VStack align="start" gap="sm" w="full">
-            <Box borderTop="default" w="full" />
+            <Box
+              borderColor={isClosed ? "muted" : "border"}
+              borderTop="default"
+              data-slot="admin-comment-notice-divider"
+              w="full"
+            />
             {adminCommentNoticeSlot}
           </VStack>
         )}

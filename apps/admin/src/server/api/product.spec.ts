@@ -19,28 +19,9 @@ vi.mock("~/server/db", () => ({
   db: {},
 }));
 
-vi.mock("@repo/util/webhook", () => ({
-  notifyWebhook: vi.fn().mockResolvedValue(false),
-}));
-
-vi.mock("@repo/util/webhook-payload", () => ({
-  buildFeatureRequestWebhookPayload: vi.fn(() => ({
-    blocks: [],
-    text: "payload",
-    username: "Fequest",
-  })),
-}));
-
-const [
-  { createCallerFactory },
-  { productRouter },
-  { notifyWebhook },
-  { buildFeatureRequestWebhookPayload },
-] = await Promise.all([
+const [{ createCallerFactory }, { productRouter }] = await Promise.all([
   import("./trpc"),
   import("./product"),
-  import("@repo/util/webhook"),
-  import("@repo/util/webhook-payload"),
 ]);
 
 const createCaller = createCallerFactory(productRouter);
@@ -319,6 +300,9 @@ describe("productRouter.byId", () => {
 
 describe("productRouter.updateFeatureComment", () => {
   it("stores a comment when feature belongs to the product owner", async () => {
+    const fetchMock = vi
+      .spyOn(globalThis, "fetch")
+      .mockResolvedValue(new Response(null, { status: 200 }));
     const { caller, featureCommentDeleteWhere, insertFeatureCommentValues } =
       createTestHarness({
         featureRequest: {
@@ -358,35 +342,39 @@ describe("productRouter.updateFeatureComment", () => {
       content: "対応予定です",
       featureRequestId: 11,
     });
-    expect(vi.mocked(buildFeatureRequestWebhookPayload)).toHaveBeenCalledWith({
-      event: "updated",
-      productName: "My Product",
-      requestTitle: "通知が欲しい",
-    });
-    expect(vi.mocked(notifyWebhook)).toHaveBeenCalledTimes(3);
-    expect(vi.mocked(notifyWebhook)).toHaveBeenCalledWith(
-      expect.objectContaining({
-        webhookUrl: "https://hooks.slack.com/services/T/B/CREATOR",
-      }),
+    expect(fetchMock).toHaveBeenCalledTimes(3);
+    expect(fetchMock).toHaveBeenNthCalledWith(
+      1,
+      "https://hooks.slack.com/services/T/B/CREATOR",
+      expect.objectContaining({ method: "POST" }),
     );
-    expect(vi.mocked(notifyWebhook)).toHaveBeenCalledWith(
-      expect.objectContaining({
-        webhookUrl: "https://hooks.slack.com/services/T/B/W1",
-      }),
+    expect(fetchMock).toHaveBeenNthCalledWith(
+      2,
+      "https://hooks.slack.com/services/T/B/W1",
+      expect.objectContaining({ method: "POST" }),
     );
-    expect(vi.mocked(notifyWebhook)).toHaveBeenCalledWith(
-      expect.objectContaining({
-        webhookUrl: "https://hooks.slack.com/services/T/B/W2",
-      }),
+    expect(fetchMock).toHaveBeenNthCalledWith(
+      3,
+      "https://hooks.slack.com/services/T/B/W2",
+      expect.objectContaining({ method: "POST" }),
     );
+    const firstPayload = JSON.parse(
+      String(fetchMock.mock.calls[0]?.[1]?.body ?? ""),
+    );
+    expect(firstPayload.text).toContain("My Product");
+    expect(firstPayload.text).toContain("通知が欲しい");
     expect(result).toEqual({
       comment: "対応予定です",
       featureId: 11,
       productId: 2,
     });
+    fetchMock.mockRestore();
   });
 
   it("clears a comment when empty string is submitted", async () => {
+    const fetchMock = vi
+      .spyOn(globalThis, "fetch")
+      .mockResolvedValue(new Response(null, { status: 200 }));
     const { caller, featureCommentDeleteWhere, insertFeatureCommentValues } =
       createTestHarness({
         featureRequest: {
@@ -409,22 +397,22 @@ describe("productRouter.updateFeatureComment", () => {
 
     expect(featureCommentDeleteWhere).toHaveBeenCalled();
     expect(insertFeatureCommentValues).not.toHaveBeenCalled();
-    expect(vi.mocked(buildFeatureRequestWebhookPayload)).toHaveBeenCalledWith({
-      event: "updated",
-      productName: "My Product",
-      requestTitle: "すでにあるコメント",
-    });
-    expect(vi.mocked(notifyWebhook)).toHaveBeenCalledTimes(1);
-    expect(vi.mocked(notifyWebhook)).toHaveBeenCalledWith(
-      expect.objectContaining({
-        webhookUrl: "https://hooks.slack.com/services/T/B/CREATOR",
-      }),
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    expect(fetchMock).toHaveBeenCalledWith(
+      "https://hooks.slack.com/services/T/B/CREATOR",
+      expect.objectContaining({ method: "POST" }),
     );
+    const firstPayload = JSON.parse(
+      String(fetchMock.mock.calls[0]?.[1]?.body ?? ""),
+    );
+    expect(firstPayload.text).toContain("My Product");
+    expect(firstPayload.text).toContain("すでにあるコメント");
     expect(result).toEqual({
       comment: null,
       featureId: 12,
       productId: 5,
     });
+    fetchMock.mockRestore();
   });
 
   it("throws NOT_FOUND when feature is missing or not owned", async () => {

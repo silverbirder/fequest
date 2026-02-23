@@ -9,6 +9,7 @@ describe("style-props", () => {
       basis: "1/2",
       border: "dashed",
       borderBottom: "dotted",
+      borderColor: "muted",
       borderLeft: "default",
       borderRight: "none",
       borderTop: "dashed",
@@ -38,6 +39,7 @@ describe("style-props", () => {
     expect(className).toContain("opacity-50");
     expect(className).toContain("border");
     expect(className).toContain("border-dashed");
+    expect(className).toContain("border-muted-foreground/40");
     expect(className).toContain("border-b");
     expect(className).toContain("border-l");
     expect(className).toContain("border-r-0");
@@ -69,6 +71,7 @@ describe("style-props", () => {
       basis: "full",
       border: "none",
       borderBottom: "default",
+      borderColor: "border",
       borderLeft: "default",
       borderRight: "default",
       borderTop: "default",
@@ -91,6 +94,7 @@ describe("style-props", () => {
       basis: "full",
       border: "none",
       borderBottom: "default",
+      borderColor: "border",
       borderLeft: "default",
       borderRight: "default",
       borderTop: "default",

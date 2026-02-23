@@ -112,7 +112,7 @@ export const FeatureRequestItem = ({
   ) : undefined;
 
   const detailContent = (
-    <VStack gap="xs">
+    <VStack gap="md">
       {detail.content}
       {editHref && (
         <HStack justify="end" w="full">
@@ -130,30 +130,28 @@ export const FeatureRequestItem = ({
         </HStack>
       )}
       {hasAdminComment ? (
-        <VStack align="start" gap="xs" w="full">
-          <HStack align="start" gap="sm" w="full">
-            <Avatar
-              fallbackText={adminName}
-              name={adminName}
-              src={adminCommentDetail?.adminUser?.image ?? undefined}
-            />
-            <VStack align="start" gap="xs" w="full">
-              <Box bg="muted" p="md" radius="sm" w="full">
-                <Textarea
-                  aria-label={t("adminCommentAriaLabel")}
-                  readOnly
-                  value={adminCommentContent}
-                  variant="display"
-                />
-              </Box>
-              {adminUpdatedAt ? (
-                <Text color="subtle" size="sm">
-                  {t("adminCommentUpdatedAt", { date: adminUpdatedAt })}
-                </Text>
-              ) : null}
-            </VStack>
-          </HStack>
-        </VStack>
+        <HStack align="start" gap="sm" w="full">
+          <Avatar
+            fallbackText={adminName}
+            name={adminName}
+            src={adminCommentDetail?.adminUser?.image ?? undefined}
+          />
+          <VStack align="start" gap="xs" w="full">
+            <Box bg="muted" p="md" radius="sm" w="full">
+              <Textarea
+                aria-label={t("adminCommentAriaLabel")}
+                readOnly
+                value={adminCommentContent}
+                variant="display"
+              />
+            </Box>
+            {adminUpdatedAt ? (
+              <Text color="subtle" size="sm">
+                {t("adminCommentUpdatedAt", { date: adminUpdatedAt })}
+              </Text>
+            ) : null}
+          </VStack>
+        </HStack>
       ) : null}
     </VStack>
   );
