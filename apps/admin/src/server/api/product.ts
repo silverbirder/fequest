@@ -457,12 +457,33 @@ export const productRouter = createTRPCRouter({
         columns: {
           id: true,
           productId: true,
+          title: true,
         },
         where: (feature, { eq }) => eq(feature.id, input.featureId),
         with: {
           product: {
             columns: {
+              name: true,
               userId: true,
+            },
+            with: {
+              watchers: {
+                columns: {
+                  userId: true,
+                },
+                with: {
+                  user: {
+                    columns: {
+                      webhookUrl: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
+          user: {
+            columns: {
+              webhookUrl: true,
             },
           },
         },
@@ -489,6 +510,28 @@ export const productRouter = createTRPCRouter({
           featureRequestId: input.featureId,
         });
       }
+
+      const watcherTargets = (feature.product?.watchers ?? [])
+        .map((watcher) => watcher.user?.webhookUrl)
+        .filter((webhookUrl): webhookUrl is string =>
+          Boolean(webhookUrl?.trim()),
+        );
+      const creatorTarget = feature.user?.webhookUrl?.trim() || null;
+      const targets = [creatorTarget, ...watcherTargets].filter(Boolean);
+      const payload = buildFeatureRequestWebhookPayload({
+        event: "updated",
+        productName: feature.product?.name ?? "Product",
+        requestTitle: feature.title,
+      });
+
+      await Promise.all(
+        targets.map((webhookUrl) =>
+          notifyWebhook({
+            payload,
+            webhookUrl,
+          }),
+        ),
+      );
 
       return {
         comment: comment.length > 0 ? comment : null,

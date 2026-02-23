@@ -19,9 +19,28 @@ vi.mock("~/server/db", () => ({
   db: {},
 }));
 
-const [{ createCallerFactory }, { productRouter }] = await Promise.all([
+vi.mock("@repo/util/webhook", () => ({
+  notifyWebhook: vi.fn().mockResolvedValue(false),
+}));
+
+vi.mock("@repo/util/webhook-payload", () => ({
+  buildFeatureRequestWebhookPayload: vi.fn(() => ({
+    blocks: [],
+    text: "payload",
+    username: "Fequest",
+  })),
+}));
+
+const [
+  { createCallerFactory },
+  { productRouter },
+  { notifyWebhook },
+  { buildFeatureRequestWebhookPayload },
+] = await Promise.all([
   import("./trpc"),
   import("./product"),
+  import("@repo/util/webhook"),
+  import("@repo/util/webhook-payload"),
 ]);
 
 const createCaller = createCallerFactory(productRouter);
@@ -304,8 +323,23 @@ describe("productRouter.updateFeatureComment", () => {
       createTestHarness({
         featureRequest: {
           id: 11,
-          product: { userId: "user-1" },
+          product: {
+            name: "My Product",
+            userId: "user-1",
+            watchers: [
+              {
+                user: { webhookUrl: "https://hooks.slack.com/services/T/B/W1" },
+                userId: "watcher-1",
+              },
+              {
+                user: { webhookUrl: "https://hooks.slack.com/services/T/B/W2" },
+                userId: "watcher-2",
+              },
+            ],
+          },
           productId: 2,
+          title: "通知が欲しい",
+          user: { webhookUrl: "https://hooks.slack.com/services/T/B/CREATOR" },
         },
         session: {
           expires: "",
@@ -324,6 +358,27 @@ describe("productRouter.updateFeatureComment", () => {
       content: "対応予定です",
       featureRequestId: 11,
     });
+    expect(vi.mocked(buildFeatureRequestWebhookPayload)).toHaveBeenCalledWith({
+      event: "updated",
+      productName: "My Product",
+      requestTitle: "通知が欲しい",
+    });
+    expect(vi.mocked(notifyWebhook)).toHaveBeenCalledTimes(3);
+    expect(vi.mocked(notifyWebhook)).toHaveBeenCalledWith(
+      expect.objectContaining({
+        webhookUrl: "https://hooks.slack.com/services/T/B/CREATOR",
+      }),
+    );
+    expect(vi.mocked(notifyWebhook)).toHaveBeenCalledWith(
+      expect.objectContaining({
+        webhookUrl: "https://hooks.slack.com/services/T/B/W1",
+      }),
+    );
+    expect(vi.mocked(notifyWebhook)).toHaveBeenCalledWith(
+      expect.objectContaining({
+        webhookUrl: "https://hooks.slack.com/services/T/B/W2",
+      }),
+    );
     expect(result).toEqual({
       comment: "対応予定です",
       featureId: 11,
@@ -336,8 +391,10 @@ describe("productRouter.updateFeatureComment", () => {
       createTestHarness({
         featureRequest: {
           id: 12,
-          product: { userId: "user-1" },
+          product: { name: "My Product", userId: "user-1", watchers: [] },
           productId: 5,
+          title: "すでにあるコメント",
+          user: { webhookUrl: "https://hooks.slack.com/services/T/B/CREATOR" },
         },
         session: {
           expires: "",
@@ -352,6 +409,17 @@ describe("productRouter.updateFeatureComment", () => {
 
     expect(featureCommentDeleteWhere).toHaveBeenCalled();
     expect(insertFeatureCommentValues).not.toHaveBeenCalled();
+    expect(vi.mocked(buildFeatureRequestWebhookPayload)).toHaveBeenCalledWith({
+      event: "updated",
+      productName: "My Product",
+      requestTitle: "すでにあるコメント",
+    });
+    expect(vi.mocked(notifyWebhook)).toHaveBeenCalledTimes(1);
+    expect(vi.mocked(notifyWebhook)).toHaveBeenCalledWith(
+      expect.objectContaining({
+        webhookUrl: "https://hooks.slack.com/services/T/B/CREATOR",
+      }),
+    );
     expect(result).toEqual({
       comment: null,
       featureId: 12,
